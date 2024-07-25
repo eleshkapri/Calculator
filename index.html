@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Calculator</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="calculator">
+        <h1>Calculator</h1>
+        <input type="text" class="display" id="result" readonly>
+        <div>
+            <button class="operators" onclick="clearResult()">C</button>
+            <button class="operators" onclick="insertValue('(')">(</button>
+            <button class="operators" onclick="insertValue(')')">)</button>
+            <button class="operators" onclick="insertValue('%')">%</button>
+        </div>
+
+        <div>
+            <button onclick="insertValue('')">7</button>
+            <button onclick="insertValue('')">8</button>
+            <button onclick="insertValue('')">9</button>
+            <button class="operators" onclick="insertValue('*')">*</button>
+        </div>
+        
+        <div>
+            <button onclick="insertValue('')">4</button>
+            <button onclick="insertValue('')">5</button>
+            <button onclick="insertValue('')">6</button>
+            <button class="operators" onclick="insertValue('-')">-</button>
+        </div>
+
+        <div>
+            <button onclick="insertValue('')">1</button>
+            <button onclick="insertValue('')">2</button>
+            <button onclick="insertValue('')">3</button>
+            <button class="operators" onclick="insertValue('+')">+</button>
+        </div>
+
+        <div>
+            <button onclick="insertValue('.')">.</button>
+            <button onclick="insertValue('')">0</button>
+            <button class="operators" onclick="insertValue('/')">/</button>
+            <button class="eq" onclick="calculate()">=</button>
+        </div>
+    </div>
+    <script src="script.js"></script>
+</body>
+</html>
