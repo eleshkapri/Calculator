@@ -2025,12 +2025,10 @@
             } else if (isIOS) {
                 if (icon) icon.textContent = '🍏';
                 if (title) title.textContent = 'Apple iOS Device (iPhone / iPad)';
-                if (desc) desc.textContent = 'Tap Share (📤) in Safari and choose "Add to Home Screen"';
+                if (desc) desc.textContent = 'Recommended: Install iOS WebClip Profile or Add to Home Screen';
                 if (primaryBtn) {
-                    primaryBtn.textContent = '📱 Add to Home Screen';
-                    primaryBtn.onclick = () => {
-                        showToast('In Safari, tap Share (📤) -> "Add to Home Screen"');
-                    };
+                    primaryBtn.textContent = '🍏 Get Apple iOS App';
+                    primaryBtn.onclick = () => window.CalcVerse.downloadIosProfile();
                 }
             } else if (isMac) {
                 if (icon) icon.textContent = '🍎';
@@ -2099,6 +2097,71 @@
             document.body.removeChild(link);
             setTimeout(() => {
                 showToast('✅ CalcVerse-Setup.exe downloaded successfully!');
+            }, 1200);
+        },
+
+        downloadIosProfile: () => {
+            SoundFx.playClick(700);
+            showToast('Generating Apple iOS WebClip profile...');
+
+            const mobileConfigXml = `<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+    <key>PayloadDisplayName</key>
+    <string>CalcVerse Pro</string>
+    <key>PayloadIdentifier</key>
+    <string>com.calcverse.app.webclip</string>
+    <key>PayloadOrganization</key>
+    <string>CalcVerse Team</string>
+    <key>PayloadRemovalDisallowed</key>
+    <false/>
+    <key>PayloadType</key>
+    <string>Configuration</string>
+    <key>PayloadUUID</key>
+    <string>4B8D8F4E-0A3B-4C67-8A87-98C3F5E7B123</string>
+    <key>PayloadVersion</key>
+    <integer>1</integer>
+    <key>PayloadContent</key>
+    <array>
+        <dict>
+            <key>FullScreen</key>
+            <true/>
+            <key>IsRemovable</key>
+            <true/>
+            <key>Label</key>
+            <string>CalcVerse</string>
+            <key>PayloadDescription</key>
+            <string>Configures Home Screen WebClip for CalcVerse Pro</string>
+            <key>PayloadDisplayName</key>
+            <string>CalcVerse</string>
+            <key>PayloadIdentifier</key>
+            <string>com.calcverse.app.webclip.entry</string>
+            <key>PayloadType</key>
+            <string>com.apple.webClip.managed</string>
+            <key>PayloadUUID</key>
+            <string>9F7A2C10-3841-4C5E-B4A1-1375B8F9A456</string>
+            <key>PayloadVersion</key>
+            <integer>1</integer>
+            <key>Precomposed</key>
+            <true/>
+            <key>URL</key>
+            <string>https://calculator-iota-seven-12.vercel.app</string>
+        </dict>
+    </array>
+</dict>
+</plist>`;
+
+            const blob = new Blob([mobileConfigXml], { type: 'application/x-apple-aspen-config' });
+            const link = document.createElement('a');
+            link.href = URL.createObjectURL(blob);
+            link.download = 'CalcVerse.mobileconfig';
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+
+            setTimeout(() => {
+                showToast('🍏 In iOS Settings: Go to "Profile Downloaded" -> Tap Install');
             }, 1200);
         },
 
