@@ -1074,8 +1074,22 @@
                     </div>
                 </div>
 
-                <h4 class="install-section-title">Other Platforms</h4>
+                <h4 class="install-section-title">All Platform Packages</h4>
                 <div class="install-cards-grid">
+                    <!-- Android APK -->
+                    <div class="platform-card" id="cardAndroid">
+                        <div class="platform-header">
+                            <span class="platform-icon">🤖</span>
+                            <div>
+                                <h5>Android APK (.apk)</h5>
+                                <span class="platform-sub">For Android Phones & Tablets</span>
+                            </div>
+                        </div>
+                        <button class="download-action-btn apk-btn" onclick="CalcVerse.downloadApk()">
+                            📥 Get .APK
+                        </button>
+                    </div>
+
                     <!-- Windows EXE -->
                     <div class="platform-card" id="cardWindows">
                         <div class="platform-header">
@@ -1111,6 +1125,6 @@
     <!-- Toast Notification -->
     <div class="toast" id="toast">Copied to clipboard!</div>
 
-    <script src="script.js?v=2.4"></script>
+    <script src="script.js?v=2.5"></script>
 </body>
 </html>
