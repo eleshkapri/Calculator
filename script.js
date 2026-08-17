@@ -10,7 +10,7 @@
     // 1. Audio Click Synthesizer (Zero-dependency tactile feedback)
     // =========================================================================
     const SoundFx = {
-        enabled: true,
+        enabled: localStorage.getItem('calcverse_sound') === 'true',
         ctx: null,
         playClick(freq = 600, type = 'sine', duration = 0.03) {
             if (!this.enabled) return;
@@ -142,10 +142,16 @@
         const soundBtn = document.getElementById('soundToggleBtn');
         const soundIcon = document.getElementById('soundIcon');
         const soundText = soundBtn.querySelector('.btn-text');
+        
+        // Initialize sound UI state
+        soundIcon.textContent = SoundFx.enabled ? '🔊' : '🔇';
+        soundText.textContent = SoundFx.enabled ? 'Sound ON' : 'Sound OFF';
+
         soundBtn.addEventListener('click', () => {
             SoundFx.enabled = !SoundFx.enabled;
             soundIcon.textContent = SoundFx.enabled ? '🔊' : '🔇';
             soundText.textContent = SoundFx.enabled ? 'Sound ON' : 'Sound OFF';
+            localStorage.setItem('calcverse_sound', SoundFx.enabled ? 'true' : 'false');
             if (SoundFx.enabled) SoundFx.playClick(900);
         });
 
