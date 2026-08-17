@@ -77,25 +77,44 @@
         const navItems = document.querySelectorAll('.nav-item');
         const views = document.querySelectorAll('.calculator-view');
         const calcTitle = document.getElementById('calculatorTitle');
-        const calcSubtitle = document.getElementById('calculatorSubtitle');
-        const sidebar = document.getElementById('sidebar');
-        const mobileBtn = document.getElementById('mobileMenuBtn');
+        const sidebarCloseBtn = document.getElementById('sidebarCloseBtn');
+        const sidebarOverlay = document.getElementById('sidebarOverlay');
+
+        const openSidebar = () => {
+            sidebar.classList.add('open');
+            if (sidebarOverlay) sidebarOverlay.classList.add('open');
+        };
+
+        const closeSidebar = () => {
+            sidebar.classList.remove('open');
+            if (sidebarOverlay) sidebarOverlay.classList.remove('open');
+        };
+
+        if (mobileBtn) {
+            mobileBtn.addEventListener('click', () => {
+                if (sidebar.classList.contains('open')) {
+                    closeSidebar();
+                } else {
+                    openSidebar();
+                }
+            });
+        }
+
+        if (sidebarCloseBtn) {
+            sidebarCloseBtn.addEventListener('click', closeSidebar);
+        }
+
+        if (sidebarOverlay) {
+            sidebarOverlay.addEventListener('click', closeSidebar);
+        }
 
         navItems.forEach(item => {
             item.addEventListener('click', () => {
                 const mode = item.dataset.mode;
                 switchMode(mode);
-                if (window.innerWidth <= 768) {
-                    sidebar.classList.remove('open');
-                }
+                closeSidebar();
             });
         });
-
-        if (mobileBtn) {
-            mobileBtn.addEventListener('click', () => {
-                sidebar.classList.toggle('open');
-            });
-        }
 
         // Subtabs
         document.querySelectorAll('.sub-tabs').forEach(container => {
