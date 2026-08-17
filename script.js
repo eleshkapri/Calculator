@@ -2061,27 +2061,9 @@
             }
         },
 
-        downloadApk: () => {
+        installAndroidApp: () => {
             SoundFx.playClick(700);
-            showToast('Starting Android APK download...');
-            
-            // If beforeinstallprompt is active on Android Chrome, trigger it
-            if (window._deferredInstallPrompt) {
-                window.CalcVerse.triggerPwaPrompt();
-            }
-
-            // Create and trigger direct .apk download package
-            const apkContent = `CalcVerse Mobile Application Package (v2.3)\nTarget: Android 8.0+\nPackage: com.calcverse.app\nURL: https://calculator-iota-seven-12.vercel.app\nBuild: Release-v2.3\nAll offline calculators and live financial converter included.`;
-            const blob = new Blob([apkContent], { type: 'application/vnd.android.package-archive' });
-            const link = document.createElement('a');
-            link.href = URL.createObjectURL(blob);
-            link.download = 'CalcVerse-v2.3.apk';
-            document.body.appendChild(link);
-            link.click();
-            document.body.removeChild(link);
-            setTimeout(() => {
-                showToast('✅ CalcVerse.apk downloaded! You can also click "Install Now"');
-            }, 1200);
+            window.CalcVerse.triggerPwaPrompt();
         },
 
         downloadExe: () => {
