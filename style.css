@@ -603,6 +603,15 @@ body.dark-theme .chip-sym {
     box-shadow: var(--card-shadow);
 }
 
+#view-standard.calculator-view.active {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    min-height: calc(100vh - 130px);
+    margin: auto 0;
+}
+
 .calc-card { width: 100%; max-width: 390px; }
 .scientific-card { width: 100%; max-width: 590px; }
 .programmer-card { width: 100%; max-width: 550px; }
@@ -2077,6 +2086,15 @@ body.dark-theme .epoch-live-val {
         width: 100%;
         max-width: 440px;
         margin: 0 auto;
+    }
+
+    #view-standard.calculator-view.active {
+        min-height: calc(100vh - 100px);
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        margin: auto 0;
     }
     
     .calc-card, .scientific-card, .financial-card, .converter-card, .health-card, .date-card, .time-card, .time-keypad-card {
