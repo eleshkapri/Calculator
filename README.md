@@ -15,16 +15,15 @@
 
 ---
 
-## 📱 Multi-Platform App Support
+## 📱 1-Click Multi-Platform Installation (PWA)
 
-CalcVerse includes a dedicated **Install & Download Center** with automatic device detection:
+CalcVerse can be installed directly onto your device with **1-click**, providing a full-screen standalone app experience with offline support:
 
-| Platform | Format | Description |
+| Platform | Installation Method | Experience |
 | :--- | :--- | :--- |
-| **Android** | `CalcVerse-v2.3.apk` | Standalone Android Application Package for smartphones & tablets |
-| **Windows** | `CalcVerse-Setup-v2.3.exe` | Windows 10/11 desktop application launcher |
-| **Apple iOS** | `CalcVerse.mobileconfig` | Apple WebClip Configuration Profile for iPhone & iPad Home Screen |
-| **Universal Web** | Progressive Web App (PWA) | 1-click install on any modern browser with offline caching |
+| **Android** | In Chrome, tap **⋮** ➔ **"Install app"** or click **"📲 Install App"** | Native WebAPK with app icon in App Drawer & Home Screen |
+| **iOS (iPhone/iPad)** | In Safari, tap Share **📤** ➔ **"Add to Home Screen"** | Full-screen standalone web app on iOS Home Screen |
+| **Windows / macOS** | In Chrome/Edge, click the install icon in address bar or sidebar | Desktop standalone application launcher |
 
 ---
 
@@ -137,7 +136,7 @@ CalcVerse includes a dedicated **Install & Download Center** with automatic devi
 
 - **Frontend**: Semantic HTML5, Vanilla JavaScript (ES6+), Vanilla CSS3 (Custom Design System).
 - **APIs**: Web Audio API, HTML5 Canvas API, Open Exchange Rates API, Web Storage API (`localStorage`), Service Worker API (PWA Cache-First + Network-First).
-- **Packaging**: Android WebAPK, Windows Executable Launcher, Apple iOS Configuration Profile (`.mobileconfig`).
+- **PWA Capabilities**: Full offline caching via Service Worker (`sw.js`), WebAPK integration, responsive layout for Mobile & Desktop.
 - **Zero External Dependencies**: Fast load times, lightweight, and completely self-contained.
 
 ---
