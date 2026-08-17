@@ -77,16 +77,19 @@
         const navItems = document.querySelectorAll('.nav-item');
         const views = document.querySelectorAll('.calculator-view');
         const calcTitle = document.getElementById('calculatorTitle');
+        const calcSubtitle = document.getElementById('calculatorSubtitle');
+        const sidebar = document.getElementById('sidebar');
+        const mobileBtn = document.getElementById('mobileMenuBtn');
         const sidebarCloseBtn = document.getElementById('sidebarCloseBtn');
         const sidebarOverlay = document.getElementById('sidebarOverlay');
 
         const openSidebar = () => {
-            sidebar.classList.add('open');
+            if (sidebar) sidebar.classList.add('open');
             if (sidebarOverlay) sidebarOverlay.classList.add('open');
         };
 
         const closeSidebar = () => {
-            sidebar.classList.remove('open');
+            if (sidebar) sidebar.classList.remove('open');
             if (sidebarOverlay) sidebarOverlay.classList.remove('open');
         };
 
