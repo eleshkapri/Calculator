@@ -1739,9 +1739,22 @@
         FinancialEngine.init();
         renderHistoryList();
 
-        // PWA Service Worker Registration & Install Prompt
+        // Clear old legacy caches
+        if ('caches' in window) {
+            caches.keys().then((names) => {
+                names.forEach((name) => {
+                    if (name.includes('omni') || name === 'omnicalc-v1') {
+                        caches.delete(name);
+                    }
+                });
+            });
+        }
+
+        // PWA Service Worker Registration & Force Update
         if ('serviceWorker' in navigator) {
-            navigator.serviceWorker.register('./sw.js').catch(() => {});
+            navigator.serviceWorker.register('./sw.js').then((reg) => {
+                reg.update().catch(() => {});
+            }).catch(() => {});
         }
 
         let deferredPrompt;

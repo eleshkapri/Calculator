@@ -1,5 +1,5 @@
-// Service Worker for OmniCalc Pro (Offline caching & PWA install support)
-const CACHE_NAME = 'omnicalc-v1';
+// Service Worker for CalcVerse Pro (Network-first with offline fallback)
+const CACHE_NAME = 'calcverse-v2';
 const ASSETS = [
   './',
   './index.html',
@@ -9,12 +9,12 @@ const ASSETS = [
 ];
 
 self.addEventListener('install', (e) => {
+  self.skipWaiting();
   e.waitUntil(
     caches.open(CACHE_NAME).then((cache) => {
       return cache.addAll(ASSETS);
     })
   );
-  self.skipWaiting();
 });
 
 self.addEventListener('activate', (e) => {
@@ -32,10 +32,23 @@ self.addEventListener('activate', (e) => {
   self.clients.claim();
 });
 
+// Network-first strategy: Always fetch fresh content from server/Vercel first!
 self.addEventListener('fetch', (e) => {
   e.respondWith(
-    caches.match(e.request).then((res) => {
-      return res || fetch(e.request).catch(() => caches.match('./index.html'));
-    })
+    fetch(e.request)
+      .then((networkResponse) => {
+        if (networkResponse && networkResponse.status === 200) {
+          const responseClone = networkResponse.clone();
+          caches.open(CACHE_NAME).then((cache) => {
+            cache.put(e.request, responseClone);
+          });
+        }
+        return networkResponse;
+      })
+      .catch(() => {
+        return caches.match(e.request).then((cachedResponse) => {
+          return cachedResponse || caches.match('./index.html');
+        });
+      })
   );
 });
