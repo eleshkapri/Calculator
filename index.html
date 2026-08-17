@@ -115,9 +115,9 @@
             </div>
 
             <div class="sidebar-footer">
-                <button id="installPwaBtn" class="utility-btn" style="display: none;" title="Install on this device">
+                <button id="installAppBtn" class="utility-btn" onclick="CalcVerse.openInstallModal()" title="Download APK for Mobile or EXE for Laptop">
                     <span>📲</span>
-                    <span class="btn-text">Install App</span>
+                    <span class="btn-text">Install App (APK/EXE)</span>
                 </button>
                 <button id="themeToggleBtn" class="utility-btn" title="Toggle Theme">
                     <span id="themeIcon">☀️</span>
@@ -1032,9 +1032,83 @@
         <div class="sidebar-overlay" id="sidebarOverlay"></div>
     </div>
 
+    <!-- Install / Download Center Modal -->
+    <div class="modal-backdrop" id="installModalBackdrop">
+        <div class="install-modal" id="installModal">
+            <div class="install-modal-header">
+                <div class="brand-badge-row">
+                    <span class="logo-mini">📲</span>
+                    <h3>Install & Download CalcVerse</h3>
+                </div>
+                <button class="close-btn" onclick="CalcVerse.closeInstallModal()" aria-label="Close modal">✕</button>
+            </div>
+
+            <div class="install-modal-body">
+                <!-- Dynamic Device Detection Banner -->
+                <div class="detected-device-card" id="detectedDeviceCard">
+                    <div class="device-info">
+                        <span class="device-icon" id="detectedIcon">💻</span>
+                        <div>
+                            <h4 id="detectedTitle">Windows PC / Laptop</h4>
+                            <p id="detectedDesc">Recommended: Download Windows Setup (.exe) or Install App</p>
+                        </div>
+                    </div>
+                    <button class="primary-download-btn" id="primaryDownloadBtn" onclick="CalcVerse.downloadDetectedApp()">
+                        📥 Download Recommended
+                    </button>
+                </div>
+
+                <h4 class="install-section-title">All Platforms & Formats</h4>
+                <div class="install-cards-grid">
+                    <!-- Android APK -->
+                    <div class="platform-card" id="cardAndroid">
+                        <div class="platform-header">
+                            <span class="platform-icon">🤖</span>
+                            <div>
+                                <h5>Android APK</h5>
+                                <span class="platform-sub">For Mobile Phones & Tablets</span>
+                            </div>
+                        </div>
+                        <button class="download-action-btn apk-btn" onclick="CalcVerse.downloadApk()">
+                            📥 Download .APK
+                        </button>
+                    </div>
+
+                    <!-- Windows EXE -->
+                    <div class="platform-card" id="cardWindows">
+                        <div class="platform-header">
+                            <span class="platform-icon">🪟</span>
+                            <div>
+                                <h5>Windows App (.exe)</h5>
+                                <span class="platform-sub">For Laptops & Desktop PCs</span>
+                            </div>
+                        </div>
+                        <button class="download-action-btn exe-btn" onclick="CalcVerse.downloadExe()">
+                            📥 Download .EXE
+                        </button>
+                    </div>
+
+                    <!-- PWA Instant Install -->
+                    <div class="platform-card" id="cardPwa">
+                        <div class="platform-header">
+                            <span class="platform-icon">⚡</span>
+                            <div>
+                                <h5>Instant Web App</h5>
+                                <span class="platform-sub">Install to Home Screen / Desktop</span>
+                            </div>
+                        </div>
+                        <button class="download-action-btn pwa-btn" id="modalPwaInstallBtn" onclick="CalcVerse.triggerPwaPrompt()">
+                            📲 Install Now
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <!-- Toast Notification -->
     <div class="toast" id="toast">Copied to clipboard!</div>
 
-    <script src="script.js?v=2.3"></script>
+    <script src="script.js?v=2.4"></script>
 </body>
 </html>

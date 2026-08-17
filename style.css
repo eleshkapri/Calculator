@@ -2177,7 +2177,210 @@ body.dark-theme .epoch-live-val {
     z-index: 200;
 }
 
-.toast.show { transform: translateX(-50%) translateY(0); opacity: 1; }
+/* Install / Download Modal */
+.modal-backdrop {
+    position: fixed;
+    inset: 0;
+    background-color: rgba(0, 0, 0, 0.7);
+    backdrop-filter: blur(5px);
+    z-index: 150;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 16px;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.25s ease;
+}
+
+.modal-backdrop.open {
+    opacity: 1;
+    pointer-events: auto;
+}
+
+.install-modal {
+    background: var(--bg-surface);
+    border: 1px solid var(--border-subtle);
+    border-radius: var(--radius-xl);
+    width: 100%;
+    max-width: 520px;
+    box-shadow: 0 20px 50px rgba(0, 0, 0, 0.5);
+    overflow: hidden;
+    transform: scale(0.95);
+    transition: transform 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.modal-backdrop.open .install-modal {
+    transform: scale(1);
+}
+
+.install-modal-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 18px 24px;
+    border-bottom: 1px solid var(--border-subtle);
+}
+
+.brand-badge-row {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.brand-badge-row h3 {
+    font-size: 1.15rem;
+    font-weight: 700;
+    color: var(--text-primary);
+}
+
+.install-modal-body {
+    padding: 20px 24px;
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+}
+
+.detected-device-card {
+    background: linear-gradient(135deg, rgba(37, 99, 235, 0.12), rgba(99, 102, 241, 0.08));
+    border: 1px solid rgba(37, 99, 235, 0.3);
+    border-radius: var(--radius-lg);
+    padding: 16px;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.device-info {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.device-icon {
+    font-size: 1.8rem;
+}
+
+.device-info h4 {
+    font-size: 1.05rem;
+    font-weight: 700;
+    color: #2563eb;
+}
+
+body.dark-theme .device-info h4 {
+    color: #60a5fa;
+}
+
+.device-info p {
+    font-size: 0.8rem;
+    color: var(--text-secondary);
+    margin-top: 2px;
+}
+
+.primary-download-btn {
+    background: linear-gradient(135deg, #2563eb, #4f46e5);
+    color: #ffffff;
+    border: none;
+    border-radius: var(--radius-md);
+    padding: 12px;
+    font-family: var(--font-ui);
+    font-size: 0.95rem;
+    font-weight: 700;
+    cursor: pointer;
+    transition: var(--transition);
+    box-shadow: 0 4px 14px rgba(37, 99, 235, 0.4);
+    text-align: center;
+}
+
+.primary-download-btn:hover {
+    box-shadow: 0 6px 20px rgba(37, 99, 235, 0.6);
+    transform: translateY(-1px);
+}
+
+.install-section-title {
+    font-size: 0.8rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    color: var(--text-muted);
+    margin-top: 4px;
+}
+
+.install-cards-grid {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.platform-card {
+    background: var(--bg-surface-elevated);
+    border: 1px solid var(--border-subtle);
+    border-radius: var(--radius-md);
+    padding: 12px 16px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    transition: var(--transition);
+}
+
+.platform-card:hover {
+    border-color: rgba(37, 99, 235, 0.4);
+    background: var(--bg-surface-hover);
+}
+
+.platform-header {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.platform-icon {
+    font-size: 1.5rem;
+}
+
+.platform-header h5 {
+    font-size: 0.92rem;
+    font-weight: 700;
+    color: var(--text-primary);
+}
+
+.platform-sub {
+    font-size: 0.72rem;
+    color: var(--text-secondary);
+    display: block;
+}
+
+.download-action-btn {
+    background: var(--bg-input);
+    border: 1px solid var(--border-subtle);
+    color: var(--text-primary);
+    font-family: var(--font-ui);
+    font-size: 0.82rem;
+    font-weight: 600;
+    padding: 8px 14px;
+    border-radius: var(--radius-sm);
+    cursor: pointer;
+    transition: var(--transition);
+    white-space: nowrap;
+}
+
+.download-action-btn:hover {
+    background: var(--bg-surface-hover);
+    border-color: #2563eb;
+    color: #2563eb;
+}
+
+.download-action-btn.pwa-btn {
+    background: rgba(16, 185, 129, 0.15);
+    color: #10b981;
+    border-color: rgba(16, 185, 129, 0.3);
+}
+
+.download-action-btn.pwa-btn:hover {
+    background: #10b981;
+    color: white;
+}
 
 /* ==========================================================================
    Responsive Breakpoints

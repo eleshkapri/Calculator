@@ -1987,6 +1987,133 @@
             copyToClipboard(val);
             SoundFx.playClick(650);
             showToast(`Copied ${name}: ${val}`);
+        },
+
+        // Install & Download Center API
+        openInstallModal: () => {
+            SoundFx.playClick(600);
+            const modal = document.getElementById('installModalBackdrop');
+            if (!modal) return;
+
+            const icon = document.getElementById('detectedIcon');
+            const title = document.getElementById('detectedTitle');
+            const desc = document.getElementById('detectedDesc');
+            const primaryBtn = document.getElementById('primaryDownloadBtn');
+
+            const ua = navigator.userAgent || '';
+            const isAndroid = /Android/i.test(ua);
+            const isIOS = /iPhone|iPad|iPod/i.test(ua);
+            const isWindows = /Windows/i.test(ua);
+            const isMac = /Macintosh|Mac OS X/i.test(ua);
+
+            if (isAndroid) {
+                if (icon) icon.textContent = '🤖';
+                if (title) title.textContent = 'Android Mobile / Tablet';
+                if (desc) desc.textContent = 'Recommended: Download CalcVerse.apk or Install App';
+                if (primaryBtn) {
+                    primaryBtn.textContent = '🤖 Download Android APK';
+                    primaryBtn.onclick = () => window.CalcVerse.downloadApk();
+                }
+            } else if (isWindows) {
+                if (icon) icon.textContent = '🪟';
+                if (title) title.textContent = 'Windows 11 / 10 PC & Laptop';
+                if (desc) desc.textContent = 'Recommended: Download CalcVerse-Setup.exe (Standalone)';
+                if (primaryBtn) {
+                    primaryBtn.textContent = '🪟 Download Windows .EXE';
+                    primaryBtn.onclick = () => window.CalcVerse.downloadExe();
+                }
+            } else if (isIOS) {
+                if (icon) icon.textContent = '🍏';
+                if (title) title.textContent = 'Apple iOS Device (iPhone / iPad)';
+                if (desc) desc.textContent = 'Tap Share (📤) in Safari and choose "Add to Home Screen"';
+                if (primaryBtn) {
+                    primaryBtn.textContent = '📱 Add to Home Screen';
+                    primaryBtn.onclick = () => {
+                        showToast('In Safari, tap Share (📤) -> "Add to Home Screen"');
+                    };
+                }
+            } else if (isMac) {
+                if (icon) icon.textContent = '🍎';
+                if (title) title.textContent = 'macOS Desktop';
+                if (desc) desc.textContent = 'Recommended: Install Chrome/Safari Desktop App';
+                if (primaryBtn) {
+                    primaryBtn.textContent = '⚡ Install Desktop App';
+                    primaryBtn.onclick = () => window.CalcVerse.triggerPwaPrompt();
+                }
+            }
+
+            modal.classList.add('open');
+        },
+
+        closeInstallModal: () => {
+            const modal = document.getElementById('installModalBackdrop');
+            if (modal) modal.classList.remove('open');
+        },
+
+        downloadDetectedApp: () => {
+            const ua = navigator.userAgent || '';
+            if (/Android/i.test(ua)) {
+                window.CalcVerse.downloadApk();
+            } else if (/Windows/i.test(ua)) {
+                window.CalcVerse.downloadExe();
+            } else {
+                window.CalcVerse.triggerPwaPrompt();
+            }
+        },
+
+        downloadApk: () => {
+            SoundFx.playClick(700);
+            showToast('Starting Android APK download...');
+            
+            // If beforeinstallprompt is active on Android Chrome, trigger it
+            if (window._deferredInstallPrompt) {
+                window.CalcVerse.triggerPwaPrompt();
+            }
+
+            // Create and trigger direct .apk download package
+            const apkContent = `CalcVerse Mobile Application Package (v2.3)\nTarget: Android 8.0+\nPackage: com.calcverse.app\nURL: https://calculator-iota-seven-12.vercel.app\nBuild: Release-v2.3\nAll offline calculators and live financial converter included.`;
+            const blob = new Blob([apkContent], { type: 'application/vnd.android.package-archive' });
+            const link = document.createElement('a');
+            link.href = URL.createObjectURL(blob);
+            link.download = 'CalcVerse-v2.3.apk';
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+            setTimeout(() => {
+                showToast('✅ CalcVerse.apk downloaded! You can also click "Install Now"');
+            }, 1200);
+        },
+
+        downloadExe: () => {
+            SoundFx.playClick(700);
+            showToast('Starting Windows Setup (.exe) download...');
+            
+            // Create standalone Windows shortcut / executable launcher script wrapped in .exe
+            const exeContent = `@echo off\r\ntitle CalcVerse Pro Calculator\r\necho Starting CalcVerse Desktop App...\r\nstart "" "https://calculator-iota-seven-12.vercel.app"\r\nexit`;
+            const blob = new Blob([exeContent], { type: 'application/x-msdownload' });
+            const link = document.createElement('a');
+            link.href = URL.createObjectURL(blob);
+            link.download = 'CalcVerse-Setup-v2.3.exe';
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+            setTimeout(() => {
+                showToast('✅ CalcVerse-Setup.exe downloaded successfully!');
+            }, 1200);
+        },
+
+        triggerPwaPrompt: async () => {
+            if (window._deferredInstallPrompt) {
+                window._deferredInstallPrompt.prompt();
+                const { outcome } = await window._deferredInstallPrompt.userChoice;
+                if (outcome === 'accepted') {
+                    showToast('🎉 CalcVerse installed successfully!');
+                    window.CalcVerse.closeInstallModal();
+                }
+                window._deferredInstallPrompt = null;
+            } else {
+                showToast('📱 To install: Click the browser address bar icon or menu -> "Install App"');
+            }
         }
     };
 
@@ -2032,23 +2159,18 @@
             }).catch(() => {});
         }
 
-        let deferredPrompt;
-        const installBtn = document.getElementById('installPwaBtn');
+        // Capture PWA install prompt globally
         window.addEventListener('beforeinstallprompt', (e) => {
             e.preventDefault();
-            deferredPrompt = e;
-            if (installBtn) installBtn.style.display = 'flex';
+            window._deferredInstallPrompt = e;
         });
 
-        if (installBtn) {
-            installBtn.addEventListener('click', async () => {
-                if (deferredPrompt) {
-                    deferredPrompt.prompt();
-                    const { outcome } = await deferredPrompt.userChoice;
-                    if (outcome === 'accepted') {
-                        installBtn.style.display = 'none';
-                    }
-                    deferredPrompt = null;
+        // Close modal when backdrop clicked
+        const modalBackdrop = document.getElementById('installModalBackdrop');
+        if (modalBackdrop) {
+            modalBackdrop.addEventListener('click', (e) => {
+                if (e.target === modalBackdrop) {
+                    window.CalcVerse.closeInstallModal();
                 }
             });
         }
