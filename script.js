@@ -1989,58 +1989,15 @@
             showToast(`Copied ${name}: ${val}`);
         },
 
-        // Install & Download Center API
+        // Install Modal API
         openInstallModal: () => {
             SoundFx.playClick(600);
-            const modal = document.getElementById('installModalBackdrop');
-            if (!modal) return;
-
-            const icon = document.getElementById('detectedIcon');
-            const title = document.getElementById('detectedTitle');
-            const desc = document.getElementById('detectedDesc');
-            const primaryBtn = document.getElementById('primaryDownloadBtn');
-
-            const ua = navigator.userAgent || '';
-            const isAndroid = /Android/i.test(ua);
-            const isIOS = /iPhone|iPad|iPod/i.test(ua);
-            const isWindows = /Windows/i.test(ua);
-            const isMac = /Macintosh|Mac OS X/i.test(ua);
-
-            if (isAndroid) {
-                if (icon) icon.textContent = '🤖';
-                if (title) title.textContent = 'Android Mobile Phone / Tablet';
-                if (desc) desc.textContent = 'Install CalcVerse directly to your App Drawer (Offline Ready)';
-                if (primaryBtn) {
-                    primaryBtn.textContent = '📲 Install App on Android (1-Tap)';
-                    primaryBtn.onclick = () => window.CalcVerse.triggerPwaPrompt();
-                }
-            } else if (isWindows) {
-                if (icon) icon.textContent = '🪟';
-                if (title) title.textContent = 'Windows 11 / 10 PC & Laptop';
-                if (desc) desc.textContent = 'Recommended: Download CalcVerse-Setup.exe (Standalone)';
-                if (primaryBtn) {
-                    primaryBtn.textContent = '🪟 Download Windows .EXE';
-                    primaryBtn.onclick = () => window.CalcVerse.downloadExe();
-                }
-            } else if (isIOS) {
-                if (icon) icon.textContent = '🍏';
-                if (title) title.textContent = 'Apple iOS Device (iPhone / iPad)';
-                if (desc) desc.textContent = 'Recommended: Install iOS WebClip Profile or Add to Home Screen';
-                if (primaryBtn) {
-                    primaryBtn.textContent = '🍏 Get Apple iOS App';
-                    primaryBtn.onclick = () => window.CalcVerse.downloadIosProfile();
-                }
-            } else if (isMac) {
-                if (icon) icon.textContent = '🍎';
-                if (title) title.textContent = 'macOS Desktop';
-                if (desc) desc.textContent = 'Recommended: Install Chrome/Safari Desktop App';
-                if (primaryBtn) {
-                    primaryBtn.textContent = '⚡ Install Desktop App';
-                    primaryBtn.onclick = () => window.CalcVerse.triggerPwaPrompt();
-                }
+            if (window._deferredInstallPrompt) {
+                window.CalcVerse.triggerPwaPrompt();
+                return;
             }
-
-            modal.classList.add('open');
+            const modal = document.getElementById('installModalBackdrop');
+            if (modal) modal.classList.add('open');
         },
 
         closeInstallModal: () => {

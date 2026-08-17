@@ -117,9 +117,9 @@
             </div>
 
             <div class="sidebar-footer">
-                <button id="installAppBtn" class="utility-btn" onclick="CalcVerse.openInstallModal()" title="Download APK for Mobile or EXE for Laptop">
+                <button id="installAppBtn" class="utility-btn" onclick="CalcVerse.openInstallModal()" title="Install CalcVerse on your device">
                     <span>📲</span>
-                    <span class="btn-text">Install App (APK/EXE)</span>
+                    <span class="btn-text">Install App</span>
                 </button>
                 <button id="themeToggleBtn" class="utility-btn" title="Toggle Theme">
                     <span id="themeIcon">☀️</span>
@@ -1034,7 +1034,7 @@
         <div class="sidebar-overlay" id="sidebarOverlay"></div>
     </div>
 
-    <!-- Install / Download Center Modal -->
+    <!-- Install CalcVerse Modal -->
     <div class="modal-backdrop" id="installModalBackdrop">
         <div class="install-modal" id="installModal">
             <div class="sheet-handle"></div>
@@ -1047,77 +1047,32 @@
             </div>
 
             <div class="install-modal-body">
-                <!-- Dynamic Device Detection Banner -->
-                <div class="detected-device-card" id="detectedDeviceCard">
-                    <div class="device-info">
-                        <span class="device-icon" id="detectedIcon">📱</span>
-                        <div class="device-text">
-                            <h4 id="detectedTitle">Mobile App</h4>
-                            <p id="detectedDesc">Install directly to your Home Screen & App Drawer</p>
+                <!-- Single Instant Web App Card -->
+                <div class="platform-card instant-install-card" id="cardPwa">
+                    <div class="platform-header">
+                        <span class="platform-icon">⚡</span>
+                        <div>
+                            <h5>Instant Web App</h5>
+                            <span class="platform-sub">Install to Home Screen / Desktop (Offline Ready)</span>
                         </div>
                     </div>
-                    <button class="primary-download-btn" id="primaryDownloadBtn" onclick="CalcVerse.downloadDetectedApp()">
-                        📲 Install App on This Device
+                    <button class="download-action-btn highlight" id="modalPwaInstallBtn" onclick="CalcVerse.triggerPwaPrompt()">
+                        📲 Install Now
                     </button>
                 </div>
 
-                <!-- Phone Install Instructions Card -->
-                <div class="phone-install-guide" id="phoneInstallGuide">
-                    <h5>💡 1-Tap Browser Installation:</h5>
+                <!-- Quick Browser Guide -->
+                <div class="phone-install-guide">
+                    <h5>💡 Browser Shortcut:</h5>
                     <div class="guide-steps">
                         <div class="guide-step">
                             <span class="step-num">🤖</span>
-                            <span><strong>Android (Chrome)</strong>: Tap menu <strong>⋮</strong> top-right ➔ tap <strong>"Install app"</strong>.</span>
+                            <span><strong>Android / Chrome / PC</strong>: Tap browser menu <strong>⋮</strong> ➔ <strong>"Install app"</strong>.</span>
                         </div>
                         <div class="guide-step">
                             <span class="step-num">🍏</span>
-                            <span><strong>iPhone (Safari)</strong>: Tap Share <strong>📤</strong> bottom ➔ tap <strong>"Add to Home Screen"</strong>.</span>
+                            <span><strong>iPhone (Safari)</strong>: Tap Share <strong>📤</strong> ➔ <strong>"Add to Home Screen"</strong>.</span>
                         </div>
-                    </div>
-                </div>
-
-                <h4 class="install-section-title">All Platform Packages</h4>
-                <div class="install-cards-grid">
-                    <!-- Android App -->
-                    <div class="platform-card" id="cardAndroid">
-                        <div class="platform-header">
-                            <span class="platform-icon">🤖</span>
-                            <div>
-                                <h5>Android Phone App</h5>
-                                <span class="platform-sub">Installs directly to Home Screen & Drawer</span>
-                            </div>
-                        </div>
-                        <button class="download-action-btn pwa-btn" onclick="CalcVerse.installAndroidApp()">
-                            📲 Install App
-                        </button>
-                    </div>
-
-                    <!-- Windows EXE -->
-                    <div class="platform-card" id="cardWindows">
-                        <div class="platform-header">
-                            <span class="platform-icon">🪟</span>
-                            <div>
-                                <h5>Windows App (.exe)</h5>
-                                <span class="platform-sub">For PC & Laptops</span>
-                            </div>
-                        </div>
-                        <button class="download-action-btn exe-btn" onclick="CalcVerse.downloadExe()">
-                            📥 Get .EXE
-                        </button>
-                    </div>
-
-                    <!-- Apple iOS Profile -->
-                    <div class="platform-card" id="cardIos">
-                        <div class="platform-header">
-                            <span class="platform-icon">🍏</span>
-                            <div>
-                                <h5>Apple iOS WebClip</h5>
-                                <span class="platform-sub">iPhone & iPad Profile</span>
-                            </div>
-                        </div>
-                        <button class="download-action-btn ios-btn" onclick="CalcVerse.downloadIosProfile()">
-                            📥 Get Profile
-                        </button>
                     </div>
                 </div>
             </div>
