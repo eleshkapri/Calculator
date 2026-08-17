@@ -1112,6 +1112,57 @@ body.dark-theme .angle-mode-pill {
    4. Financial & Form Layouts
    ========================================================================== */
 
+.financial-toolbar {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    margin-bottom: 18px;
+    width: 100%;
+    max-width: 680px;
+}
+
+.financial-toolbar .sub-tabs {
+    margin-bottom: 0;
+    flex: 1;
+    min-width: 240px;
+}
+
+.currency-picker-wrap {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    background-color: var(--bg-surface);
+    border: 1px solid var(--border-subtle);
+    padding: 6px 12px;
+    border-radius: var(--radius-lg);
+}
+
+.currency-label {
+    font-size: 0.8rem;
+    font-weight: 700;
+    color: var(--text-secondary);
+}
+
+.currency-dropdown {
+    background-color: var(--bg-input);
+    border: 1px solid var(--border-subtle);
+    color: var(--text-primary);
+    font-family: var(--font-ui);
+    font-size: 0.85rem;
+    font-weight: 600;
+    padding: 6px 10px;
+    border-radius: var(--radius-md);
+    cursor: pointer;
+    outline: none;
+    transition: var(--transition);
+}
+
+.currency-dropdown:focus {
+    border-color: #2563eb;
+}
+
 .sub-tabs {
     display: flex;
     flex-wrap: nowrap;

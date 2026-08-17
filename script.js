@@ -676,8 +676,29 @@
     // =========================================================================
     // 6. Financial Engine (Loan EMI & Compound Growth)
     // =========================================================================
+    const CURRENCY_CONFIG = {
+        INR: { symbol: '₹', locale: 'en-IN', name: 'Indian Rupee' },
+        USD: { symbol: '$', locale: 'en-US', name: 'US Dollar' },
+        EUR: { symbol: '€', locale: 'de-DE', name: 'Euro' },
+        GBP: { symbol: '£', locale: 'en-GB', name: 'British Pound' },
+        JPY: { symbol: '¥', locale: 'ja-JP', name: 'Japanese Yen' },
+        CAD: { symbol: 'CA$', locale: 'en-CA', name: 'Canadian Dollar' },
+        AUD: { symbol: 'AU$', locale: 'en-AU', name: 'Australian Dollar' },
+        AED: { symbol: 'AED ', locale: 'ar-AE', name: 'UAE Dirham' },
+        CNY: { symbol: '¥', locale: 'zh-CN', name: 'Chinese Yuan' }
+    };
+
     const FinancialEngine = {
+        currentCurrency: localStorage.getItem('calcverse_fin_currency') || 'INR',
+
         init() {
+            // Restore saved currency
+            const curSelect = document.getElementById('finCurrencySelect');
+            if (curSelect) {
+                curSelect.value = this.currentCurrency;
+            }
+            this.updateLabels();
+
             // Sliders & Number sync
             const syncInputs = [
                 ['loanAmount', 'loanAmountRange'],
@@ -699,6 +720,41 @@
                 const el = document.getElementById(id);
                 if (el) el.addEventListener('input', () => this.calculateCompound());
             });
+
+            this.calculateEMI();
+            this.calculateCompound();
+        },
+
+        setCurrency(code) {
+            if (CURRENCY_CONFIG[code]) {
+                SoundFx.playClick(600);
+                this.currentCurrency = code;
+                localStorage.setItem('calcverse_fin_currency', code);
+                this.updateLabels();
+                this.calculateEMI();
+                this.calculateCompound();
+                showToast(`Currency set to ${CURRENCY_CONFIG[code].name} (${CURRENCY_CONFIG[code].symbol})`);
+            }
+        },
+
+        updateLabels() {
+            const cur = CURRENCY_CONFIG[this.currentCurrency] || CURRENCY_CONFIG.INR;
+            const sym = cur.symbol;
+
+            const lAmount = document.getElementById('loanAmountLabel');
+            if (lAmount) lAmount.textContent = `Loan Amount (${sym})`;
+
+            const cPrinc = document.getElementById('ciPrincipalLabel');
+            if (cPrinc) cPrinc.textContent = `Initial Principal (${sym})`;
+
+            const cMonth = document.getElementById('ciMonthlyLabel');
+            if (cMonth) cMonth.textContent = `Monthly Contribution (${sym})`;
+        },
+
+        formatMoney(amount) {
+            const cur = CURRENCY_CONFIG[this.currentCurrency] || CURRENCY_CONFIG.INR;
+            const formatted = amount.toLocaleString(cur.locale, { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+            return `${cur.symbol}${formatted}`;
         },
 
         calculateEMI() {
@@ -719,10 +775,10 @@
             const principalRatio = (P / totalPayable * 100).toFixed(1);
             const interestRatio = (totalInterest / totalPayable * 100).toFixed(1);
 
-            document.getElementById('emiMonthly').textContent = `$${emi.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`;
-            document.getElementById('emiPrincipal').textContent = `$${P.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`;
-            document.getElementById('emiTotalInterest').textContent = `$${totalInterest.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`;
-            document.getElementById('emiTotalPayable').textContent = `$${totalPayable.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`;
+            document.getElementById('emiMonthly').textContent = this.formatMoney(emi);
+            document.getElementById('emiPrincipal').textContent = this.formatMoney(P);
+            document.getElementById('emiTotalInterest').textContent = this.formatMoney(totalInterest);
+            document.getElementById('emiTotalPayable').textContent = this.formatMoney(totalPayable);
 
             document.getElementById('ratioPrincipal').textContent = `${principalRatio}%`;
             document.getElementById('ratioInterest').textContent = `${interestRatio}%`;
@@ -755,9 +811,9 @@
             const totalInvested = P + (PMT * months);
             const totalInterest = Math.max(0, totalFutureValue - totalInvested);
 
-            document.getElementById('ciFutureValue').textContent = `$${totalFutureValue.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`;
-            document.getElementById('ciTotalInvested').textContent = `$${totalInvested.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`;
-            document.getElementById('ciTotalInterest').textContent = `$${totalInterest.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`;
+            document.getElementById('ciFutureValue').textContent = this.formatMoney(totalFutureValue);
+            document.getElementById('ciTotalInvested').textContent = this.formatMoney(totalInvested);
+            document.getElementById('ciTotalInterest').textContent = this.formatMoney(totalInterest);
         }
     };
 
@@ -1721,6 +1777,9 @@
         },
         zoomGraph: (factor) => GraphEngine.zoom(factor),
         resetGraph: () => GraphEngine.reset(),
+
+        // Financial API
+        setFinancialCurrency: (code) => FinancialEngine.setCurrency(code),
 
         // Programmer API
         setRadix: (r) => ProgrammerEngine.setRadix(r),

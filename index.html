@@ -337,16 +337,32 @@
 
                 <!-- 4. FINANCIAL CALCULATOR -->
                 <section class="calculator-view" id="view-financial">
-                    <div class="sub-tabs">
-                        <button class="sub-tab active" data-subtab="loan">Loan / EMI Calculator</button>
-                        <button class="sub-tab" data-subtab="compound">Compound Interest & Growth</button>
+                    <div class="financial-toolbar">
+                        <div class="sub-tabs">
+                            <button class="sub-tab active" data-subtab="loan">Loan / EMI Calculator</button>
+                            <button class="sub-tab" data-subtab="compound">Compound Interest & Growth</button>
+                        </div>
+                        <div class="currency-picker-wrap">
+                            <label for="finCurrencySelect" class="currency-label">Currency:</label>
+                            <select id="finCurrencySelect" class="currency-dropdown" onchange="CalcVerse.setFinancialCurrency(this.value)">
+                                <option value="INR" selected>₹ INR (Indian Rupee)</option>
+                                <option value="USD">$ USD (US Dollar)</option>
+                                <option value="EUR">€ EUR (Euro)</option>
+                                <option value="GBP">£ GBP (British Pound)</option>
+                                <option value="JPY">¥ JPY (Japanese Yen)</option>
+                                <option value="CAD">CA$ CAD (Canadian Dollar)</option>
+                                <option value="AUD">AU$ AUD (Australian Dollar)</option>
+                                <option value="AED">AED (UAE Dirham)</option>
+                                <option value="CNY">¥ CNY (Chinese Yuan)</option>
+                            </select>
+                        </div>
                     </div>
 
                     <!-- EMI Calculator -->
                     <div class="financial-card subtab-view active" id="subtab-loan">
                         <div class="form-grid">
                             <div class="input-card">
-                                <label for="loanAmount">Loan Amount ($ / ₹)</label>
+                                <label for="loanAmount" id="loanAmountLabel">Loan Amount (₹)</label>
                                 <input type="number" id="loanAmount" value="100000" min="100" step="1000">
                                 <input type="range" id="loanAmountRange" min="1000" max="1000000" step="1000" value="100000">
                             </div>
@@ -397,11 +413,11 @@
                     <div class="financial-card subtab-view" id="subtab-compound">
                         <div class="form-grid">
                             <div class="input-card">
-                                <label for="ciPrincipal">Initial Principal ($ / ₹)</label>
+                                <label for="ciPrincipal" id="ciPrincipalLabel">Initial Principal (₹)</label>
                                 <input type="number" id="ciPrincipal" value="10000" min="0" step="500">
                             </div>
                             <div class="input-card">
-                                <label for="ciMonthly">Monthly Contribution ($ / ₹)</label>
+                                <label for="ciMonthly" id="ciMonthlyLabel">Monthly Contribution (₹)</label>
                                 <input type="number" id="ciMonthly" value="200" min="0" step="50">
                             </div>
                             <div class="input-card">
