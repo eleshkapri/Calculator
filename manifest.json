@@ -1,0 +1,18 @@
+{
+  "name": "OmniCalc Pro - Multi-Calculator Suite",
+  "short_name": "OmniCalc",
+  "description": "Modern multi-calculator suite with Standard, Scientific, Graphing, Financial, Programmer, Time, BMI & Date tools.",
+  "start_url": "./index.html",
+  "display": "standalone",
+  "background_color": "#0a0e17",
+  "theme_color": "#2563eb",
+  "orientation": "any",
+  "icons": [
+    {
+      "src": "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 512 512'%3E%3Crect width='512' height='512' rx='128' fill='%232563eb'/%3E%3Cpath d='M160 120h192c22 0 40 18 40 40v192c0 22-18 40-40 40H160c-22 0-40-18-40-40V160c0-22 18-40 40-40z' fill='%23ffffff' fill-opacity='0.15'/%3E%3Ctext x='256' y='320' font-family='sans-serif' font-size='220' font-weight='bold' fill='%23ffffff' text-anchor='middle'%3E%C3%97%2B%3C/text%3E%3C/svg%3E",
+      "sizes": "512x512",
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
+    }
+  ]
+}

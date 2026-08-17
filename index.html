@@ -3,49 +3,903 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>Calculator</title>
+    <meta name="theme-color" content="#2563eb">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <link rel="manifest" href="manifest.json">
+    <title>OmniCalc Pro - Modern Multi-Calculator Suite</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;600;700&family=Outfit:wght@400;500;600;700;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="style.css">
 </head>
-<body>
-    <div class="calculator">
-        <h1>Calculator</h1>
-        <input type="text" class="display" id="result" readonly>
-        <div>
-            <button class="operators" onclick="clearResult()">C</button>
-            <button class="operators" onclick="insertValue('(')">(</button>
-            <button class="operators" onclick="insertValue(')')">)</button>
-            <button class="operators" onclick="insertValue('%')">%</button>
+<body class="dark-theme">
+    <div class="app-container">
+        <!-- Sidebar Navigation -->
+        <aside class="sidebar" id="sidebar">
+            <div class="brand">
+                <div class="logo-icon">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                        <rect x="4" y="2" width="16" height="20" rx="3"></rect>
+                        <line x1="8" y1="6" x2="16" y2="6"></line>
+                        <line x1="8" y1="10" x2="8.01" y2="10"></line>
+                        <line x1="12" y1="10" x2="12.01" y2="10"></line>
+                        <line x1="16" y1="10" x2="16.01" y2="10"></line>
+                        <line x1="8" y1="14" x2="8.01" y2="14"></line>
+                        <line x1="12" y1="14" x2="12.01" y2="14"></line>
+                        <line x1="16" y1="14" x2="16.01" y2="14"></line>
+                        <line x1="8" y1="18" x2="8.01" y2="18"></line>
+                        <line x1="12" y1="18" x2="12.01" y2="18"></line>
+                        <line x1="16" y1="18" x2="16.01" y2="18"></line>
+                    </svg>
+                </div>
+                <div class="brand-text">
+                    <h2>OmniCalc</h2>
+                    <span class="badge">PRO</span>
+                </div>
+            </div>
+
+            <nav class="nav-menu">
+                <button class="nav-item active" data-mode="standard">
+                    <span class="icon">🔢</span>
+                    <span class="label">Standard</span>
+                </button>
+                <button class="nav-item" data-mode="scientific">
+                    <span class="icon">🔬</span>
+                    <span class="label">Scientific</span>
+                </button>
+                <button class="nav-item" data-mode="graphing">
+                    <span class="icon">📈</span>
+                    <span class="label">Graphing</span>
+                </button>
+                <button class="nav-item" data-mode="financial">
+                    <span class="icon">💰</span>
+                    <span class="label">Financial</span>
+                </button>
+                <button class="nav-item" data-mode="converter">
+                    <span class="icon">🔄</span>
+                    <span class="label">Unit Converter</span>
+                </button>
+                <button class="nav-item" data-mode="programmer">
+                    <span class="icon">💻</span>
+                    <span class="label">Programmer</span>
+                </button>
+                <button class="nav-item" data-mode="health">
+                    <span class="icon">⚖️</span>
+                    <span class="label">BMI & Health</span>
+                </button>
+                <button class="nav-item" data-mode="date">
+                    <span class="icon">📅</span>
+                    <span class="label">Date & Age</span>
+                </button>
+                <button class="nav-item" data-mode="time">
+                    <span class="icon">⏱️</span>
+                    <span class="label">Time Calculator</span>
+                </button>
+            </nav>
+
+            <div class="sidebar-footer">
+                <button id="installPwaBtn" class="utility-btn" style="display: none;" title="Install on this device">
+                    <span>📲</span>
+                    <span class="btn-text">Install App</span>
+                </button>
+                <button id="themeToggleBtn" class="utility-btn" title="Toggle Theme">
+                    <span id="themeIcon">☀️</span>
+                    <span class="btn-text">Light Mode</span>
+                </button>
+                <button id="soundToggleBtn" class="utility-btn" title="Toggle Click Sound">
+                    <span id="soundIcon">🔊</span>
+                    <span class="btn-text">Sound ON</span>
+                </button>
+                <button id="historyToggleBtn" class="utility-btn history-btn" title="Calculation History">
+                    <span>📜</span>
+                    <span class="btn-text">History</span>
+                </button>
+            </div>
+        </aside>
+
+        <!-- Main Viewport -->
+        <main class="main-viewport">
+            <header class="top-header">
+                <button class="mobile-toggle" id="mobileMenuBtn" aria-label="Toggle menu">
+                    <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <line x1="3" y1="12" x2="21" y2="12"></line>
+                        <line x1="3" y1="6" x2="21" y2="6"></line>
+                        <line x1="3" y1="18" x2="21" y2="18"></line>
+                    </svg>
+                </button>
+                <div class="active-calculator-title">
+                    <h1 id="calculatorTitle">Standard Calculator</h1>
+                    <p id="calculatorSubtitle">Fast, precise everyday arithmetic</p>
+                </div>
+                <div class="header-actions">
+                    <button class="action-icon-btn" id="quickHistoryBtn" title="View History">
+                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <circle cx="12" cy="12" r="10"></circle>
+                            <polyline points="12 6 12 12 16 14"></polyline>
+                        </svg>
+                    </button>
+                </div>
+            </header>
+
+            <div class="calculators-container">
+                
+                <!-- 1. STANDARD CALCULATOR -->
+                <section class="calculator-view active" id="view-standard">
+                    <div class="calc-card">
+                        <div class="display-container">
+                            <div class="memory-indicator" id="stdMemoryIndicator"></div>
+                            <div class="expression-line" id="stdExpression"></div>
+                            <div class="result-line-wrapper">
+                                <input type="text" class="result-display" id="stdDisplay" value="0" readonly>
+                                <button class="copy-btn" id="stdCopyBtn" title="Copy result">📋</button>
+                            </div>
+                        </div>
+
+                        <!-- Memory Bar -->
+                        <div class="memory-bar">
+                            <button class="mem-btn" onclick="OmniCalc.memClear('std')">MC</button>
+                            <button class="mem-btn" onclick="OmniCalc.memRecall('std')">MR</button>
+                            <button class="mem-btn" onclick="OmniCalc.memAdd('std')">M+</button>
+                            <button class="mem-btn" onclick="OmniCalc.memSub('std')">M-</button>
+                            <button class="mem-btn" onclick="OmniCalc.memStore('std')">MS</button>
+                        </div>
+
+                        <!-- Keypad -->
+                        <div class="keypad standard-keypad">
+                            <button class="btn btn-fn" onclick="OmniCalc.clear('std')">AC</button>
+                            <button class="btn btn-fn" onclick="OmniCalc.backspace('std')">⌫</button>
+                            <button class="btn btn-fn" onclick="OmniCalc.inputVal('std', '%')">%</button>
+                            <button class="btn btn-op" onclick="OmniCalc.inputVal('std', '÷')">÷</button>
+
+                            <button class="btn btn-num" onclick="OmniCalc.inputVal('std', '7')">7</button>
+                            <button class="btn btn-num" onclick="OmniCalc.inputVal('std', '8')">8</button>
+                            <button class="btn btn-num" onclick="OmniCalc.inputVal('std', '9')">9</button>
+                            <button class="btn btn-op" onclick="OmniCalc.inputVal('std', '×')">×</button>
+
+                            <button class="btn btn-num" onclick="OmniCalc.inputVal('std', '4')">4</button>
+                            <button class="btn btn-num" onclick="OmniCalc.inputVal('std', '5')">5</button>
+                            <button class="btn btn-num" onclick="OmniCalc.inputVal('std', '6')">6</button>
+                            <button class="btn btn-op" onclick="OmniCalc.inputVal('std', '−')">−</button>
+
+                            <button class="btn btn-num" onclick="OmniCalc.inputVal('std', '1')">1</button>
+                            <button class="btn btn-num" onclick="OmniCalc.inputVal('std', '2')">2</button>
+                            <button class="btn btn-num" onclick="OmniCalc.inputVal('std', '3')">3</button>
+                            <button class="btn btn-op" onclick="OmniCalc.inputVal('std', '+')">+</button>
+
+                            <button class="btn btn-fn" onclick="OmniCalc.toggleSign('std')">±</button>
+                            <button class="btn btn-num" onclick="OmniCalc.inputVal('std', '0')">0</button>
+                            <button class="btn btn-num" onclick="OmniCalc.inputVal('std', '.')">.</button>
+                            <button class="btn btn-equals" onclick="OmniCalc.calculate('std')">=</button>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- 2. SCIENTIFIC CALCULATOR -->
+                <section class="calculator-view" id="view-scientific">
+                    <div class="calc-card scientific-card">
+                        <div class="display-container">
+                            <div class="sci-status-bar">
+                                <span class="angle-mode-pill" id="sciAngleMode" onclick="OmniCalc.toggleAngleMode()">DEG</span>
+                                <span class="memory-indicator" id="sciMemoryIndicator"></span>
+                            </div>
+                            <div class="expression-line" id="sciExpression"></div>
+                            <div class="result-line-wrapper">
+                                <input type="text" class="result-display" id="sciDisplay" value="0" readonly>
+                                <button class="copy-btn" id="sciCopyBtn" title="Copy result">📋</button>
+                            </div>
+                        </div>
+
+                        <!-- Scientific Memory Bar -->
+                        <div class="memory-bar">
+                            <button class="mem-btn" onclick="OmniCalc.toggleAngleMode()">DEG / RAD</button>
+                            <button class="mem-btn" onclick="OmniCalc.toggle2nd()">2nd</button>
+                            <button class="mem-btn" onclick="OmniCalc.memClear('sci')">MC</button>
+                            <button class="mem-btn" onclick="OmniCalc.memRecall('sci')">MR</button>
+                            <button class="mem-btn" onclick="OmniCalc.memAdd('sci')">M+</button>
+                            <button class="mem-btn" onclick="OmniCalc.memSub('sci')">M-</button>
+                        </div>
+
+                        <!-- Scientific Keypad -->
+                        <div class="keypad scientific-keypad">
+                            <!-- Row 1 -->
+                            <button class="btn btn-sci" onclick="OmniCalc.inputFunc('sin')"><span class="fn-label">sin</span></button>
+                            <button class="btn btn-sci" onclick="OmniCalc.inputFunc('cos')"><span class="fn-label">cos</span></button>
+                            <button class="btn btn-sci" onclick="OmniCalc.inputFunc('tan')"><span class="fn-label">tan</span></button>
+                            <button class="btn btn-fn" onclick="OmniCalc.clear('sci')">AC</button>
+                            <button class="btn btn-fn" onclick="OmniCalc.backspace('sci')">⌫</button>
+
+                            <!-- Row 2 -->
+                            <button class="btn btn-sci" onclick="OmniCalc.inputFunc('ln')">ln</button>
+                            <button class="btn btn-sci" onclick="OmniCalc.inputFunc('log')">log</button>
+                            <button class="btn btn-sci" onclick="OmniCalc.inputVal('sci', '(')">(</button>
+                            <button class="btn btn-sci" onclick="OmniCalc.inputVal('sci', ')')">)</button>
+                            <button class="btn btn-op" onclick="OmniCalc.inputVal('sci', '÷')">÷</button>
+
+                            <!-- Row 3 -->
+                            <button class="btn btn-sci" onclick="OmniCalc.inputFunc('sqrt')">√x</button>
+                            <button class="btn btn-sci" onclick="OmniCalc.inputVal('sci', '^')">xʸ</button>
+                            <button class="btn btn-num" onclick="OmniCalc.inputVal('sci', '7')">7</button>
+                            <button class="btn btn-num" onclick="OmniCalc.inputVal('sci', '8')">8</button>
+                            <button class="btn btn-num" onclick="OmniCalc.inputVal('sci', '9')">9</button>
+                            <button class="btn btn-op" onclick="OmniCalc.inputVal('sci', '×')">×</button>
+
+                            <!-- Row 4 -->
+                            <button class="btn btn-sci" onclick="OmniCalc.inputFunc('sqr')">x²</button>
+                            <button class="btn btn-sci" onclick="OmniCalc.inputFunc('fact')">n!</button>
+                            <button class="btn btn-num" onclick="OmniCalc.inputVal('sci', '4')">4</button>
+                            <button class="btn btn-num" onclick="OmniCalc.inputVal('sci', '5')">5</button>
+                            <button class="btn btn-num" onclick="OmniCalc.inputVal('sci', '6')">6</button>
+                            <button class="btn btn-op" onclick="OmniCalc.inputVal('sci', '−')">−</button>
+
+                            <!-- Row 5 -->
+                            <button class="btn btn-sci" onclick="OmniCalc.inputVal('sci', 'π')">π</button>
+                            <button class="btn btn-sci" onclick="OmniCalc.inputVal('sci', 'e')">e</button>
+                            <button class="btn btn-num" onclick="OmniCalc.inputVal('sci', '1')">1</button>
+                            <button class="btn btn-num" onclick="OmniCalc.inputVal('sci', '2')">2</button>
+                            <button class="btn btn-num" onclick="OmniCalc.inputVal('sci', '3')">3</button>
+                            <button class="btn btn-op" onclick="OmniCalc.inputVal('sci', '+')">+</button>
+
+                            <!-- Row 6 -->
+                            <button class="btn btn-sci" onclick="OmniCalc.inputFunc('inv')">1/x</button>
+                            <button class="btn btn-sci" onclick="OmniCalc.inputFunc('abs')">|x|</button>
+                            <button class="btn btn-fn" onclick="OmniCalc.toggleSign('sci')">±</button>
+                            <button class="btn btn-num" onclick="OmniCalc.inputVal('sci', '0')">0</button>
+                            <button class="btn btn-num" onclick="OmniCalc.inputVal('sci', '.')">.</button>
+                            <button class="btn btn-equals" onclick="OmniCalc.calculate('sci')">=</button>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- 3. GRAPHING CALCULATOR -->
+                <section class="calculator-view" id="view-graphing">
+                    <div class="graphing-layout">
+                        <div class="graph-controls-panel">
+                            <div class="panel-section">
+                                <h3>Function f(x)</h3>
+                                <div class="function-input-group">
+                                    <span class="func-prefix">y₁ =</span>
+                                    <input type="text" id="graphFuncInput1" class="func-input" value="sin(x)" placeholder="e.g. x^2 - 4, sin(x), 2*x + 1">
+                                    <span class="color-dot color-1"></span>
+                                </div>
+                                <div class="function-input-group">
+                                    <span class="func-prefix">y₂ =</span>
+                                    <input type="text" id="graphFuncInput2" class="func-input" value="cos(x)" placeholder="Optional 2nd function">
+                                    <span class="color-dot color-2"></span>
+                                </div>
+                                <button class="btn-primary full-width" onclick="OmniCalc.plotGraph()">Plot Functions</button>
+                            </div>
+
+                            <div class="panel-section">
+                                <h3>Quick Presets</h3>
+                                <div class="presets-grid">
+                                    <button class="preset-pill" onclick="OmniCalc.setGraphPreset('sin(x)', 'cos(x)')">Sine & Cosine</button>
+                                    <button class="preset-pill" onclick="OmniCalc.setGraphPreset('x^2 - 4', '2*x')">Parabola & Line</button>
+                                    <button class="preset-pill" onclick="OmniCalc.setGraphPreset('x^3 - 3*x', '')">Cubic Curve</button>
+                                    <button class="preset-pill" onclick="OmniCalc.setGraphPreset('1/x', '')">Hyperbola</button>
+                                    <button class="preset-pill" onclick="OmniCalc.setGraphPreset('abs(x)', '-abs(x)')">V-Curves</button>
+                                    <button class="preset-pill" onclick="OmniCalc.setGraphPreset('exp(-x^2)', '')">Gaussian Bell</button>
+                                </div>
+                            </div>
+
+                            <div class="panel-section">
+                                <h3>Zoom & Pan</h3>
+                                <div class="graph-nav-buttons">
+                                    <button class="tool-btn" onclick="OmniCalc.zoomGraph(1.25)">🔍+ Zoom In</button>
+                                    <button class="tool-btn" onclick="OmniCalc.zoomGraph(0.8)">🔍− Zoom Out</button>
+                                    <button class="tool-btn" onclick="OmniCalc.resetGraph()">🔄 Reset View</button>
+                                </div>
+                                <div class="coordinates-hud" id="graphHud">Hover canvas to trace (x, y)</div>
+                            </div>
+                        </div>
+
+                        <div class="canvas-container">
+                            <canvas id="graphCanvas"></canvas>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- 4. FINANCIAL CALCULATOR -->
+                <section class="calculator-view" id="view-financial">
+                    <div class="sub-tabs">
+                        <button class="sub-tab active" data-subtab="loan">Loan / EMI Calculator</button>
+                        <button class="sub-tab" data-subtab="compound">Compound Interest & Growth</button>
+                    </div>
+
+                    <!-- EMI Calculator -->
+                    <div class="financial-card subtab-view active" id="subtab-loan">
+                        <div class="form-grid">
+                            <div class="input-card">
+                                <label for="loanAmount">Loan Amount ($ / ₹)</label>
+                                <input type="number" id="loanAmount" value="100000" min="100" step="1000">
+                                <input type="range" id="loanAmountRange" min="1000" max="1000000" step="1000" value="100000">
+                            </div>
+                            <div class="input-card">
+                                <label for="interestRate">Interest Rate (% per annum)</label>
+                                <input type="number" id="interestRate" value="8.5" min="0.1" max="50" step="0.1">
+                                <input type="range" id="interestRateRange" min="1" max="30" step="0.1" value="8.5">
+                            </div>
+                            <div class="input-card">
+                                <label for="loanTenure">Tenure (Years)</label>
+                                <input type="number" id="loanTenure" value="5" min="1" max="40" step="1">
+                                <input type="range" id="loanTenureRange" min="1" max="30" step="1" value="5">
+                            </div>
+                        </div>
+
+                        <div class="fin-results-grid">
+                            <div class="fin-result-box highlight">
+                                <span class="res-title">Monthly EMI</span>
+                                <span class="res-value" id="emiMonthly">$2,051.65</span>
+                            </div>
+                            <div class="fin-result-box">
+                                <span class="res-title">Principal Amount</span>
+                                <span class="res-value" id="emiPrincipal">$100,000.00</span>
+                            </div>
+                            <div class="fin-result-box">
+                                <span class="res-title">Total Interest</span>
+                                <span class="res-value" id="emiTotalInterest">$23,099.18</span>
+                            </div>
+                            <div class="fin-result-box">
+                                <span class="res-title">Total Amount Payable</span>
+                                <span class="res-value" id="emiTotalPayable">$123,099.18</span>
+                            </div>
+                        </div>
+
+                        <div class="amortization-visual">
+                            <div class="bar-legend">
+                                <span class="legend-item"><span class="box-dot dot-principal"></span> Principal: <strong id="ratioPrincipal">81.2%</strong></span>
+                                <span class="legend-item"><span class="box-dot dot-interest"></span> Total Interest: <strong id="ratioInterest">18.8%</strong></span>
+                            </div>
+                            <div class="ratio-progress-bar">
+                                <div class="progress-fill-principal" id="barPrincipal" style="width: 81.2%;"></div>
+                                <div class="progress-fill-interest" id="barInterest" style="width: 18.8%;"></div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Compound Interest Calculator -->
+                    <div class="financial-card subtab-view" id="subtab-compound">
+                        <div class="form-grid">
+                            <div class="input-card">
+                                <label for="ciPrincipal">Initial Principal ($ / ₹)</label>
+                                <input type="number" id="ciPrincipal" value="10000" min="0" step="500">
+                            </div>
+                            <div class="input-card">
+                                <label for="ciMonthly">Monthly Contribution ($ / ₹)</label>
+                                <input type="number" id="ciMonthly" value="200" min="0" step="50">
+                            </div>
+                            <div class="input-card">
+                                <label for="ciRate">Annual Interest Rate (%)</label>
+                                <input type="number" id="ciRate" value="9.0" min="0.1" max="100" step="0.1">
+                            </div>
+                            <div class="input-card">
+                                <label for="ciYears">Investment Period (Years)</label>
+                                <input type="number" id="ciYears" value="10" min="1" max="60" step="1">
+                            </div>
+                            <div class="input-card">
+                                <label for="ciCompoundFreq">Compounding Frequency</label>
+                                <select id="ciCompoundFreq">
+                                    <option value="12" selected>Monthly (12/yr)</option>
+                                    <option value="4">Quarterly (4/yr)</option>
+                                    <option value="2">Semi-Annually (2/yr)</option>
+                                    <option value="1">Annually (1/yr)</option>
+                                    <option value="365">Daily (365/yr)</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <div class="fin-results-grid">
+                            <div class="fin-result-box highlight">
+                                <span class="res-title">Future Value</span>
+                                <span class="res-value" id="ciFutureValue">$62,878.29</span>
+                            </div>
+                            <div class="fin-result-box">
+                                <span class="res-title">Total Invested</span>
+                                <span class="res-value" id="ciTotalInvested">$34,000.00</span>
+                            </div>
+                            <div class="fin-result-box">
+                                <span class="res-title">Wealth Gain / Interest</span>
+                                <span class="res-value" id="ciTotalInterest">$28,878.29</span>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- 5. UNIT CONVERTER -->
+                <section class="calculator-view" id="view-converter">
+                    <div class="converter-card">
+                        <div class="category-selector">
+                            <button class="cat-btn active" data-cat="length">📏 Length</button>
+                            <button class="cat-btn" data-cat="mass">⚖️ Weight</button>
+                            <button class="cat-btn" data-cat="temperature">🌡️ Temp</button>
+                            <button class="cat-btn" data-cat="area">📐 Area</button>
+                            <button class="cat-btn" data-cat="speed">⚡ Speed</button>
+                            <button class="cat-btn" data-cat="digital">💾 Data</button>
+                            <button class="cat-btn" data-cat="time">⏱️ Time</button>
+                        </div>
+
+                        <div class="converter-grid">
+                            <!-- Left Box -->
+                            <div class="convert-box">
+                                <label for="convertValFrom">From</label>
+                                <input type="number" id="convertValFrom" class="convert-input" value="1">
+                                <select id="convertUnitFrom" class="unit-dropdown"></select>
+                            </div>
+
+                            <!-- Swap Button -->
+                            <button class="swap-btn" id="swapUnitsBtn" title="Swap Units">⇄</button>
+
+                            <!-- Right Box -->
+                            <div class="convert-box">
+                                <label for="convertValTo">To</label>
+                                <input type="number" id="convertValTo" class="convert-input" value="100">
+                                <select id="convertUnitTo" class="unit-dropdown"></select>
+                            </div>
+                        </div>
+
+                        <div class="conversion-formula" id="conversionFormula">1 Meter = 100 Centimeters</div>
+
+                        <div class="common-conversions" id="commonConversionsList">
+                            <!-- Quick cards dynamically generated -->
+                        </div>
+                    </div>
+                </section>
+
+                <!-- 6. PROGRAMMER CALCULATOR -->
+                <section class="calculator-view" id="view-programmer">
+                    <div class="calc-card programmer-card">
+                        <!-- Radix Display Rows -->
+                        <div class="radix-board">
+                            <div class="radix-row active" data-radix="HEX" onclick="OmniCalc.setRadix('HEX')">
+                                <span class="radix-tag">HEX</span>
+                                <span class="radix-val" id="progHex">0</span>
+                            </div>
+                            <div class="radix-row" data-radix="DEC" onclick="OmniCalc.setRadix('DEC')">
+                                <span class="radix-tag">DEC</span>
+                                <span class="radix-val" id="progDec">0</span>
+                            </div>
+                            <div class="radix-row" data-radix="OCT" onclick="OmniCalc.setRadix('OCT')">
+                                <span class="radix-tag">OCT</span>
+                                <span class="radix-val" id="progOct">0</span>
+                            </div>
+                            <div class="radix-row" data-radix="BIN" onclick="OmniCalc.setRadix('BIN')">
+                                <span class="radix-tag">BIN</span>
+                                <span class="radix-val" id="progBin">0000 0000 0000 0000</span>
+                            </div>
+                        </div>
+
+                        <!-- Bit Size / Word Size Selector -->
+                        <div class="bit-word-bar">
+                            <span class="bar-title">Word Size:</span>
+                            <div class="word-sizes">
+                                <button class="word-btn" data-bits="8" onclick="OmniCalc.setWordSize(8)">BYTE (8-bit)</button>
+                                <button class="word-btn" data-bits="16" onclick="OmniCalc.setWordSize(16)">WORD (16-bit)</button>
+                                <button class="word-btn active" data-bits="32" onclick="OmniCalc.setWordSize(32)">DWORD (32-bit)</button>
+                                <button class="word-btn" data-bits="64" onclick="OmniCalc.setWordSize(64)">QWORD (64-bit)</button>
+                            </div>
+                        </div>
+
+                        <!-- Programmer Keypad -->
+                        <div class="keypad programmer-keypad">
+                            <!-- Bitwise Ops Row -->
+                            <button class="btn btn-bit" onclick="OmniCalc.inputProgBitwise('AND')">AND</button>
+                            <button class="btn btn-bit" onclick="OmniCalc.inputProgBitwise('OR')">OR</button>
+                            <button class="btn btn-bit" onclick="OmniCalc.inputProgBitwise('XOR')">XOR</button>
+                            <button class="btn btn-bit" onclick="OmniCalc.inputProgBitwise('NOT')">NOT</button>
+                            <button class="btn btn-fn" onclick="OmniCalc.clear('prog')">AC</button>
+                            <button class="btn btn-fn" onclick="OmniCalc.backspace('prog')">⌫</button>
+
+                            <!-- Hex Digits & Shifts -->
+                            <button class="btn btn-hex" data-hex="A" onclick="OmniCalc.inputProgDigit('A')">A</button>
+                            <button class="btn btn-bit" onclick="OmniCalc.inputProgBitwise('<<')">&lt;&lt;</button>
+                            <button class="btn btn-num" onclick="OmniCalc.inputProgDigit('7')">7</button>
+                            <button class="btn btn-num" onclick="OmniCalc.inputProgDigit('8')">8</button>
+                            <button class="btn btn-num" onclick="OmniCalc.inputProgDigit('9')">9</button>
+                            <button class="btn btn-op" onclick="OmniCalc.inputProgOp('÷')">÷</button>
+
+                            <button class="btn btn-hex" data-hex="B" onclick="OmniCalc.inputProgDigit('B')">B</button>
+                            <button class="btn btn-bit" onclick="OmniCalc.inputProgBitwise('>>')">&gt;&gt;</button>
+                            <button class="btn btn-num" onclick="OmniCalc.inputProgDigit('4')">4</button>
+                            <button class="btn btn-num" onclick="OmniCalc.inputProgDigit('5')">5</button>
+                            <button class="btn btn-num" onclick="OmniCalc.inputProgDigit('6')">6</button>
+                            <button class="btn btn-op" onclick="OmniCalc.inputProgOp('×')">×</button>
+
+                            <button class="btn btn-hex" data-hex="C" onclick="OmniCalc.inputProgDigit('C')">C</button>
+                            <button class="btn btn-hex" data-hex="D" onclick="OmniCalc.inputProgDigit('D')">D</button>
+                            <button class="btn btn-num" onclick="OmniCalc.inputProgDigit('1')">1</button>
+                            <button class="btn btn-num" onclick="OmniCalc.inputProgDigit('2')">2</button>
+                            <button class="btn btn-num" onclick="OmniCalc.inputProgDigit('3')">3</button>
+                            <button class="btn btn-op" onclick="OmniCalc.inputProgOp('−')">−</button>
+
+                            <button class="btn btn-hex" data-hex="E" onclick="OmniCalc.inputProgDigit('E')">E</button>
+                            <button class="btn btn-hex" data-hex="F" onclick="OmniCalc.inputProgDigit('F')">F</button>
+                            <button class="btn btn-fn" onclick="OmniCalc.toggleProgSign()">±</button>
+                            <button class="btn btn-num" onclick="OmniCalc.inputProgDigit('0')">0</button>
+                            <button class="btn btn-op" onclick="OmniCalc.inputProgOp('%')">%</button>
+                            <button class="btn btn-op" onclick="OmniCalc.inputProgOp('+')">+</button>
+
+                            <!-- Full-width equals -->
+                            <button class="btn btn-equals prog-equals" onclick="OmniCalc.calculateProg()">=</button>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- 7. BMI & HEALTH CALCULATOR -->
+                <section class="calculator-view" id="view-health">
+                    <div class="health-card">
+                        <div class="unit-toggle-row">
+                            <button class="unit-pill active" id="healthMetricBtn" onclick="OmniCalc.setHealthUnit('metric')">Metric (kg, cm)</button>
+                            <button class="unit-pill" id="healthImperialBtn" onclick="OmniCalc.setHealthUnit('imperial')">Imperial (lbs, ft/in)</button>
+                        </div>
+
+                        <div class="form-grid">
+                            <div class="input-card">
+                                <label for="healthAge">Age (Years)</label>
+                                <input type="number" id="healthAge" value="25" min="2" max="120">
+                            </div>
+                            <div class="input-card">
+                                <label>Gender</label>
+                                <div class="radio-buttons">
+                                    <label><input type="radio" name="healthGender" value="male" checked> Male</label>
+                                    <label><input type="radio" name="healthGender" value="female"> Female</label>
+                                </div>
+                            </div>
+                            <div class="input-card" id="heightMetricCard">
+                                <label for="healthHeightCm">Height (cm)</label>
+                                <input type="number" id="healthHeightCm" value="175" min="50" max="260">
+                            </div>
+                            <div class="input-card" id="heightImperialCard" style="display: none;">
+                                <label>Height (Feet & Inches)</label>
+                                <div class="split-inputs">
+                                    <input type="number" id="healthHeightFt" value="5" min="1" max="8" placeholder="Feet">
+                                    <input type="number" id="healthHeightIn" value="9" min="0" max="11" placeholder="Inches">
+                                </div>
+                            </div>
+                            <div class="input-card" id="weightMetricCard">
+                                <label for="healthWeightKg">Weight (kg)</label>
+                                <input type="number" id="healthWeightKg" value="70" min="10" max="300" step="0.5">
+                            </div>
+                            <div class="input-card" id="weightImperialCard" style="display: none;">
+                                <label for="healthWeightLbs">Weight (lbs)</label>
+                                <input type="number" id="healthWeightLbs" value="154" min="20" max="600" step="1">
+                            </div>
+                        </div>
+
+                        <button class="btn-primary full-width" onclick="OmniCalc.calculateHealth()">Calculate BMI & Metrics</button>
+
+                        <div class="health-results">
+                            <div class="bmi-gauge-card">
+                                <span class="gauge-label">Body Mass Index (BMI)</span>
+                                <div class="bmi-number" id="bmiValue">22.9</div>
+                                <div class="bmi-badge badge-normal" id="bmiCategory">Normal Weight</div>
+                                
+                                <div class="bmi-meter">
+                                    <div class="bmi-zone zone-under">Under</div>
+                                    <div class="bmi-zone zone-normal">Normal</div>
+                                    <div class="bmi-zone zone-over">Overweight</div>
+                                    <div class="bmi-zone zone-obese">Obese</div>
+                                    <div class="bmi-pointer" id="bmiPointer" style="left: 45%;"></div>
+                                </div>
+                            </div>
+
+                            <div class="health-stats-grid">
+                                <div class="stat-box">
+                                    <span class="stat-title">Healthy Weight Range</span>
+                                    <span class="stat-val" id="healthyRangeVal">56.7 kg - 76.6 kg</span>
+                                </div>
+                                <div class="stat-box">
+                                    <span class="stat-title">Basal Metabolic Rate (BMR)</span>
+                                    <span class="stat-val" id="bmrVal">1,690 kcal / day</span>
+                                </div>
+                                <div class="stat-box">
+                                    <span class="stat-title">Daily Maintenance Calories</span>
+                                    <span class="stat-val" id="tdeeVal">2,324 kcal / day</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- 8. DATE & AGE CALCULATOR -->
+                <section class="calculator-view" id="view-date">
+                    <div class="sub-tabs">
+                        <button class="sub-tab active" data-subtab="diff">Date Difference</button>
+                        <button class="sub-tab" data-subtab="age">Age Calculator</button>
+                        <button class="sub-tab" data-subtab="addsub">Add / Subtract Days</button>
+                    </div>
+
+                    <!-- Date Difference View -->
+                    <div class="date-card subtab-view active" id="subtab-diff">
+                        <div class="form-grid">
+                            <div class="input-card">
+                                <label for="dateFrom">Start Date</label>
+                                <input type="date" id="dateFrom">
+                            </div>
+                            <div class="input-card">
+                                <label for="dateTo">End Date</label>
+                                <input type="date" id="dateTo">
+                            </div>
+                        </div>
+                        <button class="btn-primary full-width" onclick="OmniCalc.calculateDateDiff()">Calculate Difference</button>
+
+                        <div class="date-result-box" id="dateDiffResult">
+                            <div class="primary-duration" id="diffPrimary">0 Days</div>
+                            <div class="secondary-breakdown" id="diffBreakdown">Select two dates to compare duration</div>
+                        </div>
+                    </div>
+
+                    <!-- Age Calculator View -->
+                    <div class="date-card subtab-view" id="subtab-age">
+                        <div class="form-grid">
+                            <div class="input-card">
+                                <label for="birthDate">Date of Birth</label>
+                                <input type="date" id="birthDate">
+                            </div>
+                            <div class="input-card">
+                                <label for="asOfDate">Age as of Date</label>
+                                <input type="date" id="asOfDate">
+                            </div>
+                        </div>
+                        <button class="btn-primary full-width" onclick="OmniCalc.calculateAge()">Calculate Exact Age</button>
+
+                        <div class="date-result-box" id="ageResult">
+                            <div class="primary-duration" id="agePrimary">-- Years, -- Months, -- Days</div>
+                            <div class="secondary-breakdown" id="ageBreakdown">Enter your birthdate to compute exact age details</div>
+                        </div>
+                    </div>
+
+                    <!-- Add/Subtract Days View -->
+                    <div class="date-card subtab-view" id="subtab-addsub">
+                        <div class="form-grid">
+                            <div class="input-card">
+                                <label for="addsubDate">Start Date</label>
+                                <input type="date" id="addsubDate">
+                            </div>
+                            <div class="input-card">
+                                <label for="addsubDays">Number of Days</label>
+                                <div class="split-inputs">
+                                    <select id="addsubOperation">
+                                        <option value="add">Add (+)</option>
+                                        <option value="sub">Subtract (−)</option>
+                                    </select>
+                                    <input type="number" id="addsubDays" value="30" min="1" max="99999">
+                                </div>
+                            </div>
+                        </div>
+                        <button class="btn-primary full-width" onclick="OmniCalc.calculateAddSubDate()">Compute Result Date</button>
+
+                        <div class="date-result-box">
+                            <div class="primary-duration" id="addsubResult">--</div>
+                            <div class="secondary-breakdown" id="addsubDayOfWeek">--</div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- 9. TIME CALCULATOR -->
+                <section class="calculator-view" id="view-time">
+                    <div class="sub-tabs">
+                        <button class="sub-tab active" data-subtab="time-keypad">⏱️ Time Keypad</button>
+                        <button class="sub-tab" data-subtab="time-duration">Work Hours & Shift</button>
+                        <button class="sub-tab" data-subtab="time-math">Time Math</button>
+                        <button class="sub-tab" data-subtab="stopwatch">Stopwatch</button>
+                        <button class="sub-tab" data-subtab="epoch">Unix Epoch</button>
+                    </div>
+
+                    <!-- Time Keypad Calculator (Matches User Screenshot) -->
+                    <div class="time-keypad-card subtab-view active" id="subtab-time-keypad">
+                        <div class="time-calc-screen">
+                            <div class="time-calc-header">
+                                <span class="time-badge">TIME EXPRESSION</span>
+                                <span class="format-badge" id="timeFormatModeBadge" onclick="OmniCalc.toggleTimeResultFormat()">Format: H:M:S</span>
+                            </div>
+                            <div class="time-expression-display" id="timeKeypadExpression">2hour 35min + 3hour 45min</div>
+                            <div class="time-result-display-wrapper">
+                                <span class="time-equals-symbol">=</span>
+                                <span class="time-result-val" id="timeKeypadResult">6hour 20min</span>
+                                <button class="copy-btn" onclick="OmniCalc.copyTimeKeypadResult()" title="Copy time result">📋</button>
+                            </div>
+                            <div class="time-unit-breakdown" id="timeKeypadBreakdown">
+                                <span>6.333 Hours</span> • <span>380 Minutes</span> • <span>22,800 Seconds</span>
+                            </div>
+                        </div>
+
+                        <!-- Dedicated Time Keypad -->
+                        <div class="keypad time-unit-keypad">
+                            <!-- Utility Row -->
+                            <button class="btn btn-fn" onclick="OmniCalc.clearTimeKeypad()">C</button>
+                            <button class="btn btn-fn" onclick="OmniCalc.inputTimeKeypad('%')">%</button>
+                            <button class="btn btn-fn" onclick="OmniCalc.toggleTimeResultFormat()" title="Toggle Result Format">⟲</button>
+                            <button class="btn btn-fn" onclick="OmniCalc.backspaceTimeKeypad()">⌫</button>
+
+                            <!-- Time Units Row -->
+                            <button class="btn btn-tunit unit-hour" onclick="OmniCalc.inputTimeUnit('hour')">hour</button>
+                            <button class="btn btn-tunit unit-min" onclick="OmniCalc.inputTimeUnit('min')">min</button>
+                            <button class="btn btn-tunit unit-sec" onclick="OmniCalc.inputTimeUnit('sec')">sec</button>
+                            <button class="btn btn-tunit unit-msec" onclick="OmniCalc.inputTimeUnit('m.sec')">m.sec</button>
+
+                            <!-- Number Row 1 -->
+                            <button class="btn btn-num" onclick="OmniCalc.inputTimeKeypad('7')">7</button>
+                            <button class="btn btn-num" onclick="OmniCalc.inputTimeKeypad('8')">8</button>
+                            <button class="btn btn-num" onclick="OmniCalc.inputTimeKeypad('9')">9</button>
+                            <button class="btn btn-op" onclick="OmniCalc.inputTimeKeypad('÷')">÷</button>
+
+                            <!-- Number Row 2 -->
+                            <button class="btn btn-num" onclick="OmniCalc.inputTimeKeypad('4')">4</button>
+                            <button class="btn btn-num" onclick="OmniCalc.inputTimeKeypad('5')">5</button>
+                            <button class="btn btn-num" onclick="OmniCalc.inputTimeKeypad('6')">6</button>
+                            <button class="btn btn-op" onclick="OmniCalc.inputTimeKeypad('×')">×</button>
+
+                            <!-- Number Row 3 -->
+                            <button class="btn btn-num" onclick="OmniCalc.inputTimeKeypad('1')">1</button>
+                            <button class="btn btn-num" onclick="OmniCalc.inputTimeKeypad('2')">2</button>
+                            <button class="btn btn-num" onclick="OmniCalc.inputTimeKeypad('3')">3</button>
+                            <button class="btn btn-op" onclick="OmniCalc.inputTimeKeypad('−')">−</button>
+
+                            <!-- Number Row 4 -->
+                            <button class="btn btn-num" onclick="OmniCalc.inputTimeKeypad('0')">0</button>
+                            <button class="btn btn-num" onclick="OmniCalc.inputTimeKeypad('.')">.</button>
+                            <button class="btn btn-equals" onclick="OmniCalc.calculateTimeKeypad()">=</button>
+                            <button class="btn btn-op" onclick="OmniCalc.inputTimeKeypad('+')">+</button>
+                        </div>
+                    </div>
+
+                    <!-- Duration / Shift View -->
+                    <div class="time-card subtab-view" id="subtab-time-duration">
+                        <div class="form-grid">
+                            <div class="input-card">
+                                <label for="timeStart">Start Time</label>
+                                <input type="time" id="timeStart" value="09:00" step="1">
+                            </div>
+                            <div class="input-card">
+                                <label for="timeEnd">End Time</label>
+                                <input type="time" id="timeEnd" value="17:30" step="1">
+                            </div>
+                            <div class="input-card">
+                                <label for="timeBreak">Break / Lunch (Minutes)</label>
+                                <input type="number" id="timeBreak" value="45" min="0" max="720">
+                            </div>
+                        </div>
+                        <button class="btn-primary full-width" onclick="OmniCalc.calculateTimeDuration()">Compute Work Duration</button>
+
+                        <div class="time-results-grid">
+                            <div class="time-result-box highlight">
+                                <span class="res-title">Net Duration</span>
+                                <span class="res-value" id="timeDurationPrimary">7h 45m 00s</span>
+                            </div>
+                            <div class="time-result-box">
+                                <span class="res-title">Decimal Hours</span>
+                                <span class="res-value" id="timeDurationDecimal">7.75 hrs</span>
+                            </div>
+                            <div class="time-result-box">
+                                <span class="res-title">Total Minutes</span>
+                                <span class="res-value" id="timeDurationMinutes">465 mins</span>
+                            </div>
+                            <div class="time-result-box">
+                                <span class="res-title">Total Seconds</span>
+                                <span class="res-value" id="timeDurationSeconds">27,900 sec</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Time Math View -->
+                    <div class="time-card subtab-view" id="subtab-time-math">
+                        <div class="time-math-grid">
+                            <div class="input-card">
+                                <label>Time 1 (HH : MM : SS)</label>
+                                <div class="split-inputs">
+                                    <input type="number" id="t1Hours" placeholder="Hours" value="3" min="0">
+                                    <input type="number" id="t1Mins" placeholder="Mins" value="45" min="0" max="59">
+                                    <input type="number" id="t1Secs" placeholder="Secs" value="30" min="0" max="59">
+                                </div>
+                            </div>
+
+                            <div class="input-card">
+                                <label>Operation</label>
+                                <select id="timeMathOp">
+                                    <option value="add">Add (+)</option>
+                                    <option value="sub">Subtract (−)</option>
+                                </select>
+                            </div>
+
+                            <div class="input-card">
+                                <label>Time 2 (HH : MM : SS)</label>
+                                <div class="split-inputs">
+                                    <input type="number" id="t2Hours" placeholder="Hours" value="1" min="0">
+                                    <input type="number" id="t2Mins" placeholder="Mins" value="25" min="0" max="59">
+                                    <input type="number" id="t2Secs" placeholder="Secs" value="45" min="0" max="59">
+                                </div>
+                            </div>
+                        </div>
+                        <button class="btn-primary full-width" onclick="OmniCalc.calculateTimeMath()">Calculate Time Math</button>
+
+                        <div class="time-results-grid">
+                            <div class="time-result-box highlight">
+                                <span class="res-title">Result Time</span>
+                                <span class="res-value" id="timeMathResult">5h 11m 15s</span>
+                            </div>
+                            <div class="time-result-box">
+                                <span class="res-title">Total in Seconds</span>
+                                <span class="res-value" id="timeMathSecs">18,675 s</span>
+                            </div>
+                            <div class="time-result-box">
+                                <span class="res-title">Total in Minutes</span>
+                                <span class="res-value" id="timeMathMins">311.25 m</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Stopwatch & Lap View -->
+                    <div class="time-card subtab-view" id="subtab-stopwatch">
+                        <div class="stopwatch-container">
+                            <div class="stopwatch-display" id="stopwatchDisplay">00:00:00.00</div>
+                            <div class="stopwatch-controls">
+                                <button class="sw-btn btn-start" id="swStartBtn" onclick="OmniCalc.toggleStopwatch()">Start</button>
+                                <button class="sw-btn btn-lap" id="swLapBtn" onclick="OmniCalc.lapStopwatch()">Lap</button>
+                                <button class="sw-btn btn-reset" id="swResetBtn" onclick="OmniCalc.resetStopwatch()">Reset</button>
+                            </div>
+                            <div class="laps-container" id="swLapsContainer">
+                                <div class="empty-laps">No lap times recorded</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Unix Epoch View -->
+                    <div class="time-card subtab-view" id="subtab-epoch">
+                        <div class="epoch-live-box">
+                            <span class="epoch-label">Current Unix Timestamp</span>
+                            <div class="epoch-live-val" id="currentEpochVal">0</div>
+                        </div>
+
+                        <div class="form-grid" style="margin-top: 16px;">
+                            <div class="input-card">
+                                <label for="epochInput">Convert Epoch to Date</label>
+                                <div class="split-inputs">
+                                    <input type="number" id="epochInput" placeholder="e.g. 1773000000">
+                                    <button class="btn-primary" style="padding: 10px 14px;" onclick="OmniCalc.convertEpochToDate()">Convert</button>
+                                </div>
+                            </div>
+                            <div class="input-card">
+                                <label for="dateToEpochInput">Convert Date to Epoch</label>
+                                <div class="split-inputs">
+                                    <input type="datetime-local" id="dateToEpochInput">
+                                    <button class="btn-primary" style="padding: 10px 14px;" onclick="OmniCalc.convertDateToEpoch()">Convert</button>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="date-result-box" id="epochResultBox" style="margin-top: 16px;">
+                            <div class="primary-duration" id="epochResultPrimary">--</div>
+                            <div class="secondary-breakdown" id="epochResultSecondary">Select a conversion above</div>
+                        </div>
+                    </div>
+                </section>
+
+            </div>
+        </main>
+
+        <!-- History Drawer -->
+        <div class="history-drawer" id="historyDrawer">
+            <div class="history-header">
+                <div class="header-left">
+                    <h3>Calculation History</h3>
+                    <span class="count-badge" id="historyCount">0</span>
+                </div>
+                <div class="header-right">
+                    <button class="text-btn" onclick="OmniCalc.clearHistory()" title="Clear all records">Clear</button>
+                    <button class="close-btn" id="closeHistoryBtn" aria-label="Close history">✕</button>
+                </div>
+            </div>
+            <div class="history-list" id="historyList">
+                <div class="empty-history">No calculations recorded yet</div>
+            </div>
         </div>
 
-        <div>
-            <button onclick="insertValue('')">7</button>
-            <button onclick="insertValue('')">8</button>
-            <button onclick="insertValue('')">9</button>
-            <button class="operators" onclick="insertValue('*')">*</button>
-        </div>
-        
-        <div>
-            <button onclick="insertValue('')">4</button>
-            <button onclick="insertValue('')">5</button>
-            <button onclick="insertValue('')">6</button>
-            <button class="operators" onclick="insertValue('-')">-</button>
-        </div>
-
-        <div>
-            <button onclick="insertValue('')">1</button>
-            <button onclick="insertValue('')">2</button>
-            <button onclick="insertValue('')">3</button>
-            <button class="operators" onclick="insertValue('+')">+</button>
-        </div>
-
-        <div>
-            <button onclick="insertValue('.')">.</button>
-            <button onclick="insertValue('')">0</button>
-            <button class="operators" onclick="insertValue('/')">/</button>
-            <button class="eq" onclick="calculate()">=</button>
-        </div>
+        <div class="drawer-overlay" id="drawerOverlay"></div>
     </div>
+
+    <!-- Toast Notification -->
+    <div class="toast" id="toast">Copied to clipboard!</div>
+
     <script src="script.js"></script>
 </body>
 </html>
