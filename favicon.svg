@@ -1,0 +1,59 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
+  <defs>
+    <linearGradient id="calcGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#2563eb" />
+      <stop offset="100%" stop-color="#7c3aed" />
+    </linearGradient>
+    <linearGradient id="screenGrad" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#0f172a" />
+      <stop offset="100%" stop-color="#1e293b" />
+    </linearGradient>
+    <filter id="shadow" x="-10%" y="-10%" width="120%" height="120%">
+      <feDropShadow dx="0" dy="8" stdDeviation="16" flood-color="#000000" flood-opacity="0.3" />
+    </filter>
+  </defs>
+
+  <!-- Background Base -->
+  <rect width="512" height="512" rx="120" fill="url(#calcGrad)" />
+
+  <!-- Inner Calculator Body -->
+  <rect x="76" y="60" width="360" height="392" rx="44" fill="#ffffff" fill-opacity="0.12" stroke="#ffffff" stroke-width="6" stroke-opacity="0.25" />
+
+  <!-- Screen Display -->
+  <rect x="108" y="92" width="296" height="84" rx="20" fill="url(#screenGrad)" />
+  <!-- Screen Glow Line -->
+  <rect x="280" y="128" width="96" height="12" rx="6" fill="#38bdf8" />
+  <rect x="350" y="148" width="26" height="10" rx="5" fill="#38bdf8" />
+
+  <!-- Keypad Grid (3x3 circular / rounded buttons) -->
+  <!-- Row 1 -->
+  <circle cx="160" cy="236" r="28" fill="#ffffff" fill-opacity="0.25" />
+  <text x="160" y="246" font-family="-apple-system, Inter, sans-serif" font-size="28" font-weight="bold" fill="#ffffff" text-anchor="middle">C</text>
+
+  <circle cx="256" cy="236" r="28" fill="#ffffff" fill-opacity="0.25" />
+  <text x="256" y="246" font-family="-apple-system, Inter, sans-serif" font-size="28" font-weight="bold" fill="#ffffff" text-anchor="middle">%</text>
+
+  <circle cx="352" cy="236" r="28" fill="#38bdf8" fill-opacity="0.4" />
+  <text x="352" y="246" font-family="-apple-system, Inter, sans-serif" font-size="28" font-weight="bold" fill="#ffffff" text-anchor="middle">÷</text>
+
+  <!-- Row 2 -->
+  <circle cx="160" cy="316" r="28" fill="#ffffff" fill-opacity="0.18" />
+  <text x="160" y="326" font-family="-apple-system, Inter, sans-serif" font-size="28" font-weight="bold" fill="#ffffff" text-anchor="middle">7</text>
+
+  <circle cx="256" cy="316" r="28" fill="#ffffff" fill-opacity="0.18" />
+  <text x="256" y="326" font-family="-apple-system, Inter, sans-serif" font-size="28" font-weight="bold" fill="#ffffff" text-anchor="middle">8</text>
+
+  <circle cx="352" cy="316" r="28" fill="#38bdf8" fill-opacity="0.4" />
+  <text x="352" y="324" font-family="-apple-system, Inter, sans-serif" font-size="28" font-weight="bold" fill="#ffffff" text-anchor="middle">×</text>
+
+  <!-- Row 3 -->
+  <circle cx="160" cy="396" r="28" fill="#ffffff" fill-opacity="0.18" />
+  <text x="160" y="406" font-family="-apple-system, Inter, sans-serif" font-size="28" font-weight="bold" fill="#ffffff" text-anchor="middle">1</text>
+
+  <circle cx="256" cy="396" r="28" fill="#ffffff" fill-opacity="0.18" />
+  <text x="256" y="406" font-family="-apple-system, Inter, sans-serif" font-size="28" font-weight="bold" fill="#ffffff" text-anchor="middle">2</text>
+
+  <!-- Equals Accent Key -->
+  <rect x="324" y="368" width="56" height="56" rx="28" fill="#38bdf8" />
+  <text x="352" y="406" font-family="-apple-system, Inter, sans-serif" font-size="32" font-weight="bold" fill="#0f172a" text-anchor="middle">=</text>
+</svg>
