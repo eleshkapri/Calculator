@@ -961,20 +961,32 @@ body.dark-theme .angle-mode-pill {
 
 .sub-tabs {
     display: flex;
+    flex-wrap: nowrap;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none;
     gap: 8px;
     margin-bottom: 20px;
     background-color: var(--bg-surface);
     padding: 6px;
     border-radius: var(--radius-lg);
     border: 1px solid var(--border-subtle);
+    width: 100%;
+    max-width: 680px;
+}
+
+.sub-tabs::-webkit-scrollbar {
+    display: none;
 }
 
 .sub-tab {
-    padding: 10px 18px;
+    flex-shrink: 0;
+    white-space: nowrap;
+    padding: 8px 16px;
     background: transparent;
     border: none;
     color: var(--text-secondary);
-    font-size: 0.9rem;
+    font-size: 0.85rem;
     font-weight: 600;
     border-radius: var(--radius-md);
     cursor: pointer;
@@ -1161,12 +1173,22 @@ body.dark-theme .time-result-box.highlight .res-value { color: #60a5fa; }
 
 .category-selector {
     display: flex;
-    flex-wrap: wrap;
+    flex-wrap: nowrap;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none;
     gap: 8px;
     margin-bottom: 24px;
+    padding-bottom: 2px;
+}
+
+.category-selector::-webkit-scrollbar {
+    display: none;
 }
 
 .cat-btn {
+    flex-shrink: 0;
+    white-space: nowrap;
     background-color: var(--bg-surface-elevated);
     border: 1px solid var(--border-subtle);
     color: var(--text-secondary);
@@ -1837,13 +1859,128 @@ body.dark-theme .epoch-live-val {
         box-shadow: var(--shadow-lg);
     }
     .sidebar.open { transform: translateX(280px); }
-    .mobile-toggle { display: block; }
-    .top-header { padding: 16px 20px; }
-    .calculators-container { padding: 16px 14px; }
-    .calc-card, .scientific-card, .financial-card, .converter-card, .health-card, .date-card, .time-card, .time-keypad-card {
-        padding: 18px;
+    
+    .mobile-toggle {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        width: 38px;
+        height: 38px;
+        flex-shrink: 0;
     }
-    .btn { height: 50px; font-size: 1.05rem; }
-    .converter-grid { flex-direction: column; }
-    .swap-btn { align-self: center; margin: 0; }
+    
+    .top-header {
+        padding: 10px 16px;
+        gap: 10px;
+    }
+    
+    .active-calculator-title {
+        flex: 1;
+        min-width: 0;
+    }
+    
+    .active-calculator-title h1 {
+        font-size: 1.15rem;
+        font-weight: 700;
+        line-height: 1.2;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+    }
+    
+    .active-calculator-title p {
+        font-size: 0.72rem;
+        line-height: 1.2;
+        margin-top: 1px;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+    }
+    
+    .action-icon-btn {
+        width: 36px;
+        height: 36px;
+        flex-shrink: 0;
+    }
+    
+    .calculators-container {
+        padding: 12px 10px 32px 10px;
+        justify-content: flex-start;
+    }
+    
+    .calc-card, .scientific-card, .financial-card, .converter-card, .health-card, .date-card, .time-card, .time-keypad-card {
+        padding: 16px 12px;
+        border-radius: 20px;
+        max-width: 100%;
+    }
+    
+    .display-container {
+        padding: 12px 14px;
+        min-height: 96px;
+        margin-bottom: 12px;
+    }
+    
+    .result-display {
+        font-size: 1.85rem;
+    }
+    
+    .time-calc-screen {
+        padding: 12px 14px;
+        min-height: 120px;
+        margin-bottom: 12px;
+    }
+    
+    .time-expression-display {
+        font-size: 1rem;
+    }
+    
+    .time-result-val {
+        font-size: 1.45rem;
+    }
+    
+    .btn {
+        height: 48px;
+        font-size: 1.05rem;
+        border-radius: 12px;
+    }
+    
+    .btn-tunit {
+        font-size: 0.82rem;
+        padding: 4px;
+    }
+    
+    .stopwatch-display {
+        font-size: 2.2rem;
+        margin-bottom: 16px;
+    }
+    
+    .stopwatch-controls {
+        gap: 8px;
+        margin-bottom: 16px;
+    }
+    
+    .sw-btn {
+        height: 42px;
+        font-size: 0.9rem;
+    }
+    
+    .sub-tabs {
+        padding: 4px;
+        gap: 6px;
+        margin-bottom: 14px;
+    }
+    
+    .sub-tab {
+        padding: 7px 12px;
+        font-size: 0.78rem;
+    }
+    
+    .converter-grid {
+        flex-direction: column;
+    }
+    
+    .swap-btn {
+        align-self: center;
+        margin: 0;
+    }
 }
