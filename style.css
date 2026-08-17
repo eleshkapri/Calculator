@@ -299,20 +299,29 @@ body {
 .nav-menu {
     display: flex;
     flex-direction: column;
-    gap: 3px;
-    flex: 0 0 auto;
+    gap: 6px;
+    flex: 1;
+    overflow-y: auto;
+    overflow-x: hidden;
+    padding-right: 2px;
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+}
+
+.nav-menu::-webkit-scrollbar {
+    display: none;
 }
 
 .nav-item {
     display: flex;
     align-items: center;
-    gap: 10px;
-    padding: 7px 10px;
+    gap: 14px;
+    padding: 11px 14px;
     border: 1px solid transparent;
     background: transparent;
     color: var(--text-secondary);
     font-family: var(--font-ui);
-    font-size: 0.86rem;
+    font-size: 0.92rem;
     font-weight: 500;
     border-radius: var(--radius-md);
     cursor: pointer;
@@ -322,11 +331,11 @@ body {
 }
 
 .nav-item .icon {
-    font-size: 1rem;
+    font-size: 1.15rem;
     display: flex;
     align-items: center;
     justify-content: center;
-    width: 20px;
+    width: 24px;
     transition: transform 0.2s ease;
 }
 
@@ -337,7 +346,7 @@ body {
 }
 
 .nav-item:hover .icon {
-    transform: scale(1.12);
+    transform: scale(1.15);
 }
 
 .nav-item.active {
@@ -357,9 +366,9 @@ body.dark-theme .nav-item.active {
 .sidebar-widget {
     display: flex;
     flex-direction: column;
-    gap: 8px;
-    margin-top: 8px;
-    padding-top: 8px;
+    gap: 12px;
+    margin-top: 14px;
+    padding-top: 14px;
     border-top: 1px solid var(--border-subtle);
 }
 
@@ -367,13 +376,13 @@ body.dark-theme .nav-item.active {
     background: var(--bg-surface-elevated);
     border: 1px solid var(--border-subtle);
     border-radius: var(--radius-md);
-    padding: 6px 10px;
+    padding: 10px 12px;
     text-align: center;
 }
 
 .live-clock-time {
     font-family: var(--font-mono);
-    font-size: 0.95rem;
+    font-size: 1.15rem;
     font-weight: 800;
     color: #2563eb;
     letter-spacing: 0.5px;
@@ -384,20 +393,20 @@ body.dark-theme .live-clock-time {
 }
 
 .live-clock-date {
-    font-size: 0.68rem;
+    font-size: 0.72rem;
     font-weight: 600;
     color: var(--text-secondary);
-    margin-top: 1px;
+    margin-top: 2px;
 }
 
 .sidebar-constants-section {
     display: flex;
     flex-direction: column;
-    gap: 4px;
+    gap: 6px;
 }
 
 .widget-title {
-    font-size: 0.68rem;
+    font-size: 0.72rem;
     font-weight: 700;
     text-transform: uppercase;
     letter-spacing: 0.5px;
@@ -408,7 +417,7 @@ body.dark-theme .live-clock-time {
 .constants-chips {
     display: grid;
     grid-template-columns: repeat(2, 1fr);
-    gap: 4px;
+    gap: 6px;
 }
 
 .const-chip {
@@ -418,7 +427,7 @@ body.dark-theme .live-clock-time {
     background: var(--bg-surface-elevated);
     border: 1px solid var(--border-subtle);
     border-radius: var(--radius-sm);
-    padding: 3px 6px;
+    padding: 5px 8px;
     cursor: pointer;
     transition: var(--transition);
     text-align: left;
@@ -433,7 +442,7 @@ body.dark-theme .live-clock-time {
 .chip-sym {
     font-family: var(--font-mono);
     font-weight: 700;
-    font-size: 0.74rem;
+    font-size: 0.78rem;
     color: #2563eb;
 }
 
@@ -443,29 +452,28 @@ body.dark-theme .chip-sym {
 
 .chip-val {
     font-family: var(--font-mono);
-    font-size: 0.65rem;
+    font-size: 0.68rem;
     color: var(--text-secondary);
 }
 
 .sidebar-footer {
     display: flex;
     flex-direction: column;
-    gap: 4px;
-    margin-top: 8px;
-    padding-top: 8px;
+    gap: 8px;
+    padding-top: 14px;
     border-top: 1px solid var(--border-subtle);
 }
 
 .utility-btn {
     display: flex;
     align-items: center;
-    gap: 10px;
-    padding: 6px 10px;
+    gap: 12px;
+    padding: 10px 14px;
     border: 1px solid var(--border-subtle);
     background: var(--bg-surface-elevated);
     color: var(--text-secondary);
     font-family: var(--font-ui);
-    font-size: 0.8rem;
+    font-size: 0.85rem;
     font-weight: 500;
     border-radius: var(--radius-sm);
     cursor: pointer;
@@ -595,9 +603,7 @@ body.dark-theme .chip-sym {
     box-shadow: var(--card-shadow);
 }
 
-#view-standard.calculator-view.active,
-#view-scientific.calculator-view.active,
-#view-programmer.calculator-view.active {
+#view-standard.calculator-view.active {
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -606,22 +612,22 @@ body.dark-theme .chip-sym {
     margin: auto 0;
 }
 
-.calc-card { width: 100%; max-width: 390px; }
-.scientific-card { width: 100%; max-width: 590px; }
-.programmer-card { width: 100%; max-width: 550px; }
-.financial-card { width: 100%; max-width: 740px; padding: 28px; }
-.converter-card, .health-card, .date-card, .time-card { width: 100%; max-width: 680px; padding: 28px; }
-.time-keypad-card { width: 100%; max-width: 420px; }
+.calc-card { width: 100%; max-width: 330px; padding: 18px; }
+.scientific-card { width: 100%; max-width: 440px; padding: 18px; }
+.programmer-card { width: 100%; max-width: 460px; padding: 18px; }
+.financial-card { width: 100%; max-width: 740px; padding: 24px; }
+.converter-card, .health-card, .date-card, .time-card { width: 100%; max-width: 680px; padding: 24px; }
+.time-keypad-card { width: 100%; max-width: 350px; padding: 18px; }
 
 .display-container {
     background: var(--bg-input);
     border: 1px solid var(--border-subtle);
-    border-radius: var(--radius-lg);
-    padding: 16px 20px;
-    margin-bottom: 16px;
+    border-radius: var(--radius-md);
+    padding: 12px 16px;
+    margin-bottom: 12px;
     display: flex;
     flex-direction: column;
-    min-height: 115px;
+    min-height: 96px;
     justify-content: space-between;
     box-shadow: inset 0 2px 6px rgba(0,0,0,0.05);
 }
@@ -630,7 +636,7 @@ body.dark-theme .chip-sym {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    font-size: 0.75rem;
+    font-size: 0.72rem;
     font-weight: 700;
 }
 
@@ -638,7 +644,7 @@ body.dark-theme .chip-sym {
     background: rgba(168, 85, 247, 0.15);
     color: #9333ea;
     border: 1px solid rgba(168, 85, 247, 0.3);
-    padding: 2px 10px;
+    padding: 2px 8px;
     border-radius: 4px;
     cursor: pointer;
     user-select: none;
@@ -654,18 +660,18 @@ body.dark-theme .angle-mode-pill {
 }
 
 .memory-indicator {
-    font-size: 0.75rem;
+    font-size: 0.72rem;
     font-weight: 600;
     color: var(--accent-fin);
-    min-height: 16px;
+    min-height: 14px;
 }
 
 .expression-line {
     font-family: var(--font-mono);
-    font-size: 0.95rem;
+    font-size: 0.85rem;
     color: var(--text-secondary);
     text-align: right;
-    min-height: 24px;
+    min-height: 20px;
     overflow-x: auto;
     white-space: nowrap;
     word-break: break-all;
@@ -675,7 +681,7 @@ body.dark-theme .angle-mode-pill {
     display: flex;
     align-items: center;
     justify-content: flex-end;
-    gap: 8px;
+    gap: 6px;
 }
 
 .result-display {
@@ -684,7 +690,7 @@ body.dark-theme .angle-mode-pill {
     border: none;
     color: var(--text-primary);
     font-family: var(--font-mono);
-    font-size: 2.3rem;
+    font-size: 1.85rem;
     font-weight: 700;
     text-align: right;
     outline: none;
@@ -694,24 +700,24 @@ body.dark-theme .angle-mode-pill {
 .copy-btn {
     background: transparent;
     border: none;
-    font-size: 1.05rem;
+    font-size: 0.95rem;
     cursor: pointer;
     opacity: 0.5;
     transition: var(--transition);
-    padding: 4px;
+    padding: 3px;
 }
 
 .copy-btn:hover {
     opacity: 1;
-    transform: scale(1.15);
+    transform: scale(1.1);
 }
 
 /* Memory Bar */
 .memory-bar {
     display: flex;
     justify-content: space-between;
-    gap: 6px;
-    margin-bottom: 16px;
+    gap: 5px;
+    margin-bottom: 10px;
 }
 
 .mem-btn {
@@ -719,9 +725,9 @@ body.dark-theme .angle-mode-pill {
     background: var(--bg-surface-elevated);
     border: 1px solid var(--border-subtle);
     color: var(--text-secondary);
-    font-size: 0.75rem;
+    font-size: 0.72rem;
     font-weight: 600;
-    padding: 8px 4px;
+    padding: 5px 2px;
     border-radius: var(--radius-sm);
     cursor: pointer;
     transition: var(--transition);
@@ -736,7 +742,7 @@ body.dark-theme .angle-mode-pill {
 /* Keypads */
 .keypad {
     display: grid;
-    gap: 10px;
+    gap: 7px;
 }
 
 .standard-keypad { grid-template-columns: repeat(4, 1fr); }
@@ -745,10 +751,10 @@ body.dark-theme .angle-mode-pill {
 
 .btn {
     border: 1px solid var(--btn-num-border);
-    height: 56px;
-    border-radius: var(--radius-md);
+    height: 44px;
+    border-radius: var(--radius-sm);
     font-family: var(--font-ui);
-    font-size: 1.15rem;
+    font-size: 1.02rem;
     font-weight: 600;
     cursor: pointer;
     display: flex;
@@ -757,6 +763,16 @@ body.dark-theme .angle-mode-pill {
     transition: var(--transition);
     user-select: none;
     box-shadow: var(--btn-num-shadow);
+}
+
+.scientific-keypad .btn {
+    height: 40px;
+    font-size: 0.88rem;
+}
+
+.programmer-keypad .btn {
+    height: 38px;
+    font-size: 0.88rem;
 }
 
 .btn:active {
@@ -849,7 +865,7 @@ body.dark-theme .angle-mode-pill {
 .btn-equals {
     background: var(--btn-equals-bg);
     color: var(--btn-equals-text);
-    font-size: 1.45rem;
+    font-size: 1.25rem;
     border: none;
     box-shadow: 0 4px 14px rgba(37, 99, 235, 0.4);
 }
