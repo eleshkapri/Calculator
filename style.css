@@ -362,11 +362,105 @@ body.dark-theme .nav-item.active {
     border-color: rgba(96, 165, 250, 0.3);
 }
 
+/* Sidebar Widgets */
+.sidebar-widget {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    margin-top: 14px;
+    padding-top: 14px;
+    border-top: 1px solid var(--border-subtle);
+}
+
+.sidebar-clock-card {
+    background: var(--bg-surface-elevated);
+    border: 1px solid var(--border-subtle);
+    border-radius: var(--radius-md);
+    padding: 10px 12px;
+    text-align: center;
+}
+
+.live-clock-time {
+    font-family: var(--font-mono);
+    font-size: 1.15rem;
+    font-weight: 800;
+    color: #2563eb;
+    letter-spacing: 0.5px;
+}
+
+body.dark-theme .live-clock-time {
+    color: #38bdf8;
+}
+
+.live-clock-date {
+    font-size: 0.72rem;
+    font-weight: 600;
+    color: var(--text-secondary);
+    margin-top: 2px;
+}
+
+.sidebar-constants-section {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+}
+
+.widget-title {
+    font-size: 0.72rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    color: var(--text-muted);
+    padding-left: 2px;
+}
+
+.constants-chips {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 6px;
+}
+
+.const-chip {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    background: var(--bg-surface-elevated);
+    border: 1px solid var(--border-subtle);
+    border-radius: var(--radius-sm);
+    padding: 5px 8px;
+    cursor: pointer;
+    transition: var(--transition);
+    text-align: left;
+}
+
+.const-chip:hover {
+    background: var(--bg-surface-hover);
+    border-color: rgba(37, 99, 235, 0.4);
+    transform: translateY(-1px);
+}
+
+.chip-sym {
+    font-family: var(--font-mono);
+    font-weight: 700;
+    font-size: 0.78rem;
+    color: #2563eb;
+}
+
+body.dark-theme .chip-sym {
+    color: #38bdf8;
+}
+
+.chip-val {
+    font-family: var(--font-mono);
+    font-size: 0.68rem;
+    color: var(--text-secondary);
+}
+
 .sidebar-footer {
     display: flex;
     flex-direction: column;
     gap: 8px;
-    padding-top: 16px;
+    padding-top: 14px;
     border-top: 1px solid var(--border-subtle);
 }
 

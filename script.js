@@ -1750,15 +1750,32 @@
         copyTimeKeypadResult: () => TimeEngine.copyKeypadResult(),
         calculateTimeDuration: () => TimeEngine.calculateDuration(),
         calculateTimeMath: () => TimeEngine.calculateMath(),
-        toggleStopwatch: () => TimeEngine.toggleStopwatch(),
-        lapStopwatch: () => TimeEngine.lapStopwatch(),
-        resetStopwatch: () => TimeEngine.resetStopwatch(),
         convertEpochToDate: () => TimeEngine.convertEpochToDate(),
-        convertDateToEpoch: () => TimeEngine.convertDateToEpoch()
+        convertDateToEpoch: () => TimeEngine.convertDateToEpoch(),
+
+        // Constants API
+        copyConstant: (val, name) => {
+            copyToClipboard(val);
+            SoundFx.playClick(650);
+            showToast(`Copied ${name}: ${val}`);
+        }
     };
 
-    // Backward compatibility alias
     window.OmniCalc = window.CalcVerse;
+
+    function initSidebarClock() {
+        const timeEl = document.getElementById('sidebarLiveClock');
+        const dateEl = document.getElementById('sidebarLiveDate');
+        if (!timeEl || !dateEl) return;
+
+        const update = () => {
+            const now = new Date();
+            timeEl.textContent = now.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', second: '2-digit' });
+            dateEl.textContent = now.toLocaleDateString([], { weekday: 'short', month: 'short', day: 'numeric' });
+        };
+        update();
+        setInterval(update, 1000);
+    }
 
     // Initialize on DOM ready
     document.addEventListener('DOMContentLoaded', () => {
@@ -1766,6 +1783,7 @@
         initKeyboard();
         FinancialEngine.init();
         renderHistoryList();
+        initSidebarClock();
 
         // Clear old legacy caches
         if ('caches' in window) {

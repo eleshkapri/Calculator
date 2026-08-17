@@ -84,6 +84,36 @@
                 </button>
             </nav>
 
+            <!-- Sidebar Widgets in Blank Space -->
+            <div class="sidebar-widget">
+                <div class="sidebar-clock-card">
+                    <div class="live-clock-time" id="sidebarLiveClock">--:--:--</div>
+                    <div class="live-clock-date" id="sidebarLiveDate">-- --- ----</div>
+                </div>
+
+                <div class="sidebar-constants-section">
+                    <span class="widget-title">Quick Constants</span>
+                    <div class="constants-chips">
+                        <button class="const-chip" onclick="CalcVerse.copyConstant('3.1415926535', 'π (Pi)')" title="Click to copy Pi (3.14159...)">
+                            <span class="chip-sym">π</span>
+                            <span class="chip-val">3.14159</span>
+                        </button>
+                        <button class="const-chip" onclick="CalcVerse.copyConstant('2.7182818284', 'e (Euler)')" title="Click to copy Euler (2.71828...)">
+                            <span class="chip-sym">e</span>
+                            <span class="chip-val">2.71828</span>
+                        </button>
+                        <button class="const-chip" onclick="CalcVerse.copyConstant('1.6180339887', 'φ (Golden Ratio)')" title="Click to copy Golden Ratio (1.61803...)">
+                            <span class="chip-sym">φ</span>
+                            <span class="chip-val">1.61803</span>
+                        </button>
+                        <button class="const-chip" onclick="CalcVerse.copyConstant('1.4142135623', '√2 (Pythagoras)')" title="Click to copy √2 (1.41421...)">
+                            <span class="chip-sym">√2</span>
+                            <span class="chip-val">1.41421</span>
+                        </button>
+                    </div>
+                </div>
+            </div>
+
             <div class="sidebar-footer">
                 <button id="installPwaBtn" class="utility-btn" style="display: none;" title="Install on this device">
                     <span>📲</span>
