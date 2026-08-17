@@ -723,6 +723,7 @@
 
             this.calculateEMI();
             this.calculateCompound();
+            this.fetchLiveRates();
         },
 
         setCurrency(code) {
@@ -814,6 +815,142 @@
             document.getElementById('ciFutureValue').textContent = this.formatMoney(totalFutureValue);
             document.getElementById('ciTotalInvested').textContent = this.formatMoney(totalInvested);
             document.getElementById('ciTotalInterest').textContent = this.formatMoney(totalInterest);
+        },
+
+        // =====================================================================
+        // Live Exchange Rates & Converter
+        // =====================================================================
+        rates: {
+            USD: 1,
+            INR: 83.52,
+            EUR: 0.92,
+            GBP: 0.78,
+            JPY: 155.40,
+            CAD: 1.36,
+            AUD: 1.51,
+            AED: 3.67,
+            CNY: 7.24,
+            SGD: 1.35,
+            CHF: 0.90,
+            SAR: 3.75,
+            KRW: 1365.20,
+            BRL: 5.15,
+            ZAR: 18.25,
+            RUB: 91.50,
+            NZD: 1.63,
+            KWD: 0.31,
+            QAR: 3.64,
+            THB: 36.80
+        },
+        ratesLastUpdated: null,
+
+        async fetchLiveRates() {
+            const statusText = document.getElementById('rateStatusText');
+            const refreshIcon = document.getElementById('refreshIcon');
+            if (refreshIcon) refreshIcon.style.animation = 'spin 1s infinite linear';
+
+            try {
+                const res = await fetch('https://open.er-api.com/v6/latest/USD');
+                if (res.ok) {
+                    const data = await res.json();
+                    if (data && data.rates) {
+                        this.rates = { ...this.rates, ...data.rates };
+                        this.ratesLastUpdated = new Date();
+                        localStorage.setItem('calcverse_rates_cache', JSON.stringify({
+                            rates: this.rates,
+                            time: this.ratesLastUpdated.toISOString()
+                        }));
+                        if (statusText) {
+                            statusText.textContent = `Live Rates: Updated ${this.ratesLastUpdated.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}`;
+                        }
+                    }
+                }
+            } catch (e) {
+                // Offline or CORS fallback
+                if (statusText) statusText.textContent = 'Rates: Offline Cached';
+            } finally {
+                if (refreshIcon) refreshIcon.style.animation = '';
+                this.convert('from');
+                this.renderPopularPairs();
+            }
+        },
+
+        convert(source = 'from') {
+            const fromUnit = document.getElementById('currencyUnitFrom')?.value || 'USD';
+            const toUnit = document.getElementById('currencyUnitTo')?.value || 'INR';
+            const fromRate = this.rates[fromUnit] || 1;
+            const toRate = this.rates[toUnit] || 1;
+
+            const fromInput = document.getElementById('currencyValFrom');
+            const toInput = document.getElementById('currencyValTo');
+            const formulaEl = document.getElementById('currencyFormula');
+
+            const oneUnitConverted = (1 / fromRate) * toRate;
+            if (formulaEl) {
+                formulaEl.textContent = `1 ${fromUnit} = ${oneUnitConverted.toLocaleString(undefined, { maximumFractionDigits: 4 })} ${toUnit}`;
+            }
+
+            if (source === 'from' && fromInput && toInput) {
+                const val = parseFloat(fromInput.value) || 0;
+                const converted = (val / fromRate) * toRate;
+                toInput.value = parseFloat(converted.toFixed(4));
+            } else if (source === 'to' && fromInput && toInput) {
+                const val = parseFloat(toInput.value) || 0;
+                const converted = (val / toRate) * fromRate;
+                fromInput.value = parseFloat(converted.toFixed(4));
+            }
+        },
+
+        swap() {
+            SoundFx.playClick(600);
+            const fromSelect = document.getElementById('currencyUnitFrom');
+            const toSelect = document.getElementById('currencyUnitTo');
+            if (fromSelect && toSelect) {
+                const temp = fromSelect.value;
+                fromSelect.value = toSelect.value;
+                toSelect.value = temp;
+                this.convert('from');
+            }
+        },
+
+        renderPopularPairs() {
+            const pairsGrid = document.getElementById('popularPairsGrid');
+            if (!pairsGrid) return;
+
+            const popular = [
+                ['USD', 'INR'],
+                ['EUR', 'USD'],
+                ['GBP', 'INR'],
+                ['USD', 'AED'],
+                ['EUR', 'INR'],
+                ['USD', 'CAD'],
+                ['USD', 'JPY'],
+                ['AED', 'INR']
+            ];
+
+            pairsGrid.innerHTML = popular.map(([from, to]) => {
+                const fRate = this.rates[from] || 1;
+                const tRate = this.rates[to] || 1;
+                const rate = (1 / fRate) * tRate;
+                return `
+                    <div class="pair-card" onclick="CalcVerse.setQuickPair('${from}', '${to}')">
+                        <span class="pair-names">${from} / ${to}</span>
+                        <span class="pair-rate">${rate.toLocaleString(undefined, { maximumFractionDigits: 3 })}</span>
+                    </div>
+                `;
+            }).join('');
+        },
+
+        setQuickPair(from, to) {
+            SoundFx.playClick(600);
+            const fromSelect = document.getElementById('currencyUnitFrom');
+            const toSelect = document.getElementById('currencyUnitTo');
+            if (fromSelect && toSelect) {
+                fromSelect.value = from;
+                toSelect.value = to;
+                this.convert('from');
+                showToast(`Switched pair to ${from}/${to}`);
+            }
         }
     };
 
@@ -1778,8 +1915,12 @@
         zoomGraph: (factor) => GraphEngine.zoom(factor),
         resetGraph: () => GraphEngine.reset(),
 
-        // Financial API
+        // Financial & Currency API
         setFinancialCurrency: (code) => FinancialEngine.setCurrency(code),
+        refreshExchangeRates: () => FinancialEngine.fetchLiveRates(),
+        convertCurrency: (source) => FinancialEngine.convert(source),
+        swapCurrencyUnits: () => FinancialEngine.swap(),
+        setQuickPair: (from, to) => FinancialEngine.setQuickPair(from, to),
 
         // Programmer API
         setRadix: (r) => ProgrammerEngine.setRadix(r),

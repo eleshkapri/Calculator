@@ -339,10 +339,11 @@
                 <section class="calculator-view" id="view-financial">
                     <div class="financial-toolbar">
                         <div class="sub-tabs">
-                            <button class="sub-tab active" data-subtab="loan">Loan / EMI Calculator</button>
-                            <button class="sub-tab" data-subtab="compound">Compound Interest & Growth</button>
+                            <button class="sub-tab active" data-subtab="loan">Loan / EMI</button>
+                            <button class="sub-tab" data-subtab="compound">Compound Growth</button>
+                            <button class="sub-tab" data-subtab="livecurrency">💱 Live Currency</button>
                         </div>
-                        <div class="currency-picker-wrap">
+                        <div class="currency-picker-wrap" id="finCurrencyPickerWrap">
                             <label for="finCurrencySelect" class="currency-label">Currency:</label>
                             <select id="finCurrencySelect" class="currency-dropdown" onchange="CalcVerse.setFinancialCurrency(this.value)">
                                 <option value="INR" selected>₹ INR (Indian Rupee)</option>
@@ -452,6 +453,87 @@
                             <div class="fin-result-box">
                                 <span class="res-title">Wealth Gain / Interest</span>
                                 <span class="res-value" id="ciTotalInterest">$28,878.29</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- 3. Live Currency Converter -->
+                    <div class="financial-card subtab-view" id="subtab-livecurrency">
+                        <div class="currency-status-bar">
+                            <div class="status-indicator">
+                                <span class="pulse-dot"></span>
+                                <span id="rateStatusText">Real-Time Exchange Rates</span>
+                            </div>
+                            <button class="refresh-rates-btn" onclick="CalcVerse.refreshExchangeRates()" title="Refresh live rates">
+                                <span id="refreshIcon">🔄</span> Refresh
+                            </button>
+                        </div>
+
+                        <div class="converter-grid currency-conv-grid">
+                            <div class="convert-box">
+                                <label for="currencyValFrom">From Amount</label>
+                                <input type="number" id="currencyValFrom" class="convert-input" value="1" min="0" step="any" oninput="CalcVerse.convertCurrency('from')">
+                                <select id="currencyUnitFrom" class="unit-dropdown" onchange="CalcVerse.convertCurrency('from')">
+                                    <option value="USD" selected>🇺🇸 USD - US Dollar</option>
+                                    <option value="INR">🇮🇳 INR - Indian Rupee</option>
+                                    <option value="EUR">🇪🇺 EUR - Euro</option>
+                                    <option value="GBP">🇬🇧 GBP - British Pound</option>
+                                    <option value="JPY">🇯🇵 JPY - Japanese Yen</option>
+                                    <option value="CAD">🇨🇦 CAD - Canadian Dollar</option>
+                                    <option value="AUD">🇦🇺 AUD - Australian Dollar</option>
+                                    <option value="AED">🇦🇪 AED - UAE Dirham</option>
+                                    <option value="CNY">🇨🇳 CNY - Chinese Yuan</option>
+                                    <option value="SGD">🇸🇬 SGD - Singapore Dollar</option>
+                                    <option value="CHF">🇨🇭 CHF - Swiss Franc</option>
+                                    <option value="SAR">🇸🇦 SAR - Saudi Riyal</option>
+                                    <option value="KRW">🇰🇷 KRW - South Korean Won</option>
+                                    <option value="BRL">🇧🇷 BRL - Brazilian Real</option>
+                                    <option value="ZAR">🇿🇦 ZAR - South African Rand</option>
+                                    <option value="RUB">🇷🇺 RUB - Russian Ruble</option>
+                                    <option value="NZD">🇳🇿 NZD - New Zealand Dollar</option>
+                                    <option value="KWD">🇰🇼 KWD - Kuwaiti Dinar</option>
+                                    <option value="QAR">🇶🇦 QAR - Qatari Riyal</option>
+                                    <option value="THB">🇹🇭 THB - Thai Baht</option>
+                                </select>
+                            </div>
+
+                            <button class="swap-btn" onclick="CalcVerse.swapCurrencyUnits()" title="Swap currencies">⇄</button>
+
+                            <div class="convert-box">
+                                <label for="currencyValTo">Converted Amount</label>
+                                <input type="number" id="currencyValTo" class="convert-input" value="83.5" min="0" step="any" oninput="CalcVerse.convertCurrency('to')">
+                                <select id="currencyUnitTo" class="unit-dropdown" onchange="CalcVerse.convertCurrency('from')">
+                                    <option value="USD">🇺🇸 USD - US Dollar</option>
+                                    <option value="INR" selected>🇮🇳 INR - Indian Rupee</option>
+                                    <option value="EUR">🇪🇺 EUR - Euro</option>
+                                    <option value="GBP">🇬🇧 GBP - British Pound</option>
+                                    <option value="JPY">🇯🇵 JPY - Japanese Yen</option>
+                                    <option value="CAD">🇨🇦 CAD - Canadian Dollar</option>
+                                    <option value="AUD">🇦🇺 AUD - Australian Dollar</option>
+                                    <option value="AED">🇦🇪 AED - UAE Dirham</option>
+                                    <option value="CNY">🇨🇳 CNY - Chinese Yuan</option>
+                                    <option value="SGD">🇸🇬 SGD - Singapore Dollar</option>
+                                    <option value="CHF">🇨🇭 CHF - Swiss Franc</option>
+                                    <option value="SAR">🇸🇦 SAR - Saudi Riyal</option>
+                                    <option value="KRW">🇰🇷 KRW - South Korean Won</option>
+                                    <option value="BRL">🇧🇷 BRL - Brazilian Real</option>
+                                    <option value="ZAR">🇿🇦 ZAR - South African Rand</option>
+                                    <option value="RUB">🇷🇺 RUB - Russian Ruble</option>
+                                    <option value="NZD">🇳🇿 NZD - New Zealand Dollar</option>
+                                    <option value="KWD">🇰🇼 KWD - Kuwaiti Dinar</option>
+                                    <option value="QAR">🇶🇦 QAR - Qatari Riyal</option>
+                                    <option value="THB">🇹🇭 THB - Thai Baht</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <div class="conversion-formula" id="currencyFormula">1 USD = 83.50 INR</div>
+
+                        <!-- Popular Live Pairs Quick Matrix -->
+                        <div class="popular-pairs-section">
+                            <span class="widget-title">Live Popular Currency Pairs</span>
+                            <div class="pairs-grid" id="popularPairsGrid">
+                                <!-- Populated dynamically by script.js -->
                             </div>
                         </div>
                     </div>
