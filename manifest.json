@@ -1,6 +1,6 @@
 {
-  "name": "OmniCalc Pro - Multi-Calculator Suite",
-  "short_name": "OmniCalc",
+  "name": "CalcVerse Pro - Multi-Calculator Suite",
+  "short_name": "CalcVerse",
   "description": "Modern multi-calculator suite with Standard, Scientific, Graphing, Financial, Programmer, Time, BMI & Date tools.",
   "start_url": "./index.html",
   "display": "standalone",

@@ -1,4 +1,4 @@
-# OmniCalc Pro - Multi-Calculator Suite 🚀
+# CalcVerse Pro - Multi-Calculator Suite 🚀
 
 A modern, responsive, all-in-one web calculator suite featuring separated dedicated calculators with sleek visual styling, dark/light themes, calculation history, audio feedback, and keyboard shortcuts.
 
@@ -14,13 +14,18 @@ A modern, responsive, all-in-one web calculator suite featuring separated dedica
 6. 💻 **Programmer Calculator**: Real-time simultaneous representation in HEX, DEC, OCT, and BIN, bit-word sizes (8, 16, 32, 64-bit), and Bitwise operations ($AND, OR, XOR, NOT, <<, >>$).
 7. ⚖️ **BMI & Health Calculator**: Metric & Imperial support, visual BMI gauge with classification, healthy weight target range, and BMR / daily calorie recommendations.
 8. 📅 **Date & Age Calculator**: Exact date differences (days, weeks, hours), exact age breakdown (years, months, days), and Add/Subtract days tool.
+9. ⏱️ **Time Calculator**: App-style unit keypad calculator (`hour`, `min`, `sec`, `m.sec`), work shift duration with break deduction, time arithmetic, and millisecond stopwatch.
 
 ## 🎨 UI & Aesthetics
-- Modern Dark Slate & Light theme switcher.
+- Modern Dark Obsidian & Crisp Light theme switcher.
 - Tactile audio click synthesizer (Web Audio API).
 - History drawer with calculation storage, clipboard copying, and recall.
+- Progressive Web App (PWA) ready for mobile & laptop installation.
 - Full keyboard shortcut support for rapid entry.
 - Fully responsive on desktop, tablet, and mobile browsers.
 
 ## 🚀 How to Run
-Open `index.html` in any modern web browser or serve locally with any live server.
+Open `index.html` in any modern web browser or serve locally:
+```bash
+npx serve .
+```

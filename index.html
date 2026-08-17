@@ -7,7 +7,7 @@
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
     <link rel="manifest" href="manifest.json">
-    <title>OmniCalc Pro - Modern Multi-Calculator Suite</title>
+    <title>CalcVerse Pro - Modern Multi-Calculator Suite</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;600;700&family=Outfit:wght@400;500;600;700;800&display=swap" rel="stylesheet">
@@ -34,7 +34,7 @@
                     </svg>
                 </div>
                 <div class="brand-text">
-                    <h2>OmniCalc</h2>
+                    <h2>CalcVerse</h2>
                     <span class="badge">PRO</span>
                 </div>
             </div>
@@ -138,39 +138,39 @@
 
                         <!-- Memory Bar -->
                         <div class="memory-bar">
-                            <button class="mem-btn" onclick="OmniCalc.memClear('std')">MC</button>
-                            <button class="mem-btn" onclick="OmniCalc.memRecall('std')">MR</button>
-                            <button class="mem-btn" onclick="OmniCalc.memAdd('std')">M+</button>
-                            <button class="mem-btn" onclick="OmniCalc.memSub('std')">M-</button>
-                            <button class="mem-btn" onclick="OmniCalc.memStore('std')">MS</button>
+                            <button class="mem-btn" onclick="CalcVerse.memClear('std')">MC</button>
+                            <button class="mem-btn" onclick="CalcVerse.memRecall('std')">MR</button>
+                            <button class="mem-btn" onclick="CalcVerse.memAdd('std')">M+</button>
+                            <button class="mem-btn" onclick="CalcVerse.memSub('std')">M-</button>
+                            <button class="mem-btn" onclick="CalcVerse.memStore('std')">MS</button>
                         </div>
 
                         <!-- Keypad -->
                         <div class="keypad standard-keypad">
-                            <button class="btn btn-fn" onclick="OmniCalc.clear('std')">AC</button>
-                            <button class="btn btn-fn" onclick="OmniCalc.backspace('std')">⌫</button>
-                            <button class="btn btn-fn" onclick="OmniCalc.inputVal('std', '%')">%</button>
-                            <button class="btn btn-op" onclick="OmniCalc.inputVal('std', '÷')">÷</button>
+                            <button class="btn btn-fn" onclick="CalcVerse.clear('std')">AC</button>
+                            <button class="btn btn-fn" onclick="CalcVerse.backspace('std')">⌫</button>
+                            <button class="btn btn-fn" onclick="CalcVerse.inputVal('std', '%')">%</button>
+                            <button class="btn btn-op" onclick="CalcVerse.inputVal('std', '÷')">÷</button>
 
-                            <button class="btn btn-num" onclick="OmniCalc.inputVal('std', '7')">7</button>
-                            <button class="btn btn-num" onclick="OmniCalc.inputVal('std', '8')">8</button>
-                            <button class="btn btn-num" onclick="OmniCalc.inputVal('std', '9')">9</button>
-                            <button class="btn btn-op" onclick="OmniCalc.inputVal('std', '×')">×</button>
+                            <button class="btn btn-num" onclick="CalcVerse.inputVal('std', '7')">7</button>
+                            <button class="btn btn-num" onclick="CalcVerse.inputVal('std', '8')">8</button>
+                            <button class="btn btn-num" onclick="CalcVerse.inputVal('std', '9')">9</button>
+                            <button class="btn btn-op" onclick="CalcVerse.inputVal('std', '×')">×</button>
 
-                            <button class="btn btn-num" onclick="OmniCalc.inputVal('std', '4')">4</button>
-                            <button class="btn btn-num" onclick="OmniCalc.inputVal('std', '5')">5</button>
-                            <button class="btn btn-num" onclick="OmniCalc.inputVal('std', '6')">6</button>
-                            <button class="btn btn-op" onclick="OmniCalc.inputVal('std', '−')">−</button>
+                            <button class="btn btn-num" onclick="CalcVerse.inputVal('std', '4')">4</button>
+                            <button class="btn btn-num" onclick="CalcVerse.inputVal('std', '5')">5</button>
+                            <button class="btn btn-num" onclick="CalcVerse.inputVal('std', '6')">6</button>
+                            <button class="btn btn-op" onclick="CalcVerse.inputVal('std', '−')">−</button>
 
-                            <button class="btn btn-num" onclick="OmniCalc.inputVal('std', '1')">1</button>
-                            <button class="btn btn-num" onclick="OmniCalc.inputVal('std', '2')">2</button>
-                            <button class="btn btn-num" onclick="OmniCalc.inputVal('std', '3')">3</button>
-                            <button class="btn btn-op" onclick="OmniCalc.inputVal('std', '+')">+</button>
+                            <button class="btn btn-num" onclick="CalcVerse.inputVal('std', '1')">1</button>
+                            <button class="btn btn-num" onclick="CalcVerse.inputVal('std', '2')">2</button>
+                            <button class="btn btn-num" onclick="CalcVerse.inputVal('std', '3')">3</button>
+                            <button class="btn btn-op" onclick="CalcVerse.inputVal('std', '+')">+</button>
 
-                            <button class="btn btn-fn" onclick="OmniCalc.toggleSign('std')">±</button>
-                            <button class="btn btn-num" onclick="OmniCalc.inputVal('std', '0')">0</button>
-                            <button class="btn btn-num" onclick="OmniCalc.inputVal('std', '.')">.</button>
-                            <button class="btn btn-equals" onclick="OmniCalc.calculate('std')">=</button>
+                            <button class="btn btn-fn" onclick="CalcVerse.toggleSign('std')">±</button>
+                            <button class="btn btn-num" onclick="CalcVerse.inputVal('std', '0')">0</button>
+                            <button class="btn btn-num" onclick="CalcVerse.inputVal('std', '.')">.</button>
+                            <button class="btn btn-equals" onclick="CalcVerse.calculate('std')">=</button>
                         </div>
                     </div>
                 </section>
@@ -180,7 +180,7 @@
                     <div class="calc-card scientific-card">
                         <div class="display-container">
                             <div class="sci-status-bar">
-                                <span class="angle-mode-pill" id="sciAngleMode" onclick="OmniCalc.toggleAngleMode()">DEG</span>
+                                <span class="angle-mode-pill" id="sciAngleMode" onclick="CalcVerse.toggleAngleMode()">DEG</span>
                                 <span class="memory-indicator" id="sciMemoryIndicator"></span>
                             </div>
                             <div class="expression-line" id="sciExpression"></div>
@@ -192,61 +192,61 @@
 
                         <!-- Scientific Memory Bar -->
                         <div class="memory-bar">
-                            <button class="mem-btn" onclick="OmniCalc.toggleAngleMode()">DEG / RAD</button>
-                            <button class="mem-btn" onclick="OmniCalc.toggle2nd()">2nd</button>
-                            <button class="mem-btn" onclick="OmniCalc.memClear('sci')">MC</button>
-                            <button class="mem-btn" onclick="OmniCalc.memRecall('sci')">MR</button>
-                            <button class="mem-btn" onclick="OmniCalc.memAdd('sci')">M+</button>
-                            <button class="mem-btn" onclick="OmniCalc.memSub('sci')">M-</button>
+                            <button class="mem-btn" onclick="CalcVerse.toggleAngleMode()">DEG / RAD</button>
+                            <button class="mem-btn" onclick="CalcVerse.toggle2nd()">2nd</button>
+                            <button class="mem-btn" onclick="CalcVerse.memClear('sci')">MC</button>
+                            <button class="mem-btn" onclick="CalcVerse.memRecall('sci')">MR</button>
+                            <button class="mem-btn" onclick="CalcVerse.memAdd('sci')">M+</button>
+                            <button class="mem-btn" onclick="CalcVerse.memSub('sci')">M-</button>
                         </div>
 
                         <!-- Scientific Keypad -->
                         <div class="keypad scientific-keypad">
                             <!-- Row 1 -->
-                            <button class="btn btn-sci" onclick="OmniCalc.inputFunc('sin')"><span class="fn-label">sin</span></button>
-                            <button class="btn btn-sci" onclick="OmniCalc.inputFunc('cos')"><span class="fn-label">cos</span></button>
-                            <button class="btn btn-sci" onclick="OmniCalc.inputFunc('tan')"><span class="fn-label">tan</span></button>
-                            <button class="btn btn-fn" onclick="OmniCalc.clear('sci')">AC</button>
-                            <button class="btn btn-fn" onclick="OmniCalc.backspace('sci')">⌫</button>
+                            <button class="btn btn-sci" onclick="CalcVerse.inputFunc('sin')"><span class="fn-label">sin</span></button>
+                            <button class="btn btn-sci" onclick="CalcVerse.inputFunc('cos')"><span class="fn-label">cos</span></button>
+                            <button class="btn btn-sci" onclick="CalcVerse.inputFunc('tan')"><span class="fn-label">tan</span></button>
+                            <button class="btn btn-fn" onclick="CalcVerse.clear('sci')">AC</button>
+                            <button class="btn btn-fn" onclick="CalcVerse.backspace('sci')">⌫</button>
 
                             <!-- Row 2 -->
-                            <button class="btn btn-sci" onclick="OmniCalc.inputFunc('ln')">ln</button>
-                            <button class="btn btn-sci" onclick="OmniCalc.inputFunc('log')">log</button>
-                            <button class="btn btn-sci" onclick="OmniCalc.inputVal('sci', '(')">(</button>
-                            <button class="btn btn-sci" onclick="OmniCalc.inputVal('sci', ')')">)</button>
-                            <button class="btn btn-op" onclick="OmniCalc.inputVal('sci', '÷')">÷</button>
+                            <button class="btn btn-sci" onclick="CalcVerse.inputFunc('ln')">ln</button>
+                            <button class="btn btn-sci" onclick="CalcVerse.inputFunc('log')">log</button>
+                            <button class="btn btn-sci" onclick="CalcVerse.inputVal('sci', '(')">(</button>
+                            <button class="btn btn-sci" onclick="CalcVerse.inputVal('sci', ')')">)</button>
+                            <button class="btn btn-op" onclick="CalcVerse.inputVal('sci', '÷')">÷</button>
 
                             <!-- Row 3 -->
-                            <button class="btn btn-sci" onclick="OmniCalc.inputFunc('sqrt')">√x</button>
-                            <button class="btn btn-sci" onclick="OmniCalc.inputVal('sci', '^')">xʸ</button>
-                            <button class="btn btn-num" onclick="OmniCalc.inputVal('sci', '7')">7</button>
-                            <button class="btn btn-num" onclick="OmniCalc.inputVal('sci', '8')">8</button>
-                            <button class="btn btn-num" onclick="OmniCalc.inputVal('sci', '9')">9</button>
-                            <button class="btn btn-op" onclick="OmniCalc.inputVal('sci', '×')">×</button>
+                            <button class="btn btn-sci" onclick="CalcVerse.inputFunc('sqrt')">√x</button>
+                            <button class="btn btn-sci" onclick="CalcVerse.inputVal('sci', '^')">xʸ</button>
+                            <button class="btn btn-num" onclick="CalcVerse.inputVal('sci', '7')">7</button>
+                            <button class="btn btn-num" onclick="CalcVerse.inputVal('sci', '8')">8</button>
+                            <button class="btn btn-num" onclick="CalcVerse.inputVal('sci', '9')">9</button>
+                            <button class="btn btn-op" onclick="CalcVerse.inputVal('sci', '×')">×</button>
 
                             <!-- Row 4 -->
-                            <button class="btn btn-sci" onclick="OmniCalc.inputFunc('sqr')">x²</button>
-                            <button class="btn btn-sci" onclick="OmniCalc.inputFunc('fact')">n!</button>
-                            <button class="btn btn-num" onclick="OmniCalc.inputVal('sci', '4')">4</button>
-                            <button class="btn btn-num" onclick="OmniCalc.inputVal('sci', '5')">5</button>
-                            <button class="btn btn-num" onclick="OmniCalc.inputVal('sci', '6')">6</button>
-                            <button class="btn btn-op" onclick="OmniCalc.inputVal('sci', '−')">−</button>
+                            <button class="btn btn-sci" onclick="CalcVerse.inputFunc('sqr')">x²</button>
+                            <button class="btn btn-sci" onclick="CalcVerse.inputFunc('fact')">n!</button>
+                            <button class="btn btn-num" onclick="CalcVerse.inputVal('sci', '4')">4</button>
+                            <button class="btn btn-num" onclick="CalcVerse.inputVal('sci', '5')">5</button>
+                            <button class="btn btn-num" onclick="CalcVerse.inputVal('sci', '6')">6</button>
+                            <button class="btn btn-op" onclick="CalcVerse.inputVal('sci', '−')">−</button>
 
                             <!-- Row 5 -->
-                            <button class="btn btn-sci" onclick="OmniCalc.inputVal('sci', 'π')">π</button>
-                            <button class="btn btn-sci" onclick="OmniCalc.inputVal('sci', 'e')">e</button>
-                            <button class="btn btn-num" onclick="OmniCalc.inputVal('sci', '1')">1</button>
-                            <button class="btn btn-num" onclick="OmniCalc.inputVal('sci', '2')">2</button>
-                            <button class="btn btn-num" onclick="OmniCalc.inputVal('sci', '3')">3</button>
-                            <button class="btn btn-op" onclick="OmniCalc.inputVal('sci', '+')">+</button>
+                            <button class="btn btn-sci" onclick="CalcVerse.inputVal('sci', 'π')">π</button>
+                            <button class="btn btn-sci" onclick="CalcVerse.inputVal('sci', 'e')">e</button>
+                            <button class="btn btn-num" onclick="CalcVerse.inputVal('sci', '1')">1</button>
+                            <button class="btn btn-num" onclick="CalcVerse.inputVal('sci', '2')">2</button>
+                            <button class="btn btn-num" onclick="CalcVerse.inputVal('sci', '3')">3</button>
+                            <button class="btn btn-op" onclick="CalcVerse.inputVal('sci', '+')">+</button>
 
                             <!-- Row 6 -->
-                            <button class="btn btn-sci" onclick="OmniCalc.inputFunc('inv')">1/x</button>
-                            <button class="btn btn-sci" onclick="OmniCalc.inputFunc('abs')">|x|</button>
-                            <button class="btn btn-fn" onclick="OmniCalc.toggleSign('sci')">±</button>
-                            <button class="btn btn-num" onclick="OmniCalc.inputVal('sci', '0')">0</button>
-                            <button class="btn btn-num" onclick="OmniCalc.inputVal('sci', '.')">.</button>
-                            <button class="btn btn-equals" onclick="OmniCalc.calculate('sci')">=</button>
+                            <button class="btn btn-sci" onclick="CalcVerse.inputFunc('inv')">1/x</button>
+                            <button class="btn btn-sci" onclick="CalcVerse.inputFunc('abs')">|x|</button>
+                            <button class="btn btn-fn" onclick="CalcVerse.toggleSign('sci')">±</button>
+                            <button class="btn btn-num" onclick="CalcVerse.inputVal('sci', '0')">0</button>
+                            <button class="btn btn-num" onclick="CalcVerse.inputVal('sci', '.')">.</button>
+                            <button class="btn btn-equals" onclick="CalcVerse.calculate('sci')">=</button>
                         </div>
                     </div>
                 </section>
@@ -267,27 +267,27 @@
                                     <input type="text" id="graphFuncInput2" class="func-input" value="cos(x)" placeholder="Optional 2nd function">
                                     <span class="color-dot color-2"></span>
                                 </div>
-                                <button class="btn-primary full-width" onclick="OmniCalc.plotGraph()">Plot Functions</button>
+                                <button class="btn-primary full-width" onclick="CalcVerse.plotGraph()">Plot Functions</button>
                             </div>
 
                             <div class="panel-section">
                                 <h3>Quick Presets</h3>
                                 <div class="presets-grid">
-                                    <button class="preset-pill" onclick="OmniCalc.setGraphPreset('sin(x)', 'cos(x)')">Sine & Cosine</button>
-                                    <button class="preset-pill" onclick="OmniCalc.setGraphPreset('x^2 - 4', '2*x')">Parabola & Line</button>
-                                    <button class="preset-pill" onclick="OmniCalc.setGraphPreset('x^3 - 3*x', '')">Cubic Curve</button>
-                                    <button class="preset-pill" onclick="OmniCalc.setGraphPreset('1/x', '')">Hyperbola</button>
-                                    <button class="preset-pill" onclick="OmniCalc.setGraphPreset('abs(x)', '-abs(x)')">V-Curves</button>
-                                    <button class="preset-pill" onclick="OmniCalc.setGraphPreset('exp(-x^2)', '')">Gaussian Bell</button>
+                                    <button class="preset-pill" onclick="CalcVerse.setGraphPreset('sin(x)', 'cos(x)')">Sine & Cosine</button>
+                                    <button class="preset-pill" onclick="CalcVerse.setGraphPreset('x^2 - 4', '2*x')">Parabola & Line</button>
+                                    <button class="preset-pill" onclick="CalcVerse.setGraphPreset('x^3 - 3*x', '')">Cubic Curve</button>
+                                    <button class="preset-pill" onclick="CalcVerse.setGraphPreset('1/x', '')">Hyperbola</button>
+                                    <button class="preset-pill" onclick="CalcVerse.setGraphPreset('abs(x)', '-abs(x)')">V-Curves</button>
+                                    <button class="preset-pill" onclick="CalcVerse.setGraphPreset('exp(-x^2)', '')">Gaussian Bell</button>
                                 </div>
                             </div>
 
                             <div class="panel-section">
                                 <h3>Zoom & Pan</h3>
                                 <div class="graph-nav-buttons">
-                                    <button class="tool-btn" onclick="OmniCalc.zoomGraph(1.25)">🔍+ Zoom In</button>
-                                    <button class="tool-btn" onclick="OmniCalc.zoomGraph(0.8)">🔍− Zoom Out</button>
-                                    <button class="tool-btn" onclick="OmniCalc.resetGraph()">🔄 Reset View</button>
+                                    <button class="tool-btn" onclick="CalcVerse.zoomGraph(1.25)">🔍+ Zoom In</button>
+                                    <button class="tool-btn" onclick="CalcVerse.zoomGraph(0.8)">🔍− Zoom Out</button>
+                                    <button class="tool-btn" onclick="CalcVerse.resetGraph()">🔄 Reset View</button>
                                 </div>
                                 <div class="coordinates-hud" id="graphHud">Hover canvas to trace (x, y)</div>
                             </div>
@@ -450,19 +450,19 @@
                     <div class="calc-card programmer-card">
                         <!-- Radix Display Rows -->
                         <div class="radix-board">
-                            <div class="radix-row active" data-radix="HEX" onclick="OmniCalc.setRadix('HEX')">
+                            <div class="radix-row active" data-radix="HEX" onclick="CalcVerse.setRadix('HEX')">
                                 <span class="radix-tag">HEX</span>
                                 <span class="radix-val" id="progHex">0</span>
                             </div>
-                            <div class="radix-row" data-radix="DEC" onclick="OmniCalc.setRadix('DEC')">
+                            <div class="radix-row" data-radix="DEC" onclick="CalcVerse.setRadix('DEC')">
                                 <span class="radix-tag">DEC</span>
                                 <span class="radix-val" id="progDec">0</span>
                             </div>
-                            <div class="radix-row" data-radix="OCT" onclick="OmniCalc.setRadix('OCT')">
+                            <div class="radix-row" data-radix="OCT" onclick="CalcVerse.setRadix('OCT')">
                                 <span class="radix-tag">OCT</span>
                                 <span class="radix-val" id="progOct">0</span>
                             </div>
-                            <div class="radix-row" data-radix="BIN" onclick="OmniCalc.setRadix('BIN')">
+                            <div class="radix-row" data-radix="BIN" onclick="CalcVerse.setRadix('BIN')">
                                 <span class="radix-tag">BIN</span>
                                 <span class="radix-val" id="progBin">0000 0000 0000 0000</span>
                             </div>
@@ -472,54 +472,54 @@
                         <div class="bit-word-bar">
                             <span class="bar-title">Word Size:</span>
                             <div class="word-sizes">
-                                <button class="word-btn" data-bits="8" onclick="OmniCalc.setWordSize(8)">BYTE (8-bit)</button>
-                                <button class="word-btn" data-bits="16" onclick="OmniCalc.setWordSize(16)">WORD (16-bit)</button>
-                                <button class="word-btn active" data-bits="32" onclick="OmniCalc.setWordSize(32)">DWORD (32-bit)</button>
-                                <button class="word-btn" data-bits="64" onclick="OmniCalc.setWordSize(64)">QWORD (64-bit)</button>
+                                <button class="word-btn" data-bits="8" onclick="CalcVerse.setWordSize(8)">BYTE (8-bit)</button>
+                                <button class="word-btn" data-bits="16" onclick="CalcVerse.setWordSize(16)">WORD (16-bit)</button>
+                                <button class="word-btn active" data-bits="32" onclick="CalcVerse.setWordSize(32)">DWORD (32-bit)</button>
+                                <button class="word-btn" data-bits="64" onclick="CalcVerse.setWordSize(64)">QWORD (64-bit)</button>
                             </div>
                         </div>
 
                         <!-- Programmer Keypad -->
                         <div class="keypad programmer-keypad">
                             <!-- Bitwise Ops Row -->
-                            <button class="btn btn-bit" onclick="OmniCalc.inputProgBitwise('AND')">AND</button>
-                            <button class="btn btn-bit" onclick="OmniCalc.inputProgBitwise('OR')">OR</button>
-                            <button class="btn btn-bit" onclick="OmniCalc.inputProgBitwise('XOR')">XOR</button>
-                            <button class="btn btn-bit" onclick="OmniCalc.inputProgBitwise('NOT')">NOT</button>
-                            <button class="btn btn-fn" onclick="OmniCalc.clear('prog')">AC</button>
-                            <button class="btn btn-fn" onclick="OmniCalc.backspace('prog')">⌫</button>
+                            <button class="btn btn-bit" onclick="CalcVerse.inputProgBitwise('AND')">AND</button>
+                            <button class="btn btn-bit" onclick="CalcVerse.inputProgBitwise('OR')">OR</button>
+                            <button class="btn btn-bit" onclick="CalcVerse.inputProgBitwise('XOR')">XOR</button>
+                            <button class="btn btn-bit" onclick="CalcVerse.inputProgBitwise('NOT')">NOT</button>
+                            <button class="btn btn-fn" onclick="CalcVerse.clear('prog')">AC</button>
+                            <button class="btn btn-fn" onclick="CalcVerse.backspace('prog')">⌫</button>
 
                             <!-- Hex Digits & Shifts -->
-                            <button class="btn btn-hex" data-hex="A" onclick="OmniCalc.inputProgDigit('A')">A</button>
-                            <button class="btn btn-bit" onclick="OmniCalc.inputProgBitwise('<<')">&lt;&lt;</button>
-                            <button class="btn btn-num" onclick="OmniCalc.inputProgDigit('7')">7</button>
-                            <button class="btn btn-num" onclick="OmniCalc.inputProgDigit('8')">8</button>
-                            <button class="btn btn-num" onclick="OmniCalc.inputProgDigit('9')">9</button>
-                            <button class="btn btn-op" onclick="OmniCalc.inputProgOp('÷')">÷</button>
+                            <button class="btn btn-hex" data-hex="A" onclick="CalcVerse.inputProgDigit('A')">A</button>
+                            <button class="btn btn-bit" onclick="CalcVerse.inputProgBitwise('<<')">&lt;&lt;</button>
+                            <button class="btn btn-num" onclick="CalcVerse.inputProgDigit('7')">7</button>
+                            <button class="btn btn-num" onclick="CalcVerse.inputProgDigit('8')">8</button>
+                            <button class="btn btn-num" onclick="CalcVerse.inputProgDigit('9')">9</button>
+                            <button class="btn btn-op" onclick="CalcVerse.inputProgOp('÷')">÷</button>
 
-                            <button class="btn btn-hex" data-hex="B" onclick="OmniCalc.inputProgDigit('B')">B</button>
-                            <button class="btn btn-bit" onclick="OmniCalc.inputProgBitwise('>>')">&gt;&gt;</button>
-                            <button class="btn btn-num" onclick="OmniCalc.inputProgDigit('4')">4</button>
-                            <button class="btn btn-num" onclick="OmniCalc.inputProgDigit('5')">5</button>
-                            <button class="btn btn-num" onclick="OmniCalc.inputProgDigit('6')">6</button>
-                            <button class="btn btn-op" onclick="OmniCalc.inputProgOp('×')">×</button>
+                            <button class="btn btn-hex" data-hex="B" onclick="CalcVerse.inputProgDigit('B')">B</button>
+                            <button class="btn btn-bit" onclick="CalcVerse.inputProgBitwise('>>')">&gt;&gt;</button>
+                            <button class="btn btn-num" onclick="CalcVerse.inputProgDigit('4')">4</button>
+                            <button class="btn btn-num" onclick="CalcVerse.inputProgDigit('5')">5</button>
+                            <button class="btn btn-num" onclick="CalcVerse.inputProgDigit('6')">6</button>
+                            <button class="btn btn-op" onclick="CalcVerse.inputProgOp('×')">×</button>
 
-                            <button class="btn btn-hex" data-hex="C" onclick="OmniCalc.inputProgDigit('C')">C</button>
-                            <button class="btn btn-hex" data-hex="D" onclick="OmniCalc.inputProgDigit('D')">D</button>
-                            <button class="btn btn-num" onclick="OmniCalc.inputProgDigit('1')">1</button>
-                            <button class="btn btn-num" onclick="OmniCalc.inputProgDigit('2')">2</button>
-                            <button class="btn btn-num" onclick="OmniCalc.inputProgDigit('3')">3</button>
-                            <button class="btn btn-op" onclick="OmniCalc.inputProgOp('−')">−</button>
+                            <button class="btn btn-hex" data-hex="C" onclick="CalcVerse.inputProgDigit('C')">C</button>
+                            <button class="btn btn-hex" data-hex="D" onclick="CalcVerse.inputProgDigit('D')">D</button>
+                            <button class="btn btn-num" onclick="CalcVerse.inputProgDigit('1')">1</button>
+                            <button class="btn btn-num" onclick="CalcVerse.inputProgDigit('2')">2</button>
+                            <button class="btn btn-num" onclick="CalcVerse.inputProgDigit('3')">3</button>
+                            <button class="btn btn-op" onclick="CalcVerse.inputProgOp('−')">−</button>
 
-                            <button class="btn btn-hex" data-hex="E" onclick="OmniCalc.inputProgDigit('E')">E</button>
-                            <button class="btn btn-hex" data-hex="F" onclick="OmniCalc.inputProgDigit('F')">F</button>
-                            <button class="btn btn-fn" onclick="OmniCalc.toggleProgSign()">±</button>
-                            <button class="btn btn-num" onclick="OmniCalc.inputProgDigit('0')">0</button>
-                            <button class="btn btn-op" onclick="OmniCalc.inputProgOp('%')">%</button>
-                            <button class="btn btn-op" onclick="OmniCalc.inputProgOp('+')">+</button>
+                            <button class="btn btn-hex" data-hex="E" onclick="CalcVerse.inputProgDigit('E')">E</button>
+                            <button class="btn btn-hex" data-hex="F" onclick="CalcVerse.inputProgDigit('F')">F</button>
+                            <button class="btn btn-fn" onclick="CalcVerse.toggleProgSign()">±</button>
+                            <button class="btn btn-num" onclick="CalcVerse.inputProgDigit('0')">0</button>
+                            <button class="btn btn-op" onclick="CalcVerse.inputProgOp('%')">%</button>
+                            <button class="btn btn-op" onclick="CalcVerse.inputProgOp('+')">+</button>
 
                             <!-- Full-width equals -->
-                            <button class="btn btn-equals prog-equals" onclick="OmniCalc.calculateProg()">=</button>
+                            <button class="btn btn-equals prog-equals" onclick="CalcVerse.calculateProg()">=</button>
                         </div>
                     </div>
                 </section>
@@ -528,8 +528,8 @@
                 <section class="calculator-view" id="view-health">
                     <div class="health-card">
                         <div class="unit-toggle-row">
-                            <button class="unit-pill active" id="healthMetricBtn" onclick="OmniCalc.setHealthUnit('metric')">Metric (kg, cm)</button>
-                            <button class="unit-pill" id="healthImperialBtn" onclick="OmniCalc.setHealthUnit('imperial')">Imperial (lbs, ft/in)</button>
+                            <button class="unit-pill active" id="healthMetricBtn" onclick="CalcVerse.setHealthUnit('metric')">Metric (kg, cm)</button>
+                            <button class="unit-pill" id="healthImperialBtn" onclick="CalcVerse.setHealthUnit('imperial')">Imperial (lbs, ft/in)</button>
                         </div>
 
                         <div class="form-grid">
@@ -565,7 +565,7 @@
                             </div>
                         </div>
 
-                        <button class="btn-primary full-width" onclick="OmniCalc.calculateHealth()">Calculate BMI & Metrics</button>
+                        <button class="btn-primary full-width" onclick="CalcVerse.calculateHealth()">Calculate BMI & Metrics</button>
 
                         <div class="health-results">
                             <div class="bmi-gauge-card">
@@ -620,7 +620,7 @@
                                 <input type="date" id="dateTo">
                             </div>
                         </div>
-                        <button class="btn-primary full-width" onclick="OmniCalc.calculateDateDiff()">Calculate Difference</button>
+                        <button class="btn-primary full-width" onclick="CalcVerse.calculateDateDiff()">Calculate Difference</button>
 
                         <div class="date-result-box" id="dateDiffResult">
                             <div class="primary-duration" id="diffPrimary">0 Days</div>
@@ -640,7 +640,7 @@
                                 <input type="date" id="asOfDate">
                             </div>
                         </div>
-                        <button class="btn-primary full-width" onclick="OmniCalc.calculateAge()">Calculate Exact Age</button>
+                        <button class="btn-primary full-width" onclick="CalcVerse.calculateAge()">Calculate Exact Age</button>
 
                         <div class="date-result-box" id="ageResult">
                             <div class="primary-duration" id="agePrimary">-- Years, -- Months, -- Days</div>
@@ -666,7 +666,7 @@
                                 </div>
                             </div>
                         </div>
-                        <button class="btn-primary full-width" onclick="OmniCalc.calculateAddSubDate()">Compute Result Date</button>
+                        <button class="btn-primary full-width" onclick="CalcVerse.calculateAddSubDate()">Compute Result Date</button>
 
                         <div class="date-result-box">
                             <div class="primary-duration" id="addsubResult">--</div>
@@ -690,13 +690,13 @@
                         <div class="time-calc-screen">
                             <div class="time-calc-header">
                                 <span class="time-badge">TIME EXPRESSION</span>
-                                <span class="format-badge" id="timeFormatModeBadge" onclick="OmniCalc.toggleTimeResultFormat()">Format: H:M:S</span>
+                                <span class="format-badge" id="timeFormatModeBadge" onclick="CalcVerse.toggleTimeResultFormat()">Format: H:M:S</span>
                             </div>
                             <div class="time-expression-display" id="timeKeypadExpression">2hour 35min + 3hour 45min</div>
                             <div class="time-result-display-wrapper">
                                 <span class="time-equals-symbol">=</span>
                                 <span class="time-result-val" id="timeKeypadResult">6hour 20min</span>
-                                <button class="copy-btn" onclick="OmniCalc.copyTimeKeypadResult()" title="Copy time result">📋</button>
+                                <button class="copy-btn" onclick="CalcVerse.copyTimeKeypadResult()" title="Copy time result">📋</button>
                             </div>
                             <div class="time-unit-breakdown" id="timeKeypadBreakdown">
                                 <span>6.333 Hours</span> • <span>380 Minutes</span> • <span>22,800 Seconds</span>
@@ -706,40 +706,40 @@
                         <!-- Dedicated Time Keypad -->
                         <div class="keypad time-unit-keypad">
                             <!-- Utility Row -->
-                            <button class="btn btn-fn" onclick="OmniCalc.clearTimeKeypad()">C</button>
-                            <button class="btn btn-fn" onclick="OmniCalc.inputTimeKeypad('%')">%</button>
-                            <button class="btn btn-fn" onclick="OmniCalc.toggleTimeResultFormat()" title="Toggle Result Format">⟲</button>
-                            <button class="btn btn-fn" onclick="OmniCalc.backspaceTimeKeypad()">⌫</button>
+                            <button class="btn btn-fn" onclick="CalcVerse.clearTimeKeypad()">C</button>
+                            <button class="btn btn-fn" onclick="CalcVerse.inputTimeKeypad('%')">%</button>
+                            <button class="btn btn-fn" onclick="CalcVerse.toggleTimeResultFormat()" title="Toggle Result Format">⟲</button>
+                            <button class="btn btn-fn" onclick="CalcVerse.backspaceTimeKeypad()">⌫</button>
 
                             <!-- Time Units Row -->
-                            <button class="btn btn-tunit unit-hour" onclick="OmniCalc.inputTimeUnit('hour')">hour</button>
-                            <button class="btn btn-tunit unit-min" onclick="OmniCalc.inputTimeUnit('min')">min</button>
-                            <button class="btn btn-tunit unit-sec" onclick="OmniCalc.inputTimeUnit('sec')">sec</button>
-                            <button class="btn btn-tunit unit-msec" onclick="OmniCalc.inputTimeUnit('m.sec')">m.sec</button>
+                            <button class="btn btn-tunit unit-hour" onclick="CalcVerse.inputTimeUnit('hour')">hour</button>
+                            <button class="btn btn-tunit unit-min" onclick="CalcVerse.inputTimeUnit('min')">min</button>
+                            <button class="btn btn-tunit unit-sec" onclick="CalcVerse.inputTimeUnit('sec')">sec</button>
+                            <button class="btn btn-tunit unit-msec" onclick="CalcVerse.inputTimeUnit('m.sec')">m.sec</button>
 
                             <!-- Number Row 1 -->
-                            <button class="btn btn-num" onclick="OmniCalc.inputTimeKeypad('7')">7</button>
-                            <button class="btn btn-num" onclick="OmniCalc.inputTimeKeypad('8')">8</button>
-                            <button class="btn btn-num" onclick="OmniCalc.inputTimeKeypad('9')">9</button>
-                            <button class="btn btn-op" onclick="OmniCalc.inputTimeKeypad('÷')">÷</button>
+                            <button class="btn btn-num" onclick="CalcVerse.inputTimeKeypad('7')">7</button>
+                            <button class="btn btn-num" onclick="CalcVerse.inputTimeKeypad('8')">8</button>
+                            <button class="btn btn-num" onclick="CalcVerse.inputTimeKeypad('9')">9</button>
+                            <button class="btn btn-op" onclick="CalcVerse.inputTimeKeypad('÷')">÷</button>
 
                             <!-- Number Row 2 -->
-                            <button class="btn btn-num" onclick="OmniCalc.inputTimeKeypad('4')">4</button>
-                            <button class="btn btn-num" onclick="OmniCalc.inputTimeKeypad('5')">5</button>
-                            <button class="btn btn-num" onclick="OmniCalc.inputTimeKeypad('6')">6</button>
-                            <button class="btn btn-op" onclick="OmniCalc.inputTimeKeypad('×')">×</button>
+                            <button class="btn btn-num" onclick="CalcVerse.inputTimeKeypad('4')">4</button>
+                            <button class="btn btn-num" onclick="CalcVerse.inputTimeKeypad('5')">5</button>
+                            <button class="btn btn-num" onclick="CalcVerse.inputTimeKeypad('6')">6</button>
+                            <button class="btn btn-op" onclick="CalcVerse.inputTimeKeypad('×')">×</button>
 
                             <!-- Number Row 3 -->
-                            <button class="btn btn-num" onclick="OmniCalc.inputTimeKeypad('1')">1</button>
-                            <button class="btn btn-num" onclick="OmniCalc.inputTimeKeypad('2')">2</button>
-                            <button class="btn btn-num" onclick="OmniCalc.inputTimeKeypad('3')">3</button>
-                            <button class="btn btn-op" onclick="OmniCalc.inputTimeKeypad('−')">−</button>
+                            <button class="btn btn-num" onclick="CalcVerse.inputTimeKeypad('1')">1</button>
+                            <button class="btn btn-num" onclick="CalcVerse.inputTimeKeypad('2')">2</button>
+                            <button class="btn btn-num" onclick="CalcVerse.inputTimeKeypad('3')">3</button>
+                            <button class="btn btn-op" onclick="CalcVerse.inputTimeKeypad('−')">−</button>
 
                             <!-- Number Row 4 -->
-                            <button class="btn btn-num" onclick="OmniCalc.inputTimeKeypad('0')">0</button>
-                            <button class="btn btn-num" onclick="OmniCalc.inputTimeKeypad('.')">.</button>
-                            <button class="btn btn-equals" onclick="OmniCalc.calculateTimeKeypad()">=</button>
-                            <button class="btn btn-op" onclick="OmniCalc.inputTimeKeypad('+')">+</button>
+                            <button class="btn btn-num" onclick="CalcVerse.inputTimeKeypad('0')">0</button>
+                            <button class="btn btn-num" onclick="CalcVerse.inputTimeKeypad('.')">.</button>
+                            <button class="btn btn-equals" onclick="CalcVerse.calculateTimeKeypad()">=</button>
+                            <button class="btn btn-op" onclick="CalcVerse.inputTimeKeypad('+')">+</button>
                         </div>
                     </div>
 
@@ -759,7 +759,7 @@
                                 <input type="number" id="timeBreak" value="45" min="0" max="720">
                             </div>
                         </div>
-                        <button class="btn-primary full-width" onclick="OmniCalc.calculateTimeDuration()">Compute Work Duration</button>
+                        <button class="btn-primary full-width" onclick="CalcVerse.calculateTimeDuration()">Compute Work Duration</button>
 
                         <div class="time-results-grid">
                             <div class="time-result-box highlight">
@@ -810,7 +810,7 @@
                                 </div>
                             </div>
                         </div>
-                        <button class="btn-primary full-width" onclick="OmniCalc.calculateTimeMath()">Calculate Time Math</button>
+                        <button class="btn-primary full-width" onclick="CalcVerse.calculateTimeMath()">Calculate Time Math</button>
 
                         <div class="time-results-grid">
                             <div class="time-result-box highlight">
@@ -833,9 +833,9 @@
                         <div class="stopwatch-container">
                             <div class="stopwatch-display" id="stopwatchDisplay">00:00:00.00</div>
                             <div class="stopwatch-controls">
-                                <button class="sw-btn btn-start" id="swStartBtn" onclick="OmniCalc.toggleStopwatch()">Start</button>
-                                <button class="sw-btn btn-lap" id="swLapBtn" onclick="OmniCalc.lapStopwatch()">Lap</button>
-                                <button class="sw-btn btn-reset" id="swResetBtn" onclick="OmniCalc.resetStopwatch()">Reset</button>
+                                <button class="sw-btn btn-start" id="swStartBtn" onclick="CalcVerse.toggleStopwatch()">Start</button>
+                                <button class="sw-btn btn-lap" id="swLapBtn" onclick="CalcVerse.lapStopwatch()">Lap</button>
+                                <button class="sw-btn btn-reset" id="swResetBtn" onclick="CalcVerse.resetStopwatch()">Reset</button>
                             </div>
                             <div class="laps-container" id="swLapsContainer">
                                 <div class="empty-laps">No lap times recorded</div>
@@ -855,14 +855,14 @@
                                 <label for="epochInput">Convert Epoch to Date</label>
                                 <div class="split-inputs">
                                     <input type="number" id="epochInput" placeholder="e.g. 1773000000">
-                                    <button class="btn-primary" style="padding: 10px 14px;" onclick="OmniCalc.convertEpochToDate()">Convert</button>
+                                    <button class="btn-primary" style="padding: 10px 14px;" onclick="CalcVerse.convertEpochToDate()">Convert</button>
                                 </div>
                             </div>
                             <div class="input-card">
                                 <label for="dateToEpochInput">Convert Date to Epoch</label>
                                 <div class="split-inputs">
                                     <input type="datetime-local" id="dateToEpochInput">
-                                    <button class="btn-primary" style="padding: 10px 14px;" onclick="OmniCalc.convertDateToEpoch()">Convert</button>
+                                    <button class="btn-primary" style="padding: 10px 14px;" onclick="CalcVerse.convertDateToEpoch()">Convert</button>
                                 </div>
                             </div>
                         </div>
@@ -885,7 +885,7 @@
                     <span class="count-badge" id="historyCount">0</span>
                 </div>
                 <div class="header-right">
-                    <button class="text-btn" onclick="OmniCalc.clearHistory()" title="Clear all records">Clear</button>
+                    <button class="text-btn" onclick="CalcVerse.clearHistory()" title="Clear all records">Clear</button>
                     <button class="close-btn" id="closeHistoryBtn" aria-label="Close history">✕</button>
                 </div>
             </div>

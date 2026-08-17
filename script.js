@@ -1666,9 +1666,9 @@
     }
 
     // =========================================================================
-    // 13. Public OmniCalc API Export
+    // 13. Public CalcVerse API Export
     // =========================================================================
-    window.OmniCalc = {
+    window.CalcVerse = {
         inputVal,
         inputFunc,
         clear,
@@ -1728,6 +1728,9 @@
         convertEpochToDate: () => TimeEngine.convertEpochToDate(),
         convertDateToEpoch: () => TimeEngine.convertDateToEpoch()
     };
+
+    // Backward compatibility alias
+    window.OmniCalc = window.CalcVerse;
 
     // Initialize on DOM ready
     document.addEventListener('DOMContentLoaded', () => {
