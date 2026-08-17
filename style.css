@@ -421,11 +421,13 @@ body.dark-theme .nav-item.active {
 
 .calculators-container {
     flex: 1;
-    padding: 28px 32px;
+    padding: 24px 20px 48px 20px;
     display: flex;
     flex-direction: column;
     align-items: center;
-    justify-content: center;
+    justify-content: flex-start;
+    width: 100%;
+    min-height: min-content;
 }
 
 .calculator-view {
@@ -433,13 +435,17 @@ body.dark-theme .nav-item.active {
     width: 100%;
     max-width: 100%;
     animation: fadeIn 0.25s ease-in-out;
+    margin: auto 0;
 }
 
 .calculator-view.active {
     display: flex;
     flex-direction: column;
     align-items: center;
-    justify-content: center;
+    justify-content: flex-start;
+    width: 100%;
+    max-width: 100%;
+    margin: auto 0;
 }
 
 @keyframes fadeIn {
@@ -1524,8 +1530,12 @@ body.dark-theme .radix-row.active .radix-tag {
 
 .health-stats-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+    grid-template-columns: repeat(2, 1fr);
     gap: 12px;
+}
+
+.health-stats-grid .stat-box:last-child {
+    grid-column: span 2;
 }
 
 .stat-box {
@@ -1905,34 +1915,34 @@ body.dark-theme .epoch-live-val {
     
     .calculators-container {
         flex: 1;
-        padding: 16px 14px 28px 14px;
+        padding: 12px 10px 50px 10px;
         display: flex;
         flex-direction: column;
-        justify-content: center;
+        justify-content: flex-start;
         align-items: center;
         width: 100%;
-        min-height: calc(100vh - 65px);
+        min-height: min-content;
     }
     
     .calculator-view {
         width: 100%;
         max-width: 440px;
-        margin: auto 0;
+        margin: 0 auto;
     }
 
     .calculator-view.active {
         display: flex;
         flex-direction: column;
         align-items: center;
-        justify-content: center;
+        justify-content: flex-start;
         width: 100%;
         max-width: 440px;
-        margin: auto 0;
+        margin: 0 auto;
     }
     
     .calc-card, .scientific-card, .financial-card, .converter-card, .health-card, .date-card, .time-card, .time-keypad-card {
-        padding: 18px 16px;
-        border-radius: 22px;
+        padding: 16px 14px;
+        border-radius: 20px;
         width: 100%;
         max-width: 440px;
         box-shadow: 0 12px 32px rgba(0, 0, 0, 0.25);
@@ -1982,6 +1992,46 @@ body.dark-theme .epoch-live-val {
     .btn-tunit {
         font-size: 0.88rem;
         padding: 4px;
+    }
+
+    /* Form & Health mobile grid adjustments */
+    .form-grid {
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+        gap: 10px;
+        margin-bottom: 18px;
+    }
+
+    .form-grid .input-card {
+        min-width: 0;
+    }
+
+    .form-grid .input-card input, .form-grid .input-card select {
+        padding: 10px 12px;
+        font-size: 0.9rem;
+    }
+
+    .bmi-gauge-card {
+        padding: 14px 12px;
+        margin-bottom: 12px;
+    }
+
+    .bmi-number {
+        font-size: 2.6rem;
+        margin: 4px 0;
+    }
+
+    .health-stats-grid {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 8px;
+    }
+
+    .health-stats-grid .stat-box {
+        padding: 10px 12px;
+    }
+
+    .health-stats-grid .stat-box:last-child {
+        grid-column: span 2;
     }
     
     .stopwatch-display {
