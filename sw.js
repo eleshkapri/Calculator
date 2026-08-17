@@ -1,11 +1,13 @@
 // Service Worker for CalcVerse Pro (Network-first with offline fallback)
-const CACHE_NAME = 'calcverse-v3';
+const CACHE_NAME = 'calcverse-v4';
 const ASSETS = [
   './',
   './index.html',
   './style.css',
   './script.js',
   './favicon.svg',
+  './icon-192.png',
+  './icon-512.png',
   './manifest.json'
 ];
 
