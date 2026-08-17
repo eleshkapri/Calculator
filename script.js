@@ -2008,11 +2008,11 @@
 
             if (isAndroid) {
                 if (icon) icon.textContent = '🤖';
-                if (title) title.textContent = 'Android Mobile / Tablet';
-                if (desc) desc.textContent = 'Recommended: Download CalcVerse.apk or Install App';
+                if (title) title.textContent = 'Android Mobile Phone / Tablet';
+                if (desc) desc.textContent = 'Install CalcVerse directly to your App Drawer (Offline Ready)';
                 if (primaryBtn) {
-                    primaryBtn.textContent = '🤖 Download Android APK';
-                    primaryBtn.onclick = () => window.CalcVerse.downloadApk();
+                    primaryBtn.textContent = '📲 Install App on Android (1-Tap)';
+                    primaryBtn.onclick = () => window.CalcVerse.triggerPwaPrompt();
                 }
             } else if (isWindows) {
                 if (icon) icon.textContent = '🪟';
@@ -2051,9 +2051,11 @@
         downloadDetectedApp: () => {
             const ua = navigator.userAgent || '';
             if (/Android/i.test(ua)) {
-                window.CalcVerse.downloadApk();
+                window.CalcVerse.triggerPwaPrompt();
             } else if (/Windows/i.test(ua)) {
                 window.CalcVerse.downloadExe();
+            } else if (/iPhone|iPad|iPod/i.test(ua)) {
+                window.CalcVerse.downloadIosProfile();
             } else {
                 window.CalcVerse.triggerPwaPrompt();
             }

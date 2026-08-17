@@ -1047,30 +1047,45 @@
                 <!-- Dynamic Device Detection Banner -->
                 <div class="detected-device-card" id="detectedDeviceCard">
                     <div class="device-info">
-                        <span class="device-icon" id="detectedIcon">💻</span>
+                        <span class="device-icon" id="detectedIcon">📱</span>
                         <div>
-                            <h4 id="detectedTitle">Windows PC / Laptop</h4>
-                            <p id="detectedDesc">Recommended: Download Windows Setup (.exe) or Install App</p>
+                            <h4 id="detectedTitle">Mobile Phone Detected</h4>
+                            <p id="detectedDesc">Install CalcVerse directly onto your Home Screen & App Drawer</p>
                         </div>
                     </div>
                     <button class="primary-download-btn" id="primaryDownloadBtn" onclick="CalcVerse.downloadDetectedApp()">
-                        📥 Download Recommended
+                        📲 Install App on This Device
                     </button>
+                </div>
+
+                <!-- Phone Install Instructions Card -->
+                <div class="phone-install-guide" id="phoneInstallGuide">
+                    <h5>💡 Easy 1-Tap Installation on Phones:</h5>
+                    <div class="guide-steps">
+                        <div class="guide-step">
+                            <span class="step-num">1</span>
+                            <span>On <strong>Android (Chrome)</strong>: Tap the menu <strong>⋮</strong> top-right ➔ tap <strong>"Install app"</strong>.</span>
+                        </div>
+                        <div class="guide-step">
+                            <span class="step-num">2</span>
+                            <span>On <strong>iPhone (Safari)</strong>: Tap the Share button <strong>📤</strong> bottom ➔ tap <strong>"Add to Home Screen"</strong>.</span>
+                        </div>
+                    </div>
                 </div>
 
                 <h4 class="install-section-title">All Platforms & Formats</h4>
                 <div class="install-cards-grid">
-                    <!-- Android APK -->
+                    <!-- Mobile Android / Phone -->
                     <div class="platform-card" id="cardAndroid">
                         <div class="platform-header">
                             <span class="platform-icon">🤖</span>
                             <div>
-                                <h5>Android APK</h5>
-                                <span class="platform-sub">For Mobile Phones & Tablets</span>
+                                <h5>Android / Smartphone App</h5>
+                                <span class="platform-sub">Instant 1-Tap Install to App Drawer</span>
                             </div>
                         </div>
-                        <button class="download-action-btn apk-btn" onclick="CalcVerse.downloadApk()">
-                            📥 Download .APK
+                        <button class="download-action-btn pwa-btn" onclick="CalcVerse.triggerPwaPrompt()">
+                            📲 Install App
                         </button>
                     </div>
 
@@ -1099,20 +1114,6 @@
                         </div>
                         <button class="download-action-btn ios-btn" onclick="CalcVerse.downloadIosProfile()">
                             📥 Get iOS App
-                        </button>
-                    </div>
-
-                    <!-- PWA Instant Install -->
-                    <div class="platform-card" id="cardPwa">
-                        <div class="platform-header">
-                            <span class="platform-icon">⚡</span>
-                            <div>
-                                <h5>Instant Web App</h5>
-                                <span class="platform-sub">Install to Home Screen / Desktop</span>
-                            </div>
-                        </div>
-                        <button class="download-action-btn pwa-btn" id="modalPwaInstallBtn" onclick="CalcVerse.triggerPwaPrompt()">
-                            📲 Install Now
                         </button>
                     </div>
                 </div>

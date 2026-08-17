@@ -2297,6 +2297,50 @@ body.dark-theme .device-info h4 {
     transform: translateY(-1px);
 }
 
+.phone-install-guide {
+    background: var(--bg-input);
+    border: 1px solid var(--border-subtle);
+    border-radius: var(--radius-md);
+    padding: 12px 14px;
+}
+
+.phone-install-guide h5 {
+    font-size: 0.82rem;
+    font-weight: 700;
+    color: var(--text-primary);
+    margin-bottom: 8px;
+}
+
+.guide-steps {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+}
+
+.guide-step {
+    display: flex;
+    align-items: flex-start;
+    gap: 8px;
+    font-size: 0.76rem;
+    color: var(--text-secondary);
+    line-height: 1.35;
+}
+
+.step-num {
+    background: #2563eb;
+    color: white;
+    font-size: 0.65rem;
+    font-weight: 700;
+    width: 16px;
+    height: 16px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    margin-top: 1px;
+}
+
 .install-section-title {
     font-size: 0.8rem;
     font-weight: 700;
