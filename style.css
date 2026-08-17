@@ -299,29 +299,20 @@ body {
 .nav-menu {
     display: flex;
     flex-direction: column;
-    gap: 6px;
-    flex: 1;
-    overflow-y: auto;
-    overflow-x: hidden;
-    padding-right: 2px;
-    scrollbar-width: none;
-    -ms-overflow-style: none;
-}
-
-.nav-menu::-webkit-scrollbar {
-    display: none;
+    gap: 3px;
+    flex: 0 0 auto;
 }
 
 .nav-item {
     display: flex;
     align-items: center;
-    gap: 14px;
-    padding: 11px 14px;
+    gap: 10px;
+    padding: 7px 10px;
     border: 1px solid transparent;
     background: transparent;
     color: var(--text-secondary);
     font-family: var(--font-ui);
-    font-size: 0.92rem;
+    font-size: 0.86rem;
     font-weight: 500;
     border-radius: var(--radius-md);
     cursor: pointer;
@@ -331,11 +322,11 @@ body {
 }
 
 .nav-item .icon {
-    font-size: 1.15rem;
+    font-size: 1rem;
     display: flex;
     align-items: center;
     justify-content: center;
-    width: 24px;
+    width: 20px;
     transition: transform 0.2s ease;
 }
 
@@ -346,7 +337,7 @@ body {
 }
 
 .nav-item:hover .icon {
-    transform: scale(1.15);
+    transform: scale(1.12);
 }
 
 .nav-item.active {
@@ -366,9 +357,9 @@ body.dark-theme .nav-item.active {
 .sidebar-widget {
     display: flex;
     flex-direction: column;
-    gap: 12px;
-    margin-top: 14px;
-    padding-top: 14px;
+    gap: 8px;
+    margin-top: 8px;
+    padding-top: 8px;
     border-top: 1px solid var(--border-subtle);
 }
 
@@ -376,13 +367,13 @@ body.dark-theme .nav-item.active {
     background: var(--bg-surface-elevated);
     border: 1px solid var(--border-subtle);
     border-radius: var(--radius-md);
-    padding: 10px 12px;
+    padding: 6px 10px;
     text-align: center;
 }
 
 .live-clock-time {
     font-family: var(--font-mono);
-    font-size: 1.15rem;
+    font-size: 0.95rem;
     font-weight: 800;
     color: #2563eb;
     letter-spacing: 0.5px;
@@ -393,20 +384,20 @@ body.dark-theme .live-clock-time {
 }
 
 .live-clock-date {
-    font-size: 0.72rem;
+    font-size: 0.68rem;
     font-weight: 600;
     color: var(--text-secondary);
-    margin-top: 2px;
+    margin-top: 1px;
 }
 
 .sidebar-constants-section {
     display: flex;
     flex-direction: column;
-    gap: 6px;
+    gap: 4px;
 }
 
 .widget-title {
-    font-size: 0.72rem;
+    font-size: 0.68rem;
     font-weight: 700;
     text-transform: uppercase;
     letter-spacing: 0.5px;
@@ -417,7 +408,7 @@ body.dark-theme .live-clock-time {
 .constants-chips {
     display: grid;
     grid-template-columns: repeat(2, 1fr);
-    gap: 6px;
+    gap: 4px;
 }
 
 .const-chip {
@@ -427,7 +418,7 @@ body.dark-theme .live-clock-time {
     background: var(--bg-surface-elevated);
     border: 1px solid var(--border-subtle);
     border-radius: var(--radius-sm);
-    padding: 5px 8px;
+    padding: 3px 6px;
     cursor: pointer;
     transition: var(--transition);
     text-align: left;
@@ -442,7 +433,7 @@ body.dark-theme .live-clock-time {
 .chip-sym {
     font-family: var(--font-mono);
     font-weight: 700;
-    font-size: 0.78rem;
+    font-size: 0.74rem;
     color: #2563eb;
 }
 
@@ -452,28 +443,29 @@ body.dark-theme .chip-sym {
 
 .chip-val {
     font-family: var(--font-mono);
-    font-size: 0.68rem;
+    font-size: 0.65rem;
     color: var(--text-secondary);
 }
 
 .sidebar-footer {
     display: flex;
     flex-direction: column;
-    gap: 8px;
-    padding-top: 14px;
+    gap: 4px;
+    margin-top: 8px;
+    padding-top: 8px;
     border-top: 1px solid var(--border-subtle);
 }
 
 .utility-btn {
     display: flex;
     align-items: center;
-    gap: 12px;
-    padding: 10px 14px;
+    gap: 10px;
+    padding: 6px 10px;
     border: 1px solid var(--border-subtle);
     background: var(--bg-surface-elevated);
     color: var(--text-secondary);
     font-family: var(--font-ui);
-    font-size: 0.85rem;
+    font-size: 0.8rem;
     font-weight: 500;
     border-radius: var(--radius-sm);
     cursor: pointer;
@@ -603,7 +595,9 @@ body.dark-theme .chip-sym {
     box-shadow: var(--card-shadow);
 }
 
-#view-standard.calculator-view.active {
+#view-standard.calculator-view.active,
+#view-scientific.calculator-view.active,
+#view-programmer.calculator-view.active {
     display: flex;
     flex-direction: column;
     align-items: center;
