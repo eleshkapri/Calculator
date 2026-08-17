@@ -1035,10 +1035,11 @@
     <!-- Install / Download Center Modal -->
     <div class="modal-backdrop" id="installModalBackdrop">
         <div class="install-modal" id="installModal">
+            <div class="sheet-handle"></div>
             <div class="install-modal-header">
                 <div class="brand-badge-row">
                     <span class="logo-mini">📲</span>
-                    <h3>Install & Download CalcVerse</h3>
+                    <h3>Install CalcVerse</h3>
                 </div>
                 <button class="close-btn" onclick="CalcVerse.closeInstallModal()" aria-label="Close modal">✕</button>
             </div>
@@ -1048,9 +1049,9 @@
                 <div class="detected-device-card" id="detectedDeviceCard">
                     <div class="device-info">
                         <span class="device-icon" id="detectedIcon">📱</span>
-                        <div>
-                            <h4 id="detectedTitle">Mobile Phone Detected</h4>
-                            <p id="detectedDesc">Install CalcVerse directly onto your Home Screen & App Drawer</p>
+                        <div class="device-text">
+                            <h4 id="detectedTitle">Mobile App</h4>
+                            <p id="detectedDesc">Install directly to your Home Screen & App Drawer</p>
                         </div>
                     </div>
                     <button class="primary-download-btn" id="primaryDownloadBtn" onclick="CalcVerse.downloadDetectedApp()">
@@ -1060,46 +1061,32 @@
 
                 <!-- Phone Install Instructions Card -->
                 <div class="phone-install-guide" id="phoneInstallGuide">
-                    <h5>💡 Easy 1-Tap Installation on Phones:</h5>
+                    <h5>💡 1-Tap Browser Installation:</h5>
                     <div class="guide-steps">
                         <div class="guide-step">
-                            <span class="step-num">1</span>
-                            <span>On <strong>Android (Chrome)</strong>: Tap the menu <strong>⋮</strong> top-right ➔ tap <strong>"Install app"</strong>.</span>
+                            <span class="step-num">🤖</span>
+                            <span><strong>Android (Chrome)</strong>: Tap menu <strong>⋮</strong> top-right ➔ tap <strong>"Install app"</strong>.</span>
                         </div>
                         <div class="guide-step">
-                            <span class="step-num">2</span>
-                            <span>On <strong>iPhone (Safari)</strong>: Tap the Share button <strong>📤</strong> bottom ➔ tap <strong>"Add to Home Screen"</strong>.</span>
+                            <span class="step-num">🍏</span>
+                            <span><strong>iPhone (Safari)</strong>: Tap Share <strong>📤</strong> bottom ➔ tap <strong>"Add to Home Screen"</strong>.</span>
                         </div>
                     </div>
                 </div>
 
-                <h4 class="install-section-title">All Platforms & Formats</h4>
+                <h4 class="install-section-title">Other Platforms</h4>
                 <div class="install-cards-grid">
-                    <!-- Mobile Android / Phone -->
-                    <div class="platform-card" id="cardAndroid">
-                        <div class="platform-header">
-                            <span class="platform-icon">🤖</span>
-                            <div>
-                                <h5>Android / Smartphone App</h5>
-                                <span class="platform-sub">Instant 1-Tap Install to App Drawer</span>
-                            </div>
-                        </div>
-                        <button class="download-action-btn pwa-btn" onclick="CalcVerse.triggerPwaPrompt()">
-                            📲 Install App
-                        </button>
-                    </div>
-
                     <!-- Windows EXE -->
                     <div class="platform-card" id="cardWindows">
                         <div class="platform-header">
                             <span class="platform-icon">🪟</span>
                             <div>
                                 <h5>Windows App (.exe)</h5>
-                                <span class="platform-sub">For Laptops & Desktop PCs</span>
+                                <span class="platform-sub">For PC & Laptops</span>
                             </div>
                         </div>
                         <button class="download-action-btn exe-btn" onclick="CalcVerse.downloadExe()">
-                            📥 Download .EXE
+                            📥 Get .EXE
                         </button>
                     </div>
 
@@ -1108,12 +1095,12 @@
                         <div class="platform-header">
                             <span class="platform-icon">🍏</span>
                             <div>
-                                <h5>Apple iOS WebClip (.mobileconfig)</h5>
-                                <span class="platform-sub">For iPhone & iPad Home Screen</span>
+                                <h5>Apple iOS WebClip</h5>
+                                <span class="platform-sub">iPhone & iPad Profile</span>
                             </div>
                         </div>
                         <button class="download-action-btn ios-btn" onclick="CalcVerse.downloadIosProfile()">
-                            📥 Get iOS App
+                            📥 Get Profile
                         </button>
                     </div>
                 </div>
