@@ -541,6 +541,25 @@
 
             window.addEventListener('mouseup', () => { this.isDragging = false; });
 
+            // Touch support for mobile dragging
+            this.canvas.addEventListener('touchstart', (e) => {
+                if (e.touches.length === 1) {
+                    this.isDragging = true;
+                    this.startX = e.touches[0].clientX - this.originX;
+                    this.startY = e.touches[0].clientY - this.originY;
+                }
+            }, { passive: true });
+
+            window.addEventListener('touchmove', (e) => {
+                if (this.isDragging && e.touches.length === 1) {
+                    this.originX = e.touches[0].clientX - this.startX;
+                    this.originY = e.touches[0].clientY - this.startY;
+                    this.render();
+                }
+            }, { passive: true });
+
+            window.addEventListener('touchend', () => { this.isDragging = false; });
+
             this.canvas.addEventListener('wheel', (e) => {
                 e.preventDefault();
                 const zoomFactor = e.deltaY < 0 ? 1.15 : 0.85;

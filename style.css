@@ -2388,6 +2388,42 @@ body.dark-theme .epoch-live-val {
         height: 48px;
         font-size: 0.95rem;
     }
+
+    /* Graphing Mobile Layout */
+    #view-graphing.calculator-view,
+    #view-graphing.calculator-view.active {
+        max-width: 100%;
+        width: 100%;
+    }
+
+    .graphing-layout {
+        display: flex;
+        flex-direction: column;
+        width: 100%;
+        height: auto;
+        gap: 16px;
+    }
+
+    .graph-controls-panel {
+        width: 100%;
+        padding: 16px;
+        border-radius: var(--radius-lg);
+        box-shadow: 0 8px 24px rgba(0, 0, 0, 0.2);
+    }
+
+    .canvas-container {
+        width: 100%;
+        height: 380px;
+        min-height: 380px;
+        border-radius: var(--radius-lg);
+        box-shadow: 0 8px 24px rgba(0, 0, 0, 0.25);
+    }
+
+    #graphCanvas {
+        width: 100%;
+        height: 100%;
+        display: block;
+    }
     
     .sub-tabs {
         padding: 5px;
