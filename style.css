@@ -615,7 +615,8 @@ body.dark-theme .chip-sym {
 .calc-card { width: 100%; max-width: 390px; }
 .scientific-card { width: 100%; max-width: 590px; }
 .programmer-card { width: 100%; max-width: 550px; }
-.financial-card, .converter-card, .health-card, .date-card, .time-card { width: 100%; max-width: 680px; padding: 28px; }
+.financial-card { width: 100%; max-width: 740px; padding: 28px; }
+.converter-card, .health-card, .date-card, .time-card { width: 100%; max-width: 680px; padding: 28px; }
 .time-keypad-card { width: 100%; max-width: 420px; }
 
 .display-container {
@@ -1118,15 +1119,25 @@ body.dark-theme .angle-mode-pill {
     align-items: center;
     justify-content: space-between;
     gap: 12px;
-    margin-bottom: 18px;
+    margin-bottom: 20px;
     width: 100%;
-    max-width: 680px;
+    max-width: 740px;
 }
 
 .financial-toolbar .sub-tabs {
+    flex: 1 1 380px;
     margin-bottom: 0;
+    width: auto;
+    max-width: none;
+    overflow-x: visible;
+}
+
+.financial-toolbar .sub-tab {
     flex: 1;
-    min-width: 240px;
+    text-align: center;
+    padding: 8px 14px;
+    font-size: 0.85rem;
+    white-space: nowrap;
 }
 
 .currency-picker-wrap {
@@ -1137,6 +1148,7 @@ body.dark-theme .angle-mode-pill {
     border: 1px solid var(--border-subtle);
     padding: 6px 12px;
     border-radius: var(--radius-lg);
+    flex-shrink: 0;
 }
 
 .currency-label {

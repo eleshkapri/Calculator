@@ -128,11 +128,21 @@
                     tab.classList.add('active');
                     const targetSubtab = tab.dataset.subtab;
                     const parentView = container.closest('.calculator-view');
-                    parentView.querySelectorAll('.subtab-view').forEach(view => {
-                        view.classList.remove('active');
-                    });
-                    const targetView = parentView.querySelector(`#subtab-${targetSubtab}`);
-                    if (targetView) targetView.classList.add('active');
+                    if (parentView) {
+                        parentView.querySelectorAll('.subtab-view').forEach(view => {
+                            view.classList.remove('active');
+                        });
+                        const targetView = parentView.querySelector(`#subtab-${targetSubtab}`);
+                        if (targetView) targetView.classList.add('active');
+
+                        // Clean toggle for financial toolbar currency dropdown
+                        if (parentView.id === 'view-financial') {
+                            const finPicker = document.getElementById('finCurrencyPickerWrap');
+                            if (finPicker) {
+                                finPicker.style.display = (targetSubtab === 'livecurrency') ? 'none' : 'flex';
+                            }
+                        }
+                    }
                 });
             });
         });
