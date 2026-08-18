@@ -2447,6 +2447,13 @@ body.dark-theme .device-info h4 {
     background: linear-gradient(135deg, #1d4ed8, #4338ca);
 }
 
+/* Hide Install Button when running as an installed PWA / standalone app */
+@media (display-mode: standalone), (display-mode: fullscreen), (display-mode: minimal-ui) {
+    #installAppBtn {
+        display: none !important;
+    }
+}
+
 /* ==========================================================================
    10. Discount & Tip Calculator Styles
    ========================================================================== */

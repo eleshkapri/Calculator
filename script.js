@@ -2687,6 +2687,29 @@
             window._deferredInstallPrompt = e;
         });
 
+        // Hide install button if running in standalone mode (already installed)
+        const checkInstalledState = () => {
+            const isStandalone = window.matchMedia('(display-mode: standalone)').matches || 
+                                 window.matchMedia('(display-mode: fullscreen)').matches ||
+                                 window.matchMedia('(display-mode: minimal-ui)').matches ||
+                                 window.navigator.standalone === true;
+            const installBtn = document.getElementById('installAppBtn');
+            if (isStandalone && installBtn) {
+                installBtn.style.display = 'none';
+            }
+        };
+        checkInstalledState();
+
+        // Listen for successful app installation event
+        window.addEventListener('appinstalled', () => {
+            const installBtn = document.getElementById('installAppBtn');
+            if (installBtn) installBtn.style.display = 'none';
+            if (window.CalcVerse && window.CalcVerse.closeInstallModal) {
+                window.CalcVerse.closeInstallModal();
+            }
+            showToast('🎉 CalcVerse installed successfully!');
+        });
+
         // Close modal when backdrop clicked
         const modalBackdrop = document.getElementById('installModalBackdrop');
         if (modalBackdrop) {
