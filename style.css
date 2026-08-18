@@ -2448,6 +2448,618 @@ body.dark-theme .device-info h4 {
 }
 
 /* ==========================================================================
+   10. Discount & Tip Calculator Styles
+   ========================================================================== */
+.discount-card {
+    background: var(--bg-surface);
+    border: 1px solid var(--border-subtle);
+    border-radius: var(--radius-xl);
+    padding: 24px;
+    box-shadow: var(--shadow-md);
+    max-width: 680px;
+    margin: 0 auto;
+    width: 100%;
+}
+
+.quick-chip-row {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+    margin-top: 8px;
+}
+
+.quick-pct-chip {
+    background: var(--bg-surface-elevated);
+    border: 1px solid var(--border-subtle);
+    color: var(--text-secondary);
+    padding: 4px 10px;
+    border-radius: var(--radius-sm);
+    font-size: 0.78rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: var(--transition);
+}
+
+.quick-pct-chip:hover, .quick-pct-chip.active {
+    background: #2563eb;
+    color: #ffffff;
+    border-color: #2563eb;
+}
+
+.discount-result-card {
+    margin-top: 20px;
+    background: linear-gradient(135deg, rgba(37, 99, 235, 0.08), rgba(16, 185, 129, 0.08));
+    border: 1px solid rgba(37, 99, 235, 0.25);
+    border-radius: var(--radius-lg);
+    padding: 20px;
+}
+
+.result-hero-box {
+    text-align: center;
+    padding-bottom: 16px;
+    border-bottom: 1px dashed var(--border-subtle);
+}
+
+.hero-label {
+    font-size: 0.82rem;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    color: var(--text-muted);
+    font-weight: 700;
+}
+
+.hero-val {
+    font-size: 2.4rem;
+    font-weight: 800;
+    color: var(--text-primary);
+    font-family: var(--font-mono);
+    margin: 4px 0;
+}
+
+.savings-tag {
+    display: inline-block;
+    background: rgba(16, 185, 129, 0.15);
+    color: #10b981;
+    font-size: 0.85rem;
+    font-weight: 700;
+    padding: 4px 12px;
+    border-radius: var(--radius-full);
+}
+
+.receipt-breakdown-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 12px;
+    padding-top: 14px;
+}
+
+.breakdown-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 0.86rem;
+    color: var(--text-secondary);
+}
+
+.breakdown-item strong {
+    color: var(--text-primary);
+    font-family: var(--font-mono);
+}
+
+.text-green { color: #10b981 !important; }
+.text-amber { color: #f59e0b !important; }
+.text-primary-accent { color: #2563eb !important; }
+body.dark-theme .text-primary-accent { color: #60a5fa !important; }
+
+.badge-optional {
+    font-size: 0.68rem;
+    color: var(--text-muted);
+    font-weight: normal;
+    margin-left: 4px;
+}
+
+.stepper-wrap {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.stepper-btn {
+    width: 44px;
+    height: 44px;
+    background: var(--bg-surface-elevated);
+    border: 1px solid var(--border-subtle);
+    color: var(--text-primary);
+    border-radius: var(--radius-md);
+    font-size: 1.2rem;
+    font-weight: 700;
+    cursor: pointer;
+    transition: var(--transition);
+}
+
+.stepper-btn:hover {
+    background: #2563eb;
+    color: #ffffff;
+}
+
+.tip-receipt-card {
+    margin-top: 20px;
+    background: var(--bg-surface-elevated);
+    border: 1px solid var(--border-subtle);
+    border-radius: var(--radius-lg);
+    padding: 18px 20px;
+}
+
+.receipt-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 14px;
+}
+
+.receipt-header h4 {
+    font-size: 1rem;
+    font-weight: 700;
+    color: var(--text-primary);
+    flex: 1;
+    margin-left: 8px;
+}
+
+.split-highlight-box {
+    display: flex;
+    background: var(--bg-input);
+    border-radius: var(--radius-md);
+    padding: 14px;
+    border: 1px solid var(--border-subtle);
+}
+
+.split-column {
+    flex: 1;
+    text-align: center;
+}
+
+.split-divider {
+    width: 1px;
+    background: var(--border-subtle);
+    margin: 0 10px;
+}
+
+.col-label {
+    font-size: 0.75rem;
+    color: var(--text-muted);
+    font-weight: 600;
+    text-transform: uppercase;
+}
+
+.col-val {
+    font-size: 1.6rem;
+    font-weight: 800;
+    font-family: var(--font-mono);
+    margin-top: 2px;
+}
+
+.copy-pill-btn {
+    background: rgba(37, 99, 235, 0.12);
+    border: 1px solid rgba(37, 99, 235, 0.3);
+    color: #2563eb;
+    padding: 6px 12px;
+    border-radius: var(--radius-full);
+    font-size: 0.75rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: var(--transition);
+}
+
+body.dark-theme .copy-pill-btn {
+    color: #60a5fa;
+}
+
+.copy-pill-btn:hover {
+    background: #2563eb;
+    color: white;
+}
+
+/* ==========================================================================
+   11. Equation & Algebra Solver Styles
+   ========================================================================== */
+.equation-card {
+    background: var(--bg-surface);
+    border: 1px solid var(--border-subtle);
+    border-radius: var(--radius-xl);
+    padding: 24px;
+    box-shadow: var(--shadow-md);
+    max-width: 680px;
+    margin: 0 auto;
+    width: 100%;
+}
+
+.equation-banner {
+    background: var(--bg-input);
+    border: 1px solid var(--border-subtle);
+    border-radius: var(--radius-md);
+    padding: 12px 16px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 20px;
+}
+
+.eq-label {
+    font-size: 0.8rem;
+    color: var(--text-muted);
+    font-weight: 600;
+}
+
+.eq-formula {
+    font-family: var(--font-mono);
+    font-size: 1.05rem;
+    font-weight: 700;
+    color: #2563eb;
+}
+
+body.dark-theme .eq-formula {
+    color: #60a5fa;
+}
+
+.coeff-inputs-row {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 12px;
+    margin-bottom: 20px;
+}
+
+.coeff-item {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+}
+
+.coeff-item label {
+    font-size: 0.85rem;
+    font-weight: 700;
+    color: var(--text-secondary);
+    font-family: var(--font-mono);
+}
+
+.coeff-item input {
+    background: var(--bg-input);
+    border: 1px solid var(--border-subtle);
+    border-radius: var(--radius-md);
+    padding: 12px;
+    font-family: var(--font-mono);
+    font-size: 1.1rem;
+    font-weight: 700;
+    color: var(--text-primary);
+    text-align: center;
+}
+
+.solution-card {
+    background: var(--bg-surface-elevated);
+    border: 1px solid var(--border-subtle);
+    border-radius: var(--radius-lg);
+    padding: 20px;
+}
+
+.roots-highlight {
+    display: flex;
+    gap: 12px;
+    margin-bottom: 16px;
+}
+
+.root-box {
+    flex: 1;
+    background: var(--bg-input);
+    border: 1px solid var(--border-subtle);
+    border-radius: var(--radius-md);
+    padding: 12px;
+    text-align: center;
+}
+
+.root-label {
+    font-size: 0.76rem;
+    color: var(--text-muted);
+    font-weight: 700;
+    text-transform: uppercase;
+}
+
+.root-val {
+    font-size: 1.4rem;
+    font-weight: 800;
+    color: #2563eb;
+    font-family: var(--font-mono);
+    margin-top: 4px;
+}
+
+body.dark-theme .root-val {
+    color: #60a5fa;
+}
+
+.steps-box {
+    background: var(--bg-input);
+    border-radius: var(--radius-md);
+    padding: 14px;
+    border: 1px solid var(--border-subtle);
+}
+
+.steps-box h5 {
+    font-size: 0.8rem;
+    color: var(--text-muted);
+    font-weight: 700;
+    text-transform: uppercase;
+    margin-bottom: 8px;
+}
+
+.step-line {
+    font-size: 0.82rem;
+    color: var(--text-secondary);
+    line-height: 1.5;
+    margin-bottom: 6px;
+    font-family: var(--font-mono);
+}
+
+.system-inputs-grid {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    margin-bottom: 20px;
+}
+
+.system-row {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    background: var(--bg-input);
+    border: 1px solid var(--border-subtle);
+    padding: 10px 14px;
+    border-radius: var(--radius-md);
+}
+
+.eq-tag {
+    font-size: 0.8rem;
+    font-weight: 700;
+    color: var(--text-muted);
+    width: 42px;
+}
+
+.system-row input {
+    width: 65px;
+    background: var(--bg-surface);
+    border: 1px solid var(--border-subtle);
+    border-radius: var(--radius-sm);
+    padding: 6px;
+    font-family: var(--font-mono);
+    font-weight: 700;
+    color: var(--text-primary);
+    text-align: center;
+}
+
+.system-row span {
+    font-weight: 600;
+    color: var(--text-secondary);
+}
+
+.fraction-calc-grid {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 16px;
+    margin-bottom: 20px;
+    padding: 16px 0;
+}
+
+.fraction-input-box {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 6px;
+    width: 100px;
+}
+
+.frac-tag {
+    font-size: 0.72rem;
+    color: var(--text-muted);
+    font-weight: 600;
+}
+
+.fraction-input-box input {
+    width: 100%;
+    background: var(--bg-input);
+    border: 1px solid var(--border-subtle);
+    border-radius: var(--radius-sm);
+    padding: 10px;
+    font-family: var(--font-mono);
+    font-size: 1.2rem;
+    font-weight: 700;
+    color: var(--text-primary);
+    text-align: center;
+}
+
+.frac-bar {
+    width: 100%;
+    height: 3px;
+    background: var(--text-primary);
+    border-radius: 2px;
+}
+
+.fraction-op-box select {
+    background: var(--bg-input);
+    border: 1px solid var(--border-subtle);
+    border-radius: var(--radius-md);
+    padding: 10px 14px;
+    font-size: 1.4rem;
+    font-weight: 800;
+    color: #2563eb;
+    cursor: pointer;
+    font-family: var(--font-mono);
+}
+
+/* ==========================================================================
+   12. Statistics & Data Analyzer Styles
+   ========================================================================== */
+.stats-card {
+    background: var(--bg-surface);
+    border: 1px solid var(--border-subtle);
+    border-radius: var(--radius-xl);
+    padding: 24px;
+    box-shadow: var(--shadow-md);
+    max-width: 860px;
+    margin: 0 auto;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+.stats-input-section {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.stats-input-section label {
+    font-size: 0.85rem;
+    font-weight: 700;
+    color: var(--text-primary);
+}
+
+.stats-input-section textarea {
+    background: var(--bg-input);
+    border: 1px solid var(--border-subtle);
+    border-radius: var(--radius-md);
+    padding: 12px;
+    font-family: var(--font-mono);
+    font-size: 0.92rem;
+    color: var(--text-primary);
+    resize: vertical;
+}
+
+.stats-presets-row {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 8px;
+}
+
+.preset-label {
+    font-size: 0.75rem;
+    color: var(--text-muted);
+    font-weight: 700;
+    text-transform: uppercase;
+}
+
+.preset-chip {
+    background: var(--bg-surface-elevated);
+    border: 1px solid var(--border-subtle);
+    color: var(--text-secondary);
+    padding: 5px 10px;
+    border-radius: var(--radius-sm);
+    font-size: 0.76rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: var(--transition);
+}
+
+.preset-chip:hover {
+    background: #2563eb;
+    color: #ffffff;
+    border-color: #2563eb;
+}
+
+.preset-chip.clear {
+    margin-left: auto;
+    color: #ef4444;
+    border-color: rgba(239, 68, 68, 0.3);
+}
+
+.preset-chip.clear:hover {
+    background: #ef4444;
+    color: white;
+}
+
+.stats-metrics-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 12px;
+}
+
+.metric-card {
+    background: var(--bg-surface-elevated);
+    border: 1px solid var(--border-subtle);
+    border-radius: var(--radius-md);
+    padding: 12px 14px;
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+
+.metric-label {
+    font-size: 0.72rem;
+    color: var(--text-muted);
+    font-weight: 600;
+    text-transform: uppercase;
+}
+
+.metric-val {
+    font-size: 1.25rem;
+    font-weight: 800;
+    color: var(--text-primary);
+    font-family: var(--font-mono);
+}
+
+.stats-chart-section {
+    background: var(--bg-surface-elevated);
+    border: 1px solid var(--border-subtle);
+    border-radius: var(--radius-lg);
+    padding: 16px 20px;
+}
+
+.chart-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 12px;
+}
+
+.chart-header h5 {
+    font-size: 0.92rem;
+    font-weight: 700;
+    color: var(--text-primary);
+}
+
+.stats-canvas-container {
+    width: 100%;
+    height: 180px;
+    background: var(--bg-input);
+    border-radius: var(--radius-md);
+    overflow: hidden;
+    position: relative;
+}
+
+#statsChartCanvas {
+    width: 100%;
+    height: 100%;
+    display: block;
+}
+
+@media (max-width: 768px) {
+    .stats-metrics-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+    .coeff-inputs-row {
+        gap: 8px;
+    }
+    .system-row input {
+        width: 50px;
+    }
+    .fraction-calc-grid {
+        gap: 10px;
+    }
+    .fraction-input-box {
+        width: 80px;
+    }
+}
+
+/* ==========================================================================
    Responsive Breakpoints
    ========================================================================== */
 

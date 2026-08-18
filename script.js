@@ -67,7 +67,10 @@
         programmer: { title: 'Programmer Calculator', subtitle: 'HEX, DEC, OCT, BIN & bitwise operations' },
         health: { title: 'BMI & Health Calculator', subtitle: 'Body mass index, healthy weight & metabolic rate' },
         date: { title: 'Date & Age Calculator', subtitle: 'Exact duration between dates and age breakdown' },
-        time: { title: 'Time Calculator', subtitle: 'Work duration, time math, stopwatch & unix timestamps' }
+        time: { title: 'Time Calculator', subtitle: 'Work duration, time math, stopwatch & unix timestamps' },
+        discount: { title: 'Discount & Tip Calculator', subtitle: 'Shopping savings, sales tax & bill splitting' },
+        equation: { title: 'Equation & Algebra Solver', subtitle: 'Quadratic roots, 2x2 linear systems & fractions' },
+        statistics: { title: 'Statistics & Data Analyzer', subtitle: 'Mean, median, variance, std dev & box plots' }
     };
 
     // =========================================================================
@@ -238,6 +241,12 @@
             DateEngine.init();
         } else if (mode === 'time') {
             TimeEngine.init();
+        } else if (mode === 'discount') {
+            DiscountEngine.init();
+        } else if (mode === 'equation') {
+            EquationEngine.init();
+        } else if (mode === 'statistics') {
+            StatisticsEngine.init();
         }
     }
 
@@ -1862,7 +1871,494 @@
     };
 
     // =========================================================================
-    // 12. Keyboard Shortcuts Controller
+    // 12. Discount & Tip Engine
+    // =========================================================================
+    const DiscountEngine = {
+        init() {
+            this.calculateDiscount();
+            this.calculateTip();
+        },
+
+        calculateDiscount() {
+            const orig = parseFloat(document.getElementById('discOriginalPrice')?.value) || 0;
+            const pct = parseFloat(document.getElementById('discPercent')?.value) || 0;
+            const coup = parseFloat(document.getElementById('discCoupon')?.value) || 0;
+            const tax = parseFloat(document.getElementById('discTax')?.value) || 0;
+
+            const discAmt = orig * (pct / 100);
+            const afterDisc = orig - discAmt;
+            const coupAmt = afterDisc * (coup / 100);
+            const afterCoup = afterDisc - coupAmt;
+            const taxAmt = afterCoup * (tax / 100);
+            const finalPrice = afterCoup + taxAmt;
+            const totalSaved = (orig - afterCoup);
+            const savedPct = orig > 0 ? ((totalSaved / orig) * 100).toFixed(1) : '0';
+
+            const finalEl = document.getElementById('discFinalPrice');
+            const savingsEl = document.getElementById('discSavingsTag');
+            const origEl = document.getElementById('discOrigShow');
+            const amtEl = document.getElementById('discAmountShow');
+            const coupRow = document.getElementById('discCouponRow');
+            const coupEl = document.getElementById('discCouponShow');
+            const taxRow = document.getElementById('discTaxRow');
+            const taxEl = document.getElementById('discTaxShow');
+
+            if (finalEl) finalEl.textContent = `$${finalPrice.toFixed(2)}`;
+            if (savingsEl) savingsEl.textContent = `You save $${totalSaved.toFixed(2)} (${savedPct}%)`;
+            if (origEl) origEl.textContent = `$${orig.toFixed(2)}`;
+            if (amtEl) amtEl.textContent = `-$${discAmt.toFixed(2)}`;
+
+            if (coupRow) coupRow.style.display = coup > 0 ? 'flex' : 'none';
+            if (coupEl) coupEl.textContent = `-$${coupAmt.toFixed(2)}`;
+            if (taxRow) taxRow.style.display = tax > 0 ? 'flex' : 'none';
+            if (taxEl) taxEl.textContent = `+$${taxAmt.toFixed(2)}`;
+        },
+
+        setDiscountPct(val) {
+            SoundFx.playClick(600);
+            const el = document.getElementById('discPercent');
+            if (el) el.value = val;
+            const chips = document.querySelectorAll('#subtab-discount-calc .quick-pct-chip');
+            chips.forEach(c => c.classList.toggle('active', c.textContent.trim() === `${val}%`));
+            this.calculateDiscount();
+        },
+
+        calculateTip() {
+            const bill = parseFloat(document.getElementById('tipBillAmount')?.value) || 0;
+            const tipPct = parseFloat(document.getElementById('tipPercent')?.value) || 0;
+            const people = parseInt(document.getElementById('tipPeopleCount')?.value, 10) || 1;
+
+            const tipAmt = bill * (tipPct / 100);
+            const total = bill + tipAmt;
+            const perPersonTotal = people > 0 ? total / people : total;
+            const perPersonTip = people > 0 ? tipAmt / people : tipAmt;
+
+            const perPersonEl = document.getElementById('tipPerPersonVal');
+            const perPersonTipEl = document.getElementById('tipPerPersonTipVal');
+            const totalBillEl = document.getElementById('tipTotalBillShow');
+            const totalTipEl = document.getElementById('tipTotalTipShow');
+            const grandTotalEl = document.getElementById('tipGrandTotalShow');
+            const peopleEl = document.getElementById('tipPeopleCountShow');
+
+            if (perPersonEl) perPersonEl.textContent = `$${perPersonTotal.toFixed(2)}`;
+            if (perPersonTipEl) perPersonTipEl.textContent = `$${perPersonTip.toFixed(2)}`;
+            if (totalBillEl) totalBillEl.textContent = `$${bill.toFixed(2)}`;
+            if (totalTipEl) totalTipEl.textContent = `$${tipAmt.toFixed(2)}`;
+            if (grandTotalEl) grandTotalEl.textContent = `$${total.toFixed(2)}`;
+            if (peopleEl) peopleEl.textContent = people.toString();
+        },
+
+        setTipPct(val) {
+            SoundFx.playClick(600);
+            const el = document.getElementById('tipPercent');
+            if (el) el.value = val;
+            const chips = document.querySelectorAll('#subtab-tip-calc .quick-pct-chip');
+            chips.forEach(c => c.classList.toggle('active', c.textContent.trim() === `${val}%`));
+            this.calculateTip();
+        },
+
+        stepTipPeople(delta) {
+            SoundFx.playClick(500);
+            const el = document.getElementById('tipPeopleCount');
+            if (!el) return;
+            let val = parseInt(el.value, 10) || 1;
+            val = Math.max(1, Math.min(100, val + delta));
+            el.value = val;
+            this.calculateTip();
+        },
+
+        copyTipSummary() {
+            const bill = document.getElementById('tipTotalBillShow')?.textContent || '$0';
+            const tip = document.getElementById('tipTotalTipShow')?.textContent || '$0';
+            const grand = document.getElementById('tipGrandTotalShow')?.textContent || '$0';
+            const people = document.getElementById('tipPeopleCountShow')?.textContent || '1';
+            const perPerson = document.getElementById('tipPerPersonVal')?.textContent || '$0';
+
+            const summary = `🧾 CalcVerse Bill Split Receipt\nBill Amount: ${bill}\nTip Amount: ${tip}\nTotal with Tip: ${grand}\nSplit Between: ${people} person(s)\n👉 Each Person Pays: ${perPerson}`;
+            copyToClipboard(summary);
+        }
+    };
+
+    // =========================================================================
+    // 13. Equation & Algebra Solver Engine
+    // =========================================================================
+    const EquationEngine = {
+        init() {
+            this.solveQuadratic();
+            this.solveLinearSystem();
+            this.calculateFraction();
+        },
+
+        solveQuadratic() {
+            const a = parseFloat(document.getElementById('quadA')?.value);
+            const b = parseFloat(document.getElementById('quadB')?.value);
+            const c = parseFloat(document.getElementById('quadC')?.value);
+
+            const r1El = document.getElementById('quadRoot1');
+            const r2El = document.getElementById('quadRoot2');
+            const stepDisc = document.getElementById('quadStepDisc');
+            const stepForm = document.getElementById('quadStepFormula');
+            const stepVert = document.getElementById('quadStepVertex');
+
+            if (isNaN(a) || isNaN(b) || isNaN(c)) return;
+
+            if (a === 0) {
+                if (b !== 0) {
+                    const x = (-c / b).toFixed(4);
+                    if (r1El) r1El.textContent = x;
+                    if (r2El) r2El.textContent = 'Linear (1 Root)';
+                    if (stepDisc) stepDisc.textContent = `Linear Equation: ${b}x + ${c} = 0`;
+                    if (stepForm) stepForm.textContent = `x = -(${c}) / ${b} = ${x}`;
+                    if (stepVert) stepVert.textContent = `Straight line (No vertex)`;
+                } else {
+                    if (r1El) r1El.textContent = c === 0 ? 'Infinite Roots' : 'No Solution';
+                    if (r2El) r2El.textContent = '--';
+                }
+                return;
+            }
+
+            const D = b * b - 4 * a * c;
+            const h = -b / (2 * a);
+            const k = c - (b * b) / (4 * a);
+            const opens = a > 0 ? 'Opens Upward (Minimum)' : 'Opens Downward (Maximum)';
+
+            if (D > 0) {
+                const x1 = ((-b + Math.sqrt(D)) / (2 * a)).toFixed(4);
+                const x2 = ((-b - Math.sqrt(D)) / (2 * a)).toFixed(4);
+                if (r1El) r1El.textContent = x1;
+                if (r2El) r2El.textContent = x2;
+                if (stepDisc) stepDisc.textContent = `1. Discriminant: Δ = b² - 4ac = (${b})² - 4(${a})(${c}) = ${D} > 0 (Two Real Roots)`;
+                if (stepForm) stepForm.textContent = `2. Quadratic Formula: x = (-(${b}) ± √${D}) / (2 × ${a}) → x₁ = ${x1}, x₂ = ${x2}`;
+                if (stepVert) stepVert.textContent = `3. Parabola Vertex: (h, k) = (${h.toFixed(2)}, ${k.toFixed(2)}) • ${opens}`;
+            } else if (D === 0) {
+                const x = ((-b) / (2 * a)).toFixed(4);
+                if (r1El) r1El.textContent = x;
+                if (r2El) r2El.textContent = `${x} (Double Root)`;
+                if (stepDisc) stepDisc.textContent = `1. Discriminant: Δ = 0 (One Unique Real Repeated Root)`;
+                if (stepForm) stepForm.textContent = `2. Root: x = -(${b}) / (2 × ${a}) = ${x}`;
+                if (stepVert) stepVert.textContent = `3. Parabola Vertex: (h, k) = (${h.toFixed(2)}, ${k.toFixed(2)}) • ${opens}`;
+            } else {
+                const realPart = ((-b) / (2 * a)).toFixed(4);
+                const imagPart = ((Math.sqrt(-D)) / (2 * Math.abs(a))).toFixed(4);
+                if (r1El) r1El.textContent = `${realPart} + ${imagPart}i`;
+                if (r2El) r2El.textContent = `${realPart} - ${imagPart}i`;
+                if (stepDisc) stepDisc.textContent = `1. Discriminant: Δ = ${D} < 0 (Two Complex / Imaginary Roots)`;
+                if (stepForm) stepForm.textContent = `2. Formula: x = ${realPart} ± ${imagPart}i`;
+                if (stepVert) stepVert.textContent = `3. Parabola Vertex: (h, k) = (${h.toFixed(2)}, ${k.toFixed(2)}) • ${opens}`;
+            }
+        },
+
+        solveLinearSystem() {
+            const a1 = parseFloat(document.getElementById('linA1')?.value);
+            const b1 = parseFloat(document.getElementById('linB1')?.value);
+            const c1 = parseFloat(document.getElementById('linC1')?.value);
+            const a2 = parseFloat(document.getElementById('linA2')?.value);
+            const b2 = parseFloat(document.getElementById('linB2')?.value);
+            const c2 = parseFloat(document.getElementById('linC2')?.value);
+
+            const xEl = document.getElementById('linResultX');
+            const yEl = document.getElementById('linResultY');
+            const sD = document.getElementById('linStepD');
+            const sDx = document.getElementById('linStepDx');
+            const sDy = document.getElementById('linStepDy');
+
+            if ([a1, b1, c1, a2, b2, c2].some(isNaN)) return;
+
+            const D = a1 * b2 - a2 * b1;
+            const Dx = c1 * b2 - c2 * b1;
+            const Dy = a1 * c2 - a2 * c1;
+
+            if (D !== 0) {
+                const x = (Dx / D).toFixed(4);
+                const y = (Dy / D).toFixed(4);
+                if (xEl) xEl.textContent = x;
+                if (yEl) yEl.textContent = y;
+                if (sD) sD.textContent = `Determinant D = (a₁b₂ - a₂b₁) = (${a1})(${b2}) - (${a2})(${b1}) = ${D}`;
+                if (sDx) sDx.textContent = `D_x = (${c1})(${b2}) - (${c2})(${b1}) = ${Dx} → x = D_x / D = ${x}`;
+                if (sDy) sDy.textContent = `D_y = (${a1})(${c2}) - (${a2})(${c1}) = ${Dy} → y = D_y / D = ${y}`;
+            } else {
+                if (Dx === 0 && Dy === 0) {
+                    if (xEl) xEl.textContent = 'Infinite Solutions';
+                    if (yEl) yEl.textContent = '(Coincident Lines)';
+                    if (sD) sD.textContent = `D = 0, D_x = 0, D_y = 0: Infinitely many solutions.`;
+                } else {
+                    if (xEl) xEl.textContent = 'No Solution';
+                    if (yEl) yEl.textContent = '(Parallel Lines)';
+                    if (sD) sD.textContent = `D = 0 but D_x or D_y ≠ 0: Parallel lines (Inconsistent).`;
+                }
+            }
+        },
+
+        calculateFraction() {
+            const n1 = parseInt(document.getElementById('fracNum1')?.value, 10);
+            const d1 = parseInt(document.getElementById('fracDen1')?.value, 10);
+            const op = document.getElementById('fracOperator')?.value || '+';
+            const n2 = parseInt(document.getElementById('fracNum2')?.value, 10);
+            const d2 = parseInt(document.getElementById('fracDen2')?.value, 10);
+
+            const resFracEl = document.getElementById('fracResultFrac');
+            const resMixedEl = document.getElementById('fracResultMixed');
+            const resDecEl = document.getElementById('fracResultDecimal');
+            const s1 = document.getElementById('fracStep1');
+            const s2 = document.getElementById('fracStep2');
+
+            if ([n1, d1, n2, d2].some(isNaN) || d1 === 0 || d2 === 0) {
+                if (resFracEl) resFracEl.textContent = 'Invalid Denominator';
+                return;
+            }
+
+            let num = 0;
+            let den = 1;
+
+            if (op === '+') {
+                num = n1 * d2 + n2 * d1;
+                den = d1 * d2;
+            } else if (op === '-') {
+                num = n1 * d2 - n2 * d1;
+                den = d1 * d2;
+            } else if (op === '*') {
+                num = n1 * n2;
+                den = d1 * d2;
+            } else if (op === '/') {
+                if (n2 === 0) {
+                    if (resFracEl) resFracEl.textContent = 'Cannot divide by 0';
+                    return;
+                }
+                num = n1 * d2;
+                den = d1 * n2;
+            }
+
+            if (den < 0) {
+                num = -num;
+                den = -den;
+            }
+
+            const gcd = (a, b) => b === 0 ? Math.abs(a) : gcd(b, a % b);
+            const common = gcd(num, den);
+            const simNum = num / common;
+            const simDen = den / common;
+
+            // Mixed fraction
+            let mixedStr = '';
+            if (Math.abs(simNum) >= simDen && simDen !== 1) {
+                const whole = Math.trunc(simNum / simDen);
+                const rem = Math.abs(simNum % simDen);
+                mixedStr = rem > 0 ? `${whole}  ${rem}/${simDen}` : `${whole}`;
+            } else if (simDen === 1) {
+                mixedStr = `${simNum}`;
+            } else {
+                mixedStr = `${simNum}/${simDen}`;
+            }
+
+            const decimalVal = (simNum / simDen).toFixed(4);
+
+            if (resFracEl) resFracEl.textContent = `${simNum} / ${simDen}`;
+            if (resMixedEl) resMixedEl.textContent = mixedStr;
+            if (resDecEl) resDecEl.textContent = decimalVal;
+            if (s1) s1.textContent = `Computation: Numerator = ${num}, Denominator = ${den}`;
+            if (s2) s2.textContent = `GCD Reduction by ${common}: ${num}/${den} = ${simNum}/${simDen}`;
+        }
+    };
+
+    // =========================================================================
+    // 14. Statistics & Data Analyzer Engine
+    // =========================================================================
+    const StatisticsEngine = {
+        canvas: null,
+        ctx: null,
+
+        init() {
+            this.canvas = document.getElementById('statsChartCanvas');
+            if (this.canvas) this.ctx = this.canvas.getContext('2d');
+            this.calculateStats();
+        },
+
+        calculateStats() {
+            const raw = document.getElementById('statsDataInput')?.value || '';
+            const nums = raw
+                .split(/[\s,;\n]+/)
+                .map(v => parseFloat(v))
+                .filter(v => !isNaN(v))
+                .sort((a, b) => a - b);
+
+            if (nums.length === 0) {
+                this.updateMetrics(null);
+                return;
+            }
+
+            const N = nums.length;
+            const sum = nums.reduce((a, b) => a + b, 0);
+            const mean = sum / N;
+
+            // Median
+            const mid = Math.floor(N / 2);
+            const median = N % 2 !== 0 ? nums[mid] : (nums[mid - 1] + nums[mid]) / 2;
+
+            // Mode
+            const freq = {};
+            let maxFreq = 0;
+            nums.forEach(n => {
+                freq[n] = (freq[n] || 0) + 1;
+                if (freq[n] > maxFreq) maxFreq = freq[n];
+            });
+            const modes = Object.keys(freq).filter(k => freq[k] === maxFreq);
+            const modeStr = maxFreq > 1 ? modes.slice(0, 3).join(', ') : 'No Mode';
+
+            // Variance & StdDev
+            const sqDiffs = nums.map(n => Math.pow(n - mean, 2));
+            const popVar = sqDiffs.reduce((a, b) => a + b, 0) / N;
+            const sampleVar = N > 1 ? sqDiffs.reduce((a, b) => a + b, 0) / (N - 1) : 0;
+            const popStd = Math.sqrt(popVar);
+            const sampleStd = Math.sqrt(sampleVar);
+
+            // Min, Max, Range
+            const min = nums[0];
+            const max = nums[N - 1];
+            const range = max - min;
+
+            // Quartiles
+            const getPercentile = (arr, p) => {
+                const idx = (arr.length - 1) * p;
+                const lower = Math.floor(idx);
+                const upper = Math.ceil(idx);
+                const weight = idx - lower;
+                return arr[lower] * (1 - weight) + arr[upper] * weight;
+            };
+            const q1 = getPercentile(nums, 0.25);
+            const q3 = getPercentile(nums, 0.75);
+            const iqr = q3 - q1;
+
+            this.updateMetrics({
+                mean, median, modeStr,
+                sampleStd, popStd,
+                sampleVar, N, sum,
+                min, max, range,
+                q1, q3, iqr, nums
+            });
+
+            this.renderChart(nums, mean, median, q1, q3);
+        },
+
+        updateMetrics(d) {
+            const set = (id, val) => {
+                const el = document.getElementById(id);
+                if (el) el.textContent = val;
+            };
+
+            if (!d) {
+                ['statMean', 'statMedian', 'statMode', 'statSampleStdDev', 'statPopStdDev', 'statVariance', 'statCount', 'statSum', 'statMinMax', 'statRange', 'statQuartiles', 'statIQR']
+                    .forEach(id => set(id, '--'));
+                return;
+            }
+
+            set('statMean', d.mean.toFixed(2));
+            set('statMedian', d.median.toFixed(2));
+            set('statMode', d.modeStr);
+            set('statSampleStdDev', d.sampleStd.toFixed(2));
+            set('statPopStdDev', d.popStd.toFixed(2));
+            set('statVariance', d.sampleVar.toFixed(2));
+            set('statCount', d.N.toString());
+            set('statSum', d.sum.toFixed(2));
+            set('statMinMax', `${d.min} / ${d.max}`);
+            set('statRange', d.range.toFixed(2));
+            set('statQuartiles', `${d.q1.toFixed(2)} / ${d.q3.toFixed(2)}`);
+            set('statIQR', d.iqr.toFixed(2));
+        },
+
+        renderChart(nums, mean, median, q1, q3) {
+            if (!this.canvas) return;
+            const parent = this.canvas.parentElement;
+            if (parent) {
+                this.canvas.width = parent.clientWidth;
+                this.canvas.height = parent.clientHeight || 180;
+            }
+
+            const ctx = this.ctx;
+            if (!ctx) return;
+            const W = this.canvas.width;
+            const H = this.canvas.height;
+            ctx.clearRect(0, 0, W, H);
+
+            if (nums.length === 0) return;
+
+            const min = nums[0];
+            const max = nums[nums.length - 1];
+            const span = max - min || 1;
+            const padX = 40;
+            const padY = 30;
+
+            // Draw Bar Points
+            const barW = Math.max(4, Math.min(24, (W - 2 * padX) / nums.length - 4));
+            nums.forEach((val, i) => {
+                const x = padX + (i / (nums.length - 1 || 1)) * (W - 2 * padX);
+                const normH = ((val - min) / span) * (H - 2 * padY);
+                const y = H - padY - normH;
+
+                ctx.fillStyle = '#38bdf8';
+                ctx.beginPath();
+                ctx.arc(x, y, 4, 0, Math.PI * 2);
+                ctx.fill();
+
+                ctx.fillStyle = 'rgba(56, 189, 248, 0.2)';
+                ctx.fillRect(x - barW / 2, y, barW, H - padY - y);
+            });
+
+            // Draw Mean Line
+            const meanY = H - padY - ((mean - min) / span) * (H - 2 * padY);
+            ctx.strokeStyle = '#10b981';
+            ctx.setLineDash([4, 4]);
+            ctx.beginPath();
+            ctx.moveTo(padX, meanY);
+            ctx.lineTo(W - padX, meanY);
+            ctx.stroke();
+            ctx.setLineDash([]);
+
+            ctx.fillStyle = '#10b981';
+            ctx.font = '10px Inter, sans-serif';
+            ctx.fillText(`Mean: ${mean.toFixed(1)}`, W - padX - 65, meanY - 4);
+        },
+
+        loadPreset(type) {
+            SoundFx.playClick(600);
+            const input = document.getElementById('statsDataInput');
+            if (!input) return;
+
+            if (type === 'scores') {
+                input.value = '45, 68, 72, 85, 90, 55, 60, 78, 88, 92, 95, 40, 85, 76';
+            } else if (type === 'temps') {
+                input.value = '18.5, 21.0, 22.4, 25.1, 28.0, 30.2, 29.5, 26.3, 23.8, 19.4';
+            } else if (type === 'heights') {
+                input.value = '162, 168, 170, 172, 175, 175, 178, 180, 182, 185, 190';
+            } else if (type === 'random') {
+                const r = Array.from({ length: 10 }, () => Math.floor(Math.random() * 90) + 10);
+                input.value = r.join(', ');
+            }
+            this.calculateStats();
+        },
+
+        clearData() {
+            SoundFx.playClick(450);
+            const input = document.getElementById('statsDataInput');
+            if (input) input.value = '';
+            this.calculateStats();
+        },
+
+        copySummary() {
+            const mean = document.getElementById('statMean')?.textContent || '';
+            const median = document.getElementById('statMedian')?.textContent || '';
+            const mode = document.getElementById('statMode')?.textContent || '';
+            const sStd = document.getElementById('statSampleStdDev')?.textContent || '';
+            const count = document.getElementById('statCount')?.textContent || '';
+            const sum = document.getElementById('statSum')?.textContent || '';
+            const range = document.getElementById('statRange')?.textContent || '';
+
+            const summary = `📊 CalcVerse Statistics Summary\nCount (N): ${count}\nMean: ${mean}\nMedian: ${median}\nMode: ${mode}\nSample Std Dev: ${sStd}\nSum: ${sum}\nRange: ${range}`;
+            copyToClipboard(summary);
+        }
+    };
+
+    // =========================================================================
+    // 15. Keyboard Shortcuts Controller
     // =========================================================================
     function initKeyboard() {
         window.addEventListener('keydown', (e) => {
@@ -1988,6 +2484,25 @@
             SoundFx.playClick(650);
             showToast(`Copied ${name}: ${val}`);
         },
+
+        // Discount & Tip API
+        calculateDiscount: () => DiscountEngine.calculateDiscount(),
+        setDiscountPct: (p) => DiscountEngine.setDiscountPct(p),
+        calculateTip: () => DiscountEngine.calculateTip(),
+        setTipPct: (p) => DiscountEngine.setTipPct(p),
+        stepTipPeople: (delta) => DiscountEngine.stepTipPeople(delta),
+        copyTipSummary: () => DiscountEngine.copyTipSummary(),
+
+        // Equation & Algebra API
+        solveQuadratic: () => EquationEngine.solveQuadratic(),
+        solveLinearSystem: () => EquationEngine.solveLinearSystem(),
+        calculateFraction: () => EquationEngine.calculateFraction(),
+
+        // Statistics API
+        calculateStats: () => StatisticsEngine.calculateStats(),
+        loadStatsPreset: (t) => StatisticsEngine.loadPreset(t),
+        clearStatsData: () => StatisticsEngine.clearData(),
+        copyStatsSummary: () => StatisticsEngine.copySummary(),
 
         // Install Modal API
         openInstallModal: () => {
@@ -2142,6 +2657,9 @@
         initNavigation();
         initKeyboard();
         FinancialEngine.init();
+        DiscountEngine.init();
+        EquationEngine.init();
+        StatisticsEngine.init();
         renderHistoryList();
         initSidebarClock();
 

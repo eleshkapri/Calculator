@@ -27,7 +27,7 @@ CalcVerse can be installed directly onto your device with **1-click**, providing
 
 ---
 
-## ✨ 9 Dedicated Calculator Engines
+## ✨ 12 Dedicated Calculator Engines
 
 ### 1. 🔢 Standard Calculator
 - Precise everyday arithmetic with operator precedence ($+$, $-$, $\times$, $\div$).
@@ -93,6 +93,19 @@ CalcVerse can be installed directly onto your device with **1-click**, providing
 - **Time Arithmetic**: Add or subtract multiple time intervals.
 - **Millisecond Stopwatch**: High-precision stopwatch with real-time lap recording.
 - **Unix Epoch Converter**: Live ticking Unix timestamp converter (Epoch $\leftrightarrow$ Human Date).
+
+### 10. 🧾 Discount & Tip Calculator
+- **Discount & Sales Tax**: Original price, discount %, extra coupon %, and sales tax with live savings breakdown.
+- **Tip & Bill Splitting**: Custom tip percentage chips, number of people stepper, per-person split, and 1-click shareable receipt copy.
+
+### 11. 🧮 Equation & Algebra Solver
+- **Quadratic Equations** ($ax^2 + bx + c = 0$): Solves real and complex roots, discriminant $\Delta = b^2 - 4ac$, and parabola vertex $(h, k)$ coordinates.
+- **$2\times 2$ Linear System**: Solves simultaneous linear equations ($a_1 x + b_1 y = c_1$, $a_2 x + b_2 y = c_2$) using Cramer's Rule determinants.
+- **Fraction Calculator**: Arithmetic with step-by-step reduction, mixed numbers, and decimal conversions.
+
+### 12. 📊 Statistics & Data Analyzer
+- Comprehensive statistical metrics: **Mean ($\bar{x}$)**, **Median**, **Mode**, **Sample & Population Standard Deviation ($\sigma, s$)**, **Variance**, **Min/Max**, **Sum**, **Range**, and **Quartiles ($Q_1, Q_3, \text{IQR}$)**.
+- Visual data distribution chart rendered on HTML5 canvas with 1-click full summary export.
 
 ---
 

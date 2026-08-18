@@ -16,7 +16,7 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;600;700&family=Outfit:wght@400;500;600;700;800&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="style.css?v=2.6">
+    <link rel="stylesheet" href="style.css?v=3.0">
 </head>
 <body class="dark-theme">
     <div class="app-container">
@@ -83,6 +83,18 @@
                 <button class="nav-item" data-mode="time">
                     <span class="icon">⏱️</span>
                     <span class="label">Time Calculator</span>
+                </button>
+                <button class="nav-item" data-mode="discount">
+                    <span class="icon">🧾</span>
+                    <span class="label">Discount & Tip</span>
+                </button>
+                <button class="nav-item" data-mode="equation">
+                    <span class="icon">🧮</span>
+                    <span class="label">Equation Solver</span>
+                </button>
+                <button class="nav-item" data-mode="statistics">
+                    <span class="icon">📊</span>
+                    <span class="label">Statistics</span>
                 </button>
             </nav>
 
@@ -1010,6 +1022,369 @@
                     </div>
                 </section>
 
+                <!-- 10. Discount & Tip Calculator View -->
+                <section class="calculator-view" id="view-discount">
+                    <div class="sub-tabs">
+                        <button class="sub-tab active" data-subtab="discount-calc">🏷️ Discount & Tax</button>
+                        <button class="sub-tab" data-subtab="tip-calc">🍽️ Tip & Bill Split</button>
+                    </div>
+
+                    <!-- Subtab 1: Discount & Tax -->
+                    <div class="discount-card subtab-view active" id="subtab-discount-calc">
+                        <div class="form-grid">
+                            <div class="input-card">
+                                <label for="discOriginalPrice">Original Price ($ / ₹)</label>
+                                <input type="number" id="discOriginalPrice" placeholder="100.00" value="100" min="0" step="any" oninput="CalcVerse.calculateDiscount()">
+                            </div>
+                            <div class="input-card">
+                                <label for="discPercent">Discount (%)</label>
+                                <input type="number" id="discPercent" placeholder="20" value="20" min="0" max="100" step="any" oninput="CalcVerse.calculateDiscount()">
+                                <div class="quick-chip-row">
+                                    <button class="quick-pct-chip" onclick="CalcVerse.setDiscountPct(10)">10%</button>
+                                    <button class="quick-pct-chip" onclick="CalcVerse.setDiscountPct(15)">15%</button>
+                                    <button class="quick-pct-chip active" onclick="CalcVerse.setDiscountPct(20)">20%</button>
+                                    <button class="quick-pct-chip" onclick="CalcVerse.setDiscountPct(30)">30%</button>
+                                    <button class="quick-pct-chip" onclick="CalcVerse.setDiscountPct(50)">50%</button>
+                                    <button class="quick-pct-chip" onclick="CalcVerse.setDiscountPct(70)">70%</button>
+                                </div>
+                            </div>
+                            <div class="input-card">
+                                <label for="discCoupon">Extra Coupon Discount (%) <span class="badge-optional">Optional</span></label>
+                                <input type="number" id="discCoupon" placeholder="0" value="0" min="0" max="100" step="any" oninput="CalcVerse.calculateDiscount()">
+                            </div>
+                            <div class="input-card">
+                                <label for="discTax">Sales Tax (%) <span class="badge-optional">Optional</span></label>
+                                <input type="number" id="discTax" placeholder="0" value="0" min="0" step="any" oninput="CalcVerse.calculateDiscount()">
+                            </div>
+                        </div>
+
+                        <!-- Discount Result Summary Card -->
+                        <div class="discount-result-card" id="discountResultCard">
+                            <div class="result-hero-box">
+                                <span class="hero-label">Final Price to Pay</span>
+                                <div class="hero-val" id="discFinalPrice">$80.00</div>
+                                <div class="savings-tag" id="discSavingsTag">You save $20.00 (20%)</div>
+                            </div>
+                            <div class="receipt-breakdown-grid">
+                                <div class="breakdown-item">
+                                    <span>Original Price</span>
+                                    <strong id="discOrigShow">$100.00</strong>
+                                </div>
+                                <div class="breakdown-item">
+                                    <span>Discount Amount</span>
+                                    <strong class="text-green" id="discAmountShow">-$20.00</strong>
+                                </div>
+                                <div class="breakdown-item" id="discCouponRow" style="display: none;">
+                                    <span>Extra Coupon</span>
+                                    <strong class="text-green" id="discCouponShow">-$0.00</strong>
+                                </div>
+                                <div class="breakdown-item" id="discTaxRow" style="display: none;">
+                                    <span>Sales Tax</span>
+                                    <strong class="text-amber" id="discTaxShow">+$0.00</strong>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Subtab 2: Tip & Bill Split -->
+                    <div class="discount-card subtab-view" id="subtab-tip-calc">
+                        <div class="form-grid">
+                            <div class="input-card">
+                                <label for="tipBillAmount">Bill Amount ($ / ₹)</label>
+                                <input type="number" id="tipBillAmount" placeholder="85.00" value="85" min="0" step="any" oninput="CalcVerse.calculateTip()">
+                            </div>
+                            <div class="input-card">
+                                <label for="tipPercent">Tip Percentage (%)</label>
+                                <input type="number" id="tipPercent" placeholder="15" value="15" min="0" step="any" oninput="CalcVerse.calculateTip()">
+                                <div class="quick-chip-row">
+                                    <button class="quick-pct-chip" onclick="CalcVerse.setTipPct(0)">0%</button>
+                                    <button class="quick-pct-chip" onclick="CalcVerse.setTipPct(10)">10%</button>
+                                    <button class="quick-pct-chip active" onclick="CalcVerse.setTipPct(15)">15%</button>
+                                    <button class="quick-pct-chip" onclick="CalcVerse.setTipPct(18)">18%</button>
+                                    <button class="quick-pct-chip" onclick="CalcVerse.setTipPct(20)">20%</button>
+                                    <button class="quick-pct-chip" onclick="CalcVerse.setTipPct(25)">25%</button>
+                                </div>
+                            </div>
+                            <div class="input-card full-width">
+                                <label for="tipPeopleCount">Number of People to Split</label>
+                                <div class="stepper-wrap">
+                                    <button class="stepper-btn" onclick="CalcVerse.stepTipPeople(-1)">−</button>
+                                    <input type="number" id="tipPeopleCount" value="2" min="1" max="100" oninput="CalcVerse.calculateTip()">
+                                    <button class="stepper-btn" onclick="CalcVerse.stepTipPeople(1)">+</button>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Tip & Split Receipt Preview -->
+                        <div class="tip-receipt-card" id="tipReceiptCard">
+                            <div class="receipt-header">
+                                <span class="receipt-icon">🧾</span>
+                                <h4>Split Breakdown</h4>
+                                <button class="copy-pill-btn" onclick="CalcVerse.copyTipSummary()">📋 Copy Summary</button>
+                            </div>
+                            <div class="split-highlight-box">
+                                <div class="split-column">
+                                    <span class="col-label">Each Person Pays</span>
+                                    <div class="col-val text-primary-accent" id="tipPerPersonVal">$48.88</div>
+                                </div>
+                                <div class="split-divider"></div>
+                                <div class="split-column">
+                                    <span class="col-label">Tip Per Person</span>
+                                    <div class="col-val text-green" id="tipPerPersonTipVal">$6.38</div>
+                                </div>
+                            </div>
+                            <div class="receipt-breakdown-grid" style="margin-top: 14px;">
+                                <div class="breakdown-item">
+                                    <span>Total Bill Amount</span>
+                                    <strong id="tipTotalBillShow">$85.00</strong>
+                                </div>
+                                <div class="breakdown-item">
+                                    <span>Total Tip Amount</span>
+                                    <strong class="text-green" id="tipTotalTipShow">$12.75</strong>
+                                </div>
+                                <div class="breakdown-item">
+                                    <span>Total with Tip</span>
+                                    <strong id="tipGrandTotalShow">$97.75</strong>
+                                </div>
+                                <div class="breakdown-item">
+                                    <span>Number of People</span>
+                                    <strong id="tipPeopleCountShow">2</strong>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- 11. Equation & Algebra Solver View -->
+                <section class="calculator-view" id="view-equation">
+                    <div class="sub-tabs">
+                        <button class="sub-tab active" data-subtab="quadratic">🎯 Quadratic (ax²+bx+c=0)</button>
+                        <button class="sub-tab" data-subtab="linear2">⚖️ Linear System (2x2)</button>
+                        <button class="sub-tab" data-subtab="fraction">🔢 Fraction Calculator</button>
+                    </div>
+
+                    <!-- Subtab 1: Quadratic Equation Solver -->
+                    <div class="equation-card subtab-view active" id="subtab-quadratic">
+                        <div class="equation-banner">
+                            <span class="eq-label">Standard Form:</span>
+                            <span class="eq-formula">\(a x^2 + b x + c = 0\)</span>
+                        </div>
+                        <div class="coeff-inputs-row">
+                            <div class="coeff-item">
+                                <label>a</label>
+                                <input type="number" id="quadA" placeholder="1" value="1" step="any" oninput="CalcVerse.solveQuadratic()">
+                            </div>
+                            <div class="coeff-item">
+                                <label>b</label>
+                                <input type="number" id="quadB" placeholder="-5" value="-5" step="any" oninput="CalcVerse.solveQuadratic()">
+                            </div>
+                            <div class="coeff-item">
+                                <label>c</label>
+                                <input type="number" id="quadC" placeholder="6" value="6" step="any" oninput="CalcVerse.solveQuadratic()">
+                            </div>
+                        </div>
+
+                        <div class="solution-card" id="quadSolutionCard">
+                            <div class="roots-highlight">
+                                <div class="root-box">
+                                    <span class="root-label">Root \(x_1\)</span>
+                                    <div class="root-val" id="quadRoot1">3.00</div>
+                                </div>
+                                <div class="root-box">
+                                    <span class="root-label">Root \(x_2\)</span>
+                                    <div class="root-val" id="quadRoot2">2.00</div>
+                                </div>
+                            </div>
+                            <div class="steps-box" id="quadStepsBox">
+                                <h5>Step-by-Step Breakdown:</h5>
+                                <div class="step-line" id="quadStepDisc">1. Discriminant: \(\Delta = b^2 - 4ac = (-5)^2 - 4(1)(6) = 1 > 0\) (Two Real Roots)</div>
+                                <div class="step-line" id="quadStepFormula">2. Quadratic Formula: \(x = \frac{-b \pm \sqrt{\Delta}}{2a} = \frac{5 \pm 1}{2}\)</div>
+                                <div class="step-line" id="quadStepVertex">3. Parabola Vertex: \((h, k) = (2.5, -0.25)\) (Opens Upward)</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Subtab 2: 2x2 Linear System Solver -->
+                    <div class="equation-card subtab-view" id="subtab-linear2">
+                        <div class="equation-banner">
+                            <span class="eq-label">System of 2 Linear Equations:</span>
+                            <span class="eq-formula">\(a_1 x + b_1 y = c_1\) &amp; \(a_2 x + b_2 y = c_2\)</span>
+                        </div>
+                        <div class="system-inputs-grid">
+                            <div class="system-row">
+                                <span class="eq-tag">Eq 1:</span>
+                                <input type="number" id="linA1" placeholder="2" value="2" step="any" oninput="CalcVerse.solveLinearSystem()">
+                                <span>x +</span>
+                                <input type="number" id="linB1" placeholder="3" value="3" step="any" oninput="CalcVerse.solveLinearSystem()">
+                                <span>y =</span>
+                                <input type="number" id="linC1" placeholder="13" value="13" step="any" oninput="CalcVerse.solveLinearSystem()">
+                            </div>
+                            <div class="system-row">
+                                <span class="eq-tag">Eq 2:</span>
+                                <input type="number" id="linA2" placeholder="1" value="1" step="any" oninput="CalcVerse.solveLinearSystem()">
+                                <span>x −</span>
+                                <input type="number" id="linB2" placeholder="-2" value="-2" step="any" oninput="CalcVerse.solveLinearSystem()">
+                                <span>y =</span>
+                                <input type="number" id="linC2" placeholder="-4" value="-4" step="any" oninput="CalcVerse.solveLinearSystem()">
+                            </div>
+                        </div>
+
+                        <div class="solution-card" id="linearSolutionCard">
+                            <div class="roots-highlight">
+                                <div class="root-box">
+                                    <span class="root-label">Value of \(x\)</span>
+                                    <div class="root-val" id="linResultX">2.00</div>
+                                </div>
+                                <div class="root-box">
+                                    <span class="root-label">Value of \(y\)</span>
+                                    <div class="root-val" id="linResultY">3.00</div>
+                                </div>
+                            </div>
+                            <div class="steps-box" id="linStepsBox">
+                                <h5>Cramer's Rule Determinants:</h5>
+                                <div class="step-line" id="linStepD">Determinant \(D = (a_1 b_2 - a_2 b_1) = 2(-2) - 1(3) = -7\)</div>
+                                <div class="step-line" id="linStepDx">\(D_x = (c_1 b_2 - c_2 b_1) = 13(-2) - (-4)(3) = -14 \rightarrow x = D_x/D = 2\)</div>
+                                <div class="step-line" id="linStepDy">\(D_y = (a_1 c_2 - a_2 c_1) = 2(-4) - 1(13) = -21 \rightarrow y = D_y/D = 3\)</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Subtab 3: Fraction Calculator -->
+                    <div class="equation-card subtab-view" id="subtab-fraction">
+                        <div class="fraction-calc-grid">
+                            <!-- Fraction 1 -->
+                            <div class="fraction-input-box">
+                                <span class="frac-tag">Fraction 1</span>
+                                <input type="number" id="fracNum1" placeholder="3" value="3" oninput="CalcVerse.calculateFraction()">
+                                <div class="frac-bar"></div>
+                                <input type="number" id="fracDen1" placeholder="4" value="4" oninput="CalcVerse.calculateFraction()">
+                            </div>
+
+                            <!-- Operator Selector -->
+                            <div class="fraction-op-box">
+                                <select id="fracOperator" onchange="CalcVerse.calculateFraction()">
+                                    <option value="+">+</option>
+                                    <option value="-">−</option>
+                                    <option value="*">×</option>
+                                    <option value="/">÷</option>
+                                </select>
+                            </div>
+
+                            <!-- Fraction 2 -->
+                            <div class="fraction-input-box">
+                                <span class="frac-tag">Fraction 2</span>
+                                <input type="number" id="fracNum2" placeholder="2" value="2" oninput="CalcVerse.calculateFraction()">
+                                <div class="frac-bar"></div>
+                                <input type="number" id="fracDen2" placeholder="3" value="3" oninput="CalcVerse.calculateFraction()">
+                            </div>
+                        </div>
+
+                        <div class="solution-card" id="fracSolutionCard">
+                            <div class="roots-highlight">
+                                <div class="root-box">
+                                    <span class="root-label">Simplified Fraction</span>
+                                    <div class="root-val" id="fracResultFrac">17 / 12</div>
+                                </div>
+                                <div class="root-box">
+                                    <span class="root-label">Mixed Number</span>
+                                    <div class="root-val" id="fracResultMixed">1  5/12</div>
+                                </div>
+                                <div class="root-box">
+                                    <span class="root-label">Decimal</span>
+                                    <div class="root-val" id="fracResultDecimal">1.4167</div>
+                                </div>
+                            </div>
+                            <div class="steps-box" id="fracStepsBox">
+                                <h5>Step-by-Step Simplification:</h5>
+                                <div class="step-line" id="fracStep1">\(\frac{3}{4} + \frac{2}{3} = \frac{3 \times 3 + 2 \times 4}{4 \times 3} = \frac{9 + 8}{12} = \frac{17}{12}\)</div>
+                                <div class="step-line" id="fracStep2">\(\text{GCD}(17, 12) = 1\) (Already in lowest terms)</div>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- 12. Statistics & Data Analyzer View -->
+                <section class="calculator-view" id="view-statistics">
+                    <div class="stats-card">
+                        <div class="stats-input-section">
+                            <label for="statsDataInput">Dataset Values (Separated by commas, spaces, or lines)</label>
+                            <textarea id="statsDataInput" rows="3" placeholder="e.g. 12, 45, 67, 23, 89, 45, 90, 34, 56, 78" oninput="CalcVerse.calculateStats()">12, 45, 67, 23, 89, 45, 90, 34, 56, 78</textarea>
+                            
+                            <div class="stats-presets-row">
+                                <span class="preset-label">Quick Presets:</span>
+                                <button class="preset-chip" onclick="CalcVerse.loadStatsPreset('scores')">Exam Scores</button>
+                                <button class="preset-chip" onclick="CalcVerse.loadStatsPreset('temps')">Temperatures</button>
+                                <button class="preset-chip" onclick="CalcVerse.loadStatsPreset('heights')">Heights (cm)</button>
+                                <button class="preset-chip" onclick="CalcVerse.loadStatsPreset('random')">🎲 Random 10</button>
+                                <button class="preset-chip clear" onclick="CalcVerse.clearStatsData()">Clear</button>
+                            </div>
+                        </div>
+
+                        <!-- Statistics Metrics Grid -->
+                        <div class="stats-metrics-grid" id="statsMetricsGrid">
+                            <div class="metric-card">
+                                <span class="metric-label">Mean (\(\bar{x}\))</span>
+                                <div class="metric-val" id="statMean">53.90</div>
+                            </div>
+                            <div class="metric-card">
+                                <span class="metric-label">Median</span>
+                                <div class="metric-val" id="statMedian">50.50</div>
+                            </div>
+                            <div class="metric-card">
+                                <span class="metric-label">Mode</span>
+                                <div class="metric-val" id="statMode">45</div>
+                            </div>
+                            <div class="metric-card">
+                                <span class="metric-label">Sample Std Dev (\(s\))</span>
+                                <div class="metric-val text-green" id="statSampleStdDev">26.83</div>
+                            </div>
+                            <div class="metric-card">
+                                <span class="metric-label">Population Std Dev (\(\sigma\))</span>
+                                <div class="metric-val text-green" id="statPopStdDev">25.45</div>
+                            </div>
+                            <div class="metric-card">
+                                <span class="metric-label">Variance (\(s^2\))</span>
+                                <div class="metric-val" id="statVariance">719.88</div>
+                            </div>
+                            <div class="metric-card">
+                                <span class="metric-label">Count (\(N\))</span>
+                                <div class="metric-val" id="statCount">10</div>
+                            </div>
+                            <div class="metric-card">
+                                <span class="metric-label">Sum (\(\sum x\))</span>
+                                <div class="metric-val" id="statSum">539.00</div>
+                            </div>
+                            <div class="metric-card">
+                                <span class="metric-label">Min / Max</span>
+                                <div class="metric-val" id="statMinMax">12 / 90</div>
+                            </div>
+                            <div class="metric-card">
+                                <span class="metric-label">Range</span>
+                                <div class="metric-val" id="statRange">78.00</div>
+                            </div>
+                            <div class="metric-card">
+                                <span class="metric-label">Quartiles (\(Q_1, Q_3\))</span>
+                                <div class="metric-val" id="statQuartiles">31.25 / 72.50</div>
+                            </div>
+                            <div class="metric-card">
+                                <span class="metric-label">Interquartile (IQR)</span>
+                                <div class="metric-val" id="statIQR">41.25</div>
+                            </div>
+                        </div>
+
+                        <!-- Visual Data Chart Canvas -->
+                        <div class="stats-chart-section">
+                            <div class="chart-header">
+                                <h5>📊 Visual Data Distribution</h5>
+                                <button class="copy-pill-btn" onclick="CalcVerse.copyStatsSummary()">📋 Copy Full Summary</button>
+                            </div>
+                            <div class="stats-canvas-container">
+                                <canvas id="statsChartCanvas"></canvas>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
             </div>
         </main>
 
@@ -1082,6 +1457,6 @@
     <!-- Toast Notification -->
     <div class="toast" id="toast">Copied to clipboard!</div>
 
-    <script src="script.js?v=2.6"></script>
+    <script src="script.js?v=3.0"></script>
 </body>
 </html>
