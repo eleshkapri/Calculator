@@ -10,7 +10,7 @@
     // 1. Audio Click Synthesizer (Zero-dependency tactile feedback)
     // =========================================================================
     const SoundFx = {
-        enabled: localStorage.getItem('calcverse_sound') === 'true',
+        enabled: (localStorage.getItem('calverse_sound') || localStorage.getItem('calcverse_sound')) === 'true',
         ctx: null,
         _unlocked: false,
 
@@ -223,7 +223,7 @@
             SoundFx.enabled = !SoundFx.enabled;
             soundIcon.textContent = SoundFx.enabled ? '🔊' : '🔇';
             soundText.textContent = SoundFx.enabled ? 'Sound ON' : 'Sound OFF';
-            localStorage.setItem('calcverse_sound', SoundFx.enabled ? 'true' : 'false');
+            localStorage.setItem('calverse_sound', SoundFx.enabled ? 'true' : 'false');
             if (SoundFx.enabled) {
                 SoundFx.unlockAudio(); // Ensure audio is unlocked on this user gesture
                 SoundFx.playClick(900);
@@ -767,7 +767,7 @@
     };
 
     const FinancialEngine = {
-        currentCurrency: localStorage.getItem('calcverse_fin_currency') || 'INR',
+        currentCurrency: localStorage.getItem('calverse_fin_currency') || localStorage.getItem('calcverse_fin_currency') || 'INR',
 
         init() {
             // Restore saved currency
@@ -808,7 +808,7 @@
             if (CURRENCY_CONFIG[code]) {
                 SoundFx.playClick(600);
                 this.currentCurrency = code;
-                localStorage.setItem('calcverse_fin_currency', code);
+                localStorage.setItem('calverse_fin_currency', code);
                 this.updateLabels();
                 this.calculateEMI();
                 this.calculateCompound();
@@ -934,7 +934,7 @@
                     if (data && data.rates) {
                         this.rates = { ...this.rates, ...data.rates };
                         this.ratesLastUpdated = new Date();
-                        localStorage.setItem('calcverse_rates_cache', JSON.stringify({
+                        localStorage.setItem('calverse_rates_cache', JSON.stringify({
                             rates: this.rates,
                             time: this.ratesLastUpdated.toISOString()
                         }));
@@ -1011,7 +1011,7 @@
                 const tRate = this.rates[to] || 1;
                 const rate = (1 / fRate) * tRate;
                 return `
-                    <div class="pair-card" onclick="CalcVerse.setQuickPair('${from}', '${to}')">
+                    <div class="pair-card" onclick="CalVerse.setQuickPair('${from}', '${to}')">
                         <span class="pair-names">${from} / ${to}</span>
                         <span class="pair-rate">${rate.toLocaleString(undefined, { maximumFractionDigits: 3 })}</span>
                     </div>
@@ -1914,7 +1914,7 @@
     // 12. Discount & Tip Engine
     // =========================================================================
     const DiscountEngine = {
-        currentCurrency: localStorage.getItem('calcverse_disc_currency') || 'INR',
+        currentCurrency: localStorage.getItem('calverse_disc_currency') || localStorage.getItem('calcverse_disc_currency') || 'INR',
 
         init() {
             const curSelect = document.getElementById('discCurrencySelect');
@@ -1929,7 +1929,7 @@
         setCurrency(code) {
             if (CURRENCY_CONFIG[code]) {
                 this.currentCurrency = code;
-                localStorage.setItem('calcverse_disc_currency', code);
+                localStorage.setItem('calverse_disc_currency', code);
                 const curSelect = document.getElementById('discCurrencySelect');
                 if (curSelect) curSelect.value = code;
                 this.updateLabels();
@@ -2070,7 +2070,7 @@
             const people = document.getElementById('tipPeopleCountShow')?.textContent || '1';
             const perPerson = document.getElementById('tipPerPersonVal')?.textContent || this.formatMoney(0);
 
-            const summary = `🧾 CalcVerse Bill Split Receipt\nBill Amount: ${bill}\nTip Amount: ${tip}\nTotal with Tip: ${grand}\nSplit Between: ${people} person(s)\n👉 Each Person Pays: ${perPerson}`;
+            const summary = `🧾 CalVerse Bill Split Receipt\nBill Amount: ${bill}\nTip Amount: ${tip}\nTotal with Tip: ${grand}\nSplit Between: ${people} person(s)\n👉 Each Person Pays: ${perPerson}`;
             copyToClipboard(summary);
         }
     };
@@ -2911,7 +2911,7 @@
             const q3 = document.getElementById('fiveNumQ3')?.textContent || '';
             const iqr = document.getElementById('fiveNumIQR')?.textContent || '';
 
-            const summary = `📊 CalcVerse Statistics Summary\nCount (N): ${count}\nMean: ${mean}\nMedian: ${median}\nMode: ${mode}\nSample Std Dev: ${sStd}\nSum: ${sum}\nRange: ${range}\nQ1: ${q1} | Q3: ${q3} | IQR: ${iqr}`;
+            const summary = `📊 CalVerse Statistics Summary\nCount (N): ${count}\nMean: ${mean}\nMedian: ${median}\nMode: ${mode}\nSample Std Dev: ${sStd}\nSum: ${sum}\nRange: ${range}\nQ1: ${q1} | Q3: ${q3} | IQR: ${iqr}`;
             copyToClipboard(summary);
         }
     };
@@ -2971,9 +2971,9 @@
     }
 
     // =========================================================================
-    // 13. Public CalcVerse API Export
+    // 13. Public CalVerse API Export
     // =========================================================================
-    window.CalcVerse = {
+    window.CalVerse = {
         inputVal,
         inputFunc,
         clear,
@@ -3069,7 +3069,7 @@
         openInstallModal: () => {
             SoundFx.playClick(600);
             if (window._deferredInstallPrompt) {
-                window.CalcVerse.triggerPwaPrompt();
+                window.CalVerse.triggerPwaPrompt();
                 return;
             }
             const modal = document.getElementById('installModalBackdrop');
@@ -3084,19 +3084,19 @@
         downloadDetectedApp: () => {
             const ua = navigator.userAgent || '';
             if (/Android/i.test(ua)) {
-                window.CalcVerse.triggerPwaPrompt();
+                window.CalVerse.triggerPwaPrompt();
             } else if (/Windows/i.test(ua)) {
-                window.CalcVerse.downloadExe();
+                window.CalVerse.downloadExe();
             } else if (/iPhone|iPad|iPod/i.test(ua)) {
-                window.CalcVerse.downloadIosProfile();
+                window.CalVerse.downloadIosProfile();
             } else {
-                window.CalcVerse.triggerPwaPrompt();
+                window.CalVerse.triggerPwaPrompt();
             }
         },
 
         installAndroidApp: () => {
             SoundFx.playClick(700);
-            window.CalcVerse.triggerPwaPrompt();
+            window.CalVerse.triggerPwaPrompt();
         },
 
         downloadExe: () => {
@@ -3104,16 +3104,16 @@
             showToast('Starting Windows Setup (.exe) download...');
             
             // Create standalone Windows shortcut / executable launcher script wrapped in .exe
-            const exeContent = `@echo off\r\ntitle CalcVerse Pro Calculator\r\necho Starting CalcVerse Desktop App...\r\nstart "" "https://calculator-iota-seven-12.vercel.app"\r\nexit`;
+            const exeContent = `@echo off\r\ntitle CalVerse Pro Calculator\r\necho Starting CalVerse Desktop App...\r\nstart "" "https://calculator-iota-seven-12.vercel.app"\r\nexit`;
             const blob = new Blob([exeContent], { type: 'application/x-msdownload' });
             const link = document.createElement('a');
             link.href = URL.createObjectURL(blob);
-            link.download = 'CalcVerse-Setup-v2.3.exe';
+            link.download = 'CalVerse-Setup-v2.3.exe';
             document.body.appendChild(link);
             link.click();
             document.body.removeChild(link);
             setTimeout(() => {
-                showToast('✅ CalcVerse-Setup.exe downloaded successfully!');
+                showToast('✅ CalVerse-Setup.exe downloaded successfully!');
             }, 1200);
         },
 
@@ -3126,11 +3126,11 @@
 <plist version="1.0">
 <dict>
     <key>PayloadDisplayName</key>
-    <string>CalcVerse Pro</string>
+    <string>CalVerse Pro</string>
     <key>PayloadIdentifier</key>
-    <string>com.calcverse.app.webclip</string>
+    <string>com.calverse.app.webclip</string>
     <key>PayloadOrganization</key>
-    <string>CalcVerse Team</string>
+    <string>CalVerse Team</string>
     <key>PayloadRemovalDisallowed</key>
     <false/>
     <key>PayloadType</key>
@@ -3147,13 +3147,13 @@
             <key>IsRemovable</key>
             <true/>
             <key>Label</key>
-            <string>CalcVerse</string>
+            <string>CalVerse</string>
             <key>PayloadDescription</key>
-            <string>Configures Home Screen WebClip for CalcVerse Pro</string>
+            <string>Configures Home Screen WebClip for CalVerse Pro</string>
             <key>PayloadDisplayName</key>
-            <string>CalcVerse</string>
+            <string>CalVerse</string>
             <key>PayloadIdentifier</key>
-            <string>com.calcverse.app.webclip.entry</string>
+            <string>com.calverse.app.webclip.entry</string>
             <key>PayloadType</key>
             <string>com.apple.webClip.managed</string>
             <key>PayloadUUID</key>
@@ -3172,7 +3172,7 @@
             const blob = new Blob([mobileConfigXml], { type: 'application/x-apple-aspen-config' });
             const link = document.createElement('a');
             link.href = URL.createObjectURL(blob);
-            link.download = 'CalcVerse.mobileconfig';
+            link.download = 'CalVerse.mobileconfig';
             document.body.appendChild(link);
             link.click();
             document.body.removeChild(link);
@@ -3187,8 +3187,8 @@
                 window._deferredInstallPrompt.prompt();
                 const { outcome } = await window._deferredInstallPrompt.userChoice;
                 if (outcome === 'accepted') {
-                    showToast('🎉 CalcVerse installed successfully!');
-                    window.CalcVerse.closeInstallModal();
+                    showToast('🎉 CalVerse installed successfully!');
+                    window.CalVerse.closeInstallModal();
                 }
                 window._deferredInstallPrompt = null;
             } else {
@@ -3197,7 +3197,9 @@
         }
     };
 
-    window.OmniCalc = window.CalcVerse;
+    // Backward-compatibility aliases
+    window.CalcVerse = window.CalVerse;
+    window.OmniCalc = window.CalVerse;
 
     function initSidebarClock() {
         const timeEl = document.getElementById('sidebarLiveClock');
@@ -3228,7 +3230,7 @@
         if ('caches' in window) {
             caches.keys().then((names) => {
                 names.forEach((name) => {
-                    if (name.includes('omni') || name === 'omnicalc-v1') {
+                    if (name.includes('omni') || name === 'omnicalc-v1' || name.includes('calcverse')) {
                         caches.delete(name);
                     }
                 });
@@ -3265,10 +3267,10 @@
         window.addEventListener('appinstalled', () => {
             const installBtn = document.getElementById('installAppBtn');
             if (installBtn) installBtn.style.display = 'none';
-            if (window.CalcVerse && window.CalcVerse.closeInstallModal) {
-                window.CalcVerse.closeInstallModal();
+            if (window.CalVerse && window.CalVerse.closeInstallModal) {
+                window.CalVerse.closeInstallModal();
             }
-            showToast('🎉 CalcVerse installed successfully!');
+            showToast('🎉 CalVerse installed successfully!');
         });
 
         // Close modal when backdrop clicked
@@ -3276,7 +3278,7 @@
         if (modalBackdrop) {
             modalBackdrop.addEventListener('click', (e) => {
                 if (e.target === modalBackdrop) {
-                    window.CalcVerse.closeInstallModal();
+                    window.CalVerse.closeInstallModal();
                 }
             });
         }

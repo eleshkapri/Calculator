@@ -6,13 +6,13 @@
     <meta name="theme-color" content="#2563eb">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-    <meta name="apple-mobile-web-app-title" content="CalcVerse">
+    <meta name="apple-mobile-web-app-title" content="CalVerse">
     <link rel="manifest" href="manifest.json">
     <link rel="icon" type="image/png" sizes="192x192" href="icon-192.png">
     <link rel="icon" type="image/png" sizes="512x512" href="icon-512.png">
     <link rel="icon" type="image/svg+xml" href="favicon.svg">
     <link rel="apple-touch-icon" href="icon-192.png">
-    <title>CalcVerse</title>
+    <title>CalVerse</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;600;700&family=Outfit:wght@400;500;600;700;800&display=swap" rel="stylesheet">
@@ -40,7 +40,7 @@
                         </svg>
                     </div>
                     <div class="brand-text">
-                        <h2>CalcVerse</h2>
+                        <h2>CalVerse</h2>
                         <span class="badge">PRO</span>
                     </div>
                 </div>
@@ -108,19 +108,19 @@
                 <div class="sidebar-constants-section">
                     <span class="widget-title">Quick Constants</span>
                     <div class="constants-chips">
-                        <button class="const-chip" onclick="CalcVerse.copyConstant('3.1415926535', 'π (Pi)')" title="Click to copy Pi (3.14159...)">
+                        <button class="const-chip" onclick="CalVerse.copyConstant('3.1415926535', 'π (Pi)')" title="Click to copy Pi (3.14159...)">
                             <span class="chip-sym">π</span>
                             <span class="chip-val">3.14159</span>
                         </button>
-                        <button class="const-chip" onclick="CalcVerse.copyConstant('2.7182818284', 'e (Euler)')" title="Click to copy Euler (2.71828...)">
+                        <button class="const-chip" onclick="CalVerse.copyConstant('2.7182818284', 'e (Euler)')" title="Click to copy Euler (2.71828...)">
                             <span class="chip-sym">e</span>
                             <span class="chip-val">2.71828</span>
                         </button>
-                        <button class="const-chip" onclick="CalcVerse.copyConstant('1.6180339887', 'φ (Golden Ratio)')" title="Click to copy Golden Ratio (1.61803...)">
+                        <button class="const-chip" onclick="CalVerse.copyConstant('1.6180339887', 'φ (Golden Ratio)')" title="Click to copy Golden Ratio (1.61803...)">
                             <span class="chip-sym">φ</span>
                             <span class="chip-val">1.61803</span>
                         </button>
-                        <button class="const-chip" onclick="CalcVerse.copyConstant('1.4142135623', '√2 (Pythagoras)')" title="Click to copy √2 (1.41421...)">
+                        <button class="const-chip" onclick="CalVerse.copyConstant('1.4142135623', '√2 (Pythagoras)')" title="Click to copy √2 (1.41421...)">
                             <span class="chip-sym">√2</span>
                             <span class="chip-val">1.41421</span>
                         </button>
@@ -129,7 +129,7 @@
             </div>
 
             <div class="sidebar-footer">
-                <button id="installAppBtn" class="utility-btn" onclick="CalcVerse.openInstallModal()" title="Install CalcVerse on your device">
+                <button id="installAppBtn" class="utility-btn" onclick="CalVerse.openInstallModal()" title="Install CalVerse on your device">
                     <span>📲</span>
                     <span class="btn-text">Install App</span>
                 </button>
@@ -188,39 +188,39 @@
 
                         <!-- Memory Bar -->
                         <div class="memory-bar">
-                            <button class="mem-btn" onclick="CalcVerse.memClear('std')">MC</button>
-                            <button class="mem-btn" onclick="CalcVerse.memRecall('std')">MR</button>
-                            <button class="mem-btn" onclick="CalcVerse.memAdd('std')">M+</button>
-                            <button class="mem-btn" onclick="CalcVerse.memSub('std')">M-</button>
-                            <button class="mem-btn" onclick="CalcVerse.memStore('std')">MS</button>
+                            <button class="mem-btn" onclick="CalVerse.memClear('std')">MC</button>
+                            <button class="mem-btn" onclick="CalVerse.memRecall('std')">MR</button>
+                            <button class="mem-btn" onclick="CalVerse.memAdd('std')">M+</button>
+                            <button class="mem-btn" onclick="CalVerse.memSub('std')">M-</button>
+                            <button class="mem-btn" onclick="CalVerse.memStore('std')">MS</button>
                         </div>
 
                         <!-- Keypad -->
                         <div class="keypad standard-keypad">
-                            <button class="btn btn-fn" onclick="CalcVerse.clear('std')">AC</button>
-                            <button class="btn btn-fn" onclick="CalcVerse.backspace('std')">⌫</button>
-                            <button class="btn btn-fn" onclick="CalcVerse.inputVal('std', '%')">%</button>
-                            <button class="btn btn-op" onclick="CalcVerse.inputVal('std', '÷')">÷</button>
+                            <button class="btn btn-fn" onclick="CalVerse.clear('std')">AC</button>
+                            <button class="btn btn-fn" onclick="CalVerse.backspace('std')">⌫</button>
+                            <button class="btn btn-fn" onclick="CalVerse.inputVal('std', '%')">%</button>
+                            <button class="btn btn-op" onclick="CalVerse.inputVal('std', '÷')">÷</button>
 
-                            <button class="btn btn-num" onclick="CalcVerse.inputVal('std', '7')">7</button>
-                            <button class="btn btn-num" onclick="CalcVerse.inputVal('std', '8')">8</button>
-                            <button class="btn btn-num" onclick="CalcVerse.inputVal('std', '9')">9</button>
-                            <button class="btn btn-op" onclick="CalcVerse.inputVal('std', '×')">×</button>
+                            <button class="btn btn-num" onclick="CalVerse.inputVal('std', '7')">7</button>
+                            <button class="btn btn-num" onclick="CalVerse.inputVal('std', '8')">8</button>
+                            <button class="btn btn-num" onclick="CalVerse.inputVal('std', '9')">9</button>
+                            <button class="btn btn-op" onclick="CalVerse.inputVal('std', '×')">×</button>
 
-                            <button class="btn btn-num" onclick="CalcVerse.inputVal('std', '4')">4</button>
-                            <button class="btn btn-num" onclick="CalcVerse.inputVal('std', '5')">5</button>
-                            <button class="btn btn-num" onclick="CalcVerse.inputVal('std', '6')">6</button>
-                            <button class="btn btn-op" onclick="CalcVerse.inputVal('std', '−')">−</button>
+                            <button class="btn btn-num" onclick="CalVerse.inputVal('std', '4')">4</button>
+                            <button class="btn btn-num" onclick="CalVerse.inputVal('std', '5')">5</button>
+                            <button class="btn btn-num" onclick="CalVerse.inputVal('std', '6')">6</button>
+                            <button class="btn btn-op" onclick="CalVerse.inputVal('std', '−')">−</button>
 
-                            <button class="btn btn-num" onclick="CalcVerse.inputVal('std', '1')">1</button>
-                            <button class="btn btn-num" onclick="CalcVerse.inputVal('std', '2')">2</button>
-                            <button class="btn btn-num" onclick="CalcVerse.inputVal('std', '3')">3</button>
-                            <button class="btn btn-op" onclick="CalcVerse.inputVal('std', '+')">+</button>
+                            <button class="btn btn-num" onclick="CalVerse.inputVal('std', '1')">1</button>
+                            <button class="btn btn-num" onclick="CalVerse.inputVal('std', '2')">2</button>
+                            <button class="btn btn-num" onclick="CalVerse.inputVal('std', '3')">3</button>
+                            <button class="btn btn-op" onclick="CalVerse.inputVal('std', '+')">+</button>
 
-                            <button class="btn btn-fn" onclick="CalcVerse.toggleSign('std')">±</button>
-                            <button class="btn btn-num" onclick="CalcVerse.inputVal('std', '0')">0</button>
-                            <button class="btn btn-num" onclick="CalcVerse.inputVal('std', '.')">.</button>
-                            <button class="btn btn-equals" onclick="CalcVerse.calculate('std')">=</button>
+                            <button class="btn btn-fn" onclick="CalVerse.toggleSign('std')">±</button>
+                            <button class="btn btn-num" onclick="CalVerse.inputVal('std', '0')">0</button>
+                            <button class="btn btn-num" onclick="CalVerse.inputVal('std', '.')">.</button>
+                            <button class="btn btn-equals" onclick="CalVerse.calculate('std')">=</button>
                         </div>
                     </div>
                 </section>
@@ -230,7 +230,7 @@
                     <div class="calc-card scientific-card">
                         <div class="display-container">
                             <div class="sci-status-bar">
-                                <span class="angle-mode-pill" id="sciAngleMode" onclick="CalcVerse.toggleAngleMode()">DEG</span>
+                                <span class="angle-mode-pill" id="sciAngleMode" onclick="CalVerse.toggleAngleMode()">DEG</span>
                                 <span class="memory-indicator" id="sciMemoryIndicator"></span>
                             </div>
                             <div class="expression-line" id="sciExpression"></div>
@@ -242,61 +242,61 @@
 
                         <!-- Scientific Memory Bar -->
                         <div class="memory-bar">
-                            <button class="mem-btn" onclick="CalcVerse.toggleAngleMode()">DEG / RAD</button>
-                            <button class="mem-btn" onclick="CalcVerse.toggle2nd()">2nd</button>
-                            <button class="mem-btn" onclick="CalcVerse.memClear('sci')">MC</button>
-                            <button class="mem-btn" onclick="CalcVerse.memRecall('sci')">MR</button>
-                            <button class="mem-btn" onclick="CalcVerse.memAdd('sci')">M+</button>
-                            <button class="mem-btn" onclick="CalcVerse.memSub('sci')">M-</button>
+                            <button class="mem-btn" onclick="CalVerse.toggleAngleMode()">DEG / RAD</button>
+                            <button class="mem-btn" onclick="CalVerse.toggle2nd()">2nd</button>
+                            <button class="mem-btn" onclick="CalVerse.memClear('sci')">MC</button>
+                            <button class="mem-btn" onclick="CalVerse.memRecall('sci')">MR</button>
+                            <button class="mem-btn" onclick="CalVerse.memAdd('sci')">M+</button>
+                            <button class="mem-btn" onclick="CalVerse.memSub('sci')">M-</button>
                         </div>
 
                         <!-- Scientific Keypad -->
                         <div class="keypad scientific-keypad">
                             <!-- Row 1 -->
-                            <button class="btn btn-sci" onclick="CalcVerse.inputFunc('sin')"><span class="fn-label">sin</span></button>
-                            <button class="btn btn-sci" onclick="CalcVerse.inputFunc('cos')"><span class="fn-label">cos</span></button>
-                            <button class="btn btn-sci" onclick="CalcVerse.inputFunc('tan')"><span class="fn-label">tan</span></button>
-                            <button class="btn btn-fn" onclick="CalcVerse.clear('sci')">AC</button>
-                            <button class="btn btn-fn" onclick="CalcVerse.backspace('sci')">⌫</button>
+                            <button class="btn btn-sci" onclick="CalVerse.inputFunc('sin')"><span class="fn-label">sin</span></button>
+                            <button class="btn btn-sci" onclick="CalVerse.inputFunc('cos')"><span class="fn-label">cos</span></button>
+                            <button class="btn btn-sci" onclick="CalVerse.inputFunc('tan')"><span class="fn-label">tan</span></button>
+                            <button class="btn btn-fn" onclick="CalVerse.clear('sci')">AC</button>
+                            <button class="btn btn-fn" onclick="CalVerse.backspace('sci')">⌫</button>
 
                             <!-- Row 2 -->
-                            <button class="btn btn-sci" onclick="CalcVerse.inputFunc('ln')">ln</button>
-                            <button class="btn btn-sci" onclick="CalcVerse.inputFunc('log')">log</button>
-                            <button class="btn btn-sci" onclick="CalcVerse.inputVal('sci', '(')">(</button>
-                            <button class="btn btn-sci" onclick="CalcVerse.inputVal('sci', ')')">)</button>
-                            <button class="btn btn-op" onclick="CalcVerse.inputVal('sci', '÷')">÷</button>
+                            <button class="btn btn-sci" onclick="CalVerse.inputFunc('ln')">ln</button>
+                            <button class="btn btn-sci" onclick="CalVerse.inputFunc('log')">log</button>
+                            <button class="btn btn-sci" onclick="CalVerse.inputVal('sci', '(')">(</button>
+                            <button class="btn btn-sci" onclick="CalVerse.inputVal('sci', ')')">)</button>
+                            <button class="btn btn-op" onclick="CalVerse.inputVal('sci', '÷')">÷</button>
 
                             <!-- Row 3 -->
-                            <button class="btn btn-sci" onclick="CalcVerse.inputFunc('sqrt')">√x</button>
-                            <button class="btn btn-sci" onclick="CalcVerse.inputVal('sci', '^')">xʸ</button>
-                            <button class="btn btn-num" onclick="CalcVerse.inputVal('sci', '7')">7</button>
-                            <button class="btn btn-num" onclick="CalcVerse.inputVal('sci', '8')">8</button>
-                            <button class="btn btn-num" onclick="CalcVerse.inputVal('sci', '9')">9</button>
-                            <button class="btn btn-op" onclick="CalcVerse.inputVal('sci', '×')">×</button>
+                            <button class="btn btn-sci" onclick="CalVerse.inputFunc('sqrt')">√x</button>
+                            <button class="btn btn-sci" onclick="CalVerse.inputVal('sci', '^')">xʸ</button>
+                            <button class="btn btn-num" onclick="CalVerse.inputVal('sci', '7')">7</button>
+                            <button class="btn btn-num" onclick="CalVerse.inputVal('sci', '8')">8</button>
+                            <button class="btn btn-num" onclick="CalVerse.inputVal('sci', '9')">9</button>
+                            <button class="btn btn-op" onclick="CalVerse.inputVal('sci', '×')">×</button>
 
                             <!-- Row 4 -->
-                            <button class="btn btn-sci" onclick="CalcVerse.inputFunc('sqr')">x²</button>
-                            <button class="btn btn-sci" onclick="CalcVerse.inputFunc('fact')">n!</button>
-                            <button class="btn btn-num" onclick="CalcVerse.inputVal('sci', '4')">4</button>
-                            <button class="btn btn-num" onclick="CalcVerse.inputVal('sci', '5')">5</button>
-                            <button class="btn btn-num" onclick="CalcVerse.inputVal('sci', '6')">6</button>
-                            <button class="btn btn-op" onclick="CalcVerse.inputVal('sci', '−')">−</button>
+                            <button class="btn btn-sci" onclick="CalVerse.inputFunc('sqr')">x²</button>
+                            <button class="btn btn-sci" onclick="CalVerse.inputFunc('fact')">n!</button>
+                            <button class="btn btn-num" onclick="CalVerse.inputVal('sci', '4')">4</button>
+                            <button class="btn btn-num" onclick="CalVerse.inputVal('sci', '5')">5</button>
+                            <button class="btn btn-num" onclick="CalVerse.inputVal('sci', '6')">6</button>
+                            <button class="btn btn-op" onclick="CalVerse.inputVal('sci', '−')">−</button>
 
                             <!-- Row 5 -->
-                            <button class="btn btn-sci" onclick="CalcVerse.inputVal('sci', 'π')">π</button>
-                            <button class="btn btn-sci" onclick="CalcVerse.inputVal('sci', 'e')">e</button>
-                            <button class="btn btn-num" onclick="CalcVerse.inputVal('sci', '1')">1</button>
-                            <button class="btn btn-num" onclick="CalcVerse.inputVal('sci', '2')">2</button>
-                            <button class="btn btn-num" onclick="CalcVerse.inputVal('sci', '3')">3</button>
-                            <button class="btn btn-op" onclick="CalcVerse.inputVal('sci', '+')">+</button>
+                            <button class="btn btn-sci" onclick="CalVerse.inputVal('sci', 'π')">π</button>
+                            <button class="btn btn-sci" onclick="CalVerse.inputVal('sci', 'e')">e</button>
+                            <button class="btn btn-num" onclick="CalVerse.inputVal('sci', '1')">1</button>
+                            <button class="btn btn-num" onclick="CalVerse.inputVal('sci', '2')">2</button>
+                            <button class="btn btn-num" onclick="CalVerse.inputVal('sci', '3')">3</button>
+                            <button class="btn btn-op" onclick="CalVerse.inputVal('sci', '+')">+</button>
 
                             <!-- Row 6 -->
-                            <button class="btn btn-sci" onclick="CalcVerse.inputFunc('inv')">1/x</button>
-                            <button class="btn btn-sci" onclick="CalcVerse.inputFunc('abs')">|x|</button>
-                            <button class="btn btn-fn" onclick="CalcVerse.toggleSign('sci')">±</button>
-                            <button class="btn btn-num" onclick="CalcVerse.inputVal('sci', '0')">0</button>
-                            <button class="btn btn-num" onclick="CalcVerse.inputVal('sci', '.')">.</button>
-                            <button class="btn btn-equals" onclick="CalcVerse.calculate('sci')">=</button>
+                            <button class="btn btn-sci" onclick="CalVerse.inputFunc('inv')">1/x</button>
+                            <button class="btn btn-sci" onclick="CalVerse.inputFunc('abs')">|x|</button>
+                            <button class="btn btn-fn" onclick="CalVerse.toggleSign('sci')">±</button>
+                            <button class="btn btn-num" onclick="CalVerse.inputVal('sci', '0')">0</button>
+                            <button class="btn btn-num" onclick="CalVerse.inputVal('sci', '.')">.</button>
+                            <button class="btn btn-equals" onclick="CalVerse.calculate('sci')">=</button>
                         </div>
                     </div>
                 </section>
@@ -317,27 +317,27 @@
                                     <input type="text" id="graphFuncInput2" class="func-input" value="cos(x)" placeholder="Optional 2nd function">
                                     <span class="color-dot color-2"></span>
                                 </div>
-                                <button class="btn-primary full-width" onclick="CalcVerse.plotGraph()">Plot Functions</button>
+                                <button class="btn-primary full-width" onclick="CalVerse.plotGraph()">Plot Functions</button>
                             </div>
 
                             <div class="panel-section">
                                 <h3>Quick Presets</h3>
                                 <div class="presets-grid">
-                                    <button class="preset-pill" onclick="CalcVerse.setGraphPreset('sin(x)', 'cos(x)')">Sine & Cosine</button>
-                                    <button class="preset-pill" onclick="CalcVerse.setGraphPreset('x^2 - 4', '2*x')">Parabola & Line</button>
-                                    <button class="preset-pill" onclick="CalcVerse.setGraphPreset('x^3 - 3*x', '')">Cubic Curve</button>
-                                    <button class="preset-pill" onclick="CalcVerse.setGraphPreset('1/x', '')">Hyperbola</button>
-                                    <button class="preset-pill" onclick="CalcVerse.setGraphPreset('abs(x)', '-abs(x)')">V-Curves</button>
-                                    <button class="preset-pill" onclick="CalcVerse.setGraphPreset('exp(-x^2)', '')">Gaussian Bell</button>
+                                    <button class="preset-pill" onclick="CalVerse.setGraphPreset('sin(x)', 'cos(x)')">Sine & Cosine</button>
+                                    <button class="preset-pill" onclick="CalVerse.setGraphPreset('x^2 - 4', '2*x')">Parabola & Line</button>
+                                    <button class="preset-pill" onclick="CalVerse.setGraphPreset('x^3 - 3*x', '')">Cubic Curve</button>
+                                    <button class="preset-pill" onclick="CalVerse.setGraphPreset('1/x', '')">Hyperbola</button>
+                                    <button class="preset-pill" onclick="CalVerse.setGraphPreset('abs(x)', '-abs(x)')">V-Curves</button>
+                                    <button class="preset-pill" onclick="CalVerse.setGraphPreset('exp(-x^2)', '')">Gaussian Bell</button>
                                 </div>
                             </div>
 
                             <div class="panel-section">
                                 <h3>Zoom & Pan</h3>
                                 <div class="graph-nav-buttons">
-                                    <button class="tool-btn" onclick="CalcVerse.zoomGraph(1.25)">🔍+ Zoom In</button>
-                                    <button class="tool-btn" onclick="CalcVerse.zoomGraph(0.8)">🔍− Zoom Out</button>
-                                    <button class="tool-btn" onclick="CalcVerse.resetGraph()">🔄 Reset View</button>
+                                    <button class="tool-btn" onclick="CalVerse.zoomGraph(1.25)">🔍+ Zoom In</button>
+                                    <button class="tool-btn" onclick="CalVerse.zoomGraph(0.8)">🔍− Zoom Out</button>
+                                    <button class="tool-btn" onclick="CalVerse.resetGraph()">🔄 Reset View</button>
                                 </div>
                                 <div class="coordinates-hud" id="graphHud">Hover canvas to trace (x, y)</div>
                             </div>
@@ -359,7 +359,7 @@
                         </div>
                         <div class="currency-picker-wrap" id="finCurrencyPickerWrap">
                             <label for="finCurrencySelect" class="currency-label">Currency:</label>
-                            <select id="finCurrencySelect" class="currency-dropdown" onchange="CalcVerse.setFinancialCurrency(this.value)">
+                            <select id="finCurrencySelect" class="currency-dropdown" onchange="CalVerse.setFinancialCurrency(this.value)">
                                 <option value="INR" selected>₹ INR (Indian Rupee)</option>
                                 <option value="USD">$ USD (US Dollar)</option>
                                 <option value="EUR">€ EUR (Euro)</option>
@@ -478,7 +478,7 @@
                                 <span class="pulse-dot"></span>
                                 <span id="rateStatusText">Real-Time Exchange Rates</span>
                             </div>
-                            <button class="refresh-rates-btn" onclick="CalcVerse.refreshExchangeRates()" title="Refresh live rates">
+                            <button class="refresh-rates-btn" onclick="CalVerse.refreshExchangeRates()" title="Refresh live rates">
                                 <span id="refreshIcon">🔄</span> Refresh
                             </button>
                         </div>
@@ -486,8 +486,8 @@
                         <div class="converter-grid currency-conv-grid">
                             <div class="convert-box">
                                 <label for="currencyValFrom">From Amount</label>
-                                <input type="number" id="currencyValFrom" class="convert-input" value="1" min="0" step="any" oninput="CalcVerse.convertCurrency('from')">
-                                <select id="currencyUnitFrom" class="unit-dropdown" onchange="CalcVerse.convertCurrency('from')">
+                                <input type="number" id="currencyValFrom" class="convert-input" value="1" min="0" step="any" oninput="CalVerse.convertCurrency('from')">
+                                <select id="currencyUnitFrom" class="unit-dropdown" onchange="CalVerse.convertCurrency('from')">
                                     <option value="USD" selected>🇺🇸 USD - US Dollar</option>
                                     <option value="INR">🇮🇳 INR - Indian Rupee</option>
                                     <option value="EUR">🇪🇺 EUR - Euro</option>
@@ -511,12 +511,12 @@
                                 </select>
                             </div>
 
-                            <button class="swap-btn" onclick="CalcVerse.swapCurrencyUnits()" title="Swap currencies">⇄</button>
+                            <button class="swap-btn" onclick="CalVerse.swapCurrencyUnits()" title="Swap currencies">⇄</button>
 
                             <div class="convert-box">
                                 <label for="currencyValTo">Converted Amount</label>
-                                <input type="number" id="currencyValTo" class="convert-input" value="83.5" min="0" step="any" oninput="CalcVerse.convertCurrency('to')">
-                                <select id="currencyUnitTo" class="unit-dropdown" onchange="CalcVerse.convertCurrency('from')">
+                                <input type="number" id="currencyValTo" class="convert-input" value="83.5" min="0" step="any" oninput="CalVerse.convertCurrency('to')">
+                                <select id="currencyUnitTo" class="unit-dropdown" onchange="CalVerse.convertCurrency('from')">
                                     <option value="USD">🇺🇸 USD - US Dollar</option>
                                     <option value="INR" selected>🇮🇳 INR - Indian Rupee</option>
                                     <option value="EUR">🇪🇺 EUR - Euro</option>
@@ -598,19 +598,19 @@
                     <div class="calc-card programmer-card">
                         <!-- Radix Display Rows -->
                         <div class="radix-board">
-                            <div class="radix-row active" data-radix="HEX" onclick="CalcVerse.setRadix('HEX')">
+                            <div class="radix-row active" data-radix="HEX" onclick="CalVerse.setRadix('HEX')">
                                 <span class="radix-tag">HEX</span>
                                 <span class="radix-val" id="progHex">0</span>
                             </div>
-                            <div class="radix-row" data-radix="DEC" onclick="CalcVerse.setRadix('DEC')">
+                            <div class="radix-row" data-radix="DEC" onclick="CalVerse.setRadix('DEC')">
                                 <span class="radix-tag">DEC</span>
                                 <span class="radix-val" id="progDec">0</span>
                             </div>
-                            <div class="radix-row" data-radix="OCT" onclick="CalcVerse.setRadix('OCT')">
+                            <div class="radix-row" data-radix="OCT" onclick="CalVerse.setRadix('OCT')">
                                 <span class="radix-tag">OCT</span>
                                 <span class="radix-val" id="progOct">0</span>
                             </div>
-                            <div class="radix-row" data-radix="BIN" onclick="CalcVerse.setRadix('BIN')">
+                            <div class="radix-row" data-radix="BIN" onclick="CalVerse.setRadix('BIN')">
                                 <span class="radix-tag">BIN</span>
                                 <span class="radix-val" id="progBin">0000 0000 0000 0000</span>
                             </div>
@@ -620,54 +620,54 @@
                         <div class="bit-word-bar">
                             <span class="bar-title">Word Size:</span>
                             <div class="word-sizes">
-                                <button class="word-btn" data-bits="8" onclick="CalcVerse.setWordSize(8)">BYTE (8-bit)</button>
-                                <button class="word-btn" data-bits="16" onclick="CalcVerse.setWordSize(16)">WORD (16-bit)</button>
-                                <button class="word-btn active" data-bits="32" onclick="CalcVerse.setWordSize(32)">DWORD (32-bit)</button>
-                                <button class="word-btn" data-bits="64" onclick="CalcVerse.setWordSize(64)">QWORD (64-bit)</button>
+                                <button class="word-btn" data-bits="8" onclick="CalVerse.setWordSize(8)">BYTE (8-bit)</button>
+                                <button class="word-btn" data-bits="16" onclick="CalVerse.setWordSize(16)">WORD (16-bit)</button>
+                                <button class="word-btn active" data-bits="32" onclick="CalVerse.setWordSize(32)">DWORD (32-bit)</button>
+                                <button class="word-btn" data-bits="64" onclick="CalVerse.setWordSize(64)">QWORD (64-bit)</button>
                             </div>
                         </div>
 
                         <!-- Programmer Keypad -->
                         <div class="keypad programmer-keypad">
                             <!-- Bitwise Ops Row -->
-                            <button class="btn btn-bit" onclick="CalcVerse.inputProgBitwise('AND')">AND</button>
-                            <button class="btn btn-bit" onclick="CalcVerse.inputProgBitwise('OR')">OR</button>
-                            <button class="btn btn-bit" onclick="CalcVerse.inputProgBitwise('XOR')">XOR</button>
-                            <button class="btn btn-bit" onclick="CalcVerse.inputProgBitwise('NOT')">NOT</button>
-                            <button class="btn btn-fn" onclick="CalcVerse.clear('prog')">AC</button>
-                            <button class="btn btn-fn" onclick="CalcVerse.backspace('prog')">⌫</button>
+                            <button class="btn btn-bit" onclick="CalVerse.inputProgBitwise('AND')">AND</button>
+                            <button class="btn btn-bit" onclick="CalVerse.inputProgBitwise('OR')">OR</button>
+                            <button class="btn btn-bit" onclick="CalVerse.inputProgBitwise('XOR')">XOR</button>
+                            <button class="btn btn-bit" onclick="CalVerse.inputProgBitwise('NOT')">NOT</button>
+                            <button class="btn btn-fn" onclick="CalVerse.clear('prog')">AC</button>
+                            <button class="btn btn-fn" onclick="CalVerse.backspace('prog')">⌫</button>
 
                             <!-- Hex Digits & Shifts -->
-                            <button class="btn btn-hex" data-hex="A" onclick="CalcVerse.inputProgDigit('A')">A</button>
-                            <button class="btn btn-bit" onclick="CalcVerse.inputProgBitwise('<<')">&lt;&lt;</button>
-                            <button class="btn btn-num" onclick="CalcVerse.inputProgDigit('7')">7</button>
-                            <button class="btn btn-num" onclick="CalcVerse.inputProgDigit('8')">8</button>
-                            <button class="btn btn-num" onclick="CalcVerse.inputProgDigit('9')">9</button>
-                            <button class="btn btn-op" onclick="CalcVerse.inputProgOp('÷')">÷</button>
+                            <button class="btn btn-hex" data-hex="A" onclick="CalVerse.inputProgDigit('A')">A</button>
+                            <button class="btn btn-bit" onclick="CalVerse.inputProgBitwise('<<')">&lt;&lt;</button>
+                            <button class="btn btn-num" onclick="CalVerse.inputProgDigit('7')">7</button>
+                            <button class="btn btn-num" onclick="CalVerse.inputProgDigit('8')">8</button>
+                            <button class="btn btn-num" onclick="CalVerse.inputProgDigit('9')">9</button>
+                            <button class="btn btn-op" onclick="CalVerse.inputProgOp('÷')">÷</button>
 
-                            <button class="btn btn-hex" data-hex="B" onclick="CalcVerse.inputProgDigit('B')">B</button>
-                            <button class="btn btn-bit" onclick="CalcVerse.inputProgBitwise('>>')">&gt;&gt;</button>
-                            <button class="btn btn-num" onclick="CalcVerse.inputProgDigit('4')">4</button>
-                            <button class="btn btn-num" onclick="CalcVerse.inputProgDigit('5')">5</button>
-                            <button class="btn btn-num" onclick="CalcVerse.inputProgDigit('6')">6</button>
-                            <button class="btn btn-op" onclick="CalcVerse.inputProgOp('×')">×</button>
+                            <button class="btn btn-hex" data-hex="B" onclick="CalVerse.inputProgDigit('B')">B</button>
+                            <button class="btn btn-bit" onclick="CalVerse.inputProgBitwise('>>')">&gt;&gt;</button>
+                            <button class="btn btn-num" onclick="CalVerse.inputProgDigit('4')">4</button>
+                            <button class="btn btn-num" onclick="CalVerse.inputProgDigit('5')">5</button>
+                            <button class="btn btn-num" onclick="CalVerse.inputProgDigit('6')">6</button>
+                            <button class="btn btn-op" onclick="CalVerse.inputProgOp('×')">×</button>
 
-                            <button class="btn btn-hex" data-hex="C" onclick="CalcVerse.inputProgDigit('C')">C</button>
-                            <button class="btn btn-hex" data-hex="D" onclick="CalcVerse.inputProgDigit('D')">D</button>
-                            <button class="btn btn-num" onclick="CalcVerse.inputProgDigit('1')">1</button>
-                            <button class="btn btn-num" onclick="CalcVerse.inputProgDigit('2')">2</button>
-                            <button class="btn btn-num" onclick="CalcVerse.inputProgDigit('3')">3</button>
-                            <button class="btn btn-op" onclick="CalcVerse.inputProgOp('−')">−</button>
+                            <button class="btn btn-hex" data-hex="C" onclick="CalVerse.inputProgDigit('C')">C</button>
+                            <button class="btn btn-hex" data-hex="D" onclick="CalVerse.inputProgDigit('D')">D</button>
+                            <button class="btn btn-num" onclick="CalVerse.inputProgDigit('1')">1</button>
+                            <button class="btn btn-num" onclick="CalVerse.inputProgDigit('2')">2</button>
+                            <button class="btn btn-num" onclick="CalVerse.inputProgDigit('3')">3</button>
+                            <button class="btn btn-op" onclick="CalVerse.inputProgOp('−')">−</button>
 
-                            <button class="btn btn-hex" data-hex="E" onclick="CalcVerse.inputProgDigit('E')">E</button>
-                            <button class="btn btn-hex" data-hex="F" onclick="CalcVerse.inputProgDigit('F')">F</button>
-                            <button class="btn btn-fn" onclick="CalcVerse.toggleProgSign()">±</button>
-                            <button class="btn btn-num" onclick="CalcVerse.inputProgDigit('0')">0</button>
-                            <button class="btn btn-op" onclick="CalcVerse.inputProgOp('%')">%</button>
-                            <button class="btn btn-op" onclick="CalcVerse.inputProgOp('+')">+</button>
+                            <button class="btn btn-hex" data-hex="E" onclick="CalVerse.inputProgDigit('E')">E</button>
+                            <button class="btn btn-hex" data-hex="F" onclick="CalVerse.inputProgDigit('F')">F</button>
+                            <button class="btn btn-fn" onclick="CalVerse.toggleProgSign()">±</button>
+                            <button class="btn btn-num" onclick="CalVerse.inputProgDigit('0')">0</button>
+                            <button class="btn btn-op" onclick="CalVerse.inputProgOp('%')">%</button>
+                            <button class="btn btn-op" onclick="CalVerse.inputProgOp('+')">+</button>
 
                             <!-- Full-width equals -->
-                            <button class="btn btn-equals prog-equals" onclick="CalcVerse.calculateProg()">=</button>
+                            <button class="btn btn-equals prog-equals" onclick="CalVerse.calculateProg()">=</button>
                         </div>
                     </div>
                 </section>
@@ -676,8 +676,8 @@
                 <section class="calculator-view" id="view-health">
                     <div class="health-card">
                         <div class="unit-toggle-row">
-                            <button class="unit-pill active" id="healthMetricBtn" onclick="CalcVerse.setHealthUnit('metric')">Metric (kg, cm)</button>
-                            <button class="unit-pill" id="healthImperialBtn" onclick="CalcVerse.setHealthUnit('imperial')">Imperial (lbs, ft/in)</button>
+                            <button class="unit-pill active" id="healthMetricBtn" onclick="CalVerse.setHealthUnit('metric')">Metric (kg, cm)</button>
+                            <button class="unit-pill" id="healthImperialBtn" onclick="CalVerse.setHealthUnit('imperial')">Imperial (lbs, ft/in)</button>
                         </div>
 
                         <div class="form-grid">
@@ -713,7 +713,7 @@
                             </div>
                         </div>
 
-                        <button class="btn-primary full-width" onclick="CalcVerse.calculateHealth()">Calculate BMI & Metrics</button>
+                        <button class="btn-primary full-width" onclick="CalVerse.calculateHealth()">Calculate BMI & Metrics</button>
 
                         <div class="health-results">
                             <div class="bmi-gauge-card">
@@ -768,7 +768,7 @@
                                 <input type="date" id="dateTo">
                             </div>
                         </div>
-                        <button class="btn-primary full-width" onclick="CalcVerse.calculateDateDiff()">Calculate Difference</button>
+                        <button class="btn-primary full-width" onclick="CalVerse.calculateDateDiff()">Calculate Difference</button>
 
                         <div class="date-result-box" id="dateDiffResult">
                             <div class="primary-duration" id="diffPrimary">0 Days</div>
@@ -788,7 +788,7 @@
                                 <input type="date" id="asOfDate">
                             </div>
                         </div>
-                        <button class="btn-primary full-width" onclick="CalcVerse.calculateAge()">Calculate Exact Age</button>
+                        <button class="btn-primary full-width" onclick="CalVerse.calculateAge()">Calculate Exact Age</button>
 
                         <div class="date-result-box" id="ageResult">
                             <div class="primary-duration" id="agePrimary">-- Years, -- Months, -- Days</div>
@@ -814,7 +814,7 @@
                                 </div>
                             </div>
                         </div>
-                        <button class="btn-primary full-width" onclick="CalcVerse.calculateAddSubDate()">Compute Result Date</button>
+                        <button class="btn-primary full-width" onclick="CalVerse.calculateAddSubDate()">Compute Result Date</button>
 
                         <div class="date-result-box">
                             <div class="primary-duration" id="addsubResult">--</div>
@@ -838,13 +838,13 @@
                         <div class="time-calc-screen">
                             <div class="time-calc-header">
                                 <span class="time-badge">TIME EXPRESSION</span>
-                                <span class="format-badge" id="timeFormatModeBadge" onclick="CalcVerse.toggleTimeResultFormat()">Format: H:M:S</span>
+                                <span class="format-badge" id="timeFormatModeBadge" onclick="CalVerse.toggleTimeResultFormat()">Format: H:M:S</span>
                             </div>
                             <div class="time-expression-display" id="timeKeypadExpression">2hour 35min + 3hour 45min</div>
                             <div class="time-result-display-wrapper">
                                 <span class="time-equals-symbol">=</span>
                                 <span class="time-result-val" id="timeKeypadResult">6hour 20min</span>
-                                <button class="copy-btn" onclick="CalcVerse.copyTimeKeypadResult()" title="Copy time result">📋</button>
+                                <button class="copy-btn" onclick="CalVerse.copyTimeKeypadResult()" title="Copy time result">📋</button>
                             </div>
                             <div class="time-unit-breakdown" id="timeKeypadBreakdown">
                                 <span>6.333 Hours</span> • <span>380 Minutes</span> • <span>22,800 Seconds</span>
@@ -854,40 +854,40 @@
                         <!-- Dedicated Time Keypad -->
                         <div class="keypad time-unit-keypad">
                             <!-- Utility Row -->
-                            <button class="btn btn-fn" onclick="CalcVerse.clearTimeKeypad()">C</button>
-                            <button class="btn btn-fn" onclick="CalcVerse.inputTimeKeypad('%')">%</button>
-                            <button class="btn btn-fn" onclick="CalcVerse.toggleTimeResultFormat()" title="Toggle Result Format">⟲</button>
-                            <button class="btn btn-fn" onclick="CalcVerse.backspaceTimeKeypad()">⌫</button>
+                            <button class="btn btn-fn" onclick="CalVerse.clearTimeKeypad()">C</button>
+                            <button class="btn btn-fn" onclick="CalVerse.inputTimeKeypad('%')">%</button>
+                            <button class="btn btn-fn" onclick="CalVerse.toggleTimeResultFormat()" title="Toggle Result Format">⟲</button>
+                            <button class="btn btn-fn" onclick="CalVerse.backspaceTimeKeypad()">⌫</button>
 
                             <!-- Time Units Row -->
-                            <button class="btn btn-tunit unit-hour" onclick="CalcVerse.inputTimeUnit('hour')">hour</button>
-                            <button class="btn btn-tunit unit-min" onclick="CalcVerse.inputTimeUnit('min')">min</button>
-                            <button class="btn btn-tunit unit-sec" onclick="CalcVerse.inputTimeUnit('sec')">sec</button>
-                            <button class="btn btn-tunit unit-msec" onclick="CalcVerse.inputTimeUnit('m.sec')">m.sec</button>
+                            <button class="btn btn-tunit unit-hour" onclick="CalVerse.inputTimeUnit('hour')">hour</button>
+                            <button class="btn btn-tunit unit-min" onclick="CalVerse.inputTimeUnit('min')">min</button>
+                            <button class="btn btn-tunit unit-sec" onclick="CalVerse.inputTimeUnit('sec')">sec</button>
+                            <button class="btn btn-tunit unit-msec" onclick="CalVerse.inputTimeUnit('m.sec')">m.sec</button>
 
                             <!-- Number Row 1 -->
-                            <button class="btn btn-num" onclick="CalcVerse.inputTimeKeypad('7')">7</button>
-                            <button class="btn btn-num" onclick="CalcVerse.inputTimeKeypad('8')">8</button>
-                            <button class="btn btn-num" onclick="CalcVerse.inputTimeKeypad('9')">9</button>
-                            <button class="btn btn-op" onclick="CalcVerse.inputTimeKeypad('÷')">÷</button>
+                            <button class="btn btn-num" onclick="CalVerse.inputTimeKeypad('7')">7</button>
+                            <button class="btn btn-num" onclick="CalVerse.inputTimeKeypad('8')">8</button>
+                            <button class="btn btn-num" onclick="CalVerse.inputTimeKeypad('9')">9</button>
+                            <button class="btn btn-op" onclick="CalVerse.inputTimeKeypad('÷')">÷</button>
 
                             <!-- Number Row 2 -->
-                            <button class="btn btn-num" onclick="CalcVerse.inputTimeKeypad('4')">4</button>
-                            <button class="btn btn-num" onclick="CalcVerse.inputTimeKeypad('5')">5</button>
-                            <button class="btn btn-num" onclick="CalcVerse.inputTimeKeypad('6')">6</button>
-                            <button class="btn btn-op" onclick="CalcVerse.inputTimeKeypad('×')">×</button>
+                            <button class="btn btn-num" onclick="CalVerse.inputTimeKeypad('4')">4</button>
+                            <button class="btn btn-num" onclick="CalVerse.inputTimeKeypad('5')">5</button>
+                            <button class="btn btn-num" onclick="CalVerse.inputTimeKeypad('6')">6</button>
+                            <button class="btn btn-op" onclick="CalVerse.inputTimeKeypad('×')">×</button>
 
                             <!-- Number Row 3 -->
-                            <button class="btn btn-num" onclick="CalcVerse.inputTimeKeypad('1')">1</button>
-                            <button class="btn btn-num" onclick="CalcVerse.inputTimeKeypad('2')">2</button>
-                            <button class="btn btn-num" onclick="CalcVerse.inputTimeKeypad('3')">3</button>
-                            <button class="btn btn-op" onclick="CalcVerse.inputTimeKeypad('−')">−</button>
+                            <button class="btn btn-num" onclick="CalVerse.inputTimeKeypad('1')">1</button>
+                            <button class="btn btn-num" onclick="CalVerse.inputTimeKeypad('2')">2</button>
+                            <button class="btn btn-num" onclick="CalVerse.inputTimeKeypad('3')">3</button>
+                            <button class="btn btn-op" onclick="CalVerse.inputTimeKeypad('−')">−</button>
 
                             <!-- Number Row 4 -->
-                            <button class="btn btn-num" onclick="CalcVerse.inputTimeKeypad('0')">0</button>
-                            <button class="btn btn-num" onclick="CalcVerse.inputTimeKeypad('.')">.</button>
-                            <button class="btn btn-equals" onclick="CalcVerse.calculateTimeKeypad()">=</button>
-                            <button class="btn btn-op" onclick="CalcVerse.inputTimeKeypad('+')">+</button>
+                            <button class="btn btn-num" onclick="CalVerse.inputTimeKeypad('0')">0</button>
+                            <button class="btn btn-num" onclick="CalVerse.inputTimeKeypad('.')">.</button>
+                            <button class="btn btn-equals" onclick="CalVerse.calculateTimeKeypad()">=</button>
+                            <button class="btn btn-op" onclick="CalVerse.inputTimeKeypad('+')">+</button>
                         </div>
                     </div>
 
@@ -907,7 +907,7 @@
                                 <input type="number" id="timeBreak" value="45" min="0" max="720">
                             </div>
                         </div>
-                        <button class="btn-primary full-width" onclick="CalcVerse.calculateTimeDuration()">Compute Work Duration</button>
+                        <button class="btn-primary full-width" onclick="CalVerse.calculateTimeDuration()">Compute Work Duration</button>
 
                         <div class="time-results-grid">
                             <div class="time-result-box highlight">
@@ -958,7 +958,7 @@
                                 </div>
                             </div>
                         </div>
-                        <button class="btn-primary full-width" onclick="CalcVerse.calculateTimeMath()">Calculate Time Math</button>
+                        <button class="btn-primary full-width" onclick="CalVerse.calculateTimeMath()">Calculate Time Math</button>
 
                         <div class="time-results-grid">
                             <div class="time-result-box highlight">
@@ -981,9 +981,9 @@
                         <div class="stopwatch-container">
                             <div class="stopwatch-display" id="stopwatchDisplay">00:00:00.00</div>
                             <div class="stopwatch-controls">
-                                <button class="sw-btn btn-start" id="swStartBtn" onclick="CalcVerse.toggleStopwatch()">Start</button>
-                                <button class="sw-btn btn-lap" id="swLapBtn" onclick="CalcVerse.lapStopwatch()">Lap</button>
-                                <button class="sw-btn btn-reset" id="swResetBtn" onclick="CalcVerse.resetStopwatch()">Reset</button>
+                                <button class="sw-btn btn-start" id="swStartBtn" onclick="CalVerse.toggleStopwatch()">Start</button>
+                                <button class="sw-btn btn-lap" id="swLapBtn" onclick="CalVerse.lapStopwatch()">Lap</button>
+                                <button class="sw-btn btn-reset" id="swResetBtn" onclick="CalVerse.resetStopwatch()">Reset</button>
                             </div>
                             <div class="laps-container" id="swLapsContainer">
                                 <div class="empty-laps">No lap times recorded</div>
@@ -1003,14 +1003,14 @@
                                 <label for="epochInput">Convert Epoch to Date</label>
                                 <div class="split-inputs">
                                     <input type="number" id="epochInput" placeholder="e.g. 1773000000">
-                                    <button class="btn-primary" style="padding: 10px 14px;" onclick="CalcVerse.convertEpochToDate()">Convert</button>
+                                    <button class="btn-primary" style="padding: 10px 14px;" onclick="CalVerse.convertEpochToDate()">Convert</button>
                                 </div>
                             </div>
                             <div class="input-card">
                                 <label for="dateToEpochInput">Convert Date to Epoch</label>
                                 <div class="split-inputs">
                                     <input type="datetime-local" id="dateToEpochInput">
-                                    <button class="btn-primary" style="padding: 10px 14px;" onclick="CalcVerse.convertDateToEpoch()">Convert</button>
+                                    <button class="btn-primary" style="padding: 10px 14px;" onclick="CalVerse.convertDateToEpoch()">Convert</button>
                                 </div>
                             </div>
                         </div>
@@ -1031,7 +1031,7 @@
                         </div>
                         <div class="currency-picker-wrap" id="discCurrencyPickerWrap">
                             <label for="discCurrencySelect" class="currency-label">Currency:</label>
-                            <select id="discCurrencySelect" class="currency-dropdown" onchange="CalcVerse.setDiscountCurrency(this.value)">
+                            <select id="discCurrencySelect" class="currency-dropdown" onchange="CalVerse.setDiscountCurrency(this.value)">
                                 <option value="INR" selected>₹ INR (Indian Rupee)</option>
                                 <option value="USD">$ USD (US Dollar)</option>
                                 <option value="EUR">€ EUR (Euro)</option>
@@ -1050,27 +1050,27 @@
                         <div class="form-grid">
                             <div class="input-card">
                                 <label for="discOriginalPrice" id="discOriginalPriceLabel">Original Price (₹)</label>
-                                <input type="number" id="discOriginalPrice" placeholder="100.00" value="100" min="0" step="any" oninput="CalcVerse.calculateDiscount()">
+                                <input type="number" id="discOriginalPrice" placeholder="100.00" value="100" min="0" step="any" oninput="CalVerse.calculateDiscount()">
                             </div>
                             <div class="input-card">
                                 <label for="discPercent">Discount (%)</label>
-                                <input type="number" id="discPercent" placeholder="20" value="20" min="0" max="100" step="any" oninput="CalcVerse.calculateDiscount()">
+                                <input type="number" id="discPercent" placeholder="20" value="20" min="0" max="100" step="any" oninput="CalVerse.calculateDiscount()">
                                 <div class="quick-chip-row">
-                                    <button class="quick-pct-chip" onclick="CalcVerse.setDiscountPct(10)">10%</button>
-                                    <button class="quick-pct-chip" onclick="CalcVerse.setDiscountPct(15)">15%</button>
-                                    <button class="quick-pct-chip active" onclick="CalcVerse.setDiscountPct(20)">20%</button>
-                                    <button class="quick-pct-chip" onclick="CalcVerse.setDiscountPct(30)">30%</button>
-                                    <button class="quick-pct-chip" onclick="CalcVerse.setDiscountPct(50)">50%</button>
-                                    <button class="quick-pct-chip" onclick="CalcVerse.setDiscountPct(70)">70%</button>
+                                    <button class="quick-pct-chip" onclick="CalVerse.setDiscountPct(10)">10%</button>
+                                    <button class="quick-pct-chip" onclick="CalVerse.setDiscountPct(15)">15%</button>
+                                    <button class="quick-pct-chip active" onclick="CalVerse.setDiscountPct(20)">20%</button>
+                                    <button class="quick-pct-chip" onclick="CalVerse.setDiscountPct(30)">30%</button>
+                                    <button class="quick-pct-chip" onclick="CalVerse.setDiscountPct(50)">50%</button>
+                                    <button class="quick-pct-chip" onclick="CalVerse.setDiscountPct(70)">70%</button>
                                 </div>
                             </div>
                             <div class="input-card">
                                 <label for="discCoupon">Extra Coupon Discount (%) <span class="badge-optional">Optional</span></label>
-                                <input type="number" id="discCoupon" placeholder="0" value="0" min="0" max="100" step="any" oninput="CalcVerse.calculateDiscount()">
+                                <input type="number" id="discCoupon" placeholder="0" value="0" min="0" max="100" step="any" oninput="CalVerse.calculateDiscount()">
                             </div>
                             <div class="input-card">
                                 <label for="discTax">Sales Tax (%) <span class="badge-optional">Optional</span></label>
-                                <input type="number" id="discTax" placeholder="0" value="0" min="0" step="any" oninput="CalcVerse.calculateDiscount()">
+                                <input type="number" id="discTax" placeholder="0" value="0" min="0" step="any" oninput="CalVerse.calculateDiscount()">
                             </div>
                         </div>
 
@@ -1107,26 +1107,26 @@
                         <div class="form-grid">
                             <div class="input-card">
                                 <label for="tipBillAmount" id="tipBillAmountLabel">Bill Amount (₹)</label>
-                                <input type="number" id="tipBillAmount" placeholder="85.00" value="85" min="0" step="any" oninput="CalcVerse.calculateTip()">
+                                <input type="number" id="tipBillAmount" placeholder="85.00" value="85" min="0" step="any" oninput="CalVerse.calculateTip()">
                             </div>
                             <div class="input-card">
                                 <label for="tipPercent">Tip Percentage (%)</label>
-                                <input type="number" id="tipPercent" placeholder="15" value="15" min="0" step="any" oninput="CalcVerse.calculateTip()">
+                                <input type="number" id="tipPercent" placeholder="15" value="15" min="0" step="any" oninput="CalVerse.calculateTip()">
                                 <div class="quick-chip-row">
-                                    <button class="quick-pct-chip" onclick="CalcVerse.setTipPct(0)">0%</button>
-                                    <button class="quick-pct-chip" onclick="CalcVerse.setTipPct(10)">10%</button>
-                                    <button class="quick-pct-chip active" onclick="CalcVerse.setTipPct(15)">15%</button>
-                                    <button class="quick-pct-chip" onclick="CalcVerse.setTipPct(18)">18%</button>
-                                    <button class="quick-pct-chip" onclick="CalcVerse.setTipPct(20)">20%</button>
-                                    <button class="quick-pct-chip" onclick="CalcVerse.setTipPct(25)">25%</button>
+                                    <button class="quick-pct-chip" onclick="CalVerse.setTipPct(0)">0%</button>
+                                    <button class="quick-pct-chip" onclick="CalVerse.setTipPct(10)">10%</button>
+                                    <button class="quick-pct-chip active" onclick="CalVerse.setTipPct(15)">15%</button>
+                                    <button class="quick-pct-chip" onclick="CalVerse.setTipPct(18)">18%</button>
+                                    <button class="quick-pct-chip" onclick="CalVerse.setTipPct(20)">20%</button>
+                                    <button class="quick-pct-chip" onclick="CalVerse.setTipPct(25)">25%</button>
                                 </div>
                             </div>
                             <div class="input-card full-width">
                                 <label for="tipPeopleCount">Number of People to Split</label>
                                 <div class="stepper-wrap">
-                                    <button class="stepper-btn" onclick="CalcVerse.stepTipPeople(-1)">−</button>
-                                    <input type="number" id="tipPeopleCount" value="2" min="1" max="100" oninput="CalcVerse.calculateTip()">
-                                    <button class="stepper-btn" onclick="CalcVerse.stepTipPeople(1)">+</button>
+                                    <button class="stepper-btn" onclick="CalVerse.stepTipPeople(-1)">−</button>
+                                    <input type="number" id="tipPeopleCount" value="2" min="1" max="100" oninput="CalVerse.calculateTip()">
+                                    <button class="stepper-btn" onclick="CalVerse.stepTipPeople(1)">+</button>
                                 </div>
                             </div>
                         </div>
@@ -1136,7 +1136,7 @@
                             <div class="receipt-header">
                                 <span class="receipt-icon">🧾</span>
                                 <h4>Split Breakdown</h4>
-                                <button class="copy-pill-btn" onclick="CalcVerse.copyTipSummary()">📋 Copy Summary</button>
+                                <button class="copy-pill-btn" onclick="CalVerse.copyTipSummary()">📋 Copy Summary</button>
                             </div>
                             <div class="split-highlight-box">
                                 <div class="split-column">
@@ -1193,17 +1193,17 @@
                         <div class="coeff-inputs-row">
                             <div class="coeff-item">
                                 <label>a <span class="coeff-hint">(x² coefficient)</span></label>
-                                <input type="number" id="quadA" placeholder="1" value="1" step="any" oninput="CalcVerse.solveQuadratic()">
+                                <input type="number" id="quadA" placeholder="1" value="1" step="any" oninput="CalVerse.solveQuadratic()">
                             </div>
                             <div class="coeff-separator">×² +</div>
                             <div class="coeff-item">
                                 <label>b <span class="coeff-hint">(x coefficient)</span></label>
-                                <input type="number" id="quadB" placeholder="-5" value="-5" step="any" oninput="CalcVerse.solveQuadratic()">
+                                <input type="number" id="quadB" placeholder="-5" value="-5" step="any" oninput="CalVerse.solveQuadratic()">
                             </div>
                             <div class="coeff-separator">× +</div>
                             <div class="coeff-item">
                                 <label>c <span class="coeff-hint">(constant)</span></label>
-                                <input type="number" id="quadC" placeholder="6" value="6" step="any" oninput="CalcVerse.solveQuadratic()">
+                                <input type="number" id="quadC" placeholder="6" value="6" step="any" oninput="CalVerse.solveQuadratic()">
                             </div>
                             <div class="coeff-separator">= 0</div>
                         </div>
@@ -1250,19 +1250,19 @@
                         <div class="system-inputs-grid">
                             <div class="system-row">
                                 <span class="eq-tag">Eq 1:</span>
-                                <input type="number" id="linA1" placeholder="2" value="2" step="any" oninput="CalcVerse.solveLinearSystem()">
+                                <input type="number" id="linA1" placeholder="2" value="2" step="any" oninput="CalVerse.solveLinearSystem()">
                                 <span class="system-var">x +</span>
-                                <input type="number" id="linB1" placeholder="3" value="3" step="any" oninput="CalcVerse.solveLinearSystem()">
+                                <input type="number" id="linB1" placeholder="3" value="3" step="any" oninput="CalVerse.solveLinearSystem()">
                                 <span class="system-var">y =</span>
-                                <input type="number" id="linC1" placeholder="13" value="13" step="any" oninput="CalcVerse.solveLinearSystem()">
+                                <input type="number" id="linC1" placeholder="13" value="13" step="any" oninput="CalVerse.solveLinearSystem()">
                             </div>
                             <div class="system-row">
                                 <span class="eq-tag">Eq 2:</span>
-                                <input type="number" id="linA2" placeholder="1" value="1" step="any" oninput="CalcVerse.solveLinearSystem()">
+                                <input type="number" id="linA2" placeholder="1" value="1" step="any" oninput="CalVerse.solveLinearSystem()">
                                 <span class="system-var">x +</span>
-                                <input type="number" id="linB2" placeholder="-2" value="-2" step="any" oninput="CalcVerse.solveLinearSystem()">
+                                <input type="number" id="linB2" placeholder="-2" value="-2" step="any" oninput="CalVerse.solveLinearSystem()">
                                 <span class="system-var">y =</span>
-                                <input type="number" id="linC2" placeholder="-4" value="-4" step="any" oninput="CalcVerse.solveLinearSystem()">
+                                <input type="number" id="linC2" placeholder="-4" value="-4" step="any" oninput="CalVerse.solveLinearSystem()">
                             </div>
                         </div>
 
@@ -1298,14 +1298,14 @@
                             <!-- Fraction 1 -->
                             <div class="fraction-input-box">
                                 <span class="frac-tag">Fraction 1</span>
-                                <input type="number" id="fracNum1" placeholder="3" value="3" oninput="CalcVerse.calculateFraction()">
+                                <input type="number" id="fracNum1" placeholder="3" value="3" oninput="CalVerse.calculateFraction()">
                                 <div class="frac-bar"></div>
-                                <input type="number" id="fracDen1" placeholder="4" value="4" oninput="CalcVerse.calculateFraction()">
+                                <input type="number" id="fracDen1" placeholder="4" value="4" oninput="CalVerse.calculateFraction()">
                             </div>
 
                             <!-- Operator Selector -->
                             <div class="fraction-op-box">
-                                <select id="fracOperator" onchange="CalcVerse.calculateFraction()">
+                                <select id="fracOperator" onchange="CalVerse.calculateFraction()">
                                     <option value="+">+</option>
                                     <option value="-">−</option>
                                     <option value="*">×</option>
@@ -1316,9 +1316,9 @@
                             <!-- Fraction 2 -->
                             <div class="fraction-input-box">
                                 <span class="frac-tag">Fraction 2</span>
-                                <input type="number" id="fracNum2" placeholder="2" value="2" oninput="CalcVerse.calculateFraction()">
+                                <input type="number" id="fracNum2" placeholder="2" value="2" oninput="CalVerse.calculateFraction()">
                                 <div class="frac-bar"></div>
-                                <input type="number" id="fracDen2" placeholder="3" value="3" oninput="CalcVerse.calculateFraction()">
+                                <input type="number" id="fracDen2" placeholder="3" value="3" oninput="CalVerse.calculateFraction()">
                             </div>
                         </div>
 
@@ -1351,15 +1351,15 @@
                     <div class="stats-card">
                         <div class="stats-input-section">
                             <label for="statsDataInput">Dataset Values (Separated by commas, spaces, or lines)</label>
-                            <textarea id="statsDataInput" rows="3" placeholder="e.g. 12, 45, 67, 23, 89, 45, 90, 34, 56, 78" oninput="CalcVerse.calculateStats()">12, 45, 67, 23, 89, 45, 90, 34, 56, 78</textarea>
+                            <textarea id="statsDataInput" rows="3" placeholder="e.g. 12, 45, 67, 23, 89, 45, 90, 34, 56, 78" oninput="CalVerse.calculateStats()">12, 45, 67, 23, 89, 45, 90, 34, 56, 78</textarea>
                             
                             <div class="stats-presets-row">
                                 <span class="preset-label">Quick Presets:</span>
-                                <button class="preset-chip" onclick="CalcVerse.loadStatsPreset('scores')">Exam Scores</button>
-                                <button class="preset-chip" onclick="CalcVerse.loadStatsPreset('temps')">Temperatures</button>
-                                <button class="preset-chip" onclick="CalcVerse.loadStatsPreset('heights')">Heights (cm)</button>
-                                <button class="preset-chip" onclick="CalcVerse.loadStatsPreset('random')">🎲 Random 10</button>
-                                <button class="preset-chip clear" onclick="CalcVerse.clearStatsData()">Clear</button>
+                                <button class="preset-chip" onclick="CalVerse.loadStatsPreset('scores')">Exam Scores</button>
+                                <button class="preset-chip" onclick="CalVerse.loadStatsPreset('temps')">Temperatures</button>
+                                <button class="preset-chip" onclick="CalVerse.loadStatsPreset('heights')">Heights (cm)</button>
+                                <button class="preset-chip" onclick="CalVerse.loadStatsPreset('random')">🎲 Random 10</button>
+                                <button class="preset-chip clear" onclick="CalVerse.clearStatsData()">Clear</button>
                             </div>
                         </div>
 
@@ -1427,14 +1427,14 @@
                                         <span class="legend-badge badge-iqr"><span class="legend-dot dot-purple"></span> IQR (Q₁–Q₃)</span>
                                     </div>
                                 </div>
-                                <button class="copy-pill-btn" onclick="CalcVerse.copyStatsSummary()">📋 Copy Full Summary</button>
+                                <button class="copy-pill-btn" onclick="CalVerse.copyStatsSummary()">📋 Copy Full Summary</button>
                             </div>
 
                             <!-- Interactive Chart Mode Switcher -->
                             <div class="chart-mode-pills">
-                                <button class="chart-mode-pill active" id="chartModeBars" onclick="CalcVerse.setStatsChartMode('bars')">📊 Sorted Distribution &amp; Trend</button>
-                                <button class="chart-mode-pill" id="chartModeBoxplot" onclick="CalcVerse.setStatsChartMode('boxplot')">📦 Box &amp; Whisker Plot</button>
-                                <button class="chart-mode-pill" id="chartModeHistogram" onclick="CalcVerse.setStatsChartMode('histogram')">📈 Frequency Histogram</button>
+                                <button class="chart-mode-pill active" id="chartModeBars" onclick="CalVerse.setStatsChartMode('bars')">📊 Sorted Distribution &amp; Trend</button>
+                                <button class="chart-mode-pill" id="chartModeBoxplot" onclick="CalVerse.setStatsChartMode('boxplot')">📦 Box &amp; Whisker Plot</button>
+                                <button class="chart-mode-pill" id="chartModeHistogram" onclick="CalVerse.setStatsChartMode('histogram')">📈 Frequency Histogram</button>
                             </div>
 
                             <div class="stats-canvas-container">
@@ -1483,7 +1483,7 @@
                     <span class="count-badge" id="historyCount">0</span>
                 </div>
                 <div class="header-right">
-                    <button class="text-btn" onclick="CalcVerse.clearHistory()" title="Clear all records">Clear</button>
+                    <button class="text-btn" onclick="CalVerse.clearHistory()" title="Clear all records">Clear</button>
                     <button class="close-btn" id="closeHistoryBtn" aria-label="Close history">✕</button>
                 </div>
             </div>
@@ -1496,16 +1496,16 @@
         <div class="sidebar-overlay" id="sidebarOverlay"></div>
     </div>
 
-    <!-- Install CalcVerse Modal -->
+    <!-- Install CalVerse Modal -->
     <div class="modal-backdrop" id="installModalBackdrop">
         <div class="install-modal" id="installModal">
             <div class="sheet-handle"></div>
             <div class="install-modal-header">
                 <div class="brand-badge-row">
                     <span class="logo-mini">📲</span>
-                    <h3>Install CalcVerse</h3>
+                    <h3>Install CalVerse</h3>
                 </div>
-                <button class="close-btn" onclick="CalcVerse.closeInstallModal()" aria-label="Close modal">✕</button>
+                <button class="close-btn" onclick="CalVerse.closeInstallModal()" aria-label="Close modal">✕</button>
             </div>
 
             <div class="install-modal-body">
@@ -1518,7 +1518,7 @@
                             <span class="platform-sub">Install to Home Screen / Desktop (Offline Ready)</span>
                         </div>
                     </div>
-                    <button class="download-action-btn highlight" id="modalPwaInstallBtn" onclick="CalcVerse.triggerPwaPrompt()">
+                    <button class="download-action-btn highlight" id="modalPwaInstallBtn" onclick="CalVerse.triggerPwaPrompt()">
                         📲 Install Now
                     </button>
                 </div>

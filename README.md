@@ -1,11 +1,11 @@
-# CalcVerse Pro 🚀 — Universal Multi-Calculator & Financial Suite
+# CalVerse Pro 🚀 — Universal Multi-Calculator & Financial Suite
 
 [![Live Demo](https://img.shields.io/badge/Live%20Demo-calculator--iota--seven--12.vercel.app-blue?style=for-the-badge&logo=vercel)](https://calculator-iota-seven-12.vercel.app)
 [![PWA Ready](https://img.shields.io/badge/PWA-Ready-10b981?style=for-the-badge&logo=pwa)](https://calculator-iota-seven-12.vercel.app)
 [![Platforms](https://img.shields.io/badge/Platforms-Android%20%7C%20Windows%20%7C%20iOS%20%7C%20Web-purple?style=for-the-badge)](https://calculator-iota-seven-12.vercel.app)
 [![License](https://img.shields.io/badge/License-MIT-green?style=for-the-badge)](LICENSE)
 
-**CalcVerse Pro** is an all-in-one, zero-dependency multi-calculator suite engineered for everyday productivity, scientific research, financial planning, unit conversion, and multi-platform native deployment (Android APK, Windows EXE, Apple iOS, and PWA Web App).
+**CalVerse Pro** is an all-in-one, zero-dependency multi-calculator suite engineered for everyday productivity, scientific research, financial planning, unit conversion, and multi-platform native deployment (Android APK, Windows EXE, Apple iOS, and PWA Web App).
 
 ---
 
@@ -17,7 +17,7 @@
 
 ## 📱 1-Click Multi-Platform Installation (PWA)
 
-CalcVerse can be installed directly onto your device with **1-click**, providing a full-screen standalone app experience with offline support:
+CalVerse can be installed directly onto your device with **1-click**, providing a full-screen standalone app experience with offline support:
 
 | Platform | Installation Method | Experience |
 | :--- | :--- | :--- |

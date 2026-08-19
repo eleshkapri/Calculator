@@ -1,7 +1,7 @@
 {
-  "id": "com.calcverse.app",
-  "name": "CalcVerse Pro Calculator",
-  "short_name": "CalcVerse",
+  "id": "com.calverse.app",
+  "name": "CalVerse Pro Calculator",
+  "short_name": "CalVerse",
   "description": "Modern multi-calculator suite with Standard, Scientific, Graphing, Financial, Programmer, Time, BMI & Date tools.",
   "start_url": "./index.html",
   "scope": "./",
