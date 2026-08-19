@@ -1,8 +1,8 @@
 # CalVerse Pro 🚀 — Universal Multi-Calculator & Financial Suite
 
-[![Live Demo](https://img.shields.io/badge/Live%20Demo-calverse-esk.vercel.app/-blue?style=for-the-badge&logo=vercel)](https://calverse-esk.vercel.app/)
-[![PWA Ready](https://img.shields.io/badge/PWA-Ready-10b981?style=for-the-badge&logo=pwa)](https://calculator-iota-seven-12.vercel.app)
-[![Platforms](https://img.shields.io/badge/Platforms-Android%20%7C%20Windows%20%7C%20iOS%20%7C%20Web-purple?style=for-the-badge)](https://calculator-iota-seven-12.vercel.app)
+[![Live Demo](https://img.shields.io/static/v1?label=Live%20Demo&message=calverse-esk.vercel.app&color=2563eb&style=for-the-badge&logo=vercel)](https://calverse-esk.vercel.app/)
+[![PWA Ready](https://img.shields.io/badge/PWA-Ready-10b981?style=for-the-badge&logo=pwa)](https://calverse-esk.vercel.app/)
+[![Platforms](https://img.shields.io/static/v1?label=Platforms&message=Android%20|%20Windows%20|%20iOS%20|%20Web&color=8b5cf6&style=for-the-badge)](https://calverse-esk.vercel.app/)
 [![License](https://img.shields.io/badge/License-MIT-green?style=for-the-badge)](LICENSE)
 
 **CalVerse Pro** is an all-in-one, zero-dependency multi-calculator suite engineered for everyday productivity, scientific research, financial planning, unit conversion, algebraic solving, statistics, and multi-platform native deployment (Android APK, Windows EXE, Apple iOS WebClip, and PWA Web App).

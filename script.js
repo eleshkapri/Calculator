@@ -3105,7 +3105,7 @@
             showToast('Starting Windows Setup (.exe) download...');
             
             // Create standalone Windows shortcut / executable launcher script wrapped in .exe
-            const exeContent = `@echo off\r\ntitle CalVerse Pro Calculator\r\necho Starting CalVerse Desktop App...\r\nstart "" "https://calculator-iota-seven-12.vercel.app"\r\nexit`;
+            const exeContent = `@echo off\r\ntitle CalVerse Pro Calculator\r\necho Starting CalVerse Desktop App...\r\nstart "" "https://calverse-esk.vercel.app"\r\nexit`;
             const blob = new Blob([exeContent], { type: 'application/x-msdownload' });
             const link = document.createElement('a');
             link.href = URL.createObjectURL(blob);
@@ -3164,7 +3164,7 @@
             <key>Precomposed</key>
             <true/>
             <key>URL</key>
-            <string>https://calculator-iota-seven-12.vercel.app</string>
+            <string>https://calverse-esk.vercel.app</string>
         </dict>
     </array>
 </dict>
