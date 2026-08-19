@@ -2681,10 +2681,10 @@ body.dark-theme .copy-pill-btn {
 }
 
 .equation-banner {
-    background: var(--bg-input);
-    border: 1px solid var(--border-subtle);
+    background: linear-gradient(135deg, rgba(37, 99, 235, 0.08), rgba(99, 102, 241, 0.06));
+    border: 1px solid rgba(37, 99, 235, 0.25);
     border-radius: var(--radius-md);
-    padding: 12px 16px;
+    padding: 14px 18px;
     display: flex;
     align-items: center;
     justify-content: space-between;
@@ -2692,54 +2692,133 @@ body.dark-theme .copy-pill-btn {
 }
 
 .eq-label {
-    font-size: 0.8rem;
+    font-size: 0.78rem;
     color: var(--text-muted);
-    font-weight: 600;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
 }
 
 .eq-formula {
     font-family: var(--font-mono);
-    font-size: 1.05rem;
+    font-size: 1.1rem;
     font-weight: 700;
     color: #2563eb;
+    letter-spacing: 0.5px;
 }
 
 body.dark-theme .eq-formula {
     color: #60a5fa;
 }
 
+.eq-coeff {
+    color: #f59e0b;
+    font-weight: 800;
+    font-size: 1.15rem;
+}
+
+body.dark-theme .eq-coeff {
+    color: #fbbf24;
+}
+
+/* Coefficient inputs — inline equation layout */
 .coeff-inputs-row {
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    gap: 12px;
-    margin-bottom: 20px;
+    display: flex;
+    align-items: flex-end;
+    gap: 8px;
+    margin-bottom: 16px;
+    flex-wrap: wrap;
 }
 
 .coeff-item {
     display: flex;
     flex-direction: column;
-    gap: 6px;
+    gap: 5px;
+    flex: 1;
+    min-width: 80px;
 }
 
 .coeff-item label {
-    font-size: 0.85rem;
+    font-size: 0.8rem;
     font-weight: 700;
     color: var(--text-secondary);
     font-family: var(--font-mono);
+    display: flex;
+    align-items: center;
+    gap: 4px;
+}
+
+.coeff-hint {
+    font-size: 0.65rem;
+    color: var(--text-muted);
+    font-weight: 500;
+    font-family: var(--font-ui);
 }
 
 .coeff-item input {
     background: var(--bg-input);
     border: 1px solid var(--border-subtle);
     border-radius: var(--radius-md);
-    padding: 12px;
+    padding: 12px 8px;
     font-family: var(--font-mono);
-    font-size: 1.1rem;
+    font-size: 1.15rem;
     font-weight: 700;
     color: var(--text-primary);
     text-align: center;
+    width: 100%;
+    transition: border-color 0.2s;
 }
 
+.coeff-item input:focus {
+    border-color: #2563eb;
+    outline: none;
+    box-shadow: 0 0 0 2px rgba(37, 99, 235, 0.2);
+}
+
+.coeff-separator {
+    font-family: var(--font-mono);
+    font-size: 1.05rem;
+    font-weight: 700;
+    color: var(--text-muted);
+    padding-bottom: 14px;
+    flex-shrink: 0;
+    white-space: nowrap;
+}
+
+/* Live Equation Display */
+.live-equation-display {
+    background: var(--bg-surface-elevated);
+    border: 1px solid var(--border-subtle);
+    border-radius: var(--radius-md);
+    padding: 12px 16px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 20px;
+}
+
+.live-eq-label {
+    font-size: 0.72rem;
+    color: var(--text-muted);
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    white-space: nowrap;
+}
+
+.live-eq-text {
+    font-family: var(--font-mono);
+    font-size: 1.1rem;
+    font-weight: 700;
+    color: #2563eb;
+    letter-spacing: 0.3px;
+}
+
+body.dark-theme .live-eq-text {
+    color: #60a5fa;
+}
+
+/* Solution / Roots Card */
 .solution-card {
     background: var(--bg-surface-elevated);
     border: 1px solid var(--border-subtle);
@@ -2755,22 +2834,23 @@ body.dark-theme .eq-formula {
 
 .root-box {
     flex: 1;
-    background: var(--bg-input);
-    border: 1px solid var(--border-subtle);
+    background: linear-gradient(135deg, rgba(37, 99, 235, 0.06), rgba(37, 99, 235, 0.02));
+    border: 1px solid rgba(37, 99, 235, 0.2);
     border-radius: var(--radius-md);
-    padding: 12px;
+    padding: 14px 12px;
     text-align: center;
 }
 
 .root-label {
-    font-size: 0.76rem;
+    font-size: 0.74rem;
     color: var(--text-muted);
     font-weight: 700;
     text-transform: uppercase;
+    letter-spacing: 0.5px;
 }
 
 .root-val {
-    font-size: 1.4rem;
+    font-size: 1.5rem;
     font-weight: 800;
     color: #2563eb;
     font-family: var(--font-mono);
@@ -2781,27 +2861,42 @@ body.dark-theme .root-val {
     color: #60a5fa;
 }
 
+/* Steps Box */
 .steps-box {
     background: var(--bg-input);
     border-radius: var(--radius-md);
-    padding: 14px;
+    padding: 16px;
     border: 1px solid var(--border-subtle);
 }
 
 .steps-box h5 {
-    font-size: 0.8rem;
+    font-size: 0.78rem;
     color: var(--text-muted);
     font-weight: 700;
     text-transform: uppercase;
-    margin-bottom: 8px;
+    margin-bottom: 10px;
+    letter-spacing: 0.5px;
 }
 
 .step-line {
-    font-size: 0.82rem;
+    font-size: 0.84rem;
     color: var(--text-secondary);
-    line-height: 1.5;
-    margin-bottom: 6px;
-    font-family: var(--font-mono);
+    line-height: 1.6;
+    margin-bottom: 8px;
+    padding: 6px 10px;
+    background: var(--bg-surface);
+    border-radius: var(--radius-sm);
+    border-left: 3px solid rgba(37, 99, 235, 0.4);
+}
+
+.step-num {
+    font-weight: 800;
+    color: #2563eb;
+    margin-right: 4px;
+}
+
+body.dark-theme .step-num {
+    color: #60a5fa;
 }
 
 .system-inputs-grid {
@@ -2817,15 +2912,20 @@ body.dark-theme .root-val {
     gap: 8px;
     background: var(--bg-input);
     border: 1px solid var(--border-subtle);
-    padding: 10px 14px;
+    padding: 12px 14px;
     border-radius: var(--radius-md);
 }
 
 .eq-tag {
     font-size: 0.8rem;
     font-weight: 700;
-    color: var(--text-muted);
+    color: #2563eb;
     width: 42px;
+    flex-shrink: 0;
+}
+
+body.dark-theme .eq-tag {
+    color: #60a5fa;
 }
 
 .system-row input {
@@ -2833,16 +2933,19 @@ body.dark-theme .root-val {
     background: var(--bg-surface);
     border: 1px solid var(--border-subtle);
     border-radius: var(--radius-sm);
-    padding: 6px;
+    padding: 8px 6px;
     font-family: var(--font-mono);
     font-weight: 700;
+    font-size: 1rem;
     color: var(--text-primary);
     text-align: center;
 }
 
-.system-row span {
-    font-weight: 600;
+.system-var {
+    font-weight: 700;
     color: var(--text-secondary);
+    font-family: var(--font-mono);
+    font-size: 0.9rem;
 }
 
 .fraction-calc-grid {
@@ -2898,6 +3001,51 @@ body.dark-theme .root-val {
     color: #2563eb;
     cursor: pointer;
     font-family: var(--font-mono);
+}
+
+@media (max-width: 768px) {
+    .stats-metrics-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+    .coeff-inputs-row {
+        gap: 6px;
+    }
+    .coeff-separator {
+        font-size: 0.85rem;
+        padding-bottom: 12px;
+    }
+    .coeff-hint {
+        display: none;
+    }
+    .coeff-item input {
+        padding: 10px 6px;
+        font-size: 1rem;
+    }
+    .system-row input {
+        width: 50px;
+    }
+    .fraction-calc-grid {
+        gap: 10px;
+    }
+    .fraction-input-box {
+        width: 80px;
+    }
+    .equation-banner {
+        flex-direction: column;
+        gap: 6px;
+        align-items: flex-start;
+    }
+    .roots-highlight {
+        flex-direction: column;
+    }
+    .step-line {
+        font-size: 0.78rem;
+    }
+    .live-equation-display {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 4px;
+    }
 }
 
 /* ==========================================================================

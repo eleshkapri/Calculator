@@ -2056,6 +2056,9 @@
             const stepForm = document.getElementById('quadStepFormula');
             const stepVert = document.getElementById('quadStepVertex');
 
+            // Update live equation preview
+            this.updateLiveEquation(a, b, c);
+
             if (isNaN(a) || isNaN(b) || isNaN(c)) return;
 
             if (a === 0) {
@@ -2063,9 +2066,9 @@
                     const x = (-c / b).toFixed(4);
                     if (r1El) r1El.textContent = x;
                     if (r2El) r2El.textContent = 'Linear (1 Root)';
-                    if (stepDisc) stepDisc.textContent = `Linear Equation: ${b}x + ${c} = 0`;
-                    if (stepForm) stepForm.textContent = `x = -(${c}) / ${b} = ${x}`;
-                    if (stepVert) stepVert.textContent = `Straight line (No vertex)`;
+                    if (stepDisc) stepDisc.innerHTML = `<span class="step-num">1.</span> Linear Equation: ${b}x + ${c} = 0`;
+                    if (stepForm) stepForm.innerHTML = `<span class="step-num">2.</span> x = −(${c}) / ${b} = ${x}`;
+                    if (stepVert) stepVert.innerHTML = `<span class="step-num">3.</span> Straight line (No vertex)`;
                 } else {
                     if (r1El) r1El.textContent = c === 0 ? 'Infinite Roots' : 'No Solution';
                     if (r2El) r2El.textContent = '--';
@@ -2083,25 +2086,38 @@
                 const x2 = ((-b - Math.sqrt(D)) / (2 * a)).toFixed(4);
                 if (r1El) r1El.textContent = x1;
                 if (r2El) r2El.textContent = x2;
-                if (stepDisc) stepDisc.textContent = `1. Discriminant: Δ = b² - 4ac = (${b})² - 4(${a})(${c}) = ${D} > 0 (Two Real Roots)`;
-                if (stepForm) stepForm.textContent = `2. Quadratic Formula: x = (-(${b}) ± √${D}) / (2 × ${a}) → x₁ = ${x1}, x₂ = ${x2}`;
-                if (stepVert) stepVert.textContent = `3. Parabola Vertex: (h, k) = (${h.toFixed(2)}, ${k.toFixed(2)}) • ${opens}`;
+                if (stepDisc) stepDisc.innerHTML = `<span class="step-num">1.</span> Discriminant: Δ = b² − 4ac = (${b})² − 4(${a})(${c}) = ${D} > 0 → Two Real Roots`;
+                if (stepForm) stepForm.innerHTML = `<span class="step-num">2.</span> Quadratic Formula: x = (−(${b}) ± √${D}) / (2 × ${a}) → x₁ = ${x1}, x₂ = ${x2}`;
+                if (stepVert) stepVert.innerHTML = `<span class="step-num">3.</span> Vertex: (h, k) = (${h.toFixed(2)}, ${k.toFixed(2)}) • ${opens}`;
             } else if (D === 0) {
                 const x = ((-b) / (2 * a)).toFixed(4);
                 if (r1El) r1El.textContent = x;
                 if (r2El) r2El.textContent = `${x} (Double Root)`;
-                if (stepDisc) stepDisc.textContent = `1. Discriminant: Δ = 0 (One Unique Real Repeated Root)`;
-                if (stepForm) stepForm.textContent = `2. Root: x = -(${b}) / (2 × ${a}) = ${x}`;
-                if (stepVert) stepVert.textContent = `3. Parabola Vertex: (h, k) = (${h.toFixed(2)}, ${k.toFixed(2)}) • ${opens}`;
+                if (stepDisc) stepDisc.innerHTML = `<span class="step-num">1.</span> Discriminant: Δ = 0 → One Repeated Root`;
+                if (stepForm) stepForm.innerHTML = `<span class="step-num">2.</span> Root: x = −(${b}) / (2 × ${a}) = ${x}`;
+                if (stepVert) stepVert.innerHTML = `<span class="step-num">3.</span> Vertex: (h, k) = (${h.toFixed(2)}, ${k.toFixed(2)}) • ${opens}`;
             } else {
                 const realPart = ((-b) / (2 * a)).toFixed(4);
                 const imagPart = ((Math.sqrt(-D)) / (2 * Math.abs(a))).toFixed(4);
                 if (r1El) r1El.textContent = `${realPart} + ${imagPart}i`;
                 if (r2El) r2El.textContent = `${realPart} - ${imagPart}i`;
-                if (stepDisc) stepDisc.textContent = `1. Discriminant: Δ = ${D} < 0 (Two Complex / Imaginary Roots)`;
-                if (stepForm) stepForm.textContent = `2. Formula: x = ${realPart} ± ${imagPart}i`;
-                if (stepVert) stepVert.textContent = `3. Parabola Vertex: (h, k) = (${h.toFixed(2)}, ${k.toFixed(2)}) • ${opens}`;
+                if (stepDisc) stepDisc.innerHTML = `<span class="step-num">1.</span> Discriminant: Δ = ${D} < 0 → Two Complex Roots`;
+                if (stepForm) stepForm.innerHTML = `<span class="step-num">2.</span> Formula: x = ${realPart} ± ${imagPart}i`;
+                if (stepVert) stepVert.innerHTML = `<span class="step-num">3.</span> Vertex: (h, k) = (${h.toFixed(2)}, ${k.toFixed(2)}) • ${opens}`;
             }
+        },
+
+        updateLiveEquation(a, b, c) {
+            const el = document.getElementById('quadLiveEqText');
+            if (!el) return;
+            const aVal = isNaN(a) ? '?' : a;
+            const bVal = isNaN(b) ? '?' : b;
+            const cVal = isNaN(c) ? '?' : c;
+            const bSign = (typeof bVal === 'number' && bVal < 0) ? '−' : '+';
+            const cSign = (typeof cVal === 'number' && cVal < 0) ? '−' : '+';
+            const bAbs = typeof bVal === 'number' ? Math.abs(bVal) : bVal;
+            const cAbs = typeof cVal === 'number' ? Math.abs(cVal) : cVal;
+            el.textContent = `${aVal}x² ${bSign} ${bAbs}x ${cSign} ${cAbs} = 0`;
         },
 
         solveLinearSystem() {
@@ -2129,18 +2145,18 @@
                 const y = (Dy / D).toFixed(4);
                 if (xEl) xEl.textContent = x;
                 if (yEl) yEl.textContent = y;
-                if (sD) sD.textContent = `Determinant D = (a₁b₂ - a₂b₁) = (${a1})(${b2}) - (${a2})(${b1}) = ${D}`;
-                if (sDx) sDx.textContent = `D_x = (${c1})(${b2}) - (${c2})(${b1}) = ${Dx} → x = D_x / D = ${x}`;
-                if (sDy) sDy.textContent = `D_y = (${a1})(${c2}) - (${a2})(${c1}) = ${Dy} → y = D_y / D = ${y}`;
+                if (sD) sD.innerHTML = `<span class="step-num">D</span> = (a₁·b₂ − a₂·b₁) = (${a1})(${b2}) − (${a2})(${b1}) = ${D}`;
+                if (sDx) sDx.innerHTML = `<span class="step-num">Dₓ</span> = (${c1})(${b2}) − (${c2})(${b1}) = ${Dx} → x = Dₓ/D = ${x}`;
+                if (sDy) sDy.innerHTML = `<span class="step-num">Dᵧ</span> = (${a1})(${c2}) − (${a2})(${c1}) = ${Dy} → y = Dᵧ/D = ${y}`;
             } else {
                 if (Dx === 0 && Dy === 0) {
                     if (xEl) xEl.textContent = 'Infinite Solutions';
                     if (yEl) yEl.textContent = '(Coincident Lines)';
-                    if (sD) sD.textContent = `D = 0, D_x = 0, D_y = 0: Infinitely many solutions.`;
+                    if (sD) sD.innerHTML = `<span class="step-num">D</span> = 0, Dₓ = 0, Dᵧ = 0 → Infinitely many solutions`;
                 } else {
                     if (xEl) xEl.textContent = 'No Solution';
                     if (yEl) yEl.textContent = '(Parallel Lines)';
-                    if (sD) sD.textContent = `D = 0 but D_x or D_y ≠ 0: Parallel lines (Inconsistent).`;
+                    if (sD) sD.innerHTML = `<span class="step-num">D</span> = 0 but Dₓ or Dᵧ ≠ 0 → Parallel lines (Inconsistent)`;
                 }
             }
         },
