@@ -155,15 +155,20 @@ CalVerse can be installed directly onto your device with **1-click**, providing 
 
 ```
 Calculator/
-├── index.html         # Main application markup (12 modular calculator sections)
-├── style.css          # Design system, themes, typography & responsive layouts
-├── script.js          # Core engine modules, state management & public CalVerse API
-├── manifest.json      # PWA application manifest for mobile & desktop installation
-├── sw.js              # Network-first Service Worker with offline caching
-├── favicon.svg        # Scalable vector logo icon
-├── icon-192.png       # 192x192 PWA launcher icon
-├── icon-512.png       # 512x512 high-resolution PWA launcher icon
-└── README.md          # Comprehensive documentation and project guide
+├── assets/
+│   ├── css/
+│   │   └── style.css      # Design system, dual theme (Dark/Light), typography & layouts
+│   ├── js/
+│   │   └── script.js      # 17 modular calculator engines & public CalVerse API
+│   └── icons/
+│       ├── favicon.svg    # Scalable vector brand icon
+│       ├── icon-192.png   # 192x192 PWA launcher icon
+│       └── icon-512.png   # 512x512 high-resolution PWA launcher icon
+├── index.html             # Application shell & 12 modular calculator views
+├── manifest.json          # PWA Web App manifest for Android, iOS & Desktop
+├── sw.js                  # Network-first Service Worker with offline caching
+├── LICENSE                # MIT License
+└── README.md              # Comprehensive documentation and project guide
 ```
 
 ---

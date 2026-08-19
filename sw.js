@@ -1,13 +1,13 @@
 // Service Worker for CalVerse Pro (Network-first with offline fallback)
-const CACHE_NAME = 'calverse-v10';
+const CACHE_NAME = 'calverse-v11';
 const ASSETS = [
   './',
   './index.html',
-  './style.css',
-  './script.js',
-  './favicon.svg',
-  './icon-192.png',
-  './icon-512.png',
+  './assets/css/style.css',
+  './assets/js/script.js',
+  './assets/icons/favicon.svg',
+  './assets/icons/icon-192.png',
+  './assets/icons/icon-512.png',
   './manifest.json'
 ];
 
