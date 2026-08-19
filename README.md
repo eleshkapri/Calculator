@@ -1,6 +1,6 @@
 # CalVerse Pro 🚀 — Universal Multi-Calculator & Financial Suite
 
-[![Live Demo](https://img.shields.io/badge/Live%20Demo-calculator--iota--seven--12.vercel.app-blue?style=for-the-badge&logo=vercel)](https://calculator-iota-seven-12.vercel.app)
+[![Live Demo](https://img.shields.io/badge/Live%20Demo-calculator--iota--seven--12.vercel.app-blue?style=for-the-badge&logo=vercel)](https://calverse-esk.vercel.app/)
 [![PWA Ready](https://img.shields.io/badge/PWA-Ready-10b981?style=for-the-badge&logo=pwa)](https://calculator-iota-seven-12.vercel.app)
 [![Platforms](https://img.shields.io/badge/Platforms-Android%20%7C%20Windows%20%7C%20iOS%20%7C%20Web-purple?style=for-the-badge)](https://calculator-iota-seven-12.vercel.app)
 [![License](https://img.shields.io/badge/License-MIT-green?style=for-the-badge)](LICENSE)
