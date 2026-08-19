@@ -1874,9 +1874,52 @@
     // 12. Discount & Tip Engine
     // =========================================================================
     const DiscountEngine = {
+        currentCurrency: localStorage.getItem('calcverse_disc_currency') || 'INR',
+
         init() {
+            const curSelect = document.getElementById('discCurrencySelect');
+            if (curSelect) {
+                curSelect.value = this.currentCurrency;
+            }
+            this.updateLabels();
             this.calculateDiscount();
             this.calculateTip();
+        },
+
+        setCurrency(code) {
+            if (CURRENCY_CONFIG[code]) {
+                this.currentCurrency = code;
+                localStorage.setItem('calcverse_disc_currency', code);
+                const curSelect = document.getElementById('discCurrencySelect');
+                if (curSelect) curSelect.value = code;
+                this.updateLabels();
+                this.calculateDiscount();
+                this.calculateTip();
+                SoundFx.playClick(650);
+            }
+        },
+
+        formatMoney(amount) {
+            const conf = CURRENCY_CONFIG[this.currentCurrency] || CURRENCY_CONFIG.INR;
+            try {
+                return new Intl.NumberFormat(conf.locale, {
+                    style: 'currency',
+                    currency: this.currentCurrency,
+                    maximumFractionDigits: 2,
+                    minimumFractionDigits: 2
+                }).format(amount);
+            } catch (e) {
+                return `${conf.symbol}${amount.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`;
+            }
+        },
+
+        updateLabels() {
+            const conf = CURRENCY_CONFIG[this.currentCurrency] || CURRENCY_CONFIG.INR;
+            const origLabel = document.getElementById('discOriginalPriceLabel');
+            const tipBillLabel = document.getElementById('tipBillAmountLabel');
+
+            if (origLabel) origLabel.textContent = `Original Price (${conf.symbol.trim()})`;
+            if (tipBillLabel) tipBillLabel.textContent = `Bill Amount (${conf.symbol.trim()})`;
         },
 
         calculateDiscount() {
@@ -1903,15 +1946,22 @@
             const taxRow = document.getElementById('discTaxRow');
             const taxEl = document.getElementById('discTaxShow');
 
-            if (finalEl) finalEl.textContent = `$${finalPrice.toFixed(2)}`;
-            if (savingsEl) savingsEl.textContent = `You save $${totalSaved.toFixed(2)} (${savedPct}%)`;
-            if (origEl) origEl.textContent = `$${orig.toFixed(2)}`;
-            if (amtEl) amtEl.textContent = `-$${discAmt.toFixed(2)}`;
+            const formattedFinal = this.formatMoney(finalPrice);
+            const formattedSaved = this.formatMoney(totalSaved);
+            const formattedOrig = this.formatMoney(orig);
+            const formattedDiscAmt = this.formatMoney(discAmt);
+            const formattedCoupAmt = this.formatMoney(coupAmt);
+            const formattedTaxAmt = this.formatMoney(taxAmt);
+
+            if (finalEl) finalEl.textContent = formattedFinal;
+            if (savingsEl) savingsEl.textContent = `You save ${formattedSaved} (${savedPct}%)`;
+            if (origEl) origEl.textContent = formattedOrig;
+            if (amtEl) amtEl.textContent = `-${formattedDiscAmt}`;
 
             if (coupRow) coupRow.style.display = coup > 0 ? 'flex' : 'none';
-            if (coupEl) coupEl.textContent = `-$${coupAmt.toFixed(2)}`;
+            if (coupEl) coupEl.textContent = `-${formattedCoupAmt}`;
             if (taxRow) taxRow.style.display = tax > 0 ? 'flex' : 'none';
-            if (taxEl) taxEl.textContent = `+$${taxAmt.toFixed(2)}`;
+            if (taxEl) taxEl.textContent = `+${formattedTaxAmt}`;
         },
 
         setDiscountPct(val) {
@@ -1940,11 +1990,17 @@
             const grandTotalEl = document.getElementById('tipGrandTotalShow');
             const peopleEl = document.getElementById('tipPeopleCountShow');
 
-            if (perPersonEl) perPersonEl.textContent = `$${perPersonTotal.toFixed(2)}`;
-            if (perPersonTipEl) perPersonTipEl.textContent = `$${perPersonTip.toFixed(2)}`;
-            if (totalBillEl) totalBillEl.textContent = `$${bill.toFixed(2)}`;
-            if (totalTipEl) totalTipEl.textContent = `$${tipAmt.toFixed(2)}`;
-            if (grandTotalEl) grandTotalEl.textContent = `$${total.toFixed(2)}`;
+            const formattedPerPerson = this.formatMoney(perPersonTotal);
+            const formattedPerPersonTip = this.formatMoney(perPersonTip);
+            const formattedBill = this.formatMoney(bill);
+            const formattedTipAmt = this.formatMoney(tipAmt);
+            const formattedTotal = this.formatMoney(total);
+
+            if (perPersonEl) perPersonEl.textContent = formattedPerPerson;
+            if (perPersonTipEl) perPersonTipEl.textContent = formattedPerPersonTip;
+            if (totalBillEl) totalBillEl.textContent = formattedBill;
+            if (totalTipEl) totalTipEl.textContent = formattedTipAmt;
+            if (grandTotalEl) grandTotalEl.textContent = formattedTotal;
             if (peopleEl) peopleEl.textContent = people.toString();
         },
 
@@ -1968,11 +2024,11 @@
         },
 
         copyTipSummary() {
-            const bill = document.getElementById('tipTotalBillShow')?.textContent || '$0';
-            const tip = document.getElementById('tipTotalTipShow')?.textContent || '$0';
-            const grand = document.getElementById('tipGrandTotalShow')?.textContent || '$0';
+            const bill = document.getElementById('tipTotalBillShow')?.textContent || this.formatMoney(0);
+            const tip = document.getElementById('tipTotalTipShow')?.textContent || this.formatMoney(0);
+            const grand = document.getElementById('tipGrandTotalShow')?.textContent || this.formatMoney(0);
             const people = document.getElementById('tipPeopleCountShow')?.textContent || '1';
-            const perPerson = document.getElementById('tipPerPersonVal')?.textContent || '$0';
+            const perPerson = document.getElementById('tipPerPersonVal')?.textContent || this.formatMoney(0);
 
             const summary = `🧾 CalcVerse Bill Split Receipt\nBill Amount: ${bill}\nTip Amount: ${tip}\nTotal with Tip: ${grand}\nSplit Between: ${people} person(s)\n👉 Each Person Pays: ${perPerson}`;
             copyToClipboard(summary);
@@ -2486,6 +2542,7 @@
         },
 
         // Discount & Tip API
+        setDiscountCurrency: (code) => DiscountEngine.setCurrency(code),
         calculateDiscount: () => DiscountEngine.calculateDiscount(),
         setDiscountPct: (p) => DiscountEngine.setDiscountPct(p),
         calculateTip: () => DiscountEngine.calculateTip(),
