@@ -16,7 +16,7 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;600;700&family=Outfit:wght@400;500;600;700;800&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="style.css?v=3.2">
+    <link rel="stylesheet" href="style.css?v=3.3">
 </head>
 <body class="dark-theme">
     <div class="app-container">
@@ -1415,14 +1415,58 @@
                             </div>
                         </div>
 
-                        <!-- Visual Data Chart Canvas -->
+                        <!-- Visual Data Chart & Distribution Analyzer -->
                         <div class="stats-chart-section">
                             <div class="chart-header">
-                                <h5>📊 Visual Data Distribution</h5>
+                                <div class="chart-header-left">
+                                    <h5>📊 Visual Data Distribution &amp; Analysis</h5>
+                                    <div class="chart-legend-tags">
+                                        <span class="legend-badge badge-datapoint"><span class="legend-dot dot-blue"></span> Data Points</span>
+                                        <span class="legend-badge badge-mean"><span class="legend-dot dot-green"></span> Mean (x̄)</span>
+                                        <span class="legend-badge badge-median"><span class="legend-dot dot-amber"></span> Median</span>
+                                        <span class="legend-badge badge-iqr"><span class="legend-dot dot-purple"></span> IQR (Q₁–Q₃)</span>
+                                    </div>
+                                </div>
                                 <button class="copy-pill-btn" onclick="CalcVerse.copyStatsSummary()">📋 Copy Full Summary</button>
                             </div>
+
+                            <!-- Interactive Chart Mode Switcher -->
+                            <div class="chart-mode-pills">
+                                <button class="chart-mode-pill active" id="chartModeBars" onclick="CalcVerse.setStatsChartMode('bars')">📊 Sorted Distribution &amp; Trend</button>
+                                <button class="chart-mode-pill" id="chartModeBoxplot" onclick="CalcVerse.setStatsChartMode('boxplot')">📦 Box &amp; Whisker Plot</button>
+                                <button class="chart-mode-pill" id="chartModeHistogram" onclick="CalcVerse.setStatsChartMode('histogram')">📈 Frequency Histogram</button>
+                            </div>
+
                             <div class="stats-canvas-container">
                                 <canvas id="statsChartCanvas"></canvas>
+                            </div>
+
+                            <!-- 5-Number Summary Quick Bar -->
+                            <div class="five-number-summary" id="fiveNumberSummary">
+                                <div class="summary-stat-chip">
+                                    <span class="stat-chip-lbl">MIN</span>
+                                    <strong class="stat-chip-val" id="fiveNumMin">12</strong>
+                                </div>
+                                <div class="summary-stat-chip">
+                                    <span class="stat-chip-lbl">Q₁ (25%)</span>
+                                    <strong class="stat-chip-val" id="fiveNumQ1">31.25</strong>
+                                </div>
+                                <div class="summary-stat-chip highlight-med">
+                                    <span class="stat-chip-lbl">MEDIAN (50%)</span>
+                                    <strong class="stat-chip-val text-amber" id="fiveNumMed">50.50</strong>
+                                </div>
+                                <div class="summary-stat-chip">
+                                    <span class="stat-chip-lbl">Q₃ (75%)</span>
+                                    <strong class="stat-chip-val" id="fiveNumQ3">72.50</strong>
+                                </div>
+                                <div class="summary-stat-chip">
+                                    <span class="stat-chip-lbl">MAX</span>
+                                    <strong class="stat-chip-val" id="fiveNumMax">90</strong>
+                                </div>
+                                <div class="summary-stat-chip highlight-iqr">
+                                    <span class="stat-chip-lbl">IQR SPREAD</span>
+                                    <strong class="stat-chip-val text-purple" id="fiveNumIQR">41.25</strong>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -1500,6 +1544,6 @@
     <!-- Toast Notification -->
     <div class="toast" id="toast">Copied to clipboard!</div>
 
-    <script src="script.js?v=3.2"></script>
+    <script src="script.js?v=3.3"></script>
 </body>
 </html>
