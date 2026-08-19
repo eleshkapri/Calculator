@@ -1,5 +1,5 @@
 // Service Worker for CalVerse Pro (Network-first with offline fallback)
-const CACHE_NAME = 'calverse-v9';
+const CACHE_NAME = 'calverse-v10';
 const ASSETS = [
   './',
   './index.html',

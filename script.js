@@ -1,6 +1,7 @@
 /**
- * OmniCalc Pro - Multi-Calculator Suite Engine
- * Modern, Separated Calculators with Complete Functionality
+ * CalVerse Pro - Universal Multi-Calculator & Financial Suite Engine
+ * Modern, High-Performance Multi-Engine Suite with Zero Dependencies
+ * Architecture: Clean Vanilla ES6+ Modular Pattern
  */
 
 (function () {

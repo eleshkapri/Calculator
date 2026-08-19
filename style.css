@@ -1,5 +1,5 @@
 /* ==========================================================================
-   OmniCalc Pro - Modern Design System & Dual Theme Architecture
+   CalVerse Pro - Modern Design System & Dual Theme Architecture
    ========================================================================== */
 
 :root {
@@ -27,6 +27,9 @@
     --accent-health: #84cc16;    /* Lime Mint */
     --accent-date: #6366f1;      /* Indigo */
     --accent-time: #06b6d4;      /* Teal */
+    --accent-disc: #f43f5e;      /* Rose */
+    --accent-eq: #8b5cf6;        /* Violet */
+    --accent-stats: #38bdf8;     /* Cyan Blue */
 
     /* Keypad Colors - Dark Theme */
     --btn-num-bg: #182232;

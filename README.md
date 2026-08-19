@@ -5,7 +5,7 @@
 [![Platforms](https://img.shields.io/badge/Platforms-Android%20%7C%20Windows%20%7C%20iOS%20%7C%20Web-purple?style=for-the-badge)](https://calculator-iota-seven-12.vercel.app)
 [![License](https://img.shields.io/badge/License-MIT-green?style=for-the-badge)](LICENSE)
 
-**CalVerse Pro** is an all-in-one, zero-dependency multi-calculator suite engineered for everyday productivity, scientific research, financial planning, unit conversion, and multi-platform native deployment (Android APK, Windows EXE, Apple iOS, and PWA Web App).
+**CalVerse Pro** is an all-in-one, zero-dependency multi-calculator suite engineered for everyday productivity, scientific research, financial planning, unit conversion, algebraic solving, statistics, and multi-platform native deployment (Android APK, Windows EXE, Apple iOS WebClip, and PWA Web App).
 
 ---
 
@@ -21,9 +21,9 @@ CalVerse can be installed directly onto your device with **1-click**, providing 
 
 | Platform | Installation Method | Experience |
 | :--- | :--- | :--- |
-| **Android** | In Chrome, tap **⋮** ➔ **"Install app"** or click **"📲 Install App"** | Native WebAPK with app icon in App Drawer & Home Screen |
-| **iOS (iPhone/iPad)** | In Safari, tap Share **📤** ➔ **"Add to Home Screen"** | Full-screen standalone web app on iOS Home Screen |
-| **Windows / macOS** | In Chrome/Edge, click the install icon in address bar or sidebar | Desktop standalone application launcher |
+| **Android** | In Chrome, tap **⋮** ➔ **"Install app"** or click **"📲 Install App"** in sidebar | Native WebAPK with app icon in App Drawer & Home Screen |
+| **iOS (iPhone/iPad)** | In Safari, tap Share **📤** ➔ **"Add to Home Screen"** or download WebClip profile | Full-screen standalone web app on iOS Home Screen |
+| **Windows / macOS** | In Chrome/Edge, click the install icon in address bar or download launcher | Desktop standalone application launcher |
 
 ---
 
@@ -95,17 +95,23 @@ CalVerse can be installed directly onto your device with **1-click**, providing 
 - **Unix Epoch Converter**: Live ticking Unix timestamp converter (Epoch $\leftrightarrow$ Human Date).
 
 ### 10. 🧾 Discount & Tip Calculator
+- **Multi-Currency Support**: Choose from 9 global currencies with saved preferences.
 - **Discount & Sales Tax**: Original price, discount %, extra coupon %, and sales tax with live savings breakdown.
 - **Tip & Bill Splitting**: Custom tip percentage chips, number of people stepper, per-person split, and 1-click shareable receipt copy.
 
 ### 11. 🧮 Equation & Algebra Solver
-- **Quadratic Equations** ($ax^2 + bx + c = 0$): Solves real and complex roots, discriminant $\Delta = b^2 - 4ac$, and parabola vertex $(h, k)$ coordinates.
+- **Live Equation Preview**: Real-time formula display formatted in clean mathematical typography ($ax^2 + bx + c = 0$).
+- **Quadratic Equations**: Solves real and complex roots, discriminant $\Delta = b^2 - 4ac$, and parabola vertex $(h, k)$ coordinates with step-by-step solutions.
 - **$2\times 2$ Linear System**: Solves simultaneous linear equations ($a_1 x + b_1 y = c_1$, $a_2 x + b_2 y = c_2$) using Cramer's Rule determinants.
 - **Fraction Calculator**: Arithmetic with step-by-step reduction, mixed numbers, and decimal conversions.
 
-### 12. 📊 Statistics & Data Analyzer
-- Comprehensive statistical metrics: **Mean ($\bar{x}$)**, **Median**, **Mode**, **Sample & Population Standard Deviation ($\sigma, s$)**, **Variance**, **Min/Max**, **Sum**, **Range**, and **Quartiles ($Q_1, Q_3, \text{IQR}$)**.
-- Visual data distribution chart rendered on HTML5 canvas with 1-click full summary export.
+### 12. 📊 Statistics & Visual Data Analyzer
+- **Interactive Multi-Mode Visualizer**:
+  - **📊 Sorted Distribution & Trend**: Gradient vertical bars with top glowing dots, exact value labels, smooth trendline, and highlighted IQR zone.
+  - **📦 Box & Whisker Plot**: 5-number summary ($MIN, Q_1, MEDIAN, Q_3, MAX$) with mean diamond marker and scatter points.
+  - **📈 Frequency Histogram**: Dynamic frequency bins with interval ranges and counts.
+- **Comprehensive Metrics**: Mean ($\bar{x}$), Median, Mode, Sample & Population Standard Deviation ($\sigma, s$), Variance ($s^2$), Count ($N$), Sum ($\Sigma x$), Min/Max, Range, and Quartiles ($Q_1, Q_3, \text{IQR}$).
+- **5-Number Summary Quick Bar**: Dedicated persistent statistical summary chips.
 
 ---
 
@@ -123,7 +129,7 @@ CalVerse can be installed directly onto your device with **1-click**, providing 
 ## 🎨 UI, Aesthetics & Accessibility
 
 - **Dark Obsidian & Crisp Light Themes**: Tailored palettes with smooth CSS variable transitions and saved preferences.
-- **Tactile Audio Feedback**: Synthesized clicks via Web Audio API with dedicated `Sound ON / OFF` toggle.
+- **Tactile Audio Feedback**: Mobile-unlocked synthesizer via Web Audio API with dedicated `Sound ON / OFF` toggle.
 - **Calculation History Drawer**: Complete persistent history storage, click-to-recall, and 1-tap clipboard copying.
 - **Responsive Fluid Layout**: Centered desktop & laptop presentations with adaptive mobile swipe carousels and backdrop slide-out menus.
 
@@ -136,7 +142,7 @@ CalVerse can be installed directly onto your device with **1-click**, providing 
 | `0` - `9` | Input Digits |
 | `.` | Decimal Point |
 | `+`, `-`, `*`, `/` | Add, Subtract, Multiply, Divide |
-| `Enter` or `=` | Calculate Result |
+| `Enter` or `=` | Calculate Result / Plot Graph |
 | `Backspace` | Delete last character |
 | `Escape` | Clear All (`AC`) |
 | `(` / `)` | Open / Close Parentheses |
@@ -145,10 +151,27 @@ CalVerse can be installed directly onto your device with **1-click**, providing 
 
 ---
 
+## 📂 Project Architecture
+
+```
+Calculator/
+├── index.html         # Main application markup (12 modular calculator sections)
+├── style.css          # Design system, themes, typography & responsive layouts
+├── script.js          # Core engine modules, state management & public CalVerse API
+├── manifest.json      # PWA application manifest for mobile & desktop installation
+├── sw.js              # Network-first Service Worker with offline caching
+├── favicon.svg        # Scalable vector logo icon
+├── icon-192.png       # 192x192 PWA launcher icon
+├── icon-512.png       # 512x512 high-resolution PWA launcher icon
+└── README.md          # Comprehensive documentation and project guide
+```
+
+---
+
 ## 🛠️ Technology Stack
 
-- **Frontend**: Semantic HTML5, Vanilla JavaScript (ES6+), Vanilla CSS3 (Custom Design System).
-- **APIs**: Web Audio API, HTML5 Canvas API, Open Exchange Rates API, Web Storage API (`localStorage`), Service Worker API (PWA Cache-First + Network-First).
+- **Frontend**: Semantic HTML5, Vanilla JavaScript (ES6+ Modular Pattern), Vanilla CSS3 (Custom Design System).
+- **APIs**: Web Audio API, HTML5 Canvas API, Open Exchange Rates API, Web Storage API (`localStorage`), Service Worker API (PWA Cache).
 - **PWA Capabilities**: Full offline caching via Service Worker (`sw.js`), WebAPK integration, responsive layout for Mobile & Desktop.
 - **Zero External Dependencies**: Fast load times, lightweight, and completely self-contained.
 
