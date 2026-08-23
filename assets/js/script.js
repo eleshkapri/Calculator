@@ -189,13 +189,15 @@
         });
 
         // =========================================================================
-        // Smart System / User Theme Controller (Device & Manual Sync)
+        // Device/OS Theme Sync — Always Matches Phone/Laptop Theme
+        // Toggle button = session-only override (resets on next visit)
         // =========================================================================
         const themeBtn = document.getElementById('themeToggleBtn');
         const themeIcon = document.getElementById('themeIcon');
         const themeText = themeBtn ? themeBtn.querySelector('.btn-text') : null;
+        let _userSessionOverride = false; // true only if user tapped toggle this session
 
-        function applyTheme(themeName, persist = false) {
+        function applyTheme(themeName) {
             const isLight = themeName === 'light';
             document.body.classList.toggle('light-theme', isLight);
             document.body.classList.toggle('dark-theme', !isLight);
@@ -211,41 +213,35 @@
                 themeMeta.setAttribute('content', isLight ? '#f1f5f9' : '#0a0e17');
             }
 
-            if (persist) {
-                localStorage.setItem('calverse_user_theme', isLight ? 'light' : 'dark');
-            }
-
-            // Redraw charts if current active view requires theme sync
+            // Redraw charts if active
             if (state.currentMode === 'graphing' && typeof GraphEngine !== 'undefined') GraphEngine.render();
             if (state.currentMode === 'statistics' && typeof StatisticsEngine !== 'undefined') StatisticsEngine.renderVisualChart();
         }
 
-        // Determine initial theme:
-        // 1. Check if user set an explicit manual override
-        // 2. Otherwise auto-detect device/OS mode (prefers-color-scheme)
-        const userManualTheme = localStorage.getItem('calverse_user_theme');
-        if (userManualTheme) {
-            applyTheme(userManualTheme, false);
-        } else {
+        // On page load: ALWAYS read from device/OS prefers-color-scheme
+        (function initThemeFromOS() {
             const prefersLight = window.matchMedia && window.matchMedia('(prefers-color-scheme: light)').matches;
-            applyTheme(prefersLight ? 'light' : 'dark', false);
-        }
+            applyTheme(prefersLight ? 'light' : 'dark');
+        })();
 
-        // Listen for live OS system theme switches (e.g. phone sunrise/sunset auto mode)
+        // Listen for LIVE OS theme switches (e.g. phone sunrise/sunset auto mode)
         if (window.matchMedia) {
             const colorSchemeMedia = window.matchMedia('(prefers-color-scheme: light)');
             colorSchemeMedia.addEventListener('change', (e) => {
-                if (!localStorage.getItem('calverse_user_theme')) {
-                    applyTheme(e.matches ? 'light' : 'dark', false);
+                // Always follow OS unless user tapped toggle during this session
+                if (!_userSessionOverride) {
+                    applyTheme(e.matches ? 'light' : 'dark');
                 }
             });
         }
 
+        // Toggle button: session-only override (not saved to localStorage)
         if (themeBtn) {
             themeBtn.addEventListener('click', () => {
                 SoundFx.playClick(800);
+                _userSessionOverride = true;
                 const nextTheme = document.body.classList.contains('light-theme') ? 'dark' : 'light';
-                applyTheme(nextTheme, true);
+                applyTheme(nextTheme);
             });
         }
 

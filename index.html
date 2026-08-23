@@ -16,23 +16,18 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;600;700&family=Outfit:wght@400;500;600;700;800&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="assets/css/style.css?v=4.1">
+    <link rel="stylesheet" href="assets/css/style.css?v=4.2">
     <script>
-        // Instant Device System Theme Detection (Zero-Flicker)
+        // Always Follow Device/OS Theme (Zero-Flicker)
         (function() {
             try {
-                const userManualTheme = localStorage.getItem('calverse_user_theme');
-                // Clean legacy keys that defaulted to dark
+                // Clean ALL legacy theme keys so they never override OS theme
                 localStorage.removeItem('omni_calc_theme');
+                localStorage.removeItem('calverse_theme');
+                localStorage.removeItem('calverse_user_theme');
 
-                const systemPrefersLight = window.matchMedia && window.matchMedia('(prefers-color-scheme: light)').matches;
-                const isLight = userManualTheme ? (userManualTheme === 'light') : systemPrefersLight;
-
-                if (isLight) {
-                    document.documentElement.classList.add('light-theme');
-                } else {
-                    document.documentElement.classList.add('dark-theme');
-                }
+                var isLight = window.matchMedia && window.matchMedia('(prefers-color-scheme: light)').matches;
+                document.documentElement.classList.add(isLight ? 'light-theme' : 'dark-theme');
             } catch(e) {}
         })();
     </script>
@@ -1563,6 +1558,6 @@
     <!-- Toast Notification -->
     <div class="toast" id="toast">Copied to clipboard!</div>
 
-    <script src="assets/js/script.js?v=4.1"></script>
+    <script src="assets/js/script.js?v=4.2"></script>
 </body>
 </html>

@@ -1,5 +1,5 @@
-// Service Worker for CalVerse Pro (Offline-First with Background Sync)
-const CACHE_NAME = 'calverse-v17';
+// Service Worker for CalVerse Pro — Network-First for Fast Sync
+const CACHE_NAME = 'calverse-v18';
 
 // Core static assets required for complete offline operation
 const PRECACHE_ASSETS = [
@@ -13,12 +13,11 @@ const PRECACHE_ASSETS = [
   './assets/icons/icon-512.png'
 ];
 
-// Install: Cache all core assets immediately
+// Install: Cache all core assets immediately, activate without waiting
 self.addEventListener('install', (event) => {
   self.skipWaiting();
   event.waitUntil(
     caches.open(CACHE_NAME).then(async (cache) => {
-      // Use map with individual catches so one failed asset doesn't break the entire offline installation
       await Promise.all(
         PRECACHE_ASSETS.map((url) =>
           cache.add(url).catch((err) => {
@@ -30,7 +29,7 @@ self.addEventListener('install', (event) => {
   );
 });
 
-// Activate: Clean up all legacy caches and claim clients immediately
+// Activate: Delete ALL old caches and claim all open tabs immediately
 self.addEventListener('activate', (event) => {
   event.waitUntil(
     caches.keys().then((keys) => {
@@ -45,30 +44,25 @@ self.addEventListener('activate', (event) => {
   );
 });
 
-// Fetch: Robust Network-First with Immediate Offline Cache Fallback (ignoring query strings)
+// Fetch: Network-First strategy (fast sync) with offline cache fallback
 self.addEventListener('fetch', (event) => {
   const request = event.request;
 
   // Only handle HTTP/HTTPS GET requests
   if (request.method !== 'GET' || !request.url.startsWith('http')) return;
 
-  const url = new URL(request.url);
-
-  // 1. Navigation requests (Opening the app / page load in browser or standalone PWA)
+  // Navigation requests (opening the app / page load)
   if (request.mode === 'navigate') {
     event.respondWith(
-      fetch(request)
+      fetch(request, { cache: 'no-cache' })
         .then((networkResponse) => {
           if (networkResponse && networkResponse.status === 200) {
-            const responseClone = networkResponse.clone();
-            caches.open(CACHE_NAME).then((cache) => {
-              cache.put(request, responseClone);
-            });
+            const clone = networkResponse.clone();
+            caches.open(CACHE_NAME).then((cache) => cache.put(request, clone));
           }
           return networkResponse;
         })
         .catch(() => {
-          // When offline: Serve cached index.html
           return caches.match('./index.html', { ignoreSearch: true })
             .then((cached) => cached || caches.match('./', { ignoreSearch: true }));
         })
@@ -76,28 +70,38 @@ self.addEventListener('fetch', (event) => {
     return;
   }
 
-  // 2. Static local assets & fonts (CSS, JS, Icons, Images, Fonts)
-  event.respondWith(
-    caches.match(request, { ignoreSearch: true }).then((cachedResponse) => {
-      // If we have a cached copy, return it immediately for instant offline feel
-      // and fetch fresh copy in background to update cache (Stale-While-Revalidate)
-      const fetchPromise = fetch(request)
+  const url = new URL(request.url);
+
+  // Local app assets (CSS, JS, icons) — Network-First for fast updates
+  if (url.origin === self.location.origin) {
+    event.respondWith(
+      fetch(request, { cache: 'no-cache' })
         .then((networkResponse) => {
           if (networkResponse && networkResponse.status === 200) {
-            const responseClone = networkResponse.clone();
-            caches.open(CACHE_NAME).then((cache) => {
-              cache.put(request, responseClone);
-            });
+            const clone = networkResponse.clone();
+            caches.open(CACHE_NAME).then((cache) => cache.put(request, clone));
           }
           return networkResponse;
         })
         .catch(() => {
-          // Offline network failure is expected when disconnected
-          return null;
-        });
+          // Offline: serve from cache (ignoring query params like ?v=4.1)
+          return caches.match(request, { ignoreSearch: true });
+        })
+    );
+    return;
+  }
 
-      // Return cached response if available, otherwise wait for network
-      return cachedResponse || fetchPromise;
+  // External resources (fonts, APIs) — Cache-First for performance
+  event.respondWith(
+    caches.match(request, { ignoreSearch: true }).then((cached) => {
+      if (cached) return cached;
+      return fetch(request).then((networkResponse) => {
+        if (networkResponse && networkResponse.status === 200) {
+          const clone = networkResponse.clone();
+          caches.open(CACHE_NAME).then((cache) => cache.put(request, clone));
+        }
+        return networkResponse;
+      }).catch(() => null);
     })
   );
 });
