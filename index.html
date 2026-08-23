@@ -7,6 +7,19 @@
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
     <meta name="apple-mobile-web-app-title" content="CalVerse">
+    <meta name="description" content="CalVerse — All-in-one scientific, financial, graphing, and programming calculator. Works offline as a PWA.">
+    <meta name="author" content="Elesh Kapri">
+    <meta name="color-scheme" content="light dark">
+    <meta name="format-detection" content="telephone=no">
+    <meta property="og:title" content="CalVerse — Multi-Functional Calculator Suite">
+    <meta property="og:description" content="Scientific, financial, graphing, and programming calculator with offline PWA support.">
+    <meta property="og:image" content="https://calverse-esk.vercel.app/assets/icons/icon-512.png">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://calverse-esk.vercel.app/">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="CalVerse">
+    <meta name="twitter:description" content="All-in-one calculator suite with 12+ modes. Works offline.">
+    <meta name="twitter:image" content="https://calverse-esk.vercel.app/assets/icons/icon-512.png">
     <link rel="manifest" href="manifest.json">
     <link rel="icon" type="image/png" sizes="192x192" href="assets/icons/icon-192.png">
     <link rel="icon" type="image/png" sizes="512x512" href="assets/icons/icon-512.png">
@@ -16,16 +29,11 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;600;700&family=Outfit:wght@400;500;600;700;800&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="assets/css/style.css?v=4.3">
+    <link rel="stylesheet" href="assets/css/style.css?v=4.4">
     <script>
         // Theme Boot: Remember last mood, first visit follows OS
         (function() {
             try {
-                // Clean legacy keys from older versions
-                localStorage.removeItem('omni_calc_theme');
-                localStorage.removeItem('calverse_theme');
-                localStorage.removeItem('calverse_user_theme');
-
                 var saved = localStorage.getItem('calverse_last_theme');
                 var isLight;
                 if (saved) {
@@ -183,7 +191,7 @@
                     <p id="calculatorSubtitle">Fast, precise everyday arithmetic</p>
                 </div>
                 <div class="header-actions">
-                    <button class="action-icon-btn" id="quickHistoryBtn" title="View History">
+                    <button class="action-icon-btn" id="quickHistoryBtn" title="View History" aria-label="View Calculation History">
                         <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                             <circle cx="12" cy="12" r="10"></circle>
                             <polyline points="12 6 12 12 16 14"></polyline>
@@ -202,7 +210,7 @@
                             <div class="expression-line" id="stdExpression"></div>
                             <div class="result-line-wrapper">
                                 <input type="text" class="result-display" id="stdDisplay" value="0" readonly>
-                                <button class="copy-btn" id="stdCopyBtn" title="Copy result">📋</button>
+                                <button class="copy-btn" id="stdCopyBtn" title="Copy result" aria-label="Copy result">📋</button>
                             </div>
                         </div>
 
@@ -218,7 +226,7 @@
                         <!-- Keypad -->
                         <div class="keypad standard-keypad">
                             <button class="btn btn-fn" onclick="CalVerse.clear('std')">AC</button>
-                            <button class="btn btn-fn" onclick="CalVerse.backspace('std')">⌫</button>
+                            <button class="btn btn-fn" onclick="CalVerse.backspace('std')" aria-label="Backspace">⌫</button>
                             <button class="btn btn-fn" onclick="CalVerse.inputVal('std', '%')">%</button>
                             <button class="btn btn-op" onclick="CalVerse.inputVal('std', '÷')">÷</button>
 
@@ -256,14 +264,13 @@
                             <div class="expression-line" id="sciExpression"></div>
                             <div class="result-line-wrapper">
                                 <input type="text" class="result-display" id="sciDisplay" value="0" readonly>
-                                <button class="copy-btn" id="sciCopyBtn" title="Copy result">📋</button>
+                                <button class="copy-btn" id="sciCopyBtn" title="Copy result" aria-label="Copy result">📋</button>
                             </div>
                         </div>
 
                         <!-- Scientific Memory Bar -->
                         <div class="memory-bar">
                             <button class="mem-btn" onclick="CalVerse.toggleAngleMode()">DEG / RAD</button>
-                            <button class="mem-btn" onclick="CalVerse.toggle2nd()">2nd</button>
                             <button class="mem-btn" onclick="CalVerse.memClear('sci')">MC</button>
                             <button class="mem-btn" onclick="CalVerse.memRecall('sci')">MR</button>
                             <button class="mem-btn" onclick="CalVerse.memAdd('sci')">M+</button>
@@ -273,11 +280,11 @@
                         <!-- Scientific Keypad -->
                         <div class="keypad scientific-keypad">
                             <!-- Row 1 -->
-                            <button class="btn btn-sci" onclick="CalVerse.inputFunc('sin')"><span class="fn-label">sin</span></button>
-                            <button class="btn btn-sci" onclick="CalVerse.inputFunc('cos')"><span class="fn-label">cos</span></button>
-                            <button class="btn btn-sci" onclick="CalVerse.inputFunc('tan')"><span class="fn-label">tan</span></button>
+                            <button class="btn btn-sci" onclick="CalVerse.inputFunc('sin')">sin</button>
+                            <button class="btn btn-sci" onclick="CalVerse.inputFunc('cos')">cos</button>
+                            <button class="btn btn-sci" onclick="CalVerse.inputFunc('tan')">tan</button>
                             <button class="btn btn-fn" onclick="CalVerse.clear('sci')">AC</button>
-                            <button class="btn btn-fn" onclick="CalVerse.backspace('sci')">⌫</button>
+                            <button class="btn btn-fn" onclick="CalVerse.backspace('sci')" aria-label="Backspace">⌫</button>
 
                             <!-- Row 2 -->
                             <button class="btn btn-sci" onclick="CalVerse.inputFunc('ln')">ln</button>
@@ -531,7 +538,7 @@
                                 </select>
                             </div>
 
-                            <button class="swap-btn" onclick="CalVerse.swapCurrencyUnits()" title="Swap currencies">⇄</button>
+                            <button class="swap-btn" onclick="CalVerse.swapCurrencyUnits()" title="Swap currencies" aria-label="Swap currencies">⇄</button>
 
                             <div class="convert-box">
                                 <label for="currencyValTo">Converted Amount</label>
@@ -595,7 +602,7 @@
                             </div>
 
                             <!-- Swap Button -->
-                            <button class="swap-btn" id="swapUnitsBtn" title="Swap Units">⇄</button>
+                            <button class="swap-btn" id="swapUnitsBtn" title="Swap Units" aria-label="Swap Units">⇄</button>
 
                             <!-- Right Box -->
                             <div class="convert-box">
@@ -655,7 +662,7 @@
                             <button class="btn btn-bit" onclick="CalVerse.inputProgBitwise('XOR')">XOR</button>
                             <button class="btn btn-bit" onclick="CalVerse.inputProgBitwise('NOT')">NOT</button>
                             <button class="btn btn-fn" onclick="CalVerse.clear('prog')">AC</button>
-                            <button class="btn btn-fn" onclick="CalVerse.backspace('prog')">⌫</button>
+                            <button class="btn btn-fn" onclick="CalVerse.backspace('prog')" aria-label="Backspace">⌫</button>
 
                             <!-- Hex Digits & Shifts -->
                             <button class="btn btn-hex" data-hex="A" onclick="CalVerse.inputProgDigit('A')">A</button>
@@ -876,8 +883,8 @@
                             <!-- Utility Row -->
                             <button class="btn btn-fn" onclick="CalVerse.clearTimeKeypad()">C</button>
                             <button class="btn btn-fn" onclick="CalVerse.inputTimeKeypad('%')">%</button>
-                            <button class="btn btn-fn" onclick="CalVerse.toggleTimeResultFormat()" title="Toggle Result Format">⟲</button>
-                            <button class="btn btn-fn" onclick="CalVerse.backspaceTimeKeypad()">⌫</button>
+                            <button class="btn btn-fn" onclick="CalVerse.toggleTimeResultFormat()" title="Toggle Result Format" aria-label="Toggle Result Format">⟲</button>
+                            <button class="btn btn-fn" onclick="CalVerse.backspaceTimeKeypad()" aria-label="Backspace">⌫</button>
 
                             <!-- Time Units Row -->
                             <button class="btn btn-tunit unit-hour" onclick="CalVerse.inputTimeUnit('hour')">hour</button>
@@ -1144,9 +1151,9 @@
                             <div class="input-card full-width">
                                 <label for="tipPeopleCount">Number of People to Split</label>
                                 <div class="stepper-wrap">
-                                    <button class="stepper-btn" onclick="CalVerse.stepTipPeople(-1)">−</button>
+                                    <button class="stepper-btn" onclick="CalVerse.stepTipPeople(-1)" aria-label="Decrease people count">−</button>
                                     <input type="number" id="tipPeopleCount" value="2" min="1" max="100" oninput="CalVerse.calculateTip()">
-                                    <button class="stepper-btn" onclick="CalVerse.stepTipPeople(1)">+</button>
+                                    <button class="stepper-btn" onclick="CalVerse.stepTipPeople(1)" aria-label="Increase people count">+</button>
                                 </div>
                             </div>
                         </div>
@@ -1564,6 +1571,6 @@
     <!-- Toast Notification -->
     <div class="toast" id="toast">Copied to clipboard!</div>
 
-    <script src="assets/js/script.js?v=4.3"></script>
+    <script src="assets/js/script.js?v=4.4"></script>
 </body>
 </html>

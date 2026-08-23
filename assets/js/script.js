@@ -11,7 +11,7 @@
     // 1. Audio Click Synthesizer (Zero-dependency tactile feedback)
     // =========================================================================
     const SoundFx = {
-        enabled: (localStorage.getItem('calverse_sound') || localStorage.getItem('calcverse_sound')) === 'true',
+        enabled: localStorage.getItem('calverse_sound') === 'true',
         ctx: null,
         _unlocked: false,
 
@@ -79,7 +79,6 @@
     const state = {
         currentMode: 'standard',
         angleMode: 'DEG', // DEG or RAD
-        is2nd: false,
         memory: { std: 0, sci: 0 },
         std: { expr: '', current: '0', waitingForNewNumber: false },
         sci: { expr: '', current: '0', waitingForNewNumber: false },
@@ -110,6 +109,11 @@
         equation: { title: 'Equation & Algebra Solver', subtitle: 'Quadratic roots, 2x2 linear systems & fractions' },
         statistics: { title: 'Statistics & Data Analyzer', subtitle: 'Mean, median, variance, std dev & box plots' }
     };
+
+    // Helper: Get numeric value from DOM input by ID
+    function getFloatVal(id) {
+        return parseFloat(document.getElementById(id).value) || 0;
+    }
 
     // =========================================================================
     // 3. UI Navigation & App Shell
@@ -562,12 +566,6 @@
         if (pill) pill.textContent = state.angleMode;
     }
 
-    function toggle2nd() {
-        SoundFx.playClick(600);
-        state.is2nd = !state.is2nd;
-        // Invert labels if needed
-    }
-
     // History Storage
     function addHistory(expr, result) {
         state.history.unshift({ expr, result, timestamp: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }) });
@@ -617,6 +615,7 @@
     // 5. Graphing Engine (HTML5 Canvas Plotter)
     // =========================================================================
     const GraphEngine = {
+        _initialized: false,
         canvas: null,
         ctx: null,
         scale: 40, // pixels per unit
@@ -627,6 +626,8 @@
         startY: 0,
 
         init() {
+            if (GraphEngine._initialized) { GraphEngine.render(); return; }
+            GraphEngine._initialized = true;
             this.canvas = document.getElementById('graphCanvas');
             if (!this.canvas) return;
             this.ctx = this.canvas.getContext('2d');
@@ -837,7 +838,7 @@
     };
 
     const FinancialEngine = {
-        currentCurrency: localStorage.getItem('calverse_fin_currency') || localStorage.getItem('calcverse_fin_currency') || 'INR',
+        currentCurrency: localStorage.getItem('calverse_fin_currency') || 'INR',
 
         init() {
             // Restore saved currency
@@ -849,7 +850,7 @@
 
             // Restore offline cached exchange rates
             try {
-                const cachedRates = localStorage.getItem('calverse_rates_cache') || localStorage.getItem('calcverse_rates_cache');
+                const cachedRates = localStorage.getItem('calverse_rates_cache');
                 if (cachedRates) {
                     const parsed = JSON.parse(cachedRates);
                     if (parsed && parsed.rates) {
@@ -919,9 +920,9 @@
         },
 
         calculateEMI() {
-            const P = parseFloat(document.getElementById('loanAmount').value) || 0;
-            const annualRate = parseFloat(document.getElementById('interestRate').value) || 0;
-            const years = parseFloat(document.getElementById('loanTenure').value) || 0;
+            const P = getFloatVal('loanAmount');
+            const annualRate = getFloatVal('interestRate');
+            const years = getFloatVal('loanTenure');
 
             if (P <= 0 || annualRate <= 0 || years <= 0) return;
 
@@ -948,11 +949,11 @@
         },
 
         calculateCompound() {
-            const P = parseFloat(document.getElementById('ciPrincipal').value) || 0;
-            const PMT = parseFloat(document.getElementById('ciMonthly').value) || 0;
-            const r = (parseFloat(document.getElementById('ciRate').value) || 0) / 100;
-            const t = parseFloat(document.getElementById('ciYears').value) || 0;
-            const n = parseInt(document.getElementById('ciCompoundFreq').value, 10) || 12;
+            const P = getFloatVal('ciPrincipal');
+            const PMT = getFloatVal('ciMonthly');
+            const r = getFloatVal('ciRate') / 100;
+            const t = getFloatVal('ciYears');
+            const n = parseInt(document.getElementById('ciCompoundFreq').value) || 12;
 
             const months = t * 12;
             const monthlyRate = r / 12;
@@ -1246,11 +1247,11 @@
 
             if (cat === 'temperature') {
                 if (source === 'from') {
-                    const val = parseFloat(document.getElementById('convertValFrom').value) || 0;
+                    const val = getFloatVal('convertValFrom');
                     const res = this.convertTemp(val, fromUnit, toUnit);
                     document.getElementById('convertValTo').value = res.toFixed(3);
                 } else {
-                    const val = parseFloat(document.getElementById('convertValTo').value) || 0;
+                    const val = getFloatVal('convertValTo');
                     const res = this.convertTemp(val, toUnit, fromUnit);
                     document.getElementById('convertValFrom').value = res.toFixed(3);
                 }
@@ -1481,13 +1482,13 @@
             let weightKg = 0;
 
             if (unit === 'metric') {
-                const cm = parseFloat(document.getElementById('healthHeightCm').value) || 175;
-                weightKg = parseFloat(document.getElementById('healthWeightKg').value) || 70;
+                const cm = getFloatVal('healthHeightCm') || 175;
+                weightKg = getFloatVal('healthWeightKg') || 70;
                 heightM = cm / 100;
             } else {
-                const ft = parseFloat(document.getElementById('healthHeightFt').value) || 5;
-                const inches = parseFloat(document.getElementById('healthHeightIn').value) || 9;
-                const lbs = parseFloat(document.getElementById('healthWeightLbs').value) || 154;
+                const ft = getFloatVal('healthHeightFt') || 5;
+                const inches = getFloatVal('healthHeightIn') || 9;
+                const lbs = getFloatVal('healthWeightLbs') || 154;
                 const totalInches = ft * 12 + inches;
                 heightM = totalInches * 0.0254;
                 weightKg = lbs * 0.453592;
@@ -2017,7 +2018,7 @@
     // 12. Discount & Tip Engine
     // =========================================================================
     const DiscountEngine = {
-        currentCurrency: localStorage.getItem('calverse_disc_currency') || localStorage.getItem('calcverse_disc_currency') || 'INR',
+        currentCurrency: localStorage.getItem('calverse_disc_currency') || 'INR',
 
         init() {
             const curSelect = document.getElementById('discCurrencySelect');
@@ -3089,7 +3090,6 @@
         memAdd,
         memSub,
         toggleAngleMode,
-        toggle2nd,
         clearHistory,
 
         // Graphing API
@@ -3300,10 +3300,6 @@
         }
     };
 
-    // Backward-compatibility aliases
-    window.CalcVerse = window.CalVerse;
-    window.OmniCalc = window.CalVerse;
-
     function initSidebarClock() {
         const timeEl = document.getElementById('sidebarLiveClock');
         const dateEl = document.getElementById('sidebarLiveDate');
@@ -3328,17 +3324,6 @@
         StatisticsEngine.init();
         renderHistoryList();
         initSidebarClock();
-
-        // Clear old legacy caches
-        if ('caches' in window) {
-            caches.keys().then((names) => {
-                names.forEach((name) => {
-                    if (name.includes('omni') || name === 'omnicalc-v1' || name.includes('calcverse')) {
-                        caches.delete(name);
-                    }
-                });
-            });
-        }
 
         // PWA Service Worker Registration & Force Update
         if ('serviceWorker' in navigator) {
