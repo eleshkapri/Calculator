@@ -5,7 +5,7 @@
 [![Platforms](https://img.shields.io/static/v1?label=Platforms&message=Android%20|%20Windows%20|%20iOS%20|%20Web&color=8b5cf6&style=for-the-badge)](https://calverse-esk.vercel.app/)
 [![License](https://img.shields.io/badge/License-MIT-green?style=for-the-badge)](LICENSE)
 
-**CalVerse Pro** is an all-in-one, zero-dependency multi-calculator suite engineered for everyday productivity, scientific research, financial planning, unit conversion, algebraic solving, statistics, and multi-platform native deployment (Android APK, Windows EXE, Apple iOS WebClip, and PWA Web App).
+**CalVerse Pro** is an all-in-one, zero-dependency multi-calculator suite engineered for everyday productivity, scientific research, financial planning, unit conversion, algebraic solving, statistical analysis, and multi-platform native deployment (Android APK, Windows Desktop Launcher, Apple iOS WebClip, and PWA Web App).
 
 ---
 
@@ -17,33 +17,40 @@
 
 ## 📱 1-Click Multi-Platform Installation (PWA)
 
-CalVerse can be installed directly onto your device with **1-click**, providing a full-screen standalone app experience with offline support:
+CalVerse can be installed directly onto any mobile or desktop device with **1-click**, providing a full-screen standalone app experience with full offline support:
 
 | Platform | Installation Method | Experience |
 | :--- | :--- | :--- |
-| **Android** | In Chrome, tap **⋮** ➔ **"Install app"** or click **"📲 Install App"** in sidebar | Native WebAPK with app icon in App Drawer & Home Screen |
+| **Android** | In Chrome, tap **⋮** ➔ **"Install app"** or click **"📲 Install App"** in sidebar | Native WebAPK with icon in App Drawer & Home Screen |
 | **iOS (iPhone/iPad)** | In Safari, tap Share **📤** ➔ **"Add to Home Screen"** or download WebClip profile | Full-screen standalone web app on iOS Home Screen |
 | **Windows / macOS** | In Chrome/Edge, click the install icon in address bar or download launcher | Desktop standalone application launcher |
+
+---
+
+## ⚡ Offline-First Architecture & Smart Sync
+
+- **100% Offline Capability**: Uses a modern Service Worker (`sw.js`) with cache-first pre-caching. Launch and operate all 12 calculator engines anywhere without internet.
+- **Smart Online Auto-Sync**: Automatically detects when your device reconnects to Wi-Fi or Mobile Data to fetch the latest real-time exchange rates and background cache updates without page reloads.
+- **Persistent Local Storage**: Saves your preferences (Dark/Light mode, Sound FX, preferred currency, and calculation history) locally on your device.
 
 ---
 
 ## ✨ 12 Dedicated Calculator Engines
 
 ### 1. 🔢 Standard Calculator
-- Precise everyday arithmetic with operator precedence ($+$, $-$, $\times$, $\div$).
-- Bracket evaluation $(...)$, percentage calculation, and sign toggle ($\pm$).
-- Full memory stack ($MC, MR, M+, M-, MS$) with active indicator.
-- Ergonomic centered layout on both desktop and mobile viewports.
+- Precise arithmetic with standard operator precedence ($+$, $-$, $\times$, $\div$).
+- **Live Equation Retention**: Upper expression line keeps the full question with equals ($888 + 1 =$) while the result ($889$) remains in the primary display.
+- Seamless operation chaining, parentheses $(...)$, percentage ($\%$) and sign toggle ($\pm$).
+- Full memory stack ($MC, MR, M+, M-, MS$) with active status indicator.
 
 ### 2. 🔬 Scientific Calculator
-- Comprehensive trigonometry ($\sin, \cos, \tan, \sin^{-1}, \cos^{-1}, \tan^{-1}$) with **DEG / RAD** modes.
+- Trigonometric functions ($\sin, \cos, \tan, \sin^{-1}, \cos^{-1}, \tan^{-1}$) with **DEG / RAD** modes.
 - Logarithms ($\ln, \log_{10}$), powers ($x^y, x^2, \sqrt{x}$), factorials ($n!$), and reciprocals ($1/x$).
-- Mathematical constants ($\pi, e$) and 2nd function switcher.
-- Compact laptop-optimized key grid.
+- Mathematical constants ($\pi, e$) and 2nd function key switcher.
 
 ### 3. 📈 Graphing Calculator
 - High-performance HTML5 2D canvas function plotter ($y = f(x)$).
-- Multi-curve overlay with distinct color codings (e.g. $y_1 = \sin(x)$, $y_2 = \cos(x)$).
+- Multi-curve overlay with distinct color coding (e.g. $y_1 = \sin(x)$, $y_2 = \cos(x)$).
 - **Interactive Controls**: Touch pan dragging on mobile, mouse drag-to-pan, zoom in/out ($1.25\times / 0.8\times$), and view reset.
 - Live coordinate HUD tracking $(x, y)$ under cursor/touch.
 - One-click presets: *Sine & Cosine, Parabola & Line, Cubic Curve, Hyperbola, V-Curves, Gaussian Bell*.
@@ -52,7 +59,7 @@ CalVerse can be installed directly onto your device with **1-click**, providing 
 - **Loan & EMI Calculator**: Monthly installments, total payable, total interest, and color-coded visual amortization progress bar.
 - **Compound Interest & SIP**: Projections for initial lump sum + recurring monthly deposits with custom compounding frequencies (Monthly, Quarterly, Annually, Daily).
 - **💱 Real-Time Live Currency Converter**:
-  - Live exchange rate fetching via **Open Exchange Rates API** with automatic offline caching fallback.
+  - Live exchange rate fetching via **Open Exchange Rates API** with automatic offline fallback.
   - Bidirectional real-time conversion across 20+ world currencies (`USD`, `INR`, `EUR`, `GBP`, `JPY`, `CAD`, `AUD`, `AED`, `CNY`, `SGD`, `CHF`, `SAR`, etc.).
   - Instant **⇄ Swap** currencies and live exchange formula display.
   - **Live Popular Pairs Matrix**: 1-click quick-switch cards (`USD/INR`, `EUR/USD`, `GBP/INR`, `USD/AED`, `EUR/INR`, `USD/CAD`, `USD/JPY`, `AED/INR`).
@@ -129,7 +136,7 @@ CalVerse can be installed directly onto your device with **1-click**, providing 
 ## 🎨 UI, Aesthetics & Accessibility
 
 - **Dark Obsidian & Crisp Light Themes**: Tailored palettes with smooth CSS variable transitions and saved preferences.
-- **Tactile Audio Feedback**: Mobile-unlocked synthesizer via Web Audio API with dedicated `Sound ON / OFF` toggle.
+- **Tactile Audio Feedback**: Mobile-unlocked Web Audio API synthesizer with dedicated `Sound ON / OFF` toggle.
 - **Calculation History Drawer**: Complete persistent history storage, click-to-recall, and 1-tap clipboard copying.
 - **Responsive Fluid Layout**: Centered desktop & laptop presentations with adaptive mobile swipe carousels and backdrop slide-out menus.
 
@@ -166,7 +173,7 @@ Calculator/
 │       └── icon-512.png   # 512x512 high-resolution PWA launcher icon
 ├── index.html             # Application shell & 12 modular calculator views
 ├── manifest.json          # PWA Web App manifest for Android, iOS & Desktop
-├── sw.js                  # Network-first Service Worker with offline caching
+├── sw.js                  # Offline-first Service Worker with smart auto-sync
 ├── LICENSE                # MIT License
 └── README.md              # Comprehensive documentation and project guide
 ```
@@ -198,6 +205,14 @@ npx serve .
 ```
 
 Open your browser at `http://localhost:3000`.
+
+---
+
+## 👨‍💻 Author
+
+**Elesh Kapri**  
+- GitHub: [@eleshkapri](https://github.com/eleshkapri)  
+- Project: [CalVerse](https://calverse-esk.vercel.app/)
 
 ---
 
