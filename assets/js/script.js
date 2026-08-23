@@ -3325,10 +3325,60 @@
         renderHistoryList();
         initSidebarClock();
 
-        // PWA Service Worker Registration & Force Update
+        // =========================================================================
+        // PWA Auto-Update Engine (Instant Desktop & Mobile App Sync)
+        // =========================================================================
         if ('serviceWorker' in navigator) {
+            let _isReloading = false;
+
+            // When new SW activates, reload so the running app window gets new code immediately
+            navigator.serviceWorker.addEventListener('controllerchange', () => {
+                if (!_isReloading) {
+                    _isReloading = true;
+                    window.location.reload();
+                }
+            });
+
             navigator.serviceWorker.register('./sw.js').then((reg) => {
+                // Check for updates on startup
                 reg.update().catch(() => {});
+
+                // Detect when a new update is found and installed
+                reg.addEventListener('updatefound', () => {
+                    const newWorker = reg.installing;
+                    if (newWorker) {
+                        newWorker.addEventListener('statechange', () => {
+                            if (newWorker.state === 'installed' && navigator.serviceWorker.controller) {
+                                showToast('🚀 CalVerse updated to latest version!');
+                                setTimeout(() => {
+                                    if (!_isReloading) {
+                                        _isReloading = true;
+                                        window.location.reload();
+                                    }
+                                }, 600);
+                            }
+                        });
+                    }
+                });
+
+                // Check for updates whenever user returns to the app (PC focus or phone app switch)
+                document.addEventListener('visibilitychange', () => {
+                    if (document.visibilityState === 'visible' && navigator.onLine) {
+                        reg.update().catch(() => {});
+                    }
+                });
+                window.addEventListener('focus', () => {
+                    if (navigator.onLine) {
+                        reg.update().catch(() => {});
+                    }
+                });
+
+                // Periodic check every 10 minutes
+                setInterval(() => {
+                    if (navigator.onLine) {
+                        reg.update().catch(() => {});
+                    }
+                }, 10 * 60 * 1000);
             }).catch(() => {});
         }
 
