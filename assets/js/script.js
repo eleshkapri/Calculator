@@ -935,10 +935,26 @@
         },
         ratesLastUpdated: null,
 
-        async fetchLiveRates() {
+        async fetchLiveRates(showFeedback = false) {
             const statusText = document.getElementById('rateStatusText');
             const refreshIcon = document.getElementById('refreshIcon');
             if (refreshIcon) refreshIcon.style.animation = 'spin 1s infinite linear';
+
+            if (!navigator.onLine) {
+                // Device is offline: Use cached rates immediately without throwing network errors
+                if (refreshIcon) refreshIcon.style.animation = '';
+                if (statusText) {
+                    if (this.ratesLastUpdated) {
+                        statusText.textContent = `Offline • Cached (${this.ratesLastUpdated.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })})`;
+                    } else {
+                        statusText.textContent = 'Offline • Baseline Rates';
+                    }
+                }
+                this.convert('from');
+                this.renderPopularPairs();
+                if (showFeedback) showToast('🟠 Offline: Operating from cached data');
+                return;
+            }
 
             try {
                 const res = await fetch('https://open.er-api.com/v6/latest/USD');
@@ -952,13 +968,18 @@
                             time: this.ratesLastUpdated.toISOString()
                         }));
                         if (statusText) {
-                            statusText.textContent = `Live Rates: Updated ${this.ratesLastUpdated.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}`;
+                            statusText.textContent = `🟢 Live Rates: Updated ${this.ratesLastUpdated.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}`;
                         }
+                        if (showFeedback) showToast('🟢 Live exchange rates updated');
                     }
                 }
             } catch (e) {
-                // Offline or CORS fallback
-                if (statusText) statusText.textContent = 'Rates: Offline Cached';
+                // Offline fallback on fetch failure
+                if (statusText) {
+                    statusText.textContent = this.ratesLastUpdated 
+                        ? `Offline • Cached (${this.ratesLastUpdated.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })})` 
+                        : 'Offline • Baseline Rates';
+                }
             } finally {
                 if (refreshIcon) refreshIcon.style.animation = '';
                 this.convert('from');
@@ -3014,7 +3035,7 @@
 
         // Financial & Currency API
         setFinancialCurrency: (code) => FinancialEngine.setCurrency(code),
-        refreshExchangeRates: () => FinancialEngine.fetchLiveRates(),
+        refreshExchangeRates: () => FinancialEngine.fetchLiveRates(true),
         convertCurrency: (source) => FinancialEngine.convert(source),
         swapCurrencyUnits: () => FinancialEngine.swap(),
         setQuickPair: (from, to) => FinancialEngine.setQuickPair(from, to),
@@ -3295,6 +3316,20 @@
                 }
             });
         }
+
+        // Real-Time Online / Offline Connectivity Auto-Sync
+        window.addEventListener('online', () => {
+            showToast('🟢 Internet connected • Updating live data...');
+            FinancialEngine.fetchLiveRates(true);
+            if ('serviceWorker' in navigator) {
+                navigator.serviceWorker.ready.then((reg) => reg.update()).catch(() => {});
+            }
+        });
+
+        window.addEventListener('offline', () => {
+            FinancialEngine.fetchLiveRates(false);
+            showToast('🟠 Offline mode • Operating from cached data');
+        });
     });
 
 })();
