@@ -16,7 +16,23 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;600;700&family=Outfit:wght@400;500;600;700;800&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="assets/css/style.css?v=3.8">
+    <link rel="stylesheet" href="assets/css/style.css?v=3.9">
+    <script>
+        // Instant Device Theme Detection (Zero-Flicker)
+        (function() {
+            try {
+                const saved = localStorage.getItem('calverse_theme') || localStorage.getItem('omni_calc_theme');
+                const isLight = saved ? (saved === 'light') : (window.matchMedia && window.matchMedia('(prefers-color-scheme: light)').matches);
+                if (isLight) {
+                    document.documentElement.classList.add('light-theme');
+                    document.addEventListener('DOMContentLoaded', function() {
+                        document.body.classList.remove('dark-theme');
+                        document.body.classList.add('light-theme');
+                    });
+                }
+            } catch(e) {}
+        })();
+    </script>
 </head>
 <body class="dark-theme">
     <div class="app-container">
@@ -1544,6 +1560,6 @@
     <!-- Toast Notification -->
     <div class="toast" id="toast">Copied to clipboard!</div>
 
-    <script src="assets/js/script.js?v=3.8"></script>
+    <script src="assets/js/script.js?v=3.9"></script>
 </body>
 </html>

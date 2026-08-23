@@ -188,28 +188,64 @@
             });
         });
 
-        // Theme Toggle
+        // =========================================================================
+        // Smart System / User Theme Controller (Device & Manual Sync)
+        // =========================================================================
         const themeBtn = document.getElementById('themeToggleBtn');
         const themeIcon = document.getElementById('themeIcon');
-        const themeText = themeBtn.querySelector('.btn-text');
-        
-        const savedTheme = localStorage.getItem('omni_calc_theme') || 'dark';
-        if (savedTheme === 'light') {
-            document.body.classList.remove('dark-theme');
-            document.body.classList.add('light-theme');
-            themeIcon.textContent = '🌙';
-            themeText.textContent = 'Dark Mode';
+        const themeText = themeBtn ? themeBtn.querySelector('.btn-text') : null;
+
+        function applyTheme(themeName, persist = false) {
+            const isLight = themeName === 'light';
+            document.body.classList.toggle('light-theme', isLight);
+            document.body.classList.toggle('dark-theme', !isLight);
+            
+            if (themeIcon) themeIcon.textContent = isLight ? '🌙' : '☀️';
+            if (themeText) themeText.textContent = isLight ? 'Dark Mode' : 'Light Mode';
+            
+            // Sync mobile OS status bar color
+            const themeMeta = document.querySelector('meta[name="theme-color"]');
+            if (themeMeta) {
+                themeMeta.setAttribute('content', isLight ? '#f1f5f9' : '#0a0e17');
+            }
+
+            if (persist) {
+                localStorage.setItem('calverse_theme', isLight ? 'light' : 'dark');
+            }
+
+            // Redraw charts if current active view requires theme sync
+            if (state.currentMode === 'graphing' && typeof GraphEngine !== 'undefined') GraphEngine.render();
+            if (state.currentMode === 'statistics' && typeof StatisticsEngine !== 'undefined') StatisticsEngine.renderVisualChart();
         }
 
-        themeBtn.addEventListener('click', () => {
-            SoundFx.playClick(800);
-            const isLight = document.body.classList.toggle('light-theme');
-            document.body.classList.toggle('dark-theme', !isLight);
-            themeIcon.textContent = isLight ? '🌙' : '☀️';
-            themeText.textContent = isLight ? 'Dark Mode' : 'Light Mode';
-            localStorage.setItem('omni_calc_theme', isLight ? 'light' : 'dark');
-            if (state.currentMode === 'graphing') GraphEngine.render();
-        });
+        // Determine initial theme:
+        // 1. Saved manual preference (if any)
+        // 2. Otherwise auto-detect device/OS mode (prefers-color-scheme)
+        const savedTheme = localStorage.getItem('calverse_theme') || localStorage.getItem('omni_calc_theme');
+        if (savedTheme) {
+            applyTheme(savedTheme, false);
+        } else {
+            const prefersLight = window.matchMedia && window.matchMedia('(prefers-color-scheme: light)').matches;
+            applyTheme(prefersLight ? 'light' : 'dark', false);
+        }
+
+        // Listen for live OS system theme switches (e.g. phone sunrise/sunset auto mode)
+        if (window.matchMedia) {
+            const colorSchemeMedia = window.matchMedia('(prefers-color-scheme: light)');
+            colorSchemeMedia.addEventListener('change', (e) => {
+                if (!localStorage.getItem('calverse_theme')) {
+                    applyTheme(e.matches ? 'light' : 'dark', false);
+                }
+            });
+        }
+
+        if (themeBtn) {
+            themeBtn.addEventListener('click', () => {
+                SoundFx.playClick(800);
+                const nextTheme = document.body.classList.contains('light-theme') ? 'dark' : 'light';
+                applyTheme(nextTheme, true);
+            });
+        }
 
         // Sound Toggle
         const soundBtn = document.getElementById('soundToggleBtn');
