@@ -376,6 +376,27 @@
         SoundFx.playClick(500);
         const data = state[type];
 
+        // If the expression was just evaluated (contains '='):
+        if (data.expr && data.expr.includes('=')) {
+            if (['+', '−', '×', '÷', '^', '%'].includes(val)) {
+                // Operator after equals: chain on previous answer
+                if (data.current === 'Error') data.current = '0';
+                data.expr = `${data.current} ${val} `;
+                data.waitingForNewNumber = true;
+                updateDisplay(type);
+                return;
+            } else {
+                // New digit or function after equals: clear expression line
+                data.expr = '';
+                if (val === '.') {
+                    data.current = '0.';
+                    data.waitingForNewNumber = false;
+                    updateDisplay(type);
+                    return;
+                }
+            }
+        }
+
         if (['+', '−', '×', '÷', '^', '%'].includes(val)) {
             if (data.current === 'Error') data.current = '0';
             data.expr += `${data.current} ${val} `;
@@ -384,7 +405,10 @@
         } else if (val === '(' || val === ')') {
             data.expr += val;
         } else if (val === '.') {
-            if (!data.current.includes('.')) {
+            if (data.waitingForNewNumber) {
+                data.current = '0.';
+                data.waitingForNewNumber = false;
+            } else if (!data.current.includes('.')) {
                 data.current += '.';
             }
         } else if (val === 'π') {
@@ -412,23 +436,23 @@
 
         if (fn === 'sqr') {
             data.current = evaluateMath(`(${cur}) * (${cur})`, state.angleMode);
-            data.expr = `sqr(${cur})`;
+            data.expr = `sqr(${cur}) =`;
         } else if (fn === 'sqrt') {
             data.current = evaluateMath(`sqrt(${cur})`, state.angleMode);
-            data.expr = `√(${cur})`;
+            data.expr = `√(${cur}) =`;
         } else if (fn === 'fact') {
             data.current = factorial(parseInt(cur, 10)).toString();
-            data.expr = `${cur}!`;
+            data.expr = `${cur}! =`;
         } else if (fn === 'inv') {
             data.current = evaluateMath(`1 / (${cur})`, state.angleMode);
-            data.expr = `1/(${cur})`;
+            data.expr = `1/(${cur}) =`;
         } else if (fn === 'abs') {
             data.current = Math.abs(parseFloat(cur)).toString();
-            data.expr = `|${cur}|`;
+            data.expr = `|${cur}| =`;
         } else {
             // Trigonometry / Log
             data.current = evaluateMath(`${fn}(${cur})`, state.angleMode);
-            data.expr = `${fn}(${cur})`;
+            data.expr = `${fn}(${cur}) =`;
         }
         data.waitingForNewNumber = true;
         updateDisplay('sci');
@@ -445,7 +469,10 @@
     function backspace(type) {
         SoundFx.playClick(480);
         const data = state[type];
-        if (data.current.length > 1) {
+        if (data.expr && data.expr.includes('=')) {
+            data.expr = '';
+        }
+        if (data.current.length > 1 && data.current !== 'Error') {
             data.current = data.current.slice(0, -1);
         } else {
             data.current = '0';
@@ -465,16 +492,22 @@
     function calculate(type) {
         SoundFx.playClick(850, 'triangle', 0.05);
         const data = state[type];
-        const fullExpr = data.expr + data.current;
+
+        // If empty or already calculated with '=', prevent repeating
+        if (!data.expr && (data.current === '0' || data.current === 'Error' || data.current === '')) return;
+        if (data.expr.endsWith('=')) return;
+
+        const fullExpr = (data.expr + data.current).trim();
         const res = evaluateMath(fullExpr, state.angleMode);
 
         if (res !== 'Error') {
             addHistory(fullExpr, res);
-            data.expr = '';
+            data.expr = `${fullExpr} =`;
             data.current = res;
             data.waitingForNewNumber = true;
         } else {
             data.current = 'Error';
+            data.waitingForNewNumber = true;
         }
         updateDisplay(type);
     }
