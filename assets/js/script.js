@@ -3399,6 +3399,31 @@
             FinancialEngine.fetchLiveRates(false);
             showToast('🟠 Offline mode • Operating from cached data');
         });
+
+        // Prevent Pull-To-Refresh on Mobile Devices & WebViews
+        let _touchStartY = 0;
+        document.addEventListener('touchstart', (e) => {
+            if (e.touches && e.touches.length === 1) {
+                _touchStartY = e.touches[0].clientY;
+            }
+        }, { passive: true });
+
+        document.addEventListener('touchmove', (e) => {
+            if (e.touches && e.touches.length === 1) {
+                const touchY = e.touches[0].clientY;
+                const touchDiff = touchY - _touchStartY;
+                
+                // If user is pulling downward at the top of the container
+                const scrollable = e.target.closest('.main-viewport, .sidebar, .history-drawer, .calculators-container, .modal-card');
+                const isAtTop = scrollable ? scrollable.scrollTop <= 0 : window.scrollY <= 0;
+
+                if (isAtTop && touchDiff > 0 && !e.target.closest('input, textarea, select')) {
+                    if (e.cancelable) {
+                        e.preventDefault();
+                    }
+                }
+            }
+        }, { passive: false });
     });
 
 })();

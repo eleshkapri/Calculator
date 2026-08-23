@@ -171,11 +171,17 @@ body.light-theme {
     --card-shadow: 0 12px 30px rgba(0, 0, 0, 0.07);
 }
 
-/* Base Reset */
+/* Base Reset & Mobile Pull-To-Refresh Prevention */
 *, *::before, *::after {
     box-sizing: border-box;
     margin: 0;
     padding: 0;
+}
+
+html {
+    overscroll-behavior: none;
+    overscroll-behavior-y: none;
+    overscroll-behavior-x: none;
 }
 
 body {
@@ -183,10 +189,16 @@ body {
     background-color: var(--bg-base);
     color: var(--text-primary);
     min-height: 100vh;
+    min-height: 100dvh;
     display: flex;
-    overflow-x: hidden;
+    overflow: hidden;
     line-height: 1.5;
     -webkit-font-smoothing: antialiased;
+    overscroll-behavior: none;
+    overscroll-behavior-y: none;
+    overscroll-behavior-x: none;
+    -webkit-user-select: none;
+    user-select: none;
 }
 
 /* App Container */
@@ -194,8 +206,11 @@ body {
     display: flex;
     width: 100vw;
     height: 100vh;
+    height: 100dvh;
     position: relative;
     overflow: hidden;
+    overscroll-behavior: none;
+    overscroll-behavior-y: none;
 }
 
 /* ==========================================================================
@@ -212,6 +227,10 @@ body {
     flex-shrink: 0;
     z-index: 40;
     overflow-x: hidden;
+    overflow-y: auto;
+    overscroll-behavior: contain;
+    overscroll-behavior-y: contain;
+    -webkit-overflow-scrolling: touch;
     transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
@@ -498,10 +517,14 @@ body.dark-theme .chip-sym {
     display: flex;
     flex-direction: column;
     height: 100vh;
+    height: 100dvh;
     overflow-y: auto;
     background-color: var(--bg-base);
     position: relative;
     scrollbar-width: thin;
+    overscroll-behavior: contain;
+    overscroll-behavior-y: contain;
+    -webkit-overflow-scrolling: touch;
 }
 
 .top-header {
@@ -2055,12 +2078,16 @@ body.dark-theme .epoch-live-val {
     right: -360px;
     width: 360px;
     height: 100vh;
+    height: 100dvh;
     background-color: var(--bg-surface);
     border-left: 1px solid var(--border-subtle);
     box-shadow: var(--shadow-lg);
     z-index: 100;
     display: flex;
     flex-direction: column;
+    overscroll-behavior: contain;
+    overscroll-behavior-y: contain;
+    -webkit-overflow-scrolling: touch;
     transition: right 0.3s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
