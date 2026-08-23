@@ -1,5 +1,5 @@
 // Service Worker for CalVerse Pro (Offline-First with Background Sync)
-const CACHE_NAME = 'calverse-v16';
+const CACHE_NAME = 'calverse-v17';
 
 // Core static assets required for complete offline operation
 const PRECACHE_ASSETS = [

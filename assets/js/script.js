@@ -199,6 +199,8 @@
             const isLight = themeName === 'light';
             document.body.classList.toggle('light-theme', isLight);
             document.body.classList.toggle('dark-theme', !isLight);
+            document.documentElement.classList.toggle('light-theme', isLight);
+            document.documentElement.classList.toggle('dark-theme', !isLight);
             
             if (themeIcon) themeIcon.textContent = isLight ? '🌙' : '☀️';
             if (themeText) themeText.textContent = isLight ? 'Dark Mode' : 'Light Mode';
@@ -210,7 +212,7 @@
             }
 
             if (persist) {
-                localStorage.setItem('calverse_theme', isLight ? 'light' : 'dark');
+                localStorage.setItem('calverse_user_theme', isLight ? 'light' : 'dark');
             }
 
             // Redraw charts if current active view requires theme sync
@@ -219,11 +221,11 @@
         }
 
         // Determine initial theme:
-        // 1. Saved manual preference (if any)
+        // 1. Check if user set an explicit manual override
         // 2. Otherwise auto-detect device/OS mode (prefers-color-scheme)
-        const savedTheme = localStorage.getItem('calverse_theme') || localStorage.getItem('omni_calc_theme');
-        if (savedTheme) {
-            applyTheme(savedTheme, false);
+        const userManualTheme = localStorage.getItem('calverse_user_theme');
+        if (userManualTheme) {
+            applyTheme(userManualTheme, false);
         } else {
             const prefersLight = window.matchMedia && window.matchMedia('(prefers-color-scheme: light)').matches;
             applyTheme(prefersLight ? 'light' : 'dark', false);
@@ -233,7 +235,7 @@
         if (window.matchMedia) {
             const colorSchemeMedia = window.matchMedia('(prefers-color-scheme: light)');
             colorSchemeMedia.addEventListener('change', (e) => {
-                if (!localStorage.getItem('calverse_theme')) {
+                if (!localStorage.getItem('calverse_user_theme')) {
                     applyTheme(e.matches ? 'light' : 'dark', false);
                 }
             });
