@@ -778,6 +778,18 @@
             }
             this.updateLabels();
 
+            // Restore offline cached exchange rates
+            try {
+                const cachedRates = localStorage.getItem('calverse_rates_cache') || localStorage.getItem('calcverse_rates_cache');
+                if (cachedRates) {
+                    const parsed = JSON.parse(cachedRates);
+                    if (parsed && parsed.rates) {
+                        this.rates = { ...this.rates, ...parsed.rates };
+                        if (parsed.time) this.ratesLastUpdated = new Date(parsed.time);
+                    }
+                }
+            } catch (e) {}
+
             // Sliders & Number sync
             const syncInputs = [
                 ['loanAmount', 'loanAmountRange'],
