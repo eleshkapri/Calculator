@@ -189,13 +189,11 @@
         });
 
         // =========================================================================
-        // Device/OS Theme Sync — Always Matches Phone/Laptop Theme
-        // Toggle button = session-only override (resets on next visit)
+        // Theme Controller — Remembers Last Mood + First Visit Follows OS
         // =========================================================================
         const themeBtn = document.getElementById('themeToggleBtn');
         const themeIcon = document.getElementById('themeIcon');
         const themeText = themeBtn ? themeBtn.querySelector('.btn-text') : null;
-        let _userSessionOverride = false; // true only if user tapped toggle this session
 
         function applyTheme(themeName) {
             const isLight = themeName === 'light';
@@ -213,33 +211,37 @@
                 themeMeta.setAttribute('content', isLight ? '#f1f5f9' : '#0a0e17');
             }
 
+            // Remember this mood for next app open
+            try { localStorage.setItem('calverse_last_theme', isLight ? 'light' : 'dark'); } catch(e) {}
+
             // Redraw charts if active
             if (state.currentMode === 'graphing' && typeof GraphEngine !== 'undefined') GraphEngine.render();
             if (state.currentMode === 'statistics' && typeof StatisticsEngine !== 'undefined') StatisticsEngine.renderVisualChart();
         }
 
-        // On page load: ALWAYS read from device/OS prefers-color-scheme
-        (function initThemeFromOS() {
-            const prefersLight = window.matchMedia && window.matchMedia('(prefers-color-scheme: light)').matches;
-            applyTheme(prefersLight ? 'light' : 'dark');
+        // On page load: use saved theme if available, else follow OS
+        (function initTheme() {
+            const saved = localStorage.getItem('calverse_last_theme');
+            if (saved) {
+                applyTheme(saved);
+            } else {
+                const prefersLight = window.matchMedia && window.matchMedia('(prefers-color-scheme: light)').matches;
+                applyTheme(prefersLight ? 'light' : 'dark');
+            }
         })();
 
         // Listen for LIVE OS theme switches (e.g. phone sunrise/sunset auto mode)
         if (window.matchMedia) {
             const colorSchemeMedia = window.matchMedia('(prefers-color-scheme: light)');
             colorSchemeMedia.addEventListener('change', (e) => {
-                // Always follow OS unless user tapped toggle during this session
-                if (!_userSessionOverride) {
-                    applyTheme(e.matches ? 'light' : 'dark');
-                }
+                applyTheme(e.matches ? 'light' : 'dark');
             });
         }
 
-        // Toggle button: session-only override (not saved to localStorage)
+        // Toggle button: switches theme and saves for next visit
         if (themeBtn) {
             themeBtn.addEventListener('click', () => {
                 SoundFx.playClick(800);
-                _userSessionOverride = true;
                 const nextTheme = document.body.classList.contains('light-theme') ? 'dark' : 'light';
                 applyTheme(nextTheme);
             });

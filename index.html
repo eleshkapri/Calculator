@@ -16,17 +16,23 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;600;700&family=Outfit:wght@400;500;600;700;800&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="assets/css/style.css?v=4.2">
+    <link rel="stylesheet" href="assets/css/style.css?v=4.3">
     <script>
-        // Always Follow Device/OS Theme (Zero-Flicker)
+        // Theme Boot: Remember last mood, first visit follows OS
         (function() {
             try {
-                // Clean ALL legacy theme keys so they never override OS theme
+                // Clean legacy keys from older versions
                 localStorage.removeItem('omni_calc_theme');
                 localStorage.removeItem('calverse_theme');
                 localStorage.removeItem('calverse_user_theme');
 
-                var isLight = window.matchMedia && window.matchMedia('(prefers-color-scheme: light)').matches;
+                var saved = localStorage.getItem('calverse_last_theme');
+                var isLight;
+                if (saved) {
+                    isLight = saved === 'light';
+                } else {
+                    isLight = window.matchMedia && window.matchMedia('(prefers-color-scheme: light)').matches;
+                }
                 document.documentElement.classList.add(isLight ? 'light-theme' : 'dark-theme');
             } catch(e) {}
         })();
@@ -1558,6 +1564,6 @@
     <!-- Toast Notification -->
     <div class="toast" id="toast">Copied to clipboard!</div>
 
-    <script src="assets/js/script.js?v=4.2"></script>
+    <script src="assets/js/script.js?v=4.3"></script>
 </body>
 </html>
