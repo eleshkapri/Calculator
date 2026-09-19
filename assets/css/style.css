@@ -225,14 +225,12 @@ body {
     border-right: 1px solid var(--border-subtle);
     display: flex;
     flex-direction: column;
+    height: 100vh;
+    height: 100dvh;
     padding: 24px 16px;
     flex-shrink: 0;
     z-index: 40;
-    overflow-x: hidden;
-    overflow-y: auto;
-    overscroll-behavior-y: contain;
-    touch-action: pan-y;
-    -webkit-overflow-scrolling: touch;
+    overflow: hidden; /* Whole sidebar does not scroll */
     transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
@@ -324,15 +322,29 @@ body {
     display: flex;
     flex-direction: column;
     gap: 6px;
-    flex: 1;
+    flex: 1 1 auto;
+    min-height: 0; /* Ensures flex child respects container bounds and scrolls */
     overflow-y: auto;
     overflow-x: hidden;
-    padding-right: 2px;
-    scrollbar-width: none;
+    padding-right: 4px;
+    -webkit-overflow-scrolling: touch;
+    touch-action: pan-y;
+    overscroll-behavior-y: contain;
+    scrollbar-width: thin;
+    scrollbar-color: var(--border-highlight) transparent;
 }
 
 .nav-menu::-webkit-scrollbar {
-    display: none;
+    width: 4px;
+}
+
+.nav-menu::-webkit-scrollbar-track {
+    background: transparent;
+}
+
+.nav-menu::-webkit-scrollbar-thumb {
+    background: var(--border-highlight);
+    border-radius: 4px;
 }
 
 .nav-item {
@@ -3415,24 +3427,45 @@ body.light-theme .stats-canvas-container {
         height: 100dvh;
         width: 280px;
         box-shadow: var(--shadow-lg);
-        overflow-y: auto;
-        overflow-x: hidden;
-        -webkit-overflow-scrolling: touch;
-        overscroll-behavior-y: contain;
-        touch-action: pan-y;
-        padding-bottom: max(36px, env(safe-area-inset-bottom, 24px));
+        overflow: hidden; /* Whole sidebar stays fixed - does not scroll */
+        padding: 16px 14px;
+        padding-bottom: max(16px, env(safe-area-inset-bottom, 12px));
     }
     .sidebar.open { transform: translateX(280px); }
     .sidebar-close-btn { display: flex; }
 
-    /* Unify mobile sidebar into a single continuous scroll container to prevent nested scroll traps */
+    /* The calculation options list is the ONLY scrollable area */
     .sidebar .nav-menu {
-        overflow: visible;
-        flex: none;
+        flex: 1 1 auto;
+        min-height: 0;
+        overflow-y: auto;
+        overflow-x: hidden;
+        -webkit-overflow-scrolling: touch;
+        touch-action: pan-y;
+        overscroll-behavior-y: contain;
+        padding-right: 4px;
     }
 
-    .sidebar * {
-        touch-action: pan-y;
+    .sidebar .brand,
+    .sidebar .sidebar-widget,
+    .sidebar .sidebar-footer {
+        flex-shrink: 0;
+    }
+
+    .sidebar .sidebar-widget {
+        margin-top: 8px;
+        padding-top: 8px;
+        gap: 8px;
+    }
+
+    .sidebar .sidebar-footer {
+        padding-top: 8px;
+        gap: 6px;
+    }
+
+    .sidebar .utility-btn {
+        padding: 8px 12px;
+        font-size: 0.82rem;
     }
     
     .mobile-toggle {
