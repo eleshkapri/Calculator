@@ -3435,7 +3435,7 @@
             showToast('🟠 Offline mode • Operating from cached data');
         });
 
-        // Prevent Pull-To-Refresh on Mobile Devices & WebViews
+        // Prevent Pull-To-Refresh on Mobile Devices & WebViews (Main Viewport only)
         let _touchStartY = 0;
         document.addEventListener('touchstart', (e) => {
             if (e.touches && e.touches.length === 1) {
@@ -3444,15 +3444,20 @@
         }, { passive: true });
 
         document.addEventListener('touchmove', (e) => {
+            // NEVER block or cancel touch scrolling inside sidebar, history drawer, or modals
+            if (e.target.closest('.sidebar, .history-drawer, .modal-backdrop, .install-modal')) {
+                return;
+            }
+
             if (e.touches && e.touches.length === 1) {
                 const touchY = e.touches[0].clientY;
                 const touchDiff = touchY - _touchStartY;
                 
-                // If user is pulling downward at the top of the container
-                const scrollable = e.target.closest('.main-viewport, .sidebar, .history-drawer, .calculators-container, .modal-card');
-                const isAtTop = scrollable ? scrollable.scrollTop <= 0 : window.scrollY <= 0;
+                // Only prevent pull-down at the very top of the main viewport to stop browser page reloads
+                const mainViewport = document.querySelector('.main-viewport');
+                const isAtTop = mainViewport ? mainViewport.scrollTop <= 0 : window.scrollY <= 0;
 
-                if (isAtTop && touchDiff > 0 && !e.target.closest('input, textarea, select')) {
+                if (isAtTop && touchDiff > 0 && !e.target.closest('input, textarea, select, canvas')) {
                     if (e.cancelable) {
                         e.preventDefault();
                     }

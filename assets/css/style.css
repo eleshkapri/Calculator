@@ -230,7 +230,9 @@ body {
     z-index: 40;
     overflow-x: hidden;
     overflow-y: auto;
-    overscroll-behavior: contain;
+    overscroll-behavior-y: contain;
+    touch-action: pan-y;
+    -webkit-overflow-scrolling: touch;
     transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
@@ -3409,11 +3411,29 @@ body.light-theme .stats-canvas-container {
         left: -280px;
         top: 0;
         bottom: 0;
+        height: 100vh;
+        height: 100dvh;
         width: 280px;
         box-shadow: var(--shadow-lg);
+        overflow-y: auto;
+        overflow-x: hidden;
+        -webkit-overflow-scrolling: touch;
+        overscroll-behavior-y: contain;
+        touch-action: pan-y;
+        padding-bottom: max(36px, env(safe-area-inset-bottom, 24px));
     }
     .sidebar.open { transform: translateX(280px); }
     .sidebar-close-btn { display: flex; }
+
+    /* Unify mobile sidebar into a single continuous scroll container to prevent nested scroll traps */
+    .sidebar .nav-menu {
+        overflow: visible;
+        flex: none;
+    }
+
+    .sidebar * {
+        touch-action: pan-y;
+    }
     
     .mobile-toggle {
         display: flex;
