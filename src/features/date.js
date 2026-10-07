@@ -3,7 +3,7 @@
  * Precise duration between dates, chronological age breakdown & date math
  */
 
-import { SoundFx } from '../../core/sound.js';
+import { SoundFx } from '../core/sound.js';
 
 export const DateEngine = {
     init() {

@@ -4,9 +4,9 @@
  */
 
 import { state } from '../core/state.js';
-import { inputVal, calculate, backspace, clear } from '../features/standard/standard.js';
-import { GraphEngine } from '../features/graphing/graphing.js';
-import { ProgrammerEngine } from '../features/programmer/programmer.js';
+import { inputVal, calculate, backspace, clear } from '../features/standard.js';
+import { GraphEngine } from '../features/graphing.js';
+import { ProgrammerEngine } from '../features/programmer.js';
 
 export function initKeyboard() {
     window.addEventListener('keydown', (e) => {

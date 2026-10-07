@@ -5,8 +5,8 @@
 
 import { state } from '../core/state.js';
 import { SoundFx } from '../core/sound.js';
-import { GraphEngine } from '../features/graphing/graphing.js';
-import { StatisticsEngine } from '../features/statistics/statistics.js';
+import { GraphEngine } from '../features/graphing.js';
+import { StatisticsEngine } from '../features/statistics.js';
 
 export function applyTheme(themeName) {
     const isLight = themeName === 'light';

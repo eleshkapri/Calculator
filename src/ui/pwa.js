@@ -5,7 +5,7 @@
 
 import { SoundFx } from '../core/sound.js';
 import { showToast } from '../core/dom.js';
-import { FinancialEngine } from '../features/financial/financial.js';
+import { FinancialEngine } from '../features/financial.js';
 
 export const PWAController = {
     openInstallModal() {

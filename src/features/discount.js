@@ -3,10 +3,10 @@
  * Shopping savings, sales tax, coupon reduction & bill splitting with tip
  */
 
-import { CURRENCY_CONFIG } from '../../core/constants.js';
-import { formatMoney } from '../../core/format.js';
-import { SoundFx } from '../../core/sound.js';
-import { copyToClipboard } from '../../core/dom.js';
+import { CURRENCY_CONFIG } from '../core/constants.js';
+import { formatMoney } from '../core/format.js';
+import { SoundFx } from '../core/sound.js';
+import { copyToClipboard } from '../core/dom.js';
 
 export const DiscountEngine = {
     currentCurrency: localStorage.getItem('calverse_disc_currency') || 'INR',

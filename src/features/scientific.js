@@ -3,10 +3,10 @@
  * High-precision scientific functions, trigonometry, logarithms & powers
  */
 
-import { state } from '../../core/state.js';
-import { SoundFx } from '../../core/sound.js';
-import { evaluateMath, factorial } from '../../core/math.js';
-import { updateDisplay } from '../standard/standard.js';
+import { state } from '../core/state.js';
+import { SoundFx } from '../core/sound.js';
+import { evaluateMath, factorial } from '../core/math.js';
+import { updateDisplay } from './standard.js';
 
 export function inputFunc(fn) {
     SoundFx.playClick(550);

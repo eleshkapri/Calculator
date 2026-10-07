@@ -18,17 +18,17 @@ import {
     memSub,
     renderHistoryList,
     clearHistory
-} from './features/standard/standard.js';
-import { inputFunc, toggleAngleMode } from './features/scientific/scientific.js';
-import { GraphEngine } from './features/graphing/graphing.js';
-import { FinancialEngine } from './features/financial/financial.js';
-import { ProgrammerEngine } from './features/programmer/programmer.js';
-import { HealthEngine } from './features/health/health.js';
-import { DateEngine } from './features/date/date.js';
-import { TimeEngine } from './features/time/time.js';
-import { DiscountEngine } from './features/discount/discount.js';
-import { EquationEngine } from './features/equations/equations.js';
-import { StatisticsEngine } from './features/statistics/statistics.js';
+} from './features/standard.js';
+import { inputFunc, toggleAngleMode } from './features/scientific.js';
+import { GraphEngine } from './features/graphing.js';
+import { FinancialEngine } from './features/financial.js';
+import { ProgrammerEngine } from './features/programmer.js';
+import { HealthEngine } from './features/health.js';
+import { DateEngine } from './features/date.js';
+import { TimeEngine } from './features/time.js';
+import { DiscountEngine } from './features/discount.js';
+import { EquationEngine } from './features/equations.js';
+import { StatisticsEngine } from './features/statistics.js';
 import { initNavigation, switchMode } from './ui/navigation.js';
 import { initKeyboard } from './ui/keyboard.js';
 import { initSidebarClock } from './ui/clock.js';

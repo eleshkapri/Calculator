@@ -3,9 +3,9 @@
  * Statistical metrics (Mean, Median, Mode, Variance, StdDev, IQR) & HTML5 Canvas visual charts (Bars, Boxplot, Histogram)
  */
 
-import { state } from '../../core/state.js';
-import { SoundFx } from '../../core/sound.js';
-import { copyToClipboard } from '../../core/dom.js';
+import { state } from '../core/state.js';
+import { SoundFx } from '../core/sound.js';
+import { copyToClipboard } from '../core/dom.js';
 
 export const StatisticsEngine = {
     canvas: null,

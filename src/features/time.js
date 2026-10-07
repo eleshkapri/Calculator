@@ -3,9 +3,9 @@
  * Time unit keypad, duration calculator, time math, epoch timestamps & stopwatch with lap tracking
  */
 
-import { SoundFx } from '../../core/sound.js';
-import { copyToClipboard } from '../../core/dom.js';
-import { addHistory } from '../standard/standard.js';
+import { SoundFx } from '../core/sound.js';
+import { copyToClipboard } from '../core/dom.js';
+import { addHistory } from './standard.js';
 
 export const TimeEngine = {
     swStartTime: 0,

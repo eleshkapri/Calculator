@@ -3,10 +3,10 @@
  * Loan EMI calculator, SIP compound growth & live real-time currency exchange
  */
 
-import { CURRENCY_CONFIG } from '../../core/constants.js';
-import { formatMoney } from '../../core/format.js';
-import { SoundFx } from '../../core/sound.js';
-import { getFloatVal, showToast } from '../../core/dom.js';
+import { CURRENCY_CONFIG } from '../core/constants.js';
+import { formatMoney } from '../core/format.js';
+import { SoundFx } from '../core/sound.js';
+import { getFloatVal, showToast } from '../core/dom.js';
 
 export const FinancialEngine = {
     currentCurrency: localStorage.getItem('calverse_fin_currency') || 'INR',

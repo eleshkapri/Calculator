@@ -1,7 +1,7 @@
 /**
  * CalVerse Pro - Compiled Production Bundle
  * Generated from modular src/ architecture
- * Built: 2026-10-07T11:21:17.700Z
+ * Built: 2026-10-07T11:32:23.266Z
  * Zero dependencies • Offline-ready PWA
  */
 
@@ -388,7 +388,7 @@
     
 
     // -------------------------------------------------------------------------
-    // Module: src/features/standard/standard.js
+    // Module: src/features/standard.js
     // -------------------------------------------------------------------------
     /**
      * CalVerse Pro - Standard Calculator Feature
@@ -577,7 +577,7 @@
     
 
     // -------------------------------------------------------------------------
-    // Module: src/features/scientific/scientific.js
+    // Module: src/features/scientific.js
     // -------------------------------------------------------------------------
     /**
      * CalVerse Pro - Scientific Calculator Feature
@@ -627,7 +627,7 @@
     
 
     // -------------------------------------------------------------------------
-    // Module: src/features/graphing/graphing.js
+    // Module: src/features/graphing.js
     // -------------------------------------------------------------------------
     /**
      * CalVerse Pro - Graphing Calculator Feature
@@ -844,7 +844,7 @@
     
 
     // -------------------------------------------------------------------------
-    // Module: src/features/financial/financial.js
+    // Module: src/features/financial.js
     // -------------------------------------------------------------------------
     /**
      * CalVerse Pro - Financial & Currency Feature
@@ -1155,7 +1155,7 @@
     
 
     // -------------------------------------------------------------------------
-    // Module: src/features/programmer/programmer.js
+    // Module: src/features/programmer.js
     // -------------------------------------------------------------------------
     /**
      * CalVerse Pro - Programmer Calculator Feature
@@ -1336,7 +1336,7 @@
     
 
     // -------------------------------------------------------------------------
-    // Module: src/features/converter/converter.js
+    // Module: src/features/converter.js
     // -------------------------------------------------------------------------
     /**
      * CalVerse Pro - Unit Converter Feature
@@ -1447,7 +1447,7 @@
     
 
     // -------------------------------------------------------------------------
-    // Module: src/features/health/health.js
+    // Module: src/features/health.js
     // -------------------------------------------------------------------------
     /**
      * CalVerse Pro - BMI & Health Feature
@@ -1557,7 +1557,7 @@
     
 
     // -------------------------------------------------------------------------
-    // Module: src/features/date/date.js
+    // Module: src/features/date.js
     // -------------------------------------------------------------------------
     /**
      * CalVerse Pro - Date & Age Feature
@@ -1674,7 +1674,7 @@
     
 
     // -------------------------------------------------------------------------
-    // Module: src/features/time/time.js
+    // Module: src/features/time.js
     // -------------------------------------------------------------------------
     /**
      * CalVerse Pro - Time & Stopwatch Feature
@@ -2092,7 +2092,7 @@
     
 
     // -------------------------------------------------------------------------
-    // Module: src/features/discount/discount.js
+    // Module: src/features/discount.js
     // -------------------------------------------------------------------------
     /**
      * CalVerse Pro - Discount & Tip Feature
@@ -2258,7 +2258,7 @@
     
 
     // -------------------------------------------------------------------------
-    // Module: src/features/equations/equations.js
+    // Module: src/features/equations.js
     // -------------------------------------------------------------------------
     /**
      * CalVerse Pro - Equation & Algebra Feature
@@ -2461,7 +2461,7 @@
     
 
     // -------------------------------------------------------------------------
-    // Module: src/features/statistics/statistics.js
+    // Module: src/features/statistics.js
     // -------------------------------------------------------------------------
     /**
      * CalVerse Pro - Statistics & Data Analyzer Feature

@@ -3,9 +3,9 @@
  * Instant multi-category conversions: length, mass, temperature, area, speed, digital, time
  */
 
-import { CONVERTER_UNITS } from '../../core/constants.js';
-import { SoundFx } from '../../core/sound.js';
-import { getFloatVal } from '../../core/dom.js';
+import { CONVERTER_UNITS } from '../core/constants.js';
+import { SoundFx } from '../core/sound.js';
+import { getFloatVal } from '../core/dom.js';
 
 export const ConverterEngine = {
     currentCategory: 'length',

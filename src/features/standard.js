@@ -3,11 +3,11 @@
  * Core 4-operation arithmetic, memory registers & calculation history
  */
 
-import { state } from '../../core/state.js';
-import { SoundFx } from '../../core/sound.js';
-import { evaluateMath } from '../../core/math.js';
-import { StorageEngine } from '../../core/storage.js';
-import { copyToClipboard } from '../../core/dom.js';
+import { state } from '../core/state.js';
+import { SoundFx } from '../core/sound.js';
+import { evaluateMath } from '../core/math.js';
+import { StorageEngine } from '../core/storage.js';
+import { copyToClipboard } from '../core/dom.js';
 
 export function updateDisplay(type) {
     const data = state[type];

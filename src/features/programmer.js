@@ -3,8 +3,8 @@
  * Multi-radix conversion (HEX, DEC, OCT, BIN), bitwise operations & word-size bit masking
  */
 
-import { state } from '../../core/state.js';
-import { SoundFx } from '../../core/sound.js';
+import { state } from '../core/state.js';
+import { SoundFx } from '../core/sound.js';
 
 export const ProgrammerEngine = {
     setRadix(radix) {

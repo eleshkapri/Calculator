@@ -7,17 +7,17 @@ import { state } from '../core/state.js';
 import { TITLES } from '../core/constants.js';
 import { SoundFx } from '../core/sound.js';
 import { copyToClipboard } from '../core/dom.js';
-import { renderHistoryList } from '../features/standard/standard.js';
-import { GraphEngine } from '../features/graphing/graphing.js';
-import { FinancialEngine } from '../features/financial/financial.js';
-import { ConverterEngine } from '../features/converter/converter.js';
-import { ProgrammerEngine } from '../features/programmer/programmer.js';
-import { HealthEngine } from '../features/health/health.js';
-import { DateEngine } from '../features/date/date.js';
-import { TimeEngine } from '../features/time/time.js';
-import { DiscountEngine } from '../features/discount/discount.js';
-import { EquationEngine } from '../features/equations/equations.js';
-import { StatisticsEngine } from '../features/statistics/statistics.js';
+import { renderHistoryList } from '../features/standard.js';
+import { GraphEngine } from '../features/graphing.js';
+import { FinancialEngine } from '../features/financial.js';
+import { ConverterEngine } from '../features/converter.js';
+import { ProgrammerEngine } from '../features/programmer.js';
+import { HealthEngine } from '../features/health.js';
+import { DateEngine } from '../features/date.js';
+import { TimeEngine } from '../features/time.js';
+import { DiscountEngine } from '../features/discount.js';
+import { EquationEngine } from '../features/equations.js';
+import { StatisticsEngine } from '../features/statistics.js';
 import { initTheme } from './theme.js';
 
 export function initNavigation() {

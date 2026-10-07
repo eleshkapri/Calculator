@@ -3,9 +3,9 @@
  * Body mass index, gauge visualizer, healthy weight range, BMR & TDEE
  */
 
-import { state } from '../../core/state.js';
-import { SoundFx } from '../../core/sound.js';
-import { getFloatVal } from '../../core/dom.js';
+import { state } from '../core/state.js';
+import { SoundFx } from '../core/sound.js';
+import { getFloatVal } from '../core/dom.js';
 
 export const HealthEngine = {
     setUnit(unit) {
