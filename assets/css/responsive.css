@@ -1,0 +1,529 @@
+/**
+ * ============================================================================
+ * CalVerse Pro - Responsive Media Queries Across All Screens
+ * ============================================================================
+ */
+
+/* ==========================================================================
+   Responsive Breakpoints
+   ========================================================================== */
+
+@media (max-width: 900px) {
+    .graphing-layout { flex-direction: column; height: auto; }
+    .graph-controls-panel { width: 100%; }
+    .canvas-container { height: 420px; }
+}
+
+@media (max-width: 768px) {
+    .sidebar {
+        position: fixed;
+        left: -280px;
+        top: 0;
+        bottom: 0;
+        height: 100vh;
+        height: 100dvh;
+        width: 280px;
+        box-shadow: var(--shadow-lg);
+        overflow: hidden; /* Whole sidebar stays fixed - does not scroll */
+        padding: 16px 14px;
+        padding-bottom: max(16px, env(safe-area-inset-bottom, 12px));
+    }
+    .sidebar.open { transform: translateX(280px); }
+    .sidebar-close-btn { display: flex; }
+
+    /* The calculation options list is the ONLY scrollable area */
+    .sidebar .nav-menu {
+        flex: 1 1 auto;
+        min-height: 0;
+        overflow-y: auto;
+        overflow-x: hidden;
+        -webkit-overflow-scrolling: touch;
+        touch-action: pan-y;
+        overscroll-behavior-y: contain;
+        padding-right: 4px;
+    }
+
+    .sidebar .brand,
+    .sidebar .sidebar-widget,
+    .sidebar .sidebar-footer {
+        flex-shrink: 0;
+    }
+
+    .sidebar .sidebar-widget {
+        margin-top: 8px;
+        padding-top: 8px;
+        gap: 8px;
+    }
+
+    .sidebar .sidebar-footer {
+        padding-top: 8px;
+        gap: 6px;
+    }
+
+    .sidebar .utility-btn {
+        padding: 8px 12px;
+        font-size: 0.82rem;
+    }
+    
+    .mobile-toggle {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        width: 38px;
+        height: 38px;
+        flex-shrink: 0;
+    }
+    
+    .top-header {
+        padding: 12px 18px;
+        gap: 12px;
+    }
+    
+    .active-calculator-title {
+        flex: 1;
+        min-width: 0;
+    }
+    
+    .active-calculator-title h1 {
+        font-size: 1.15rem;
+        font-weight: 700;
+        line-height: 1.2;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+    }
+    
+    .active-calculator-title p {
+        font-size: 0.75rem;
+        line-height: 1.2;
+        margin-top: 1px;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+    }
+    
+    .action-icon-btn {
+        width: 38px;
+        height: 38px;
+        flex-shrink: 0;
+    }
+    
+    .calculators-container {
+        flex: 1;
+        padding: 12px 10px 50px 10px;
+        display: flex;
+        flex-direction: column;
+        justify-content: flex-start;
+        align-items: center;
+        width: 100%;
+        max-width: 100%;
+        box-sizing: border-box;
+        min-height: min-content;
+    }
+    
+    .calculator-view {
+        width: 100%;
+        max-width: 440px;
+        box-sizing: border-box;
+        margin: 0 auto;
+    }
+
+    .calculator-view.active {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: flex-start;
+        width: 100%;
+        max-width: 440px;
+        box-sizing: border-box;
+        margin: 0 auto;
+    }
+
+    #view-standard.calculator-view.active {
+        min-height: calc(100vh - 100px);
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        margin: auto 0;
+        width: 100%;
+        box-sizing: border-box;
+    }
+    
+    .calc-card, .scientific-card, .programmer-card, .financial-card, .converter-card, .health-card, .date-card, .time-card, .time-keypad-card {
+        padding: 16px 14px;
+        border-radius: 20px;
+        width: 100%;
+        max-width: 440px;
+        box-sizing: border-box;
+        box-shadow: 0 12px 32px rgba(0, 0, 0, 0.25);
+    }
+    
+    .display-container {
+        padding: 14px 18px;
+        min-height: 110px;
+        margin-bottom: 14px;
+        border-radius: 16px;
+        box-sizing: border-box;
+        width: 100%;
+    }
+    
+    .result-display {
+        font-size: 2.2rem;
+        word-break: break-all;
+    }
+
+    .expression-line {
+        font-size: 0.92rem;
+        min-height: 22px;
+        word-break: break-all;
+    }
+    
+    .time-calc-screen {
+        padding: 14px 18px;
+        min-height: 130px;
+        margin-bottom: 14px;
+        border-radius: 16px;
+        box-sizing: border-box;
+        width: 100%;
+    }
+    
+    .time-expression-display {
+        font-size: 1.05rem;
+    }
+    
+    .time-result-val {
+        font-size: 1.6rem;
+    }
+
+    /* Keypad responsive button gaps & sizing */
+    .keypad {
+        width: 100%;
+        box-sizing: border-box;
+    }
+
+    .standard-keypad {
+        grid-template-columns: repeat(4, 1fr);
+        gap: 10px;
+    }
+    
+    .standard-keypad .btn {
+        height: 52px;
+        font-size: 1.18rem;
+        border-radius: 14px;
+    }
+    
+    .scientific-keypad {
+        grid-template-columns: repeat(5, 1fr);
+        gap: 7px;
+    }
+
+    .scientific-keypad .btn {
+        height: 44px;
+        font-size: 0.9rem;
+        border-radius: 10px;
+        padding: 2px 4px;
+    }
+
+    .programmer-keypad {
+        grid-template-columns: repeat(6, 1fr);
+        gap: 6px;
+    }
+
+    .programmer-keypad .btn {
+        height: 40px;
+        font-size: 0.82rem;
+        border-radius: 8px;
+        padding: 2px 2px;
+    }
+
+    .programmer-keypad .prog-equals {
+        height: 42px;
+    }
+
+    .time-unit-keypad {
+        grid-template-columns: repeat(4, 1fr);
+        gap: 8px;
+    }
+
+    .time-unit-keypad .btn {
+        height: 48px;
+        font-size: 0.95rem;
+        border-radius: 12px;
+    }
+    
+    .btn-tunit {
+        font-size: 0.88rem;
+        padding: 4px;
+    }
+
+    /* Form & Health mobile grid adjustments */
+    .form-grid {
+        display: grid;
+        grid-template-columns: 1fr;
+        gap: 12px;
+        margin-bottom: 18px;
+        width: 100%;
+        box-sizing: border-box;
+    }
+
+    .form-grid .input-card {
+        min-width: 0;
+        width: 100%;
+        box-sizing: border-box;
+    }
+
+    .form-grid .input-card input, .form-grid .input-card select {
+        padding: 10px 12px;
+        font-size: 0.9rem;
+        width: 100%;
+        box-sizing: border-box;
+    }
+
+    .financial-toolbar {
+        flex-direction: column;
+        align-items: stretch;
+        gap: 10px;
+        width: 100%;
+        max-width: 100%;
+        box-sizing: border-box;
+    }
+
+    .financial-toolbar .sub-tabs {
+        flex: 1 1 auto;
+        width: 100%;
+        max-width: 100%;
+        overflow-x: auto;
+        box-sizing: border-box;
+    }
+
+    .bmi-gauge-card {
+        padding: 14px 12px;
+        margin-bottom: 12px;
+    }
+
+    .bmi-number {
+        font-size: 2.6rem;
+        margin: 4px 0;
+    }
+
+    .health-stats-grid {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 8px;
+    }
+
+    .health-stats-grid .stat-box {
+        padding: 10px 12px;
+    }
+
+    .health-stats-grid .stat-box:last-child {
+        grid-column: span 2;
+    }
+    
+    .stopwatch-display {
+        font-size: 2.6rem;
+        margin-bottom: 20px;
+    }
+    
+    .stopwatch-controls {
+        gap: 10px;
+        margin-bottom: 20px;
+    }
+    
+    .sw-btn {
+        height: 48px;
+        font-size: 0.95rem;
+    }
+
+    /* Graphing Mobile Layout */
+    #view-graphing.calculator-view,
+    #view-graphing.calculator-view.active {
+        max-width: 100%;
+        width: 100%;
+    }
+
+    .graphing-layout {
+        display: flex;
+        flex-direction: column;
+        width: 100%;
+        height: auto;
+        gap: 16px;
+    }
+
+    .graph-controls-panel {
+        width: 100%;
+        padding: 16px;
+        border-radius: var(--radius-lg);
+        box-shadow: 0 8px 24px rgba(0, 0, 0, 0.2);
+    }
+
+    .canvas-container {
+        width: 100%;
+        height: 380px;
+        min-height: 380px;
+        border-radius: var(--radius-lg);
+        box-shadow: 0 8px 24px rgba(0, 0, 0, 0.25);
+    }
+
+    #graphCanvas {
+        width: 100%;
+        height: 100%;
+        display: block;
+    }
+    
+    .sub-tabs {
+        padding: 5px;
+        gap: 6px;
+        margin-bottom: 16px;
+    }
+    
+    .sub-tab {
+        padding: 8px 14px;
+        font-size: 0.82rem;
+    }
+    
+    .converter-grid {
+        flex-direction: column;
+        gap: 12px;
+    }
+    
+    .swap-btn {
+        align-self: center;
+        margin: 0;
+    }
+
+    /* Mobile Install Bottom Sheet */
+    .modal-backdrop {
+        align-items: flex-end;
+        padding: 0;
+    }
+
+    .install-modal {
+        max-width: 100%;
+        width: 100%;
+        border-radius: 24px 24px 0 0;
+        max-height: 82vh;
+        overflow-y: auto;
+        padding-bottom: 24px;
+        transform: translateY(100%);
+        transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+        box-shadow: 0 -10px 40px rgba(0, 0, 0, 0.4);
+    }
+
+    .modal-backdrop.open .install-modal {
+        transform: translateY(0);
+    }
+
+    .sheet-handle {
+        display: block;
+    }
+
+    .install-modal-header {
+        padding: 12px 20px 14px 20px;
+    }
+
+    .install-modal-body {
+        padding: 14px 18px 24px 18px;
+        gap: 12px;
+    }
+
+    .detected-device-card {
+        padding: 14px;
+        gap: 10px;
+    }
+
+    .device-info {
+        gap: 10px;
+    }
+
+    .device-icon {
+        font-size: 1.5rem;
+    }
+
+    .device-info h4 {
+        font-size: 0.95rem;
+    }
+
+    .primary-download-btn {
+        padding: 11px;
+        font-size: 0.9rem;
+    }
+}
+
+/* Compact Mobile Keypad & Layout Tuning (<=380px, e.g. Samsung Galaxy F23 360px) */
+@media (max-width: 380px) {
+    .calculators-container {
+        padding: 8px 6px 40px 6px;
+    }
+
+    .calc-card, .scientific-card, .programmer-card, .financial-card, .converter-card, .health-card, .date-card, .time-card, .time-keypad-card {
+        padding: 12px 10px;
+        border-radius: 16px;
+    }
+
+    .display-container {
+        padding: 10px 12px;
+        min-height: 96px;
+        margin-bottom: 10px;
+    }
+
+    .result-display {
+        font-size: 1.85rem;
+    }
+
+    .standard-keypad {
+        gap: 8px;
+    }
+
+    .standard-keypad .btn {
+        height: 48px;
+        font-size: 1.05rem;
+        border-radius: 10px;
+    }
+
+    .scientific-keypad {
+        gap: 5px;
+    }
+
+    .scientific-keypad .btn {
+        height: 38px;
+        font-size: 0.78rem;
+        border-radius: 7px;
+        padding: 1px 2px;
+    }
+
+    .programmer-keypad {
+        gap: 4px;
+    }
+
+    .programmer-keypad .btn {
+        height: 36px;
+        font-size: 0.74rem;
+        border-radius: 6px;
+        padding: 1px;
+    }
+
+    .time-unit-keypad {
+        gap: 6px;
+    }
+
+    .time-unit-keypad .btn {
+        height: 42px;
+        font-size: 0.88rem;
+        border-radius: 8px;
+    }
+
+    .memory-bar {
+        gap: 4px;
+        margin-bottom: 8px;
+    }
+
+    .mem-btn {
+        padding: 4px 1px;
+        font-size: 0.68rem;
+    }
+
+    .split-inputs {
+        gap: 6px;
+    }
+}

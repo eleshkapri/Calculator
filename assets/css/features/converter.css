@@ -1,0 +1,132 @@
+/**
+ * ============================================================================
+ * CalVerse Pro - Unit Conversion Engine
+ * ============================================================================
+ */
+
+/* ==========================================================================
+   5. Unit Converter
+   ========================================================================== */
+
+.category-selector {
+    display: flex;
+    flex-wrap: nowrap;
+    overflow-x: auto;
+    scrollbar-width: none;
+    gap: 8px;
+    margin-bottom: 24px;
+    padding-bottom: 2px;
+}
+
+.category-selector::-webkit-scrollbar {
+    display: none;
+}
+
+.cat-btn {
+    flex-shrink: 0;
+    white-space: nowrap;
+    background-color: var(--bg-surface-elevated);
+    border: 1px solid var(--border-subtle);
+    color: var(--text-secondary);
+    padding: 8px 14px;
+    border-radius: var(--radius-sm);
+    font-size: 0.85rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: var(--transition);
+}
+
+.cat-btn:hover {
+    background-color: var(--bg-surface-hover);
+    color: var(--text-primary);
+}
+
+.cat-btn.active {
+    background: linear-gradient(135deg, #ec4899, #be185d);
+    color: #ffffff;
+    border-color: transparent;
+    box-shadow: 0 4px 12px rgba(236, 72, 153, 0.35);
+}
+
+.converter-grid {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    margin-bottom: 20px;
+}
+
+.convert-box {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.convert-input {
+    background-color: var(--bg-input);
+    border: 1px solid var(--border-subtle);
+    color: var(--text-primary);
+    font-family: var(--font-mono);
+    font-size: 1.35rem;
+    font-weight: 700;
+    padding: 12px 16px;
+    border-radius: var(--radius-md);
+    outline: none;
+    width: 100%;
+}
+
+.convert-input:focus {
+    border-color: #ec4899;
+}
+
+.unit-dropdown {
+    background-color: var(--bg-surface-elevated);
+    border: 1px solid var(--border-subtle);
+    color: var(--text-primary);
+    padding: 10px 14px;
+    border-radius: var(--radius-md);
+    font-family: var(--font-ui);
+    font-size: 0.9rem;
+    outline: none;
+    cursor: pointer;
+}
+
+.swap-btn {
+    background-color: var(--bg-surface-elevated);
+    border: 1px solid var(--border-subtle);
+    color: var(--text-secondary);
+    font-size: 1.3rem;
+    width: 44px;
+    height: 44px;
+    border-radius: 50%;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: var(--transition);
+    align-self: flex-end;
+    margin-bottom: 6px;
+}
+
+.swap-btn:hover {
+    background: linear-gradient(135deg, #ec4899, #be185d);
+    color: #ffffff;
+    border-color: transparent;
+    transform: rotate(180deg);
+}
+
+.conversion-formula {
+    text-align: center;
+    font-family: var(--font-mono);
+    font-size: 0.9rem;
+    color: #db2777;
+    background-color: var(--bg-input);
+    padding: 10px;
+    border-radius: var(--radius-sm);
+    margin-bottom: 20px;
+    border: 1px solid var(--border-subtle);
+}
+
+body.dark-theme .conversion-formula {
+    color: #f472b6;
+}

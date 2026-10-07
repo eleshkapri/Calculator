@@ -1,0 +1,112 @@
+/**
+ * ============================================================================
+ * CalVerse Pro - Programmer BigInt & Radix Keypad
+ * ============================================================================
+ */
+
+/* ==========================================================================
+   6. Programmer Calculator
+   ========================================================================== */
+
+.radix-board {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    background-color: var(--bg-input);
+    padding: 14px 18px;
+    border-radius: var(--radius-lg);
+    border: 1px solid var(--border-subtle);
+    margin-bottom: 14px;
+}
+
+.radix-row {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 7px 10px;
+    border-radius: var(--radius-sm);
+    cursor: pointer;
+    border: 1px solid transparent;
+    transition: var(--transition);
+}
+
+.radix-row:hover {
+    background-color: var(--bg-surface-hover);
+}
+
+.radix-row.active {
+    background: rgba(37, 99, 235, 0.12);
+    border-color: rgba(37, 99, 235, 0.35);
+}
+
+.radix-tag {
+    font-family: var(--font-heading);
+    font-size: 0.8rem;
+    font-weight: 700;
+    width: 36px;
+    color: var(--text-muted);
+}
+
+.radix-row.active .radix-tag {
+    color: #2563eb;
+}
+
+body.dark-theme .radix-row.active .radix-tag {
+    color: #38bdf8;
+}
+
+.radix-val {
+    flex: 1;
+    font-family: var(--font-mono);
+    font-size: 1.05rem;
+    font-weight: 600;
+    color: var(--text-primary);
+    text-align: right;
+    word-break: break-all;
+}
+
+.bit-word-bar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 8px;
+    margin-bottom: 14px;
+}
+
+.bar-title {
+    font-size: 0.8rem;
+    font-weight: 600;
+    color: var(--text-secondary);
+}
+
+.word-sizes {
+    display: flex;
+    gap: 6px;
+}
+
+.word-btn {
+    background-color: var(--bg-surface-elevated);
+    border: 1px solid var(--border-subtle);
+    color: var(--text-secondary);
+    font-size: 0.72rem;
+    font-weight: 600;
+    padding: 5px 8px;
+    border-radius: var(--radius-sm);
+    cursor: pointer;
+    transition: var(--transition);
+}
+
+.word-btn.active {
+    background: linear-gradient(135deg, #0284c7, #0369a1);
+    color: #ffffff;
+    border-color: transparent;
+}
+
+.programmer-keypad {
+    grid-template-columns: repeat(6, 1fr);
+}
+
+.prog-equals {
+    grid-column: span 6;
+    margin-top: 4px;
+}

@@ -1,5 +1,5 @@
 // Service Worker for CalVerse Pro — Network-First for Fast Sync
-const CACHE_NAME = 'calverse-v32';
+const CACHE_NAME = 'calverse-v33';
 
 // Core static assets required for complete offline operation
 const PRECACHE_ASSETS = [
@@ -8,6 +8,27 @@ const PRECACHE_ASSETS = [
   './favicon.ico',
   './manifest.json',
   './assets/css/style.css',
+  './assets/css/responsive.css',
+  './assets/css/core/variables.css',
+  './assets/css/core/reset.css',
+  './assets/css/ui/layout.css',
+  './assets/css/ui/header.css',
+  './assets/css/ui/sidebar.css',
+  './assets/css/ui/display.css',
+  './assets/css/ui/keypad.css',
+  './assets/css/ui/modals.css',
+  './assets/css/ui/footer.css',
+  './assets/css/features/standard.css',
+  './assets/css/features/graphing.css',
+  './assets/css/features/financial.css',
+  './assets/css/features/programmer.css',
+  './assets/css/features/health.css',
+  './assets/css/features/date.css',
+  './assets/css/features/time.css',
+  './assets/css/features/discount.css',
+  './assets/css/features/equations.css',
+  './assets/css/features/statistics.css',
+  './assets/css/features/converter.css',
   './assets/icons/favicon.svg',
   './assets/icons/favicon.ico',
   './assets/icons/icon-192.png',

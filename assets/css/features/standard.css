@@ -1,0 +1,35 @@
+/**
+ * ============================================================================
+ * CalVerse Pro - Standard & Scientific Calculator Views
+ * ============================================================================
+ */
+
+/* ==========================================================================
+   Shared Calculator Cards & Displays
+   ========================================================================== */
+
+.calc-card, .scientific-card, .programmer-card, .financial-card, .converter-card, .health-card, .date-card, .time-card, .time-keypad-card {
+    background: var(--bg-surface);
+    border: 1px solid var(--border-subtle);
+    border-radius: var(--radius-xl);
+    padding: 24px;
+    box-shadow: var(--card-shadow);
+    box-sizing: border-box;
+    width: 100%;
+}
+
+#view-standard.calculator-view.active {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    min-height: calc(100vh - 130px);
+    margin: auto 0;
+}
+
+.calc-card { width: 100%; max-width: 330px; padding: 18px; }
+.scientific-card { width: 100%; max-width: 440px; padding: 18px; }
+.programmer-card { width: 100%; max-width: 460px; padding: 18px; }
+.financial-card { width: 100%; max-width: 740px; padding: 24px; }
+.converter-card, .health-card, .date-card, .time-card { width: 100%; max-width: 680px; padding: 24px; }
+.time-keypad-card { width: 100%; max-width: 350px; padding: 18px; }

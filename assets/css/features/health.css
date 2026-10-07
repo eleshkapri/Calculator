@@ -1,0 +1,156 @@
+/**
+ * ============================================================================
+ * CalVerse Pro - BMI & Metabolic Health Biometrics
+ * ============================================================================
+ */
+
+/* ==========================================================================
+   7. BMI & Health Calculator
+   ========================================================================== */
+
+.unit-toggle-row {
+    display: flex;
+    gap: 8px;
+    margin-bottom: 20px;
+}
+
+.unit-pill {
+    flex: 1;
+    background-color: var(--bg-surface-elevated);
+    border: 1px solid var(--border-subtle);
+    color: var(--text-secondary);
+    padding: 10px;
+    border-radius: var(--radius-md);
+    font-weight: 600;
+    cursor: pointer;
+    transition: var(--transition);
+}
+
+.unit-pill.active {
+    background: linear-gradient(135deg, #65a30d, #4d7c0f);
+    color: #ffffff;
+    border-color: transparent;
+}
+
+.radio-buttons {
+    display: flex;
+    gap: 16px;
+    align-items: center;
+    padding: 12px 0;
+}
+
+.radio-buttons label {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    cursor: pointer;
+    color: var(--text-primary);
+}
+
+.health-results {
+    margin-top: 24px;
+}
+
+.bmi-gauge-card {
+    background-color: var(--bg-surface-elevated);
+    border: 1px solid var(--border-subtle);
+    border-radius: var(--radius-lg);
+    padding: 20px;
+    text-align: center;
+    margin-bottom: 16px;
+}
+
+.gauge-label {
+    font-size: 0.85rem;
+    font-weight: 600;
+    color: var(--text-secondary);
+}
+
+.bmi-number {
+    font-family: var(--font-heading);
+    font-size: 3rem;
+    font-weight: 800;
+    color: #10b981;
+    line-height: 1.1;
+    margin: 8px 0;
+}
+
+.bmi-badge {
+    display: inline-block;
+    padding: 4px 14px;
+    border-radius: 20px;
+    font-size: 0.85rem;
+    font-weight: 700;
+    margin-bottom: 16px;
+}
+
+.badge-under { background-color: rgba(56, 189, 248, 0.2); color: #0284c7; }
+.badge-normal { background-color: rgba(16, 185, 129, 0.2); color: #059669; }
+.badge-over { background-color: rgba(249, 115, 22, 0.2); color: #d97706; }
+.badge-obese { background-color: rgba(244, 63, 94, 0.2); color: #e11d48; }
+
+.bmi-meter {
+    display: flex;
+    height: 14px;
+    border-radius: 7px;
+    overflow: hidden;
+    position: relative;
+    margin-top: 8px;
+}
+
+.bmi-zone {
+    flex: 1;
+    font-size: 0.65rem;
+    color: rgba(255,255,255,0.95);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 600;
+}
+
+.zone-under { background-color: #38bdf8; }
+.zone-normal { background-color: #10b981; }
+.zone-over { background-color: #f97316; }
+.zone-obese { background-color: #f43f5e; }
+
+.bmi-pointer {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    width: 4px;
+    background-color: #ffffff;
+    box-shadow: 0 0 8px rgba(0,0,0,0.8);
+    transform: translateX(-50%);
+    transition: left 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.health-stats-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 12px;
+}
+
+.health-stats-grid .stat-box:last-child {
+    grid-column: span 2;
+}
+
+.stat-box {
+    background-color: var(--bg-surface-elevated);
+    border: 1px solid var(--border-subtle);
+    border-radius: var(--radius-md);
+    padding: 14px;
+}
+
+.stat-title {
+    font-size: 0.75rem;
+    color: var(--text-secondary);
+    display: block;
+    margin-bottom: 4px;
+}
+
+.stat-val {
+    font-family: var(--font-heading);
+    font-size: 1.05rem;
+    font-weight: 700;
+    color: var(--text-primary);
+}

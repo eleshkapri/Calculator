@@ -1,0 +1,158 @@
+/**
+ * ============================================================================
+ * CalVerse Pro - Calendar Date Math & Precision Stopwatch
+ * ============================================================================
+ */
+
+/* ==========================================================================
+   8. Date & Stopwatch
+   ========================================================================== */
+
+.date-result-box {
+    margin-top: 20px;
+    background-color: var(--bg-surface-elevated);
+    border: 1px solid var(--border-subtle);
+    border-radius: var(--radius-lg);
+    padding: 20px;
+    text-align: center;
+}
+
+.primary-duration {
+    font-family: var(--font-heading);
+    font-size: 1.6rem;
+    font-weight: 800;
+    color: #2563eb;
+    margin-bottom: 6px;
+}
+
+.secondary-breakdown {
+    font-size: 0.9rem;
+    color: var(--text-secondary);
+    line-height: 1.6;
+}
+
+.stopwatch-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 16px 0;
+}
+
+.stopwatch-display {
+    font-family: var(--font-mono);
+    font-size: 3.2rem;
+    font-weight: 800;
+    letter-spacing: -1px;
+    color: #2563eb;
+    margin-bottom: 24px;
+}
+
+body.dark-theme .stopwatch-display {
+    color: #38bdf8;
+    text-shadow: 0 0 20px rgba(56, 189, 248, 0.35);
+}
+
+.stopwatch-controls {
+    display: flex;
+    gap: 14px;
+    margin-bottom: 24px;
+    width: 100%;
+    max-width: 380px;
+}
+
+.sw-btn {
+    flex: 1;
+    height: 48px;
+    border: none;
+    border-radius: var(--radius-md);
+    font-family: var(--font-ui);
+    font-size: 1rem;
+    font-weight: 700;
+    cursor: pointer;
+    transition: var(--transition);
+}
+
+.btn-start {
+    background: linear-gradient(135deg, #10b981, #059669);
+    color: #ffffff;
+    box-shadow: 0 4px 14px rgba(16, 185, 129, 0.35);
+}
+
+.btn-start.running {
+    background: linear-gradient(135deg, #f43f5e, #e11d48);
+    box-shadow: 0 4px 14px rgba(244, 63, 94, 0.35);
+}
+
+.btn-lap {
+    background-color: var(--bg-surface-elevated);
+    border: 1px solid var(--border-subtle);
+    color: var(--text-primary);
+}
+
+.btn-lap:hover {
+    background-color: var(--bg-surface-hover);
+}
+
+.btn-reset {
+    background-color: var(--bg-surface-elevated);
+    border: 1px solid var(--border-subtle);
+    color: var(--text-secondary);
+}
+
+.btn-reset:hover {
+    background-color: var(--bg-surface-hover);
+    color: var(--text-primary);
+}
+
+.laps-container {
+    width: 100%;
+    max-height: 200px;
+    overflow-y: auto;
+    border-top: 1px solid var(--border-subtle);
+    padding-top: 14px;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.lap-row {
+    display: flex;
+    justify-content: space-between;
+    padding: 8px 14px;
+    background-color: var(--bg-surface-elevated);
+    border-radius: var(--radius-sm);
+    font-family: var(--font-mono);
+    font-size: 0.9rem;
+}
+
+.lap-num { color: var(--text-secondary); }
+.lap-time { color: var(--text-primary); font-weight: 600; }
+.empty-laps { text-align: center; color: var(--text-muted); font-size: 0.85rem; padding: 10px 0; }
+
+.epoch-live-box {
+    background: rgba(6, 182, 212, 0.1);
+    border: 1px solid rgba(6, 182, 212, 0.3);
+    border-radius: var(--radius-lg);
+    padding: 18px;
+    text-align: center;
+}
+
+.epoch-label {
+    font-size: 0.8rem;
+    font-weight: 700;
+    color: var(--text-secondary);
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.epoch-live-val {
+    font-family: var(--font-mono);
+    font-size: 2.2rem;
+    font-weight: 800;
+    color: #0891b2;
+    margin-top: 4px;
+}
+
+body.dark-theme .epoch-live-val {
+    color: #22d3ee;
+}

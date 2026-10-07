@@ -1,0 +1,216 @@
+/**
+ * ============================================================================
+ * CalVerse Pro - Calculator Keypads & Button Primitives
+ * ============================================================================
+ */
+
+/* Memory Bar */
+.memory-bar {
+    display: flex;
+    justify-content: space-between;
+    gap: 5px;
+    margin-bottom: 10px;
+}
+
+.mem-btn {
+    flex: 1;
+    background: var(--bg-surface-elevated);
+    border: 1px solid var(--border-subtle);
+    color: var(--text-secondary);
+    font-size: 0.72rem;
+    font-weight: 600;
+    padding: 5px 2px;
+    border-radius: var(--radius-sm);
+    cursor: pointer;
+    transition: var(--transition);
+}
+
+.mem-btn:hover {
+    background: var(--bg-surface-hover);
+    color: var(--text-primary);
+    border-color: var(--border-highlight);
+}
+
+/* Keypads - Laptop & Desktop Defaults */
+.keypad {
+    display: grid;
+    gap: 12px;
+    width: 100%;
+    box-sizing: border-box;
+}
+
+.standard-keypad {
+    grid-template-columns: repeat(4, 1fr);
+    gap: 12px;
+}
+
+.standard-keypad .btn {
+    height: 52px;
+    font-size: 1.15rem;
+}
+
+.scientific-keypad {
+    grid-template-columns: repeat(5, 1fr);
+    gap: 10px;
+}
+
+.scientific-keypad .btn {
+    height: 44px;
+    font-size: 0.90rem;
+    padding: 2px 4px;
+}
+
+.time-unit-keypad {
+    grid-template-columns: repeat(4, 1fr);
+    gap: 10px;
+}
+
+.time-unit-keypad .btn {
+    height: 48px;
+    font-size: 1rem;
+    padding: 2px 4px;
+}
+
+.programmer-keypad {
+    grid-template-columns: repeat(6, 1fr);
+    gap: 8px;
+}
+
+.programmer-keypad .btn {
+    height: 42px;
+    font-size: 0.86rem;
+    padding: 2px 2px;
+}
+
+.btn {
+    border: 1px solid var(--btn-num-border);
+    height: 48px;
+    border-radius: var(--radius-sm);
+    font-family: var(--font-ui);
+    font-size: 1.05rem;
+    font-weight: 600;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: var(--transition);
+    user-select: none;
+    touch-action: manipulation;
+    -webkit-tap-highlight-color: transparent;
+    box-shadow: var(--btn-num-shadow);
+    min-width: 0;
+    box-sizing: border-box;
+}
+
+.programmer-keypad .btn {
+    height: 38px;
+    font-size: 0.84rem;
+    padding: 2px 2px;
+}
+
+.time-unit-keypad .btn {
+    height: 44px;
+    font-size: 0.95rem;
+    padding: 2px 4px;
+}
+
+.btn:active {
+    transform: scale(0.95);
+}
+
+.btn-num {
+    background-color: var(--btn-num-bg);
+    color: var(--btn-num-text);
+}
+
+.btn-num:hover {
+    background-color: var(--btn-num-hover);
+    border-color: var(--border-highlight);
+}
+
+.btn-op {
+    background-color: var(--btn-op-bg);
+    color: var(--btn-op-text);
+    border-color: var(--btn-op-border);
+    font-size: 1.35rem;
+}
+
+.btn-op:hover {
+    background-color: var(--btn-op-hover);
+    border-color: var(--btn-op-text);
+}
+
+.btn-fn {
+    background-color: var(--btn-fn-bg);
+    color: var(--btn-fn-text);
+    border-color: var(--btn-fn-border);
+}
+
+.btn-fn:hover {
+    background-color: var(--btn-fn-hover);
+    border-color: var(--btn-fn-text);
+}
+
+.btn-sci {
+    background-color: var(--btn-sci-bg);
+    color: var(--btn-sci-text);
+    border-color: var(--btn-sci-border);
+    font-size: 0.95rem;
+}
+
+.btn-sci:hover {
+    background-color: var(--btn-sci-hover);
+    color: var(--border-focus);
+    border-color: var(--border-focus);
+}
+
+.btn-hex {
+    background-color: var(--btn-hex-bg);
+    color: var(--btn-hex-text);
+    border-color: var(--btn-hex-border);
+    font-size: 1.05rem;
+}
+
+.btn-hex:hover {
+    border-color: var(--btn-hex-text);
+}
+
+.btn-hex.disabled {
+    opacity: 0.25;
+    pointer-events: none;
+}
+
+.btn-bit {
+    background-color: var(--btn-bit-bg);
+    color: var(--btn-bit-text);
+    border-color: var(--btn-bit-border);
+    font-size: 0.85rem;
+}
+
+.btn-bit:hover {
+    border-color: var(--btn-bit-text);
+}
+
+.btn-tunit {
+    font-size: 0.95rem;
+    font-weight: 700;
+}
+
+.unit-hour { background: var(--unit-hour-bg); color: var(--unit-hour-text); border-color: var(--unit-hour-border); }
+.unit-min { background: var(--unit-min-bg); color: var(--unit-min-text); border-color: var(--unit-min-border); }
+.unit-sec { background: var(--unit-sec-bg); color: var(--unit-sec-text); border-color: var(--unit-sec-border); }
+.unit-msec { background: var(--unit-msec-bg); color: var(--unit-msec-text); border-color: var(--unit-msec-border); }
+
+.btn-equals {
+    background: var(--btn-equals-bg);
+    color: var(--btn-equals-text);
+    font-size: 1.25rem;
+    border: none;
+    box-shadow: 0 4px 14px rgba(37, 99, 235, 0.4);
+}
+
+.btn-equals:hover {
+    background: var(--btn-equals-hover);
+    box-shadow: 0 6px 18px rgba(37, 99, 235, 0.5);
+    transform: translateY(-1px);
+}

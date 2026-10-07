@@ -1,0 +1,45 @@
+/**
+ * ============================================================================
+ * CalVerse Pro - Base Reset & Viewport Constraints
+ * ============================================================================
+ */
+
+/* Base Reset & Mobile Pull-To-Refresh Prevention */
+*, *::before, *::after {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+.hidden {
+    display: none !important;
+}
+
+html {
+    overscroll-behavior: none;
+}
+
+body {
+    font-family: var(--font-ui);
+    background-color: var(--bg-base);
+    color: var(--text-primary);
+    min-height: 100vh;
+    min-height: 100dvh;
+    display: flex;
+    overflow: hidden;
+    line-height: 1.5;
+    -webkit-font-smoothing: antialiased;
+    overscroll-behavior: none;
+    user-select: none;
+}
+
+/* App Container */
+.app-container {
+    display: flex;
+    width: 100vw;
+    height: 100vh;
+    height: 100dvh;
+    position: relative;
+    overflow: hidden;
+    overscroll-behavior: none;
+}

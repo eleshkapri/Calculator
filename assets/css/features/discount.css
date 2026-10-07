@@ -1,0 +1,217 @@
+/**
+ * ============================================================================
+ * CalVerse Pro - Discount, Sales Tax & Bill Tip Splitting
+ * ============================================================================
+ */
+
+/* ==========================================================================
+   10. Discount & Tip Calculator Styles
+   ========================================================================== */
+.discount-card {
+    background: var(--bg-surface);
+    border: 1px solid var(--border-subtle);
+    border-radius: var(--radius-xl);
+    padding: 24px;
+    box-shadow: var(--shadow-md);
+    max-width: 680px;
+    margin: 0 auto;
+    width: 100%;
+}
+
+.quick-chip-row {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+    margin-top: 8px;
+}
+
+.quick-pct-chip {
+    background: var(--bg-surface-elevated);
+    border: 1px solid var(--border-subtle);
+    color: var(--text-secondary);
+    padding: 4px 10px;
+    border-radius: var(--radius-sm);
+    font-size: 0.78rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: var(--transition);
+}
+
+.quick-pct-chip:hover, .quick-pct-chip.active {
+    background: #2563eb;
+    color: #ffffff;
+    border-color: #2563eb;
+}
+
+.discount-result-card {
+    margin-top: 20px;
+    background: linear-gradient(135deg, rgba(37, 99, 235, 0.08), rgba(16, 185, 129, 0.08));
+    border: 1px solid rgba(37, 99, 235, 0.25);
+    border-radius: var(--radius-lg);
+    padding: 20px;
+}
+
+.result-hero-box {
+    text-align: center;
+    padding-bottom: 16px;
+    border-bottom: 1px dashed var(--border-subtle);
+}
+
+.hero-label {
+    font-size: 0.82rem;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    color: var(--text-muted);
+    font-weight: 700;
+}
+
+.hero-val {
+    font-size: 2.4rem;
+    font-weight: 800;
+    color: var(--text-primary);
+    font-family: var(--font-mono);
+    margin: 4px 0;
+}
+
+.savings-tag {
+    display: inline-block;
+    background: rgba(16, 185, 129, 0.15);
+    color: #10b981;
+    font-size: 0.85rem;
+    font-weight: 700;
+    padding: 4px 12px;
+    border-radius: var(--radius-full);
+}
+
+.receipt-breakdown-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 12px;
+    padding-top: 14px;
+}
+
+.breakdown-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 0.86rem;
+    color: var(--text-secondary);
+}
+
+.breakdown-item strong {
+    color: var(--text-primary);
+    font-family: var(--font-mono);
+}
+
+.text-green { color: #10b981 !important; }
+.text-amber { color: #f59e0b !important; }
+.text-primary-accent { color: #2563eb !important; }
+body.dark-theme .text-primary-accent { color: #60a5fa !important; }
+
+.badge-optional {
+    font-size: 0.68rem;
+    color: var(--text-muted);
+    font-weight: normal;
+    margin-left: 4px;
+}
+
+.stepper-wrap {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.stepper-btn {
+    width: 44px;
+    height: 44px;
+    background: var(--bg-surface-elevated);
+    border: 1px solid var(--border-subtle);
+    color: var(--text-primary);
+    border-radius: var(--radius-md);
+    font-size: 1.2rem;
+    font-weight: 700;
+    cursor: pointer;
+    transition: var(--transition);
+}
+
+.stepper-btn:hover {
+    background: #2563eb;
+    color: #ffffff;
+}
+
+.tip-receipt-card {
+    margin-top: 20px;
+    background: var(--bg-surface-elevated);
+    border: 1px solid var(--border-subtle);
+    border-radius: var(--radius-lg);
+    padding: 18px 20px;
+}
+
+.receipt-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 14px;
+}
+
+.receipt-header h4 {
+    font-size: 1rem;
+    font-weight: 700;
+    color: var(--text-primary);
+    flex: 1;
+    margin-left: 8px;
+}
+
+.split-highlight-box {
+    display: flex;
+    background: var(--bg-input);
+    border-radius: var(--radius-md);
+    padding: 14px;
+    border: 1px solid var(--border-subtle);
+}
+
+.split-column {
+    flex: 1;
+    text-align: center;
+}
+
+.split-divider {
+    width: 1px;
+    background: var(--border-subtle);
+    margin: 0 10px;
+}
+
+.col-label {
+    font-size: 0.75rem;
+    color: var(--text-muted);
+    font-weight: 600;
+    text-transform: uppercase;
+}
+
+.col-val {
+    font-size: 1.6rem;
+    font-weight: 800;
+    font-family: var(--font-mono);
+    margin-top: 2px;
+}
+
+.copy-pill-btn {
+    background: rgba(37, 99, 235, 0.12);
+    border: 1px solid rgba(37, 99, 235, 0.3);
+    color: #2563eb;
+    padding: 6px 12px;
+    border-radius: var(--radius-full);
+    font-size: 0.75rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: var(--transition);
+}
+
+body.dark-theme .copy-pill-btn {
+    color: #60a5fa;
+}
+
+.copy-pill-btn:hover {
+    background: #2563eb;
+    color: white;
+}
