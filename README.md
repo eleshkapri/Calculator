@@ -1,4 +1,4 @@
-# <div align="center"><img src="assets/icons/icon-512.png" alt="CalVerse Pro Logo" width="108" height="108" style="border-radius: 22px; box-shadow: 0 8px 24px rgba(0,0,0,0.25);" /><br><br>🧮 CalVerse Pro</div>
+# <div align="center">🧮 CalVerse Pro</div>
 
 <div align="center">
 
