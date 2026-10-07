@@ -47,6 +47,8 @@ export function applyTheme(themeName) {
     document.documentElement.classList.toggle('dark-theme', !isLight);
     
     const themeBtn = document.getElementById('themeToggleBtn');
+    const themeIcon = document.getElementById('themeIcon');
+    const themeText = themeBtn ? themeBtn.querySelector('.btn-text') : null;
     const headerThemeBtn = document.getElementById('headerThemeBtn');
     const headerThemeIcon = document.getElementById('headerThemeIcon');
 

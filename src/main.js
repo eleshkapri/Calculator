@@ -45,7 +45,7 @@ import { StatisticsEngine } from './features/statistics.js';
 import { initNavigation, switchMode, openSidebar, closeSidebar, toggleSidebar, toggleHistory } from './ui/navigation.js';
 import { toggleTheme } from './ui/theme.js';
 import { initKeyboard } from './ui/keyboard.js';
-import { initSidebarClock } from './ui/clock.js';
+import { initSidebarClock, updateSidebarClock } from './ui/clock.js';
 import { PWAController, initPWA } from './ui/pwa.js';
 
 /**
@@ -165,6 +165,7 @@ export class CalVerseFacade {
         this.downloadExe = () => PWAController.downloadExe();
         this.downloadIosProfile = () => PWAController.downloadIosProfile();
         this.triggerPwaPrompt = () => PWAController.triggerPwaPrompt();
+        this.updateSidebarClock = () => updateSidebarClock();
     }
 }
 
@@ -174,16 +175,26 @@ export const CalVerse = Object.freeze(new CalVerseFacade());
 // Expose on global window object
 window.CalVerse = CalVerse;
 
-// Initialize on DOM ready
-document.addEventListener('DOMContentLoaded', () => {
-    initSoundAutoUnlock();
-    initNavigation();
-    initKeyboard();
-    FinancialEngine.init();
-    DiscountEngine.init();
-    EquationEngine.init();
-    StatisticsEngine.init();
-    renderHistoryList();
-    initSidebarClock();
-    initPWA();
-});
+/**
+ * Robust application bootstrapper with per-subsystem error isolation.
+ * Automatically runs immediately if DOM is already parsed or on DOMContentLoaded.
+ */
+function boot() {
+    try { initSidebarClock(); } catch (e) { console.error('Clock init error:', e); }
+    try { initSoundAutoUnlock(); } catch (e) { console.warn('SoundFx unlock error:', e); }
+    try { initNavigation(); } catch (e) { console.error('Navigation init error:', e); }
+    try { initKeyboard(); } catch (e) { console.error('Keyboard init error:', e); }
+    try { FinancialEngine.init(); } catch (e) { console.error('Financial init error:', e); }
+    try { DiscountEngine.init(); } catch (e) { console.error('Discount init error:', e); }
+    try { EquationEngine.init(); } catch (e) { console.error('Equation init error:', e); }
+    try { StatisticsEngine.init(); } catch (e) { console.error('Statistics init error:', e); }
+    try { DateEngine.init(); } catch (e) { console.error('Date init error:', e); }
+    try { renderHistoryList(); } catch (e) { console.error('History init error:', e); }
+    try { initPWA(); } catch (e) { console.error('PWA init error:', e); }
+}
+
+if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', boot);
+} else {
+    boot();
+}

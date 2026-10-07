@@ -42,6 +42,7 @@ import { DiscountEngine } from '../features/discount.js';
 import { EquationEngine } from '../features/equations.js';
 import { StatisticsEngine } from '../features/statistics.js';
 import { initTheme } from './theme.js';
+import { updateSidebarClock } from './clock.js';
 
 /**
  * Controls the slide-out navigation sidebar drawer.
@@ -51,6 +52,7 @@ export function openSidebar() {
     const sidebarOverlay = document.getElementById('sidebarOverlay');
     if (sidebar) sidebar.classList.add('open');
     if (sidebarOverlay) sidebarOverlay.classList.add('open');
+    updateSidebarClock();
 }
 
 export function closeSidebar() {
