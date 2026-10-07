@@ -1,5 +1,5 @@
 // Service Worker for CalVerse Pro — Network-First for Fast Sync
-const CACHE_NAME = 'calverse-v29';
+const CACHE_NAME = 'calverse-v30';
 
 // Core static assets required for complete offline operation
 const PRECACHE_ASSETS = [
@@ -8,11 +8,35 @@ const PRECACHE_ASSETS = [
   './favicon.ico',
   './manifest.json',
   './assets/css/style.css',
-  './assets/js/script.js',
   './assets/icons/favicon.svg',
   './assets/icons/favicon.ico',
   './assets/icons/icon-192.png',
-  './assets/icons/icon-512.png'
+  './assets/icons/icon-512.png',
+  './src/main.js',
+  './src/core/constants.js',
+  './src/core/dom.js',
+  './src/core/format.js',
+  './src/core/math.js',
+  './src/core/sound.js',
+  './src/core/state.js',
+  './src/core/storage.js',
+  './src/features/converter.js',
+  './src/features/date.js',
+  './src/features/discount.js',
+  './src/features/equations.js',
+  './src/features/financial.js',
+  './src/features/graphing.js',
+  './src/features/health.js',
+  './src/features/programmer.js',
+  './src/features/scientific.js',
+  './src/features/standard.js',
+  './src/features/statistics.js',
+  './src/features/time.js',
+  './src/ui/clock.js',
+  './src/ui/keyboard.js',
+  './src/ui/navigation.js',
+  './src/ui/pwa.js',
+  './src/ui/theme.js'
 ];
 
 // Install: Cache all core assets immediately, activate without waiting
