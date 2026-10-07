@@ -44,6 +44,10 @@
     margin: 0 auto;
 }
 
+.calculator-view:not(.active) {
+    display: none !important;
+}
+
 .calculator-view.active {
     display: flex;
     flex-direction: column;

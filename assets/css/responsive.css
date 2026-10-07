@@ -473,7 +473,6 @@
     }
 
     /* Graphing Mobile Layout */
-    #view-graphing.calculator-view,
     #view-graphing.calculator-view.active {
         max-width: 100%;
         width: 100%;
