@@ -216,6 +216,14 @@ export function switchMode(mode) {
         if (subtitleEl) subtitleEl.textContent = TITLES[mode].subtitle;
     }
 
+    // Reset scroll positions so the new view starts cleanly at the top
+    const mainViewport = document.querySelector('.main-viewport');
+    const calcContainer = document.querySelector('.calculators-container');
+    const activeView = document.getElementById(`view-${mode}`);
+    if (mainViewport) mainViewport.scrollTop = 0;
+    if (calcContainer) calcContainer.scrollTop = 0;
+    if (activeView) activeView.scrollTop = 0;
+
     // Lazy initialization & refresh of engine calculations
     if (mode === 'graphing') {
         setTimeout(() => GraphEngine.init(), 50);
