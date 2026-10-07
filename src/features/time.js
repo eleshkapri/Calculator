@@ -62,6 +62,8 @@ export const TimeEngine = {
     keypadBuffer: '',
     keypadFormatMode: 'HMS', // 'HMS', 'DEC', 'MIN', 'SEC'
     keypadLastSeconds: 22800, // 6h 20m
+    isCalculated: false,
+    lastIsRatio: false,
 
     init() {
         this.updateKeypadScreen();
@@ -73,19 +75,40 @@ export const TimeEngine = {
     // --- Time Keypad Methods ---
     inputKeypad(val) {
         SoundFx.playClick(500);
+
         if (['+', '−', '×', '÷', '%'].includes(val)) {
-            if (this.keypadBuffer) {
-                this.keypadExpr += this.keypadBuffer + ' ';
+            if (this.isCalculated) {
+                // Chain from previous calculated answer
+                const prevFormatted = this.lastIsRatio 
+                    ? this.keypadLastSeconds.toString() 
+                    : this.formatSeconds(this.keypadLastSeconds, 'HMS');
+                this.keypadExpr = `${prevFormatted} ${val} `;
                 this.keypadBuffer = '';
+                this.isCalculated = false;
+            } else {
+                if (this.keypadBuffer) {
+                    this.keypadExpr += this.keypadBuffer + ' ';
+                    this.keypadBuffer = '';
+                }
+                this.keypadExpr = this.keypadExpr.trimEnd() + ` ${val} `;
             }
-            this.keypadExpr = this.keypadExpr.trimEnd() + ` ${val} `;
         } else if (val === '.') {
-            if (!this.keypadBuffer.includes('.')) {
+            if (this.isCalculated) {
+                this.keypadExpr = '';
+                this.keypadBuffer = '0.';
+                this.isCalculated = false;
+            } else if (!this.keypadBuffer.includes('.')) {
                 this.keypadBuffer = (this.keypadBuffer || '0') + '.';
             }
         } else {
-            // Digits
-            this.keypadBuffer += val;
+            // Numeric Digits (0-9)
+            if (this.isCalculated) {
+                this.keypadExpr = '';
+                this.keypadBuffer = val;
+                this.isCalculated = false;
+            } else {
+                this.keypadBuffer += val;
+            }
         }
         this.updateKeypadScreen();
         this.calculateKeypad(false);
@@ -93,9 +116,15 @@ export const TimeEngine = {
 
     inputUnit(unit) {
         SoundFx.playClick(550);
-        if (!this.keypadBuffer && !this.keypadExpr) return;
+        if (this.isCalculated) {
+            this.keypadExpr = '';
+            this.keypadBuffer = '';
+            this.isCalculated = false;
+        }
 
-        const num = this.keypadBuffer || '';
+        const num = this.keypadBuffer || (this.keypadExpr ? '' : '1');
+        if (!num && !this.keypadExpr) return;
+
         this.keypadExpr += num + unit + ' ';
         this.keypadBuffer = '';
         this.updateKeypadScreen();
@@ -107,6 +136,8 @@ export const TimeEngine = {
         this.keypadExpr = '';
         this.keypadBuffer = '';
         this.keypadLastSeconds = 0;
+        this.isCalculated = false;
+        this.lastIsRatio = false;
         const exprEl = document.getElementById('timeKeypadExpression');
         const resEl = document.getElementById('timeKeypadResult');
         const bdEl = document.getElementById('timeKeypadBreakdown');
@@ -117,6 +148,9 @@ export const TimeEngine = {
 
     backspaceKeypad() {
         SoundFx.playClick(480);
+        if (this.isCalculated) {
+            this.isCalculated = false;
+        }
         if (this.keypadBuffer.length > 0) {
             this.keypadBuffer = this.keypadBuffer.slice(0, -1);
         } else if (this.keypadExpr.length > 0) {
@@ -126,7 +160,7 @@ export const TimeEngine = {
             let foundUnit = false;
             for (const u of units) {
                 if (this.keypadExpr.endsWith(u)) {
-                    this.keypadExpr = this.keypadExpr.slice(0, -u.length);
+                    this.keypadExpr = this.keypadExpr.slice(0, -u.length).trimEnd();
                     foundUnit = true;
                     break;
                 }
@@ -184,42 +218,80 @@ export const TimeEngine = {
         if (!rawExpr || rawExpr === '0') return;
 
         try {
-            let mathExpr = rawExpr
-                .replace(/(\d+(\.\d+)?)\s*hour/g, '($1 * 3600)')
-                .replace(/(\d+(\.\d+)?)\s*min/g, '($1 * 60)')
-                .replace(/(\d+(\.\d+)?)\s*sec/g, '($1 * 1)')
-                .replace(/(\d+(\.\d+)?)\s*m\.sec/g, '($1 * 0.001)');
+            let s = rawExpr;
 
-            // Replace operators for JS eval
-            mathExpr = mathExpr
-                .replace(/×/g, '*')
-                .replace(/÷/g, '/')
-                .replace(/−/g, '-');
+            // Normalize operator glyphs
+            s = s.replace(/×/g, '*')
+                 .replace(/÷/g, '/')
+                 .replace(/−/g, '-');
 
-            // Handle adjacent implicit addition (e.g. 2hour 35min -> 2hour + 35min)
-            mathExpr = mathExpr.replace(/\)\s*\(/g, ') + (');
+            const unitMultipliers = {
+                'hour': 3600,
+                'min': 60,
+                'sec': 1,
+                'm.sec': 0.001
+            };
 
-            // Clean up trailing operators if not final
+            // 1. Tag each (number + unit) as an absolute seconds token: __T__<sec>__
+            let tagged = s.replace(/(\d+(?:\.\d+)?)\s*(hour|min|sec|m\.sec)/g, (_, val, unit) => {
+                const sec = parseFloat(val) * (unitMultipliers[unit] || 1);
+                return `__T__${sec}__`;
+            });
+
+            // 2. Group adjacent time tokens with NO intervening operator into compound duration
+            // e.g. "__T__7200__ __T__1800__" -> "__T__9000__"
+            while (/__T__([0-9.]+)__\s+__T__([0-9.]+)__/.test(tagged)) {
+                tagged = tagged.replace(/__T__([0-9.]+)__\s+__T__([0-9.]+)__/g, (m, a, b) => {
+                    const sum = parseFloat(a) + parseFloat(b);
+                    return `__T__${sum}__`;
+                });
+            }
+
+            // 3. Detect if this is a division of duration by duration (e.g. 2hour / 30min -> 4)
+            const isDurationDiv = /__T__([0-9.]+)__\s*\/\s*__T__([0-9.]+)__/.test(tagged) &&
+                !/[\+\-]/.test(tagged);
+
+            // 4. Convert all __T__<sec>__ tokens to parenthesized expressions (sec)
+            let mathExpr = tagged.replace(/__T__([0-9.]+)__/g, '($1)');
+
+            // 5. Handle percentage notation (e.g. * 50% -> * 0.5, + 20% -> * 1.20)
+            mathExpr = mathExpr.replace(/([\*\/])\s*(\d+(?:\.\d+)?)\s*%/g, '$1 ($2 / 100)');
+            mathExpr = mathExpr.replace(/([\+\-])\s*(\d+(?:\.\d+)?)\s*%/g, '$1 ($2 / 100)');
+            mathExpr = mathExpr.replace(/(\d+(?:\.\d+)?)\s*%/g, '($1 / 100)');
+
+            // Strip trailing operator for live evaluation while user is typing
             mathExpr = mathExpr.replace(/[\+\-\*\/%]\s*$/, '');
 
             const evaluatedSec = Function(`"use strict"; return (${mathExpr});`)();
             if (typeof evaluatedSec === 'number' && isFinite(evaluatedSec)) {
                 this.keypadLastSeconds = evaluatedSec;
-                const formatted = this.formatSeconds(evaluatedSec, this.keypadFormatMode);
+                this.lastIsRatio = isDurationDiv;
+
+                let formatted = '';
+                if (isDurationDiv) {
+                    formatted = `${parseFloat(evaluatedSec.toFixed(4))}× (Ratio)`;
+                } else {
+                    formatted = this.formatSeconds(evaluatedSec, this.keypadFormatMode);
+                }
                 
                 const resEl = document.getElementById('timeKeypadResult');
                 const bdEl = document.getElementById('timeKeypadBreakdown');
                 if (resEl) resEl.textContent = formatted;
 
                 if (bdEl) {
-                    const decH = (evaluatedSec / 3600).toFixed(3);
-                    const totM = (evaluatedSec / 60).toFixed(1);
-                    const totS = evaluatedSec.toFixed(0);
-                    bdEl.innerHTML = `<span>${parseFloat(decH).toLocaleString()} Hours</span> • <span>${parseFloat(totM).toLocaleString()} Minutes</span> • <span>${parseFloat(totS).toLocaleString()} Seconds</span>`;
+                    if (isDurationDiv) {
+                        bdEl.innerHTML = `<span>Ratio Multiplier: ${parseFloat(evaluatedSec.toFixed(4))}×</span> • <span>Dimensionless Result</span>`;
+                    } else {
+                        const decH = (evaluatedSec / 3600).toFixed(3);
+                        const totM = (evaluatedSec / 60).toFixed(1);
+                        const totS = evaluatedSec.toFixed(0);
+                        bdEl.innerHTML = `<span>${parseFloat(decH).toLocaleString()} Hours</span> • <span>${parseFloat(totM).toLocaleString()} Minutes</span> • <span>${parseFloat(totS).toLocaleString()} Seconds</span>`;
+                    }
                 }
 
                 if (isFinal) {
                     SoundFx.playClick(850, 'triangle', 0.05);
+                    this.isCalculated = true;
                     addHistory(rawExpr, formatted);
                 }
             }
@@ -233,6 +305,7 @@ export const TimeEngine = {
 
     toggleFormat() {
         SoundFx.playClick(600);
+        if (this.lastIsRatio) return;
         const modes = ['HMS', 'DEC', 'MIN', 'SEC'];
         const labels = { HMS: 'Format: H:M:S', DEC: 'Format: Dec Hours', MIN: 'Format: Total Mins', SEC: 'Format: Total Secs' };
         const nextIdx = (modes.indexOf(this.keypadFormatMode) + 1) % modes.length;
