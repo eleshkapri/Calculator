@@ -252,8 +252,8 @@ export class TimeCalculator extends BaseCalculator {
             mathExpr = mathExpr.replace(/[\+\-\*\/%]\s*$/, '');
 
             // Token Whitelist Validation: only numbers, operators, parens, spaces
-            const testMath = mathExpr.replace(/[0-9.]+/g, '').replace(/[\+\-\*\/\%\(\)\s]/g, '');
-            if (testMath.length > 0) return;
+            const remainderChars = mathExpr.replace(/[0-9.]+/g, '').replace(/[\+\-\*\/\%\(\)\s]/g, '');
+            if (remainderChars.length > 0) return;
 
             // Execute in hardened sandbox
             const sandbox = new Function(

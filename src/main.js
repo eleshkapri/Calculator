@@ -42,7 +42,7 @@ import { TimeEngine } from './features/time.js';
 import { DiscountEngine } from './features/discount.js';
 import { EquationEngine } from './features/equations.js';
 import { StatisticsEngine } from './features/statistics.js';
-import { initNavigation, switchMode, openSidebar, closeSidebar, toggleSidebar, toggleHistory } from './ui/navigation.js';
+import { initNavigation, switchMode, openSidebar, closeSidebar, toggleSidebar, openHistory, closeHistory, toggleHistory } from './ui/navigation.js';
 import { toggleTheme } from './ui/theme.js';
 import { initKeyboard } from './ui/keyboard.js';
 import { initSidebarClock, updateSidebarClock } from './ui/clock.js';
@@ -59,6 +59,8 @@ export class CalVerseFacade {
         this.openSidebar = () => openSidebar();
         this.closeSidebar = () => closeSidebar();
         this.toggleSidebar = () => toggleSidebar();
+        this.openHistory = () => openHistory();
+        this.closeHistory = () => closeHistory();
         this.toggleHistory = () => toggleHistory();
         this.toggleTheme = () => toggleTheme();
 

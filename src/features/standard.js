@@ -283,9 +283,11 @@ export class StandardCalculator extends BaseCalculator {
             item.addEventListener('click', () => {
                 const idx = parseInt(item.dataset.index, 10);
                 const record = state.history[idx];
-                if (record && state[state.currentMode]) {
-                    state[state.currentMode].current = record.result;
-                    this.updateDisplay(state.currentMode);
+                const modeType = (state.currentMode === 'scientific') ? 'sci' : 'std';
+                if (record && state[modeType]) {
+                    state[modeType].current = record.result;
+                    state[modeType].waitingForNewNumber = false;
+                    this.updateDisplay(modeType);
                     copyToClipboard(record.result);
                 }
             });

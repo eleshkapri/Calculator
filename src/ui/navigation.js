@@ -72,15 +72,36 @@ export function toggleSidebar() {
 }
 
 /**
+ * Opens calculation history drawer, closing sidebar if open.
+ */
+export function openHistory() {
+    closeSidebar();
+    const historyDrawer = document.getElementById('historyDrawer');
+    const drawerOverlay = document.getElementById('drawerOverlay');
+    if (historyDrawer) historyDrawer.classList.add('open');
+    if (drawerOverlay) drawerOverlay.classList.add('open');
+    renderHistoryList();
+}
+
+/**
+ * Closes calculation history drawer.
+ */
+export function closeHistory() {
+    const historyDrawer = document.getElementById('historyDrawer');
+    const drawerOverlay = document.getElementById('drawerOverlay');
+    if (historyDrawer) historyDrawer.classList.remove('open');
+    if (drawerOverlay) drawerOverlay.classList.remove('open');
+}
+
+/**
  * Toggles calculation history slide-out drawer.
  */
 export function toggleHistory() {
     const historyDrawer = document.getElementById('historyDrawer');
-    const drawerOverlay = document.getElementById('drawerOverlay');
-    if (historyDrawer && drawerOverlay) {
-        historyDrawer.classList.toggle('open');
-        drawerOverlay.classList.toggle('open');
-        renderHistoryList();
+    if (historyDrawer && historyDrawer.classList.contains('open')) {
+        closeHistory();
+    } else {
+        openHistory();
     }
 }
 
@@ -181,8 +202,8 @@ export function initNavigation() {
 
     if (histBtn) histBtn.addEventListener('click', toggleHistory);
     if (quickHistBtn) quickHistBtn.addEventListener('click', toggleHistory);
-    if (closeHistBtn) closeHistBtn.addEventListener('click', toggleHistory);
-    if (drawerOverlay) drawerOverlay.addEventListener('click', toggleHistory);
+    if (closeHistBtn) closeHistBtn.addEventListener('click', closeHistory);
+    if (drawerOverlay) drawerOverlay.addEventListener('click', closeHistory);
 
     // Quick Copy Display Buttons
     const stdCopy = document.getElementById('stdCopyBtn');

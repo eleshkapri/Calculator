@@ -198,13 +198,13 @@ export class GraphingCalculator extends BaseCalculator {
             code = code.replace(/(\d+)\s*([a-zA-Z])/g, '$1*$2');
 
             // Whitelist verification: strip known tokens
-            const testCode = code
+            const cleanedTokens = code
                 .replace(/Math\.(sin|cos|tan|abs|exp|log|log10|sqrt|PI|E)/g, '')
                 .replace(/x/g, '')
                 .replace(/[0-9.]+/g, '')
                 .replace(/[\+\-\*\/\%\(\)\,\s\^]/g, '');
 
-            if (testCode.trim().length > 0) {
+            if (cleanedTokens.trim().length > 0) {
                 return null; // Contains unknown symbols or injection
             }
 

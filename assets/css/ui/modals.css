@@ -11,8 +11,9 @@
 .history-drawer {
     position: fixed;
     top: 0;
-    right: -360px;
-    width: 360px;
+    right: -100%;
+    width: min(360px, 100vw);
+    max-width: 100vw;
     height: 100vh;
     height: 100dvh;
     background-color: var(--bg-surface);
@@ -25,19 +26,25 @@
     transition: right 0.3s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
-.history-drawer.open { right: 0; }
+.history-drawer.open {
+    right: 0;
+}
 
 .drawer-overlay {
     position: fixed;
     inset: 0;
-    background-color: rgba(0,0,0,0.5);
-    z-index: 90;
+    background-color: rgba(0, 0, 0, 0.6);
+    backdrop-filter: blur(2px);
+    z-index: 95;
     opacity: 0;
     pointer-events: none;
     transition: opacity 0.3s ease;
 }
 
-.drawer-overlay.open { opacity: 1; pointer-events: auto; }
+.drawer-overlay.open {
+    opacity: 1;
+    pointer-events: auto;
+}
 
 .history-header {
     display: flex;

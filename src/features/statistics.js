@@ -15,7 +15,7 @@
  *    - Mode 2 ('boxplot'): Horizontal Tukey box-and-whisker plot highlighting outliers, IQR box,
  *      and median line.
  *    - Mode 3 ('histogram'): Binned frequency distribution with Scott/Sturges auto-binning.
- * 4. Dataset Presets & Clipboard Export: Quick dataset presets (test scores, temperatures, heights)
+ * 4. Dataset Presets & Clipboard Export: Quick dataset presets (exam scores, temperatures, heights)
  *    and formatted markdown summary copying.
  * 
  * OBJECTS & METHODS PRESENT IN THIS FILE:
