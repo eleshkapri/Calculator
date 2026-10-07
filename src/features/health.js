@@ -1,11 +1,11 @@
 /**
  * ============================================================================
- * CalVerse Pro - BMI & Metabolic Health Engine
+ * CalVerse Pro - BMI & Metabolic Health Engine (OOP Architecture)
  * File: src/features/health.js
  * ============================================================================
  * 
  * MODULE OVERVIEW:
- * Computes essential biometric and metabolic health indicators:
+ * Object-oriented biometric and metabolic health calculation engine:
  * 1. Body Mass Index (BMI): Supports Metric (cm, kg) and Imperial (ft/in, lbs) units.
  * 2. Visual Color Gauge Indicator: Positions the UI pointer dynamically across 4 WHO zones:
  *    Underweight (<18.5), Normal (18.5-24.9), Overweight (25-29.9), and Obese (>=30).
@@ -13,122 +13,130 @@
  * 4. Basal Metabolic Rate (BMR): Computes resting energy expenditure via the Mifflin-St Jeor formula.
  * 5. Total Daily Energy Expenditure (TDEE): Estimates daily caloric maintenance needs.
  * 
- * OBJECTS & METHODS PRESENT IN THIS FILE:
- * HealthEngine:
- * 1. setUnit(unit):
- *    - Toggles between 'metric' and 'imperial' input modes and re-runs calculations.
- * 
- * 2. calculate():
- *    - Converts inputs to standard SI units (meters and kilograms).
- *    - Computes BMI = weight / (height²).
- *    - Updates gauge pointer percentage position and category status badge.
- *    - Computes healthy weight range.
- *    - Computes gender-adjusted Mifflin-St Jeor BMR and activity TDEE.
+ * OOP PRINCIPLES:
+ * 1. Inheritance: Extends BaseCalculator.
+ * 2. Encapsulation: Unit preferences, biometric formulas, and gauge coordinates are
+ *    encapsulated in HealthCalculator methods.
  * ============================================================================
  */
 
+import { BaseCalculator } from './base.js';
 import { state } from '../core/state.js';
-import { SoundFx } from '../core/sound.js';
 import { getFloatVal } from '../core/dom.js';
 
-export const HealthEngine = {
+export class HealthCalculator extends BaseCalculator {
+    constructor(id = 'health') {
+        super(id);
+    }
+
     /**
      * Toggles between Metric and Imperial measurement systems.
-     * 
-     * @param {'metric'|'imperial'} unit - Selected measurement unit system.
+     * @param {'metric'|'imperial'} unit
      */
     setUnit(unit) {
         state.health.unit = unit;
-        document.getElementById('healthMetricBtn').classList.toggle('active', unit === 'metric');
-        document.getElementById('healthImperialBtn').classList.toggle('active', unit === 'imperial');
+        const mBtn = document.getElementById('healthMetricBtn');
+        const iBtn = document.getElementById('healthImperialBtn');
+        if (mBtn) mBtn.classList.toggle('active', unit === 'metric');
+        if (iBtn) iBtn.classList.toggle('active', unit === 'imperial');
 
-        document.getElementById('heightMetricCard').style.display = unit === 'metric' ? 'flex' : 'none';
-        document.getElementById('heightImperialCard').style.display = unit === 'imperial' ? 'flex' : 'none';
-        document.getElementById('weightMetricCard').style.display = unit === 'metric' ? 'flex' : 'none';
-        document.getElementById('weightImperialCard').style.display = unit === 'imperial' ? 'flex' : 'none';
+        const hmCard = document.getElementById('heightMetricCard');
+        const hiCard = document.getElementById('heightImperialCard');
+        const wmCard = document.getElementById('weightMetricCard');
+        const wiCard = document.getElementById('weightImperialCard');
+
+        if (hmCard) hmCard.style.display = unit === 'metric' ? 'flex' : 'none';
+        if (hiCard) hiCard.style.display = unit === 'imperial' ? 'flex' : 'none';
+        if (wmCard) wmCard.style.display = unit === 'metric' ? 'flex' : 'none';
+        if (wiCard) wiCard.style.display = unit === 'imperial' ? 'flex' : 'none';
 
         this.calculate();
-    },
+    }
 
     /**
-     * Executes complete biometric calculations: BMI, health category, gauge position,
-     * healthy weight range, Mifflin-St Jeor BMR, and light-activity TDEE.
+     * Executes complete biometric calculations: BMI, category, gauge pointer,
+     * healthy weight range, Mifflin-St Jeor BMR, and TDEE.
      */
     calculate() {
-        SoundFx.playClick(600);
+        this.playFeedback(600);
         const unit = state.health.unit;
         let heightM = 0;
         let weightKg = 0;
 
-        // Convert user inputs into metric base units (meters & kilograms)
         if (unit === 'metric') {
-            const cm = getFloatVal('healthHeightCm') || 175;
-            weightKg = getFloatVal('healthWeightKg') || 70;
-            heightM = cm / 100;
+            const hCm = getFloatVal('healthHeightCm');
+            const wKg = getFloatVal('healthWeightKg');
+            heightM = hCm / 100;
+            weightKg = wKg;
         } else {
-            const ft = getFloatVal('healthHeightFt') || 5;
-            const inches = getFloatVal('healthHeightIn') || 9;
-            const lbs = getFloatVal('healthWeightLbs') || 154;
-            const totalInches = ft * 12 + inches;
-            heightM = totalInches * 0.0254;
+            const feet = getFloatVal('healthHeightFt');
+            const inches = getFloatVal('healthHeightIn');
+            const lbs = getFloatVal('healthWeightLbs');
+            heightM = ((feet * 12) + inches) * 0.0254;
             weightKg = lbs * 0.453592;
         }
 
+        const age = getFloatVal('healthAge') || 25;
+        const gender = document.getElementById('healthGender')?.value || 'male';
+
         if (heightM <= 0 || weightKg <= 0) return;
 
-        // BMI Formula: weight (kg) / [height (m)]²
+        // BMI Computation
         const bmi = weightKg / (heightM * heightM);
-        const age = parseInt(document.getElementById('healthAge')?.value, 10) || 25;
-        const gender = document.querySelector('input[name="healthGender"]:checked')?.value || 'male';
+        const bmiRounded = bmi.toFixed(1);
 
-        // Determine WHO Classification & visual gauge pointer percentage position
-        let cat = 'Normal Weight';
+        // Classification according to WHO standards
+        let category = 'Normal';
         let badgeClass = 'badge-normal';
-        let pointerPercent = 45;
+        let gaugePct = 0;
 
         if (bmi < 18.5) {
-            cat = 'Underweight';
+            category = 'Underweight';
             badgeClass = 'badge-under';
-            pointerPercent = (bmi / 18.5) * 25;
+            gaugePct = Math.max(5, (bmi / 18.5) * 25);
         } else if (bmi < 25) {
-            cat = 'Normal Weight';
+            category = 'Normal';
             badgeClass = 'badge-normal';
-            pointerPercent = 25 + ((bmi - 18.5) / 6.5) * 25;
+            gaugePct = 25 + ((bmi - 18.5) / (24.9 - 18.5)) * 25;
         } else if (bmi < 30) {
-            cat = 'Overweight';
+            category = 'Overweight';
             badgeClass = 'badge-over';
-            pointerPercent = 50 + ((bmi - 25) / 5) * 25;
+            gaugePct = 50 + ((bmi - 25) / (29.9 - 25)) * 25;
         } else {
-            cat = 'Obese';
+            category = 'Obese';
             badgeClass = 'badge-obese';
-            pointerPercent = Math.min(100, 75 + ((bmi - 30) / 10) * 25);
+            gaugePct = Math.min(95, 75 + ((bmi - 30) / 10) * 20);
         }
 
-        const bmiValEl = document.getElementById('bmiValue');
-        if (bmiValEl) bmiValEl.textContent = bmi.toFixed(1);
+        const valEl = document.getElementById('bmiPrimaryVal');
+        const badgeEl = document.getElementById('bmiStatusBadge');
+        const pointerEl = document.getElementById('bmiGaugePointer');
 
-        const catElem = document.getElementById('bmiCategory');
-        if (catElem) {
-            catElem.textContent = cat;
-            catElem.className = `bmi-badge ${badgeClass}`;
+        if (valEl) valEl.textContent = bmiRounded;
+        if (badgeEl) {
+            badgeEl.textContent = category;
+            badgeEl.className = `status-badge ${badgeClass}`;
+        }
+        if (pointerEl) {
+            pointerEl.style.left = `${gaugePct}%`;
         }
 
-        const pointerEl = document.getElementById('bmiPointer');
-        if (pointerEl) pointerEl.style.left = `${pointerPercent}%`;
+        // Healthy Weight Range: BMI 18.5 to 24.9
+        const minHealthyKg = 18.5 * (heightM * heightM);
+        const maxHealthyKg = 24.9 * (heightM * heightM);
+        const rangeEl = document.getElementById('bmiHealthyRange');
 
-        // Healthy Weight Range: Target BMI between 18.5 and 24.9
-        const minW = (18.5 * heightM * heightM).toFixed(1);
-        const maxW = (24.9 * heightM * heightM).toFixed(1);
-        const healthyRangeEl = document.getElementById('healthyRangeVal');
-        if (healthyRangeEl) {
-            healthyRangeEl.textContent = unit === 'metric' 
-                ? `${minW} kg - ${maxW} kg` 
-                : `${(minW * 2.20462).toFixed(1)} lbs - ${(maxW * 2.20462).toFixed(1)} lbs`;
+        if (rangeEl) {
+            if (unit === 'metric') {
+                rangeEl.textContent = `${minHealthyKg.toFixed(1)} - ${maxHealthyKg.toFixed(1)} kg`;
+            } else {
+                const minLbs = minHealthyKg / 0.453592;
+                const maxLbs = maxHealthyKg / 0.453592;
+                rangeEl.textContent = `${minLbs.toFixed(1)} - ${maxLbs.toFixed(1)} lbs`;
+            }
         }
 
-        // Basal Metabolic Rate (BMR) via Mifflin-St Jeor Equation
-        // Men:   BMR = 10*W + 6.25*H - 5*Age + 5
-        // Women: BMR = 10*W + 6.25*H - 5*Age - 161
+        // Basal Metabolic Rate (BMR) - Mifflin-St Jeor formula
         let bmr = (10 * weightKg) + (6.25 * heightM * 100) - (5 * age);
         bmr = gender === 'male' ? bmr + 5 : bmr - 161;
 
@@ -141,4 +149,7 @@ export const HealthEngine = {
         const tdeeEl = document.getElementById('tdeeVal');
         if (tdeeEl) tdeeEl.textContent = `${Math.round(tdee).toLocaleString()} kcal / day`;
     }
-};
+}
+
+/** Default singleton instance of HealthCalculator */
+export const HealthEngine = new HealthCalculator();

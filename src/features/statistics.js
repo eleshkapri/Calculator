@@ -36,15 +36,19 @@
  * ============================================================================
  */
 
+import { BaseCalculator } from './base.js';
 import { state } from '../core/state.js';
 import { SoundFx } from '../core/sound.js';
 import { copyToClipboard } from '../core/dom.js';
 
-export const StatisticsEngine = {
-    canvas: null,
-    ctx: null,
-    currentMode: 'bars', // 'bars' | 'boxplot' | 'histogram'
-    lastData: null,
+export class StatisticsCalculator extends BaseCalculator {
+    constructor(id = 'statistics') {
+        super(id);
+        this.canvas = null;
+        this.ctx = null;
+        this.currentMode = 'bars'; // 'bars' | 'boxplot' | 'histogram'
+        this.lastData = null;
+    }
 
     init() {
         this.canvas = document.getElementById('statsChartCanvas');
@@ -66,8 +70,7 @@ export const StatisticsEngine = {
             }
         });
 
-        this.calculateStats();
-    },
+        this.calculateStats();}
 
     setChartMode(mode) {
         SoundFx.playClick(600);
@@ -92,8 +95,7 @@ export const StatisticsEngine = {
                 this.lastData.max,
                 this.lastData.iqr
             );
-        }
-    },
+        }}
 
     calculateStats() {
         const raw = document.getElementById('statsDataInput')?.value || '';
@@ -162,8 +164,7 @@ export const StatisticsEngine = {
 
         this.lastData = statObj;
         this.updateMetrics(statObj);
-        this.renderChart(nums, mean, median, q1, q3, min, max, iqr);
-    },
+        this.renderChart(nums, mean, median, q1, q3, min, max, iqr);}
 
     updateMetrics(d) {
         const set = (id, val) => {
@@ -196,13 +197,11 @@ export const StatisticsEngine = {
         set('fiveNumMed', d.median.toFixed(2));
         set('fiveNumQ3', d.q3.toFixed(2));
         set('fiveNumMax', d.max.toFixed(2));
-        set('fiveNumIQR', d.iqr.toFixed(2));
-    },
+        set('fiveNumIQR', d.iqr.toFixed(2));}
 
     clearCanvas() {
         if (!this.canvas || !this.ctx) return;
-        this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
-    },
+        this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);}
 
     renderChart(nums, mean, median, q1, q3, min, max, iqr) {
         if (!this.canvas) return;
@@ -242,8 +241,7 @@ export const StatisticsEngine = {
             this.renderHistogram(ctx, W, H, nums, mean, median, min, max, textColor, gridColor, isLight);
         }
 
-        ctx.restore();
-    },
+        ctx.restore();}
 
     renderBarsAndTrend(ctx, W, H, nums, mean, median, q1, q3, min, max, textColor, gridColor, isLight) {
         const padLeft = 55;
@@ -415,8 +413,7 @@ export const StatisticsEngine = {
             ctx.textAlign = 'center';
             ctx.textBaseline = 'middle';
             ctx.fillText(`Med ${median.toFixed(1)}`, padLeft + plotW + 40, medY);
-        }
-    },
+        }}
 
     renderBoxPlot(ctx, W, H, nums, mean, median, q1, q3, min, max, textColor, gridColor, isLight) {
         const padLeft = 60;
@@ -551,8 +548,7 @@ export const StatisticsEngine = {
         drawTag(xQ1, boxY - 8, 'Q₁', q1, '#a855f7');
         drawTag(xMed, boxY - 8, 'MEDIAN', median, '#f59e0b');
         drawTag(xQ3, boxY - 8, 'Q₃', q3, '#a855f7');
-        drawTag(xMax, boxY - 8, 'MAX', max, '#38bdf8');
-    },
+        drawTag(xMax, boxY - 8, 'MAX', max, '#38bdf8');}
 
     renderHistogram(ctx, W, H, nums, mean, median, min, max, textColor, gridColor, isLight) {
         const padLeft = 55;
@@ -636,8 +632,7 @@ export const StatisticsEngine = {
             ctx.textAlign = 'center';
             ctx.textBaseline = 'top';
             ctx.fillText(`${bStart.toFixed(0)}-${bEnd.toFixed(0)}`, x + barW / 2, padTop + plotH + 8);
-        });
-    },
+        });}
 
     loadPreset(type) {
         SoundFx.playClick(600);
@@ -654,15 +649,13 @@ export const StatisticsEngine = {
             const r = Array.from({ length: 10 }, () => Math.floor(Math.random() * 90) + 10);
             input.value = r.join(', ');
         }
-        this.calculateStats();
-    },
+        this.calculateStats();}
 
     clearData() {
         SoundFx.playClick(450);
         const input = document.getElementById('statsDataInput');
         if (input) input.value = '';
-        this.calculateStats();
-    },
+        this.calculateStats();}
 
     copySummary() {
         const mean = document.getElementById('statMean')?.textContent || '';
@@ -679,4 +672,7 @@ export const StatisticsEngine = {
         const summary = `📊 CalVerse Statistics Summary\nCount (N): ${count}\nMean: ${mean}\nMedian: ${median}\nMode: ${mode}\nSample Std Dev: ${sStd}\nSum: ${sum}\nRange: ${range}\nQ1: ${q1} | Q3: ${q3} | IQR: ${iqr}`;
         copyToClipboard(summary);
     }
-};
+}
+
+/** Default singleton instance of StatisticsCalculator */
+export const StatisticsEngine = new StatisticsCalculator();

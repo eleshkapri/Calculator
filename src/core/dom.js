@@ -65,3 +65,19 @@ export function copyToClipboard(text) {
         showToast('Failed to copy');
     });
 }
+
+/**
+ * Escapes unsafe HTML characters to prevent Cross-Site Scripting (XSS).
+ * 
+ * @param {string} str - Raw string possibly containing special HTML characters.
+ * @returns {string} Sanitized string safe for DOM interpolation.
+ */
+export function escapeHtml(str) {
+    if (str === null || str === undefined) return '';
+    return String(str)
+        .replace(/&/g, '&amp;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;')
+        .replace(/"/g, '&quot;')
+        .replace(/'/g, '&#039;');
+}

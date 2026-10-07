@@ -782,37 +782,60 @@ body.dark-theme .angle-mode-pill {
     border-color: var(--border-highlight);
 }
 
-/* Keypads */
+/* Keypads - Laptop & Desktop Defaults */
 .keypad {
     display: grid;
-    gap: 8px;
+    gap: 12px;
     width: 100%;
     box-sizing: border-box;
 }
 
 .standard-keypad {
     grid-template-columns: repeat(4, 1fr);
-    gap: 8px;
+    gap: 12px;
+}
+
+.standard-keypad .btn {
+    height: 52px;
+    font-size: 1.15rem;
 }
 
 .scientific-keypad {
     grid-template-columns: repeat(5, 1fr);
-    gap: 8px;
+    gap: 10px;
+}
+
+.scientific-keypad .btn {
+    height: 44px;
+    font-size: 0.90rem;
+    padding: 2px 4px;
 }
 
 .time-unit-keypad {
     grid-template-columns: repeat(4, 1fr);
-    gap: 8px;
+    gap: 10px;
+}
+
+.time-unit-keypad .btn {
+    height: 48px;
+    font-size: 1rem;
+    padding: 2px 4px;
 }
 
 .programmer-keypad {
     grid-template-columns: repeat(6, 1fr);
-    gap: 7px;
+    gap: 8px;
+}
+
+.programmer-keypad .btn {
+    height: 42px;
+    font-size: 0.86rem;
+    padding: 2px 2px;
 }
 
 .btn {
     border: 1px solid var(--btn-num-border);
-    height: 46px;
+    height: 48px;
     border-radius: var(--radius-sm);
     font-family: var(--font-ui);
     font-size: 1.05rem;
@@ -823,15 +846,11 @@ body.dark-theme .angle-mode-pill {
     justify-content: center;
     transition: var(--transition);
     user-select: none;
+    touch-action: manipulation;
+    -webkit-tap-highlight-color: transparent;
     box-shadow: var(--btn-num-shadow);
     min-width: 0;
     box-sizing: border-box;
-}
-
-.scientific-keypad .btn {
-    height: 40px;
-    font-size: 0.88rem;
-    padding: 2px 4px;
 }
 
 .programmer-keypad .btn {
@@ -4090,5 +4109,3 @@ body.light-theme .stats-canvas-container {
         gap: 6px;
     }
 }
-
-

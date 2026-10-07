@@ -1,75 +1,117 @@
 /**
  * ============================================================================
- * CalVerse Pro - Centralized Global Application State
+ * CalVerse Pro - Centralized State Manager (OOP Singleton Architecture)
  * File: src/core/state.js
  * ============================================================================
  * 
  * MODULE OVERVIEW:
- * Acts as the centralized state store for CalVerse. Tracks active application
- * view modes, trigonometric units, standard/scientific display buffers,
- * memory registers, programmer bitwise buffers, health unit preferences,
- * and calculation history.
+ * Encapsulates global application state within the `StateManager` Singleton class.
+ * Provides data protection, input validation, and synchronization with localStorage.
  * 
- * EXPORTED STATE OBJECT:
- * - state.currentMode: Active calculator view identifier (e.g. 'standard', 'scientific').
- * - state.angleMode: Current trigonometric angle unit ('DEG' or 'RAD').
- * - state.memory: Independent memory registers for standard and scientific keypads.
- * - state.std: Expression, current display value, and entry flag for Standard mode.
- * - state.sci: Expression, current display value, and entry flag for Scientific mode.
- * - state.prog: Programmer calculator state (Radix, Bit width, BigInt accumulator, pending operation).
- * - state.health: Preferred units for BMI/health calculations ('metric' or 'imperial').
- * - state.history: In-memory array of historical calculations synced to localStorage.
+ * OOP PRINCIPLES:
+ * 1. Singleton Pattern: Ensures exactly one coordinated instance coordinates state.
+ * 2. Encapsulation: State buffers are managed through class properties and guarded methods.
  * ============================================================================
  */
 
 import { StorageEngine } from './storage.js';
 
+export class StateManager {
+    /** @type {StateManager|null} Singleton instance */
+    static #instance = null;
+
+    constructor() {
+        if (StateManager.#instance) {
+            return StateManager.#instance;
+        }
+
+        this.currentMode = 'standard';
+        this.angleMode = 'DEG';
+
+        this.memory = {
+            std: 0,
+            sci: 0
+        };
+
+        this.std = {
+            expr: '',
+            current: '0',
+            waitingForNewNumber: false
+        };
+
+        this.sci = {
+            expr: '',
+            current: '0',
+            waitingForNewNumber: false
+        };
+
+        this.prog = {
+            radix: 'HEX',
+            wordSize: 32,
+            val: 0n,
+            currentInput: '0',
+            pendingOp: null,
+            storedVal: null,
+            waitingForNew: false
+        };
+
+        this.health = {
+            unit: 'metric'
+        };
+
+        this.history = StorageEngine.loadHistory();
+
+        StateManager.#instance = this;
+    }
+
+    /**
+     * Retrieves the singleton StateManager instance.
+     * @returns {StateManager}
+     */
+    static getInstance() {
+        if (!StateManager.#instance) {
+            StateManager.#instance = new StateManager();
+        }
+        return StateManager.#instance;
+    }
+
+    /**
+     * Resets a keypad state buffer to default zeros.
+     * @param {'std'|'sci'} type 
+     */
+    resetBuffer(type) {
+        if (this[type]) {
+            this[type].expr = '';
+            this[type].current = '0';
+            this[type].waitingForNewNumber = false;
+        }
+    }
+
+    /**
+     * Appends a record to history with a maximum 50-item cap.
+     * @param {string} expr 
+     * @param {string} result 
+     */
+    pushHistory(expr, result) {
+        this.history.unshift({
+            expr,
+            result,
+            timestamp: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
+        });
+        if (this.history.length > 50) this.history.pop();
+        StorageEngine.saveHistory(this.history);
+    }
+
+    /**
+     * Clears all recorded calculation history.
+     */
+    clearAllHistory() {
+        this.history = [];
+        StorageEngine.clearHistory();
+    }
+}
+
 /**
- * Global reactive state object shared by all calculator features and UI components.
+ * Singleton state instance maintaining 100% backward compatibility.
  */
-export const state = {
-    /** Currently active calculator view mode ('standard', 'scientific', 'graphing', etc.) */
-    currentMode: 'standard',
-
-    /** Active trigonometric angle mode: 'DEG' (degrees) or 'RAD' (radians) */
-    angleMode: 'DEG',
-
-    /** Memory registers for memory buttons (MC, MR, M+, M-, MS) */
-    memory: {
-        std: 0,
-        sci: 0
-    },
-
-    /** Standard calculator operational buffer */
-    std: {
-        expr: '',
-        current: '0',
-        waitingForNewNumber: false
-    },
-
-    /** Scientific calculator operational buffer */
-    sci: {
-        expr: '',
-        current: '0',
-        waitingForNewNumber: false
-    },
-
-    /** Programmer calculator operational buffer supporting arbitrary precision BigInt */
-    prog: {
-        radix: 'HEX',         // 'HEX', 'DEC', 'OCT', or 'BIN'
-        wordSize: 32,         // 8, 16, 32, or 64 bits
-        val: 0n,              // Primary numeric value in BigInt format
-        currentInput: '0',    // Raw string input in current radix
-        pendingOp: null,      // Active binary operator ('+', '-', '&', '|', etc.)
-        storedVal: null,      // Value buffered before operator was pressed
-        waitingForNew: false  // Reset input buffer upon subsequent keypress
-    },
-
-    /** Health module unit system: 'metric' (kg, cm) or 'imperial' (lbs, ft/in) */
-    health: {
-        unit: 'metric'
-    },
-
-    /** Calculation history records loaded from persistent local storage */
-    history: StorageEngine.loadHistory()
-};
+export const state = StateManager.getInstance();

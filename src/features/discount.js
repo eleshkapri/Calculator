@@ -1,57 +1,31 @@
 /**
  * ============================================================================
- * CalVerse Pro - Discount, Tax & Tip Calculation Engine
+ * CalVerse Pro - Discount, Tax & Tip Calculation Engine (OOP Architecture)
  * File: src/features/discount.js
  * ============================================================================
  * 
  * MODULE OVERVIEW:
- * Handles shopping discount calculations, multi-tier coupon reductions, sales tax,
- * restaurant tipping, and multi-person bill splitting. Provides instantaneous
- * currency-aware feedback and clipboard summary generation.
+ * Object-oriented financial discount, coupon reduction, sales tax,
+ * restaurant tipping, and multi-person bill splitting engine.
  * 
- * OBJECTS & METHODS PRESENT IN THIS FILE:
- * DiscountEngine:
- * 1. init():
- *    - Loads persisted currency preference from localStorage and runs initial evaluations.
- * 
- * 2. setCurrency(code):
- *    - Changes active currency, updates input label symbols, and re-renders results.
- * 
- * 3. formatMoney(amount):
- *    - Delegates monetary formatting to the core formatMoney utility using the active currency.
- * 
- * 4. updateLabels():
- *    - Dynamically updates UI input labels with the active currency symbol.
- * 
- * 5. calculateDiscount():
- *    - Computes final price after primary discount %, extra coupon %, and sales tax %.
- *    - Calculates absolute and relative monetary savings.
- * 
- * 6. setDiscountPct(val):
- *    - Quick preset button handler for standard discount percentages (e.g. 10%, 20%, 50%).
- * 
- * 7. calculateTip():
- *    - Computes total tip amount, grand total, and per-person split amounts.
- * 
- * 8. setTipPct(val):
- *    - Quick preset button handler for standard tip percentages (10%, 15%, 20%).
- * 
- * 9. stepTipPeople(delta):
- *    - Increments or decrements the number of persons splitting the bill (clamped 1-100).
- * 
- * 10. copyTipSummary():
- *     - Generates and copies a cleanly formatted text receipt to the system clipboard.
+ * OOP PRINCIPLES:
+ * 1. Inheritance: Extends BaseCalculator.
+ * 2. Encapsulation: Currency preferences, coupon stacking math, and receipt formatting
+ *    are encapsulated in DiscountCalculator methods.
  * ============================================================================
  */
 
+import { BaseCalculator } from './base.js';
 import { CURRENCY_CONFIG } from '../core/constants.js';
 import { formatMoney } from '../core/format.js';
 import { SoundFx } from '../core/sound.js';
 import { copyToClipboard } from '../core/dom.js';
 
-export const DiscountEngine = {
-    /** Currently active currency code (persisted in localStorage) */
-    currentCurrency: localStorage.getItem('calverse_disc_currency') || 'INR',
+export class DiscountCalculator extends BaseCalculator {
+    constructor(id = 'discount') {
+        super(id);
+        this.currentCurrency = localStorage.getItem('calverse_disc_currency') || 'INR';
+    }
 
     /**
      * Initializes currency selection, updates DOM labels, and performs initial calculations.
@@ -64,11 +38,10 @@ export const DiscountEngine = {
         this.updateLabels();
         this.calculateDiscount();
         this.calculateTip();
-    },
+    }
 
     /**
      * Switches the active currency, saves to localStorage, and updates UI representations.
-     * 
      * @param {string} code - ISO 4217 currency code (e.g., 'INR', 'USD', 'EUR').
      */
     setCurrency(code) {
@@ -82,17 +55,16 @@ export const DiscountEngine = {
             this.calculateTip();
             SoundFx.playClick(650);
         }
-    },
+    }
 
     /**
      * Helper to format amounts using the active discount currency.
-     * 
      * @param {number} amount - Numeric amount to format.
      * @returns {string} Formatted localized currency string.
      */
     formatMoney(amount) {
         return formatMoney(amount, this.currentCurrency);
-    },
+    }
 
     /**
      * Synchronizes form input labels to reflect the active currency symbol.
@@ -104,14 +76,10 @@ export const DiscountEngine = {
 
         if (origLabel) origLabel.textContent = `Original Price (${conf.symbol.trim()})`;
         if (tipBillLabel) tipBillLabel.textContent = `Bill Amount (${conf.symbol.trim()})`;
-    },
+    }
 
     /**
      * Calculates compounded discount, coupon reductions, and tax additions.
-     * Formula:
-     *   afterDiscount = original - (original * discountPct / 100)
-     *   afterCoupon   = afterDiscount - (afterDiscount * couponPct / 100)
-     *   finalPrice    = afterCoupon + (afterCoupon * taxPct / 100)
      */
     calculateDiscount() {
         const orig = parseFloat(document.getElementById('discOriginalPrice')?.value) || 0;
@@ -149,16 +117,14 @@ export const DiscountEngine = {
         if (origEl) origEl.textContent = formattedOrig;
         if (amtEl) amtEl.textContent = `-${formattedDiscAmt}`;
 
-        // Toggle visibility of optional breakdown rows
         if (coupRow) coupRow.style.display = coup > 0 ? 'flex' : 'none';
         if (coupEl) coupEl.textContent = `-${formattedCoupAmt}`;
         if (taxRow) taxRow.style.display = tax > 0 ? 'flex' : 'none';
         if (taxEl) taxEl.textContent = `+${formattedTaxAmt}`;
-    },
+    }
 
     /**
      * Applies a quick percentage preset chip to the discount input.
-     * 
      * @param {number} val - Discount percentage (e.g., 10, 20, 50).
      */
     setDiscountPct(val) {
@@ -168,7 +134,7 @@ export const DiscountEngine = {
         const chips = document.querySelectorAll('#subtab-discount-calc .quick-pct-chip');
         chips.forEach(c => c.classList.toggle('active', c.textContent.trim() === `${val}%`));
         this.calculateDiscount();
-    },
+    }
 
     /**
      * Calculates bill tip, grand total, and per-person split amounts.
@@ -202,11 +168,10 @@ export const DiscountEngine = {
         if (totalTipEl) totalTipEl.textContent = formattedTipAmt;
         if (grandTotalEl) grandTotalEl.textContent = formattedTotal;
         if (peopleEl) peopleEl.textContent = people.toString();
-    },
+    }
 
     /**
      * Applies a quick percentage preset chip to the tip input.
-     * 
      * @param {number} val - Tip percentage (e.g., 10, 15, 20).
      */
     setTipPct(val) {
@@ -216,25 +181,24 @@ export const DiscountEngine = {
         const chips = document.querySelectorAll('#subtab-tip-calc .quick-pct-chip');
         chips.forEach(c => c.classList.toggle('active', c.textContent.trim() === `${val}%`));
         this.calculateTip();
-    },
+    }
 
     /**
      * Adjusts the number of people splitting the bill.
-     * 
      * @param {number} delta - Positive or negative integer step (+1 or -1).
      */
     stepTipPeople(delta) {
-        SoundFx.playClick(500);
+        this.playFeedback(500);
         const el = document.getElementById('tipPeopleCount');
         if (!el) return;
         let val = parseInt(el.value, 10) || 1;
         val = Math.max(1, Math.min(100, val + delta));
         el.value = val;
         this.calculateTip();
-    },
+    }
 
     /**
-     * Copies a clean ASCII bill receipt to the clipboard for sharing with friends.
+     * Copies a clean ASCII bill receipt to the clipboard.
      */
     copyTipSummary() {
         const bill = document.getElementById('tipTotalBillShow')?.textContent || this.formatMoney(0);
@@ -246,4 +210,7 @@ export const DiscountEngine = {
         const summary = `🧾 CalVerse Bill Split Receipt\nBill Amount: ${bill}\nTip Amount: ${tip}\nTotal with Tip: ${grand}\nSplit Between: ${people} person(s)\n👉 Each Person Pays: ${perPerson}`;
         copyToClipboard(summary);
     }
-};
+}
+
+/** Default singleton instance of DiscountCalculator */
+export const DiscountEngine = new DiscountCalculator();

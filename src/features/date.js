@@ -1,38 +1,36 @@
 /**
  * ============================================================================
- * CalVerse Pro - Date & Age Calculation Engine
+ * CalVerse Pro - Date & Age Calculation Engine (OOP Architecture)
  * File: src/features/date.js
  * ============================================================================
  * 
  * MODULE OVERVIEW:
- * Provides calendar and chronological date algorithms:
- * 1. Date Duration / Difference: Calculates absolute days, weeks, and hours between two dates.
- * 2. Chronological Age Breakdown: Computes exact years, months, and days lived from date of birth.
- * 3. Date Arithmetic: Computes future or past calendar dates by adding or subtracting an arbitrary number of days.
+ * Object-oriented calendar and chronological date calculation engine:
+ * 1. Date Duration / Difference: Calculates absolute days, weeks, and hours between dates.
+ * 2. Chronological Age Breakdown: Computes exact years, months, and days lived.
+ * 3. Date Arithmetic: Computes future or past calendar dates by day offsets.
  * 
- * OBJECTS & METHODS PRESENT IN THIS FILE:
- * DateEngine:
- * 1. init():
- *    - Defaults date inputs to today's date and runs initial calculations.
- * 
- * 2. calculateDiff():
- *    - Reads 'dateFrom' and 'dateTo', computes the day delta, and updates display badges.
- * 
- * 3. calculateAge():
- *    - Computes exact chronological age taking into account leap years and varying month lengths.
- * 
- * 4. calculateAddSub():
- *    - Adds or subtracts specified days from a seed date and outputs the target weekday and date.
+ * OOP PRINCIPLES:
+ * 1. Inheritance: Extends BaseCalculator.
+ * 2. Encapsulation: Date parsing, leap-year calculations, and day difference models
+ *    are encapsulated in DateCalculator methods.
  * ============================================================================
  */
 
-import { SoundFx } from '../core/sound.js';
+import { BaseCalculator } from './base.js';
 
-export const DateEngine = {
+export class DateCalculator extends BaseCalculator {
+    constructor(id = 'date') {
+        super(id);
+    }
+
     /**
-     * Initializes default dates to today / year 2000 and calculates initial results.
+     * Initializes default dates and calculates initial results.
      */
     init() {
+        if (this.isInitialized) return;
+        this.markInitialized();
+
         const today = new Date().toISOString().split('T')[0];
         const dFrom = document.getElementById('dateFrom');
         const dTo = document.getElementById('dateTo');
@@ -49,84 +47,85 @@ export const DateEngine = {
         this.calculateDiff();
         this.calculateAge();
         this.calculateAddSub();
-    },
+    }
 
     /**
-     * Computes the absolute difference in days, weeks, and hours between two calendar dates.
+     * Computes difference in days, weeks, and hours between two calendar dates.
      */
     calculateDiff() {
-        SoundFx.playClick(600);
+        this.playFeedback(600);
         const dFromEl = document.getElementById('dateFrom');
         const dToEl = document.getElementById('dateTo');
         if (!dFromEl || !dToEl) return;
 
-        const from = new Date(dFromEl.value);
-        const to = new Date(dToEl.value);
+        const d1 = new Date(dFromEl.value);
+        const d2 = new Date(dToEl.value);
 
-        if (isNaN(from.getTime()) || isNaN(to.getTime())) return;
+        if (isNaN(d1.getTime()) || isNaN(d2.getTime())) return;
 
-        // Calculate absolute time difference in milliseconds
-        const diffTime = Math.abs(to - from);
+        const diffTime = Math.abs(d2 - d1);
         const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
-        const weeks = (diffDays / 7).toFixed(1);
+        const diffWeeks = (diffDays / 7).toFixed(1);
+        const diffHours = (diffDays * 24).toLocaleString();
 
-        const primEl = document.getElementById('diffPrimary');
-        const breakEl = document.getElementById('diffBreakdown');
-        if (primEl) primEl.textContent = `${diffDays} Days`;
-        if (breakEl) {
-            breakEl.innerHTML = `Equivalent to <strong>${weeks} weeks</strong> or <strong>${(diffDays * 24).toLocaleString()} hours</strong>`;
-        }
-    },
+        const primEl = document.getElementById('dateDiffPrimary');
+        const wksEl = document.getElementById('dateDiffWeeks');
+        const hrsEl = document.getElementById('dateDiffHours');
+
+        if (primEl) primEl.textContent = `${diffDays.toLocaleString()} Days`;
+        if (wksEl) wksEl.textContent = `${diffWeeks} Weeks`;
+        if (hrsEl) hrsEl.textContent = `${diffHours} Hours`;
+    }
 
     /**
-     * Calculates exact chronological age (Years, Months, Days) from birthdate up to an 'as of' date.
-     * Accurately borrows days from previous months when day subtraction goes negative.
+     * Computes exact chronological age taking into account varying month lengths and leap years.
      */
     calculateAge() {
-        SoundFx.playClick(600);
-        const bDateEl = document.getElementById('birthDate');
-        const asDateEl = document.getElementById('asOfDate');
-        if (!bDateEl || !asDateEl) return;
+        this.playFeedback(600);
+        const birthEl = document.getElementById('birthDate');
+        const asOfEl = document.getElementById('asOfDate');
+        if (!birthEl || !asOfEl) return;
 
-        const dob = new Date(bDateEl.value);
-        const asOf = new Date(asDateEl.value);
+        const birth = new Date(birthEl.value);
+        const asOf = new Date(asOfEl.value);
 
-        if (isNaN(dob.getTime()) || isNaN(asOf.getTime())) return;
+        if (isNaN(birth.getTime()) || isNaN(asOf.getTime()) || birth > asOf) return;
 
-        let years = asOf.getFullYear() - dob.getFullYear();
-        let months = asOf.getMonth() - dob.getMonth();
-        let days = asOf.getDate() - dob.getDate();
+        let years = asOf.getFullYear() - birth.getFullYear();
+        let months = asOf.getMonth() - birth.getMonth();
+        let days = asOf.getDate() - birth.getDate();
 
-        // Adjust negative day borrowing from previous month
         if (days < 0) {
             months--;
-            const prevMonthDays = new Date(asOf.getFullYear(), asOf.getMonth(), 0).getDate();
-            days += prevMonthDays;
+            const prevMonthLastDay = new Date(asOf.getFullYear(), asOf.getMonth(), 0).getDate();
+            days += prevMonthLastDay;
         }
-        // Adjust negative month borrowing from previous year
+
         if (months < 0) {
             years--;
             months += 12;
         }
 
-        const totalDays = Math.floor((asOf - dob) / (1000 * 60 * 60 * 24));
+        const agePrim = document.getElementById('agePrimary');
+        const ageSec = document.getElementById('ageSecondary');
+        const daysLivedEl = document.getElementById('ageDaysLived');
 
-        const agePrimEl = document.getElementById('agePrimary');
-        const ageBreakEl = document.getElementById('ageBreakdown');
-        if (agePrimEl) agePrimEl.textContent = `${years} Years, ${months} Months, ${days} Days`;
-        if (ageBreakEl) {
-            ageBreakEl.innerHTML = `Total lived: <strong>${totalDays.toLocaleString()} days</strong> (≈ <strong>${Math.floor(totalDays / 7).toLocaleString()} weeks</strong>)`;
-        }
-    },
+        const totalDaysLived = Math.floor((asOf - birth) / (1000 * 60 * 60 * 24));
+
+        if (agePrim) agePrim.textContent = `${years} Years, ${months} Months`;
+        if (ageSec) ageSec.textContent = `${days} Days`;
+        if (daysLivedEl) daysLivedEl.textContent = `Total Days Lived: ${totalDaysLived.toLocaleString()} days`;
+    }
 
     /**
-     * Adds or subtracts days from a specified date and displays the resulting date and day of week.
+     * Adds or subtracts specified days from a date.
      */
     calculateAddSub() {
-        SoundFx.playClick(600);
+        this.playFeedback(600);
         const asDateEl = document.getElementById('addsubDate');
-        const opEl = document.getElementById('addsubOperation');
+        const opEl = document.getElementById('addsubOp');
         const daysEl = document.getElementById('addsubDays');
+
         if (!asDateEl || !opEl || !daysEl) return;
 
         const start = new Date(asDateEl.value);
@@ -148,4 +147,7 @@ export const DateEngine = {
         if (resEl) resEl.textContent = resultDate.toLocaleDateString(undefined, options);
         if (dayEl) dayEl.textContent = `${op === 'add' ? '+' : '−'} ${days} days from ${start.toLocaleDateString()}`;
     }
-};
+}
+
+/** Default singleton instance of DateCalculator */
+export const DateEngine = new DateCalculator();

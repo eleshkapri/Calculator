@@ -1,12 +1,11 @@
 /**
  * ============================================================================
- * CalVerse Pro - Equation & Algebra Engine
+ * CalVerse Pro - Equation & Algebra Engine (OOP Architecture)
  * File: src/features/equations.js
  * ============================================================================
  * 
  * MODULE OVERVIEW:
- * Solves polynomial, linear, and rational algebraic problems with full
- * pedagogical step-by-step mathematical breakdowns:
+ * Object-oriented equation and algebraic computation engine:
  * 1. Quadratic Equation Solver: Solves ax² + bx + c = 0, calculates discriminant Δ,
  *    identifies real/complex roots, and computes parabola vertex (h, k).
  * 2. 2x2 Linear System Solver: Solves simultaneous linear equations via Cramer's Rule
@@ -14,40 +13,36 @@
  * 3. Rational Fraction Engine: Adds, subtracts, multiplies, and divides fractions,
  *    simplifies via Euclidean Greatest Common Divisor (GCD), and computes mixed numbers.
  * 
- * OBJECTS & METHODS PRESENT IN THIS FILE:
- * EquationEngine:
- * 1. init():
- *    - Triggers initial solutions for quadratic, linear, and fraction engines.
- * 
- * 2. solveQuadratic():
- *    - Reads a, b, c; calculates discriminant D; computes roots (real or complex with imaginary unit i);
- *      computes parabola vertex (h, k); writes step-by-step explanations.
- * 
- * 3. updateLiveEquation(a, b, c):
- *    - Dynamically formats the live LaTeX-style equation preview label with correct signs.
- * 
- * 4. solveLinearSystem():
- *    - Solves a1*x + b1*y = c1 and a2*x + b2*y = c2 using Cramer's Rule determinants D, Dx, Dy.
- * 
- * 5. calculateFraction():
- *    - Computes rational fractions (n1/d1) [+, -, *, /] (n2/d2), simplifies via GCD Euclidean
- *      algorithm, formats mixed fractions and decimal approximations.
+ * OOP PRINCIPLES:
+ * 1. Inheritance: Extends BaseCalculator.
+ * 2. Encapsulation: Mathematical solver routines and step-by-step generators are
+ *    encapsulated in EquationCalculator methods.
+ * 3. Security: All displayed values and dynamic steps are sanitized against XSS.
  * ============================================================================
  */
 
-export const EquationEngine = {
+import { BaseCalculator } from './base.js';
+import { escapeHtml } from '../core/dom.js';
+
+export class EquationCalculator extends BaseCalculator {
+    constructor(id = 'equations') {
+        super(id);
+    }
+
     /**
-     * Solves initial quadratic, linear, and fraction equations on boot.
+     * Initializes default quadratic, linear, and fraction models.
      */
     init() {
+        if (this.isInitialized) return;
+        this.markInitialized();
+
         this.solveQuadratic();
         this.solveLinearSystem();
         this.calculateFraction();
-    },
+    }
 
     /**
      * Solves the quadratic equation ax² + bx + c = 0.
-     * Computes discriminant Δ = b² - 4ac, real/complex roots, and parabola vertex (h, k).
      */
     solveQuadratic() {
         const a = parseFloat(document.getElementById('quadA')?.value);
@@ -60,7 +55,6 @@ export const EquationEngine = {
         const stepForm = document.getElementById('quadStepFormula');
         const stepVert = document.getElementById('quadStepVertex');
 
-        // Update live formula preview banner
         this.updateLiveEquation(a, b, c);
 
         if (isNaN(a) || isNaN(b) || isNaN(c)) return;
@@ -71,8 +65,8 @@ export const EquationEngine = {
                 const x = (-c / b).toFixed(4);
                 if (r1El) r1El.textContent = x;
                 if (r2El) r2El.textContent = 'Linear (1 Root)';
-                if (stepDisc) stepDisc.innerHTML = `<span class="step-num">1.</span> Linear Equation: ${b}x + ${c} = 0`;
-                if (stepForm) stepForm.innerHTML = `<span class="step-num">2.</span> x = −(${c}) / ${b} = ${x}`;
+                if (stepDisc) stepDisc.innerHTML = `<span class="step-num">1.</span> Linear Equation: ${escapeHtml(b)}x + ${escapeHtml(c)} = 0`;
+                if (stepForm) stepForm.innerHTML = `<span class="step-num">2.</span> x = −(${escapeHtml(c)}) / ${escapeHtml(b)} = ${escapeHtml(x)}`;
                 if (stepVert) stepVert.innerHTML = `<span class="step-num">3.</span> Straight line (No vertex)`;
             } else {
                 if (r1El) r1El.textContent = c === 0 ? 'Infinite Roots' : 'No Solution';
@@ -88,36 +82,33 @@ export const EquationEngine = {
         const opens = a > 0 ? 'Opens Upward (Minimum)' : 'Opens Downward (Maximum)';
 
         if (D > 0) {
-            // Case 1: Two distinct real roots
             const x1 = ((-b + Math.sqrt(D)) / (2 * a)).toFixed(4);
             const x2 = ((-b - Math.sqrt(D)) / (2 * a)).toFixed(4);
             if (r1El) r1El.textContent = x1;
             if (r2El) r2El.textContent = x2;
-            if (stepDisc) stepDisc.innerHTML = `<span class="step-num">1.</span> Discriminant: Δ = b² − 4ac = (${b})² − 4(${a})(${c}) = ${D} > 0 → Two Real Roots`;
-            if (stepForm) stepForm.innerHTML = `<span class="step-num">2.</span> Quadratic Formula: x = (−(${b}) ± √${D}) / (2 × ${a}) → x₁ = ${x1}, x₂ = ${x2}`;
-            if (stepVert) stepVert.innerHTML = `<span class="step-num">3.</span> Vertex: (h, k) = (${h.toFixed(2)}, ${k.toFixed(2)}) • ${opens}`;
+            if (stepDisc) stepDisc.innerHTML = `<span class="step-num">1.</span> Discriminant: Δ = b² − 4ac = (${escapeHtml(b)})² − 4(${escapeHtml(a)})(${escapeHtml(c)}) = ${escapeHtml(D)} > 0 → Two Real Roots`;
+            if (stepForm) stepForm.innerHTML = `<span class="step-num">2.</span> Quadratic Formula: x = (−(${escapeHtml(b)}) ± √${escapeHtml(D)}) / (2 × ${escapeHtml(a)}) → x₁ = ${escapeHtml(x1)}, x₂ = ${escapeHtml(x2)}`;
+            if (stepVert) stepVert.innerHTML = `<span class="step-num">3.</span> Vertex: (h, k) = (${escapeHtml(h.toFixed(2))}, ${escapeHtml(k.toFixed(2))}) • ${escapeHtml(opens)}`;
         } else if (D === 0) {
-            // Case 2: One repeated real root
             const x = ((-b) / (2 * a)).toFixed(4);
             if (r1El) r1El.textContent = x;
             if (r2El) r2El.textContent = `${x} (Double Root)`;
             if (stepDisc) stepDisc.innerHTML = `<span class="step-num">1.</span> Discriminant: Δ = 0 → One Repeated Root`;
-            if (stepForm) stepForm.innerHTML = `<span class="step-num">2.</span> Root: x = −(${b}) / (2 × ${a}) = ${x}`;
-            if (stepVert) stepVert.innerHTML = `<span class="step-num">3.</span> Vertex: (h, k) = (${h.toFixed(2)}, ${k.toFixed(2)}) • ${opens}`;
+            if (stepForm) stepForm.innerHTML = `<span class="step-num">2.</span> Root: x = −(${escapeHtml(b)}) / (2 × ${escapeHtml(a)}) = ${escapeHtml(x)}`;
+            if (stepVert) stepVert.innerHTML = `<span class="step-num">3.</span> Vertex: (h, k) = (${escapeHtml(h.toFixed(2))}, ${escapeHtml(k.toFixed(2))}) • ${escapeHtml(opens)}`;
         } else {
-            // Case 3: Complex conjugate roots (imaginary unit i)
             const realPart = ((-b) / (2 * a)).toFixed(4);
             const imagPart = ((Math.sqrt(-D)) / (2 * Math.abs(a))).toFixed(4);
             if (r1El) r1El.textContent = `${realPart} + ${imagPart}i`;
             if (r2El) r2El.textContent = `${realPart} - ${imagPart}i`;
-            if (stepDisc) stepDisc.innerHTML = `<span class="step-num">1.</span> Discriminant: Δ = ${D} < 0 → Two Complex Roots`;
-            if (stepForm) stepForm.innerHTML = `<span class="step-num">2.</span> Formula: x = ${realPart} ± ${imagPart}i`;
-            if (stepVert) stepVert.innerHTML = `<span class="step-num">3.</span> Vertex: (h, k) = (${h.toFixed(2)}, ${k.toFixed(2)}) • ${opens}`;
+            if (stepDisc) stepDisc.innerHTML = `<span class="step-num">1.</span> Discriminant: Δ = ${escapeHtml(D)} < 0 → Two Complex Roots`;
+            if (stepForm) stepForm.innerHTML = `<span class="step-num">2.</span> Formula: x = ${escapeHtml(realPart)} ± ${escapeHtml(imagPart)}i`;
+            if (stepVert) stepVert.innerHTML = `<span class="step-num">3.</span> Vertex: (h, k) = (${escapeHtml(h.toFixed(2))}, ${escapeHtml(k.toFixed(2))}) • ${escapeHtml(opens)}`;
         }
-    },
+    }
 
     /**
-     * Updates the dynamic equation text preview to show current coefficients with correct signs.
+     * Updates the dynamic equation text preview.
      */
     updateLiveEquation(a, b, c) {
         const el = document.getElementById('quadLiveEqText');
@@ -130,12 +121,10 @@ export const EquationEngine = {
         const bAbs = typeof bVal === 'number' ? Math.abs(bVal) : bVal;
         const cAbs = typeof cVal === 'number' ? Math.abs(cVal) : cVal;
         el.textContent = `${aVal}x² ${bSign} ${bAbs}x ${cSign} ${cAbs} = 0`;
-    },
+    }
 
     /**
-     * Solves a 2x2 system of linear equations using Cramer's Rule:
-     *   a1*x + b1*y = c1
-     *   a2*x + b2*y = c2
+     * Solves a 2x2 system of linear equations using Cramer's Rule.
      */
     solveLinearSystem() {
         const a1 = parseFloat(document.getElementById('linA1')?.value);
@@ -153,7 +142,6 @@ export const EquationEngine = {
 
         if ([a1, b1, c1, a2, b2, c2].some(isNaN)) return;
 
-        // Cramer's determinants
         const D = a1 * b2 - a2 * b1;
         const Dx = c1 * b2 - c2 * b1;
         const Dy = a1 * c2 - a2 * c1;
@@ -163,9 +151,9 @@ export const EquationEngine = {
             const y = (Dy / D).toFixed(4);
             if (xEl) xEl.textContent = x;
             if (yEl) yEl.textContent = y;
-            if (sD) sD.innerHTML = `<span class="step-num">D</span> = (a₁·b₂ − a₂·b₁) = (${a1})(${b2}) − (${a2})(${b1}) = ${D}`;
-            if (sDx) sDx.innerHTML = `<span class="step-num">Dₓ</span> = (${c1})(${b2}) − (${c2})(${b1}) = ${Dx} → x = Dₓ/D = ${x}`;
-            if (sDy) sDy.innerHTML = `<span class="step-num">Dᵧ</span> = (${a1})(${c2}) − (${a2})(${c1}) = ${Dy} → y = Dᵧ/D = ${y}`;
+            if (sD) sD.innerHTML = `<span class="step-num">D</span> = (${escapeHtml(a1)})(${escapeHtml(b2)}) − (${escapeHtml(a2)})(${escapeHtml(b1)}) = ${escapeHtml(D)}`;
+            if (sDx) sDx.innerHTML = `<span class="step-num">Dₓ</span> = (${escapeHtml(c1)})(${escapeHtml(b2)}) − (${escapeHtml(c2)})(${escapeHtml(b1)}) = ${escapeHtml(Dx)} → x = Dₓ/D = ${escapeHtml(x)}`;
+            if (sDy) sDy.innerHTML = `<span class="step-num">Dᵧ</span> = (${escapeHtml(a1)})(${escapeHtml(c2)}) − (${escapeHtml(a2)})(${escapeHtml(c1)}) = ${escapeHtml(Dy)} → y = Dᵧ/D = ${escapeHtml(y)}`;
         } else {
             if (Dx === 0 && Dy === 0) {
                 if (xEl) xEl.textContent = 'Infinite Solutions';
@@ -177,11 +165,10 @@ export const EquationEngine = {
                 if (sD) sD.innerHTML = `<span class="step-num">D</span> = 0 but Dₓ or Dᵧ ≠ 0 → Parallel lines (Inconsistent)`;
             }
         }
-    },
+    }
 
     /**
-     * Performs fraction arithmetic and Euclidean GCD reduction:
-     * (n1/d1) [op] (n2/d2) -> reduced fraction, mixed fraction, and decimal.
+     * Performs fraction arithmetic and Euclidean GCD reduction.
      */
     calculateFraction() {
         const n1 = parseInt(document.getElementById('fracNum1')?.value, 10);
@@ -222,19 +209,16 @@ export const EquationEngine = {
             den = d1 * n2;
         }
 
-        // Standardize negative sign to numerator
         if (den < 0) {
             num = -num;
             den = -den;
         }
 
-        // Euclidean Greatest Common Divisor
         const gcd = (a, b) => b === 0 ? Math.abs(a) : gcd(b, a % b);
         const common = gcd(num, den);
         const simNum = num / common;
         const simDen = den / common;
 
-        // Mixed fraction formatting (e.g. 7/2 -> 3 1/2)
         let mixedStr = '';
         if (Math.abs(simNum) >= simDen && simDen !== 1) {
             const whole = Math.trunc(simNum / simDen);
@@ -254,4 +238,7 @@ export const EquationEngine = {
         if (s1) s1.textContent = `Computation: Numerator = ${num}, Denominator = ${den}`;
         if (s2) s2.textContent = `GCD Reduction by ${common}: ${num}/${den} = ${simNum}/${simDen}`;
     }
-};
+}
+
+/** Default singleton instance of EquationCalculator */
+export const EquationEngine = new EquationCalculator();

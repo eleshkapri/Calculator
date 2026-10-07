@@ -1,80 +1,71 @@
 /**
  * ============================================================================
- * CalVerse Pro - Time Calculation & Stopwatch Engine
+ * CalVerse Pro - Time Calculation & Stopwatch Engine (OOP Architecture)
  * File: src/features/time.js
  * ============================================================================
  * 
  * MODULE OVERVIEW:
- * A multi-tool temporal calculation and chronometer engine:
+ * Object-oriented multi-tool temporal calculation and chronometer engine:
  * 1. Time Unit Keypad: Dedicated keypad accepting hours, minutes, seconds, and milliseconds
- *    with direct arithmetic expressions (e.g., "2hour 35min + 45min").
- *    Supports multiple format output views: Hours/Minutes/Seconds (HMS), Decimal Hours,
- *    Total Minutes, and Total Seconds.
- * 2. Time Duration & Shift: Computes elapsed duration between clock times (e.g. 09:30 to 18:15)
- *    and shifts times forward or backward.
- * 3. Unix Epoch Converter: Real-time live UTC epoch counter with bidirectional date-to-epoch
- *    and epoch-to-date converters.
- * 4. Precision Digital Stopwatch: Millisecond chronometer with Lap times recording,
- *    fastest/slowest lap highlighting, and clipboard export.
+ *    with compound duration grouping, scalar multiplication/division, and ratio calculation.
+ * 2. Time Duration & Shift: Computes elapsed duration between clock times and shifts times.
+ * 3. Unix Epoch Converter: Real-time live UTC epoch counter with bidirectional converters.
+ * 4. Precision Digital Stopwatch: Millisecond chronometer with Lap times recording.
  * 
- * OBJECTS & METHODS PRESENT IN THIS FILE:
- * TimeEngine:
- * 1. init(): Initializes default keypad screens, computes duration, and starts live epoch ticker.
- * 2. Keypad Subsystem:
- *    - inputKeypad(val): Handles numeric digits and operator buttons.
- *    - inputUnit(unit): Appends temporal unit token ('hour', 'min', 'sec', 'm.sec').
- *    - clearKeypad(): Resets keypad expression buffer.
- *    - backspaceKeypad(): Removes last character or temporal unit word.
- *    - updateKeypadScreen(): Synchronizes expression preview DOM element.
- *    - calculateKeypad(recordHistory): Evaluates time tokens to total seconds and formats display.
- *    - toggleFormat(): Cycles output mode through HMS -> Decimal Hours -> Total Minutes -> Total Seconds.
- *    - copyKeypadResult(): Copies current keypad result to clipboard.
- * 3. Duration & Arithmetic:
- *    - calculateDuration(): Computes elapsed difference between start and end clock times.
- *    - calculateMath(): Computes target clock time by adding/subtracting hours/minutes.
- * 4. Epoch Timestamps:
- *    - startEpochTicker(): Starts 1-second interval updating current live Unix epoch.
- *    - convertEpochToDate(): Converts numeric epoch timestamp to UTC/Local date string.
- *    - convertDateToEpoch(): Converts datetime picker value to integer Unix epoch seconds.
- * 5. Stopwatch:
- *    - startStopwatch(): Starts requestAnimationFrame/interval timer.
- *    - pauseStopwatch(): Freezes elapsed time counter.
- *    - resetStopwatch(): Resets timer and clears recorded laps.
- *    - recordLap(): Stores split and cumulative lap records.
- *    - renderLaps(): Renders lap table DOM.
+ * OOP PRINCIPLES:
+ * 1. Inheritance: Extends BaseCalculator.
+ * 2. Encapsulation: Stopwatch intervals, epoch ticker timers, and keypad state buffers
+ *    are protected instance properties of TimeCalculator.
+ * 3. Security: Evaluates temporal arithmetic inside a strict sandbox with expression token validation.
  * ============================================================================
  */
 
+import { BaseCalculator } from './base.js';
 import { SoundFx } from '../core/sound.js';
-import { copyToClipboard } from '../core/dom.js';
+import { copyToClipboard, escapeHtml } from '../core/dom.js';
 import { addHistory } from './standard.js';
 
-export const TimeEngine = {
-    swStartTime: 0,
-    swElapsedTime: 0,
-    swTimerInterval: null,
-    swIsRunning: false,
-    swLaps: [],
-    epochTickerInterval: null,
+export class TimeCalculator extends BaseCalculator {
+    static #SANDBOX_ARGS = Object.freeze([
+        'window', 'document', 'globalThis', 'self', 'top', 'parent', 'frames',
+        'location', 'fetch', 'XMLHttpRequest', 'localStorage', 'sessionStorage',
+        'indexedDB', 'alert', 'prompt', 'confirm', 'process'
+    ]);
 
-    // Time Keypad State
-    keypadExpr: '2hour 35min + 3hour 45min',
-    keypadBuffer: '',
-    keypadFormatMode: 'HMS', // 'HMS', 'DEC', 'MIN', 'SEC'
-    keypadLastSeconds: 22800, // 6h 20m
-    isCalculated: false,
-    lastIsRatio: false,
+    constructor(id = 'time') {
+        super(id);
+        this.swStartTime = 0;
+        this.swElapsedTime = 0;
+        this.swTimerInterval = null;
+        this.swIsRunning = false;
+        this.swLaps = [];
+        this.epochTickerInterval = null;
 
+        // Keypad State
+        this.keypadExpr = '2hour 35min + 3hour 45min';
+        this.keypadBuffer = '';
+        this.keypadFormatMode = 'HMS'; // 'HMS', 'DEC', 'MIN', 'SEC'
+        this.keypadLastSeconds = 22800; // 6h 20m
+        this.isCalculated = false;
+        this.lastIsRatio = false;
+    }
+
+    /**
+     * Bootstraps default displays and starts the live epoch ticker.
+     */
     init() {
+        if (this.isInitialized) return;
+        this.markInitialized();
+
         this.updateKeypadScreen();
         this.calculateDuration();
         this.calculateMath();
         this.startEpochTicker();
-    },
+    }
 
     // --- Time Keypad Methods ---
     inputKeypad(val) {
-        SoundFx.playClick(500);
+        this.playFeedback(500);
 
         if (['+', '−', '×', '÷', '%'].includes(val)) {
             if (this.isCalculated) {
@@ -112,10 +103,10 @@ export const TimeEngine = {
         }
         this.updateKeypadScreen();
         this.calculateKeypad(false);
-    },
+    }
 
     inputUnit(unit) {
-        SoundFx.playClick(550);
+        this.playFeedback(550);
         if (this.isCalculated) {
             this.keypadExpr = '';
             this.keypadBuffer = '';
@@ -129,10 +120,10 @@ export const TimeEngine = {
         this.keypadBuffer = '';
         this.updateKeypadScreen();
         this.calculateKeypad(false);
-    },
+    }
 
     clearKeypad() {
-        SoundFx.playClick(450);
+        this.playFeedback(450);
         this.keypadExpr = '';
         this.keypadBuffer = '';
         this.keypadLastSeconds = 0;
@@ -144,10 +135,10 @@ export const TimeEngine = {
         if (exprEl) exprEl.textContent = '0';
         if (resEl) resEl.textContent = '0hour 0min';
         if (bdEl) bdEl.innerHTML = '<span>0 Hours</span> • <span>0 Minutes</span> • <span>0 Seconds</span>';
-    },
+    }
 
     backspaceKeypad() {
-        SoundFx.playClick(480);
+        this.playFeedback(480);
         if (this.isCalculated) {
             this.isCalculated = false;
         }
@@ -155,7 +146,6 @@ export const TimeEngine = {
             this.keypadBuffer = this.keypadBuffer.slice(0, -1);
         } else if (this.keypadExpr.length > 0) {
             this.keypadExpr = this.keypadExpr.trimEnd();
-            // Check if last token is unit word
             const units = ['m.sec', 'hour', 'min', 'sec'];
             let foundUnit = false;
             for (const u of units) {
@@ -171,14 +161,14 @@ export const TimeEngine = {
         }
         this.updateKeypadScreen();
         this.calculateKeypad(false);
-    },
+    }
 
     updateKeypadScreen() {
         const exprEl = document.getElementById('timeKeypadExpression');
         if (!exprEl) return;
         const fullDisplay = (this.keypadExpr + this.keypadBuffer).trim() || '0';
         exprEl.textContent = fullDisplay;
-    },
+    }
 
     formatSeconds(totalSec, mode = 'HMS') {
         const isNeg = totalSec < 0;
@@ -211,7 +201,7 @@ export const TimeEngine = {
 
         const resStr = parts.join(' ') || '0hour 0min';
         return `${isNeg ? '− ' : ''}${resStr}`;
-    },
+    }
 
     calculateKeypad(isFinal = true) {
         const rawExpr = (this.keypadExpr + this.keypadBuffer).trim();
@@ -239,7 +229,6 @@ export const TimeEngine = {
             });
 
             // 2. Group adjacent time tokens with NO intervening operator into compound duration
-            // e.g. "__T__7200__ __T__1800__" -> "__T__9000__"
             while (/__T__([0-9.]+)__\s+__T__([0-9.]+)__/.test(tagged)) {
                 tagged = tagged.replace(/__T__([0-9.]+)__\s+__T__([0-9.]+)__/g, (m, a, b) => {
                     const sum = parseFloat(a) + parseFloat(b);
@@ -254,7 +243,7 @@ export const TimeEngine = {
             // 4. Convert all __T__<sec>__ tokens to parenthesized expressions (sec)
             let mathExpr = tagged.replace(/__T__([0-9.]+)__/g, '($1)');
 
-            // 5. Handle percentage notation (e.g. * 50% -> * 0.5, + 20% -> * 1.20)
+            // 5. Handle percentage notation (e.g. * 50% -> * 0.5)
             mathExpr = mathExpr.replace(/([\*\/])\s*(\d+(?:\.\d+)?)\s*%/g, '$1 ($2 / 100)');
             mathExpr = mathExpr.replace(/([\+\-])\s*(\d+(?:\.\d+)?)\s*%/g, '$1 ($2 / 100)');
             mathExpr = mathExpr.replace(/(\d+(?:\.\d+)?)\s*%/g, '($1 / 100)');
@@ -262,8 +251,18 @@ export const TimeEngine = {
             // Strip trailing operator for live evaluation while user is typing
             mathExpr = mathExpr.replace(/[\+\-\*\/%]\s*$/, '');
 
-            const evaluatedSec = Function(`"use strict"; return (${mathExpr});`)();
-            if (typeof evaluatedSec === 'number' && isFinite(evaluatedSec)) {
+            // Token Whitelist Validation: only numbers, operators, parens, spaces
+            const testMath = mathExpr.replace(/[0-9.]+/g, '').replace(/[\+\-\*\/\%\(\)\s]/g, '');
+            if (testMath.length > 0) return;
+
+            // Execute in hardened sandbox
+            const sandbox = new Function(
+                ...TimeCalculator.#SANDBOX_ARGS,
+                `"use strict"; return (${mathExpr});`
+            );
+            const evaluatedSec = sandbox(...TimeCalculator.#SANDBOX_ARGS.map(() => undefined));
+
+            if (typeof evaluatedSec === 'number' && Number.isFinite(evaluatedSec)) {
                 this.keypadLastSeconds = evaluatedSec;
                 this.lastIsRatio = isDurationDiv;
 
@@ -290,7 +289,7 @@ export const TimeEngine = {
                 }
 
                 if (isFinal) {
-                    SoundFx.playClick(850, 'triangle', 0.05);
+                    this.playFeedback(850, 'triangle', 0.05);
                     this.isCalculated = true;
                     addHistory(rawExpr, formatted);
                 }
@@ -298,13 +297,13 @@ export const TimeEngine = {
         } catch (e) {
             if (isFinal) {
                 const resEl = document.getElementById('timeKeypadResult');
-                if (resEl) resEl.textContent = 'Error';
+                if (resEl) resEl.textContent = 'Invalid Time';
             }
         }
-    },
+    }
 
     toggleFormat() {
-        SoundFx.playClick(600);
+        this.playFeedback(600);
         if (this.lastIsRatio) return;
         const modes = ['HMS', 'DEC', 'MIN', 'SEC'];
         const labels = { HMS: 'Format: H:M:S', DEC: 'Format: Dec Hours', MIN: 'Format: Total Mins', SEC: 'Format: Total Secs' };
@@ -317,15 +316,15 @@ export const TimeEngine = {
         const formatted = this.formatSeconds(this.keypadLastSeconds, this.keypadFormatMode);
         const resEl = document.getElementById('timeKeypadResult');
         if (resEl) resEl.textContent = formatted;
-    },
+    }
 
     copyKeypadResult() {
         const resEl = document.getElementById('timeKeypadResult');
-        if (resEl) copyToClipboard(resEl.textContent);
-    },
+        if (resEl) this.copyText(resEl.textContent);
+    }
 
     calculateDuration() {
-        SoundFx.playClick(600);
+        this.playFeedback(600);
         const sEl = document.getElementById('timeStart');
         const eEl = document.getElementById('timeEnd');
         const bEl = document.getElementById('timeBreak');
@@ -343,7 +342,6 @@ export const TimeEngine = {
         let startTotalSec = sH * 3600 + sM * 60 + sS;
         let endTotalSec = eH * 3600 + eM * 60 + eS;
 
-        // Across midnight handling
         if (endTotalSec < startTotalSec) {
             endTotalSec += 24 * 3600;
         }
@@ -360,33 +358,22 @@ export const TimeEngine = {
         const primEl = document.getElementById('timeDurationPrimary');
         const decEl = document.getElementById('timeDurationDecimal');
         const minEl = document.getElementById('timeDurationMinutes');
-        const secEl = document.getElementById('timeDurationSeconds');
 
-        if (primEl) primEl.textContent = `${h}h ${m}m ${s}s`;
-        if (decEl) decEl.textContent = `${decimalHrs} hrs`;
-        if (minEl) minEl.textContent = `${totalMins.toLocaleString()} mins`;
-        if (secEl) secEl.textContent = `${netSec.toLocaleString()} sec`;
-    },
+        if (primEl) primEl.textContent = `${h} hrs ${m} mins ${s} secs`;
+        if (decEl) decEl.textContent = `${decimalHrs} Hours`;
+        if (minEl) minEl.textContent = `${totalMins.toLocaleString()} Minutes`;
+    }
 
     calculateMath() {
-        SoundFx.playClick(600);
-        const t1HEl = document.getElementById('t1Hours');
-        const t1MEl = document.getElementById('t1Mins');
-        const t1SEl = document.getElementById('t1Secs');
-        const t2HEl = document.getElementById('t2Hours');
-        const t2MEl = document.getElementById('t2Mins');
-        const t2SEl = document.getElementById('t2Secs');
+        this.playFeedback(600);
+        const t1El = document.getElementById('timeMath1');
+        const t2El = document.getElementById('timeMath2');
         const opEl = document.getElementById('timeMathOp');
+        if (!t1El || !t2El || !opEl) return;
 
-        const t1H = parseInt(t1HEl ? t1HEl.value : '0', 10) || 0;
-        const t1M = parseInt(t1MEl ? t1MEl.value : '0', 10) || 0;
-        const t1S = parseInt(t1SEl ? t1SEl.value : '0', 10) || 0;
-
-        const t2H = parseInt(t2HEl ? t2HEl.value : '0', 10) || 0;
-        const t2M = parseInt(t2MEl ? t2MEl.value : '0', 10) || 0;
-        const t2S = parseInt(t2SEl ? t2SEl.value : '0', 10) || 0;
-
-        const op = opEl ? opEl.value : 'add';
+        const [t1H = 0, t1M = 0, t1S = 0] = t1El.value.split(':').map(Number);
+        const [t2H = 0, t2M = 0, t2S = 0] = t2El.value.split(':').map(Number);
+        const op = opEl.value;
 
         const sec1 = t1H * 3600 + t1M * 60 + t1S;
         const sec2 = t2H * 3600 + t2M * 60 + t2S;
@@ -407,14 +394,13 @@ export const TimeEngine = {
         if (resEl) resEl.textContent = `${prefix}${h}h ${m}m ${s}s`;
         if (sResEl) sResEl.textContent = `${prefix}${resSec.toLocaleString()} s`;
         if (mResEl) mResEl.textContent = `${prefix}${(resSec / 60).toFixed(2)} m`;
-    },
+    }
 
     // Stopwatch
     toggleStopwatch() {
-        SoundFx.playClick(700);
+        this.playFeedback(700);
         const startBtn = document.getElementById('swStartBtn');
         if (this.swIsRunning) {
-            // Pause
             clearInterval(this.swTimerInterval);
             this.swElapsedTime += Date.now() - this.swStartTime;
             this.swIsRunning = false;
@@ -423,7 +409,6 @@ export const TimeEngine = {
                 startBtn.classList.remove('running');
             }
         } else {
-            // Start
             this.swStartTime = Date.now();
             this.swTimerInterval = setInterval(() => this.updateStopwatchDisplay(), 10);
             this.swIsRunning = true;
@@ -432,7 +417,7 @@ export const TimeEngine = {
                 startBtn.classList.add('running');
             }
         }
-    },
+    }
 
     updateStopwatchDisplay() {
         const time = this.swElapsedTime + (Date.now() - this.swStartTime);
@@ -445,28 +430,63 @@ export const TimeEngine = {
         const fmt = `${String(h).padStart(2, '0')}:${String(m).padStart(2, '0')}:${String(s).padStart(2, '0')}.${String(ms).padStart(2, '0')}`;
         const disp = document.getElementById('stopwatchDisplay');
         if (disp) disp.textContent = fmt;
-    },
+    }
 
     lapStopwatch() {
-        if (!this.swIsRunning && this.swElapsedTime === 0) return;
-        SoundFx.playClick(600);
-        const dispEl = document.getElementById('stopwatchDisplay');
-        const disp = dispEl ? dispEl.textContent : '';
-        this.swLaps.unshift({ lapNum: this.swLaps.length + 1, time: disp });
+        if (!this.swIsRunning) return;
+        this.playFeedback(650);
+        const time = this.swElapsedTime + (Date.now() - this.swStartTime);
+        const prevTotal = this.swLaps.reduce((acc, l) => acc + l.splitMs, 0);
+        const splitMs = time - prevTotal;
 
+        this.swLaps.unshift({
+            lapNum: this.swLaps.length + 1,
+            splitMs,
+            totalMs: time
+        });
+        this.renderLaps();
+    }
+
+    renderLaps() {
         const container = document.getElementById('swLapsContainer');
-        if (container) {
-            container.innerHTML = this.swLaps.map(l => `
-                <div class="lap-row">
-                    <span class="lap-num">Lap ${l.lapNum}</span>
-                    <span class="lap-time">${l.time}</span>
-                </div>
-            `).join('');
+        if (!container) return;
+
+        if (this.swLaps.length === 0) {
+            container.innerHTML = '<div class="empty-laps">No lap times recorded</div>';
+            return;
         }
-    },
+
+        const formatMs = (ms) => {
+            const centis = Math.floor((ms % 1000) / 10);
+            const totalSec = Math.floor(ms / 1000);
+            const s = totalSec % 60;
+            const m = Math.floor((totalSec / 60) % 60);
+            const h = Math.floor(totalSec / 3600);
+            return `${String(h).padStart(2, '0')}:${String(m).padStart(2, '0')}:${String(s).padStart(2, '0')}.${String(centis).padStart(2, '0')}`;
+        };
+
+        const splits = this.swLaps.map(l => l.splitMs);
+        const minSplit = Math.min(...splits);
+        const maxSplit = Math.max(...splits);
+
+        container.innerHTML = this.swLaps.map(l => {
+            let badge = '';
+            if (this.swLaps.length > 1) {
+                if (l.splitMs === minSplit) badge = '<span class="lap-tag fastest">Fastest</span>';
+                else if (l.splitMs === maxSplit) badge = '<span class="lap-tag slowest">Slowest</span>';
+            }
+            return `
+                <div class="lap-row">
+                    <span class="lap-number">Lap ${escapeHtml(l.lapNum)} ${badge}</span>
+                    <span class="lap-split">+${formatMs(l.splitMs)}</span>
+                    <span class="lap-total">${formatMs(l.totalMs)}</span>
+                </div>
+            `;
+        }).join('');
+    }
 
     resetStopwatch() {
-        SoundFx.playClick(500);
+        this.playFeedback(450);
         clearInterval(this.swTimerInterval);
         this.swIsRunning = false;
         this.swElapsedTime = 0;
@@ -480,7 +500,7 @@ export const TimeEngine = {
             startBtn.classList.remove('running');
         }
         if (container) container.innerHTML = '<div class="empty-laps">No lap times recorded</div>';
-    },
+    }
 
     // Unix Epoch
     startEpochTicker() {
@@ -492,10 +512,10 @@ export const TimeEngine = {
         if (!this.epochTickerInterval) {
             this.epochTickerInterval = setInterval(updateEpoch, 1000);
         }
-    },
+    }
 
     convertEpochToDate() {
-        SoundFx.playClick(600);
+        this.playFeedback(600);
         const inp = document.getElementById('epochInput');
         if (!inp) return;
         const ep = parseInt(inp.value, 10);
@@ -507,14 +527,14 @@ export const TimeEngine = {
         if (primEl) primEl.textContent = d.toLocaleString();
         if (secEl) {
             secEl.innerHTML = `
-                UTC: <strong>${d.toUTCString()}</strong><br>
-                ISO: <strong>${d.toISOString()}</strong>
+                UTC: <strong>${escapeHtml(d.toUTCString())}</strong><br>
+                ISO: <strong>${escapeHtml(d.toISOString())}</strong>
             `;
         }
-    },
+    }
 
     convertDateToEpoch() {
-        SoundFx.playClick(600);
+        this.playFeedback(600);
         const dtInp = document.getElementById('dateToEpochInput');
         if (!dtInp || !dtInp.value) return;
 
@@ -525,4 +545,7 @@ export const TimeEngine = {
         if (primEl) primEl.textContent = `${epochSec} Epoch`;
         if (secEl) secEl.textContent = `${d.toUTCString()} (Local: ${d.toLocaleString()})`;
     }
-};
+}
+
+/** Default singleton instance of TimeCalculator */
+export const TimeEngine = new TimeCalculator();

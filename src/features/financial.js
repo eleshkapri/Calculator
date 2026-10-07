@@ -1,49 +1,52 @@
 /**
  * ============================================================================
- * CalVerse Pro - Financial & Currency Calculation Engine
+ * CalVerse Pro - Financial & Currency Calculation Engine (OOP Architecture)
  * File: src/features/financial.js
  * ============================================================================
  * 
  * MODULE OVERVIEW:
- * Powers three financial computation modules:
- * 1. Loan EMI (Equated Monthly Installment) Calculator:
- *    - Amortization formula computing monthly payment, total interest, and principal/interest ratios.
- * 2. Compound Interest & SIP (Systematic Investment Plan) Growth Calculator:
- *    - Future value projections combining initial lump-sum compounding and monthly SIP contributions.
- * 3. Live Foreign Exchange Rate Converter:
- *    - Fetches real-time currency exchange rates from open.er-api.com with offline cache persistence.
- *    - Bidirectional conversion and popular currency pairs grid.
+ * Object-oriented financial computation and currency exchange engine:
+ * 1. Loan EMI (Equated Monthly Installment) Calculator: Amortization schedule.
+ * 2. Compound Interest & SIP Growth Calculator: Future value compound projections.
+ * 3. Live Foreign Exchange Rate Converter: Real-time queries with offline fallback cache.
  * 
- * OBJECTS & METHODS PRESENT IN THIS FILE:
- * FinancialEngine:
- * 1. init(): Restores saved currency & cached exchange rates, binds range sliders, runs initial models.
- * 2. setCurrency(code): Updates active financial currency and re-renders labels and figures.
- * 3. updateLabels(): Rewrites input header labels with active currency symbol.
- * 4. formatMoney(amount): Formats numeric values according to the active financial currency locale.
- * 5. calculateEMI(): Computes monthly EMI, total interest, principal ratio, and progress bar widths.
- * 6. calculateCompound(): Computes future value of compound lump sum plus recurring monthly contributions.
- * 7. fetchLiveRates(showFeedback): Queries real-time currency API; provides graceful offline fallback.
- * 8. convert(source): Performs bidirectional currency exchange conversion.
- * 9. swap(): Swaps 'From' and 'To' currency select values and reconverts.
- * 10. renderPopularPairs(): Renders clickable quick-convert currency pair cards.
- * 11. setQuickPair(from, to): Activates a currency pair when a card is clicked.
+ * OOP PRINCIPLES:
+ * 1. Inheritance: Extends BaseCalculator.
+ * 2. Encapsulation: Currency states, exchange rate matrices, and loan parameters
+ *    are encapsulated within FinancialCalculator.
+ * 3. Security: Sanitizes popular currency cards and inputs.
  * ============================================================================
  */
 
+import { BaseCalculator } from './base.js';
 import { CURRENCY_CONFIG } from '../core/constants.js';
 import { formatMoney } from '../core/format.js';
-import { SoundFx } from '../core/sound.js';
-import { getFloatVal, showToast } from '../core/dom.js';
+import { getFloatVal, showToast, escapeHtml } from '../core/dom.js';
 
-export const FinancialEngine = {
-    /** Currently selected currency code for loans and investments (persisted) */
-    currentCurrency: localStorage.getItem('calverse_fin_currency') || 'INR',
+export class FinancialCalculator extends BaseCalculator {
+    constructor(id = 'financial') {
+        super(id);
+        this.currentCurrency = localStorage.getItem('calverse_fin_currency') || 'INR';
+        this.rates = {
+            USD: 1.0,
+            INR: 83.50,
+            EUR: 0.92,
+            GBP: 0.79,
+            JPY: 155.20,
+            AED: 3.67,
+            CAD: 1.36,
+            AUD: 1.51
+        };
+        this.ratesLastUpdated = null;
+    }
 
     /**
-     * Initializes financial subtab inputs, range sync listeners, and triggers live rates fetch.
+     * Bootstraps financial currency, synchronizes sliders, and runs models.
      */
     init() {
-        // Restore saved currency
+        if (this.isInitialized) return;
+        this.markInitialized();
+
         const curSelect = document.getElementById('finCurrencySelect');
         if (curSelect) {
             curSelect.value = this.currentCurrency;
@@ -87,216 +90,192 @@ export const FinancialEngine = {
         this.calculateEMI();
         this.calculateCompound();
         this.fetchLiveRates();
-    },
+    }
 
     /**
-     * Switches the currency code for loan and investment calculations.
-     * 
-     * @param {string} code - ISO 4217 currency code (e.g., 'INR', 'USD', 'EUR').
+     * Switches the active financial currency code.
+     * @param {string} code
      */
     setCurrency(code) {
         if (CURRENCY_CONFIG[code]) {
-            SoundFx.playClick(600);
+            this.playFeedback(600);
             this.currentCurrency = code;
             localStorage.setItem('calverse_fin_currency', code);
             this.updateLabels();
             this.calculateEMI();
             this.calculateCompound();
-            showToast(`Currency set to ${CURRENCY_CONFIG[code].name} (${CURRENCY_CONFIG[code].symbol})`);
         }
-    },
+    }
 
     /**
-     * Updates label text in the UI to display the active currency symbol.
+     * Updates header currency symbol badges.
      */
     updateLabels() {
-        const cur = CURRENCY_CONFIG[this.currentCurrency] || CURRENCY_CONFIG.INR;
-        const sym = cur.symbol;
-
-        const lAmount = document.getElementById('loanAmountLabel');
-        if (lAmount) lAmount.textContent = `Loan Amount (${sym})`;
-
-        const cPrinc = document.getElementById('ciPrincipalLabel');
-        if (cPrinc) cPrinc.textContent = `Initial Principal (${sym})`;
-
-        const cMonth = document.getElementById('ciMonthlyLabel');
-        if (cMonth) cMonth.textContent = `Monthly Contribution (${sym})`;
-    },
+        const symbol = CURRENCY_CONFIG[this.currentCurrency]?.symbol || this.currentCurrency;
+        document.querySelectorAll('.fin-curr-symbol').forEach(el => {
+            el.textContent = symbol;
+        });
+    }
 
     /**
-     * Formats an amount using the active financial currency settings.
-     * 
-     * @param {number} amount - Numeric monetary amount.
-     * @returns {string} Localized currency string.
+     * Formats an amount using active currency locale rules.
+     * @param {number} amount
+     * @returns {string}
      */
     formatMoney(amount) {
         return formatMoney(amount, this.currentCurrency);
-    },
+    }
 
     /**
-     * Calculates loan EMI using the standard amortization formula:
-     *   E = P * r * (1 + r)^n / ((1 + r)^n - 1)
-     * Where:
-     *   P = Principal loan amount
-     *   r = Monthly interest rate (annual rate / 12 / 100)
-     *   n = Total number of monthly installments (years * 12)
+     * Computes loan EMI and updates breakdown charts.
      */
     calculateEMI() {
         const P = getFloatVal('loanAmount');
         const annualRate = getFloatVal('interestRate');
-        const years = getFloatVal('loanTenure');
+        const tenureYears = getFloatVal('loanTenure');
 
-        if (P <= 0 || annualRate <= 0 || years <= 0) return;
+        if (P <= 0 || annualRate < 0 || tenureYears <= 0) return;
 
-        const r = annualRate / 12 / 100;
-        const n = years * 12;
+        const N = tenureYears * 12; // Total months
+        const r = (annualRate / 12) / 100; // Monthly fractional interest
 
-        const emi = (P * r * Math.pow(1 + r, n)) / (Math.pow(1 + r, n) - 1);
-        const totalPayable = emi * n;
-        const totalInterest = totalPayable - P;
+        let emi = 0;
+        let totalPayment = 0;
+        let totalInterest = 0;
 
-        const principalRatio = (P / totalPayable * 100).toFixed(1);
-        const interestRatio = (totalInterest / totalPayable * 100).toFixed(1);
+        if (r === 0) {
+            emi = P / N;
+            totalPayment = P;
+            totalInterest = 0;
+        } else {
+            const factor = Math.pow(1 + r, N);
+            emi = (P * r * factor) / (factor - 1);
+            totalPayment = emi * N;
+            totalInterest = totalPayment - P;
+        }
 
-        document.getElementById('emiMonthly').textContent = this.formatMoney(emi);
-        document.getElementById('emiPrincipal').textContent = this.formatMoney(P);
-        document.getElementById('emiTotalInterest').textContent = this.formatMoney(totalInterest);
-        document.getElementById('emiTotalPayable').textContent = this.formatMoney(totalPayable);
+        const emiEl = document.getElementById('emiMonthlyVal');
+        const prinEl = document.getElementById('emiTotalPrincipal');
+        const intEl = document.getElementById('emiTotalInterest');
+        const totEl = document.getElementById('emiTotalPayment');
+        const barPrin = document.getElementById('emiBarPrincipal');
+        const barInt = document.getElementById('emiBarInterest');
 
-        document.getElementById('ratioPrincipal').textContent = `${principalRatio}%`;
-        document.getElementById('ratioInterest').textContent = `${interestRatio}%`;
-        document.getElementById('barPrincipal').style.width = `${principalRatio}%`;
-        document.getElementById('barInterest').style.width = `${interestRatio}%`;
-    },
+        if (emiEl) emiEl.textContent = this.formatMoney(emi);
+        if (prinEl) prinEl.textContent = this.formatMoney(P);
+        if (intEl) intEl.textContent = this.formatMoney(totalInterest);
+        if (totEl) totEl.textContent = this.formatMoney(totalPayment);
+
+        if (barPrin && barInt && totalPayment > 0) {
+            const pPct = ((P / totalPayment) * 100).toFixed(1);
+            const iPct = ((totalInterest / totalPayment) * 100).toFixed(1);
+            barPrin.style.width = `${pPct}%`;
+            barInt.style.width = `${iPct}%`;
+            barPrin.title = `Principal: ${pPct}%`;
+            barInt.title = `Interest: ${iPct}%`;
+        }
+    }
 
     /**
-     * Calculates Compound Interest & Monthly SIP Investment Growth.
-     * Future Value:
-     *   FV_lump = P * (1 + r/n)^(n*t)
-     *   FV_sip  = PMT * (((1 + i)^months - 1) / i)
+     * Computes future value of compound lump sum plus recurring monthly contributions.
      */
     calculateCompound() {
         const P = getFloatVal('ciPrincipal');
         const PMT = getFloatVal('ciMonthly');
-        const r = getFloatVal('ciRate') / 100;
-        const t = getFloatVal('ciYears');
-        const n = parseInt(document.getElementById('ciCompoundFreq').value, 10) || 12;
+        const annualRate = getFloatVal('ciRate');
+        const years = getFloatVal('ciYears');
+        const freqSelect = document.getElementById('ciCompoundFreq');
+        const n = parseInt(freqSelect?.value || '12', 10);
 
-        const months = t * 12;
-        const monthlyRate = r / 12;
+        if (years <= 0) return;
 
-        // Lump sum compound
-        let FV_lump = P * Math.pow(1 + r / n, n * t);
+        const r = annualRate / 100;
+        const totalInvested = P + (PMT * 12 * years);
 
-        // Monthly recurring investment compounding
-        let FV_sip = 0;
-        if (monthlyRate > 0) {
-            FV_sip = PMT * ((Math.pow(1 + monthlyRate, months) - 1) / monthlyRate);
-        } else {
-            FV_sip = PMT * months;
+        // Future Value of Initial Principal
+        const fvPrincipal = P * Math.pow(1 + (r / n), n * years);
+
+        // Future Value of Monthly Contributions (Ordinary Annuity formula)
+        let fvContributions = 0;
+        if (PMT > 0) {
+            const rMonth = r / 12;
+            const totalMonths = years * 12;
+            if (rMonth === 0) {
+                fvContributions = PMT * totalMonths;
+            } else {
+                fvContributions = PMT * ((Math.pow(1 + rMonth, totalMonths) - 1) / rMonth);
+            }
         }
 
-        const totalFutureValue = FV_lump + FV_sip;
-        const totalInvested = P + (PMT * months);
+        const totalFutureValue = fvPrincipal + fvContributions;
         const totalInterest = Math.max(0, totalFutureValue - totalInvested);
 
-        document.getElementById('ciFutureValue').textContent = this.formatMoney(totalFutureValue);
-        document.getElementById('ciTotalInvested').textContent = this.formatMoney(totalInvested);
-        document.getElementById('ciTotalInterest').textContent = this.formatMoney(totalInterest);
-    },
+        const fvEl = document.getElementById('ciFutureValue');
+        const invEl = document.getElementById('ciTotalInvested');
+        const intEl = document.getElementById('ciTotalInterest');
+        const barInv = document.getElementById('ciBarInvested');
+        const barInt = document.getElementById('ciBarInterest');
 
-    // =========================================================================
-    // Live Exchange Rates & Converter
-    // =========================================================================
+        if (fvEl) fvEl.textContent = this.formatMoney(totalFutureValue);
+        if (invEl) invEl.textContent = this.formatMoney(totalInvested);
+        if (intEl) intEl.textContent = this.formatMoney(totalInterest);
 
-    /** Baseline exchange rates relative to USD (1.00) used offline or upon network failure */
-    rates: {
-        USD: 1,
-        INR: 83.52,
-        EUR: 0.92,
-        GBP: 0.78,
-        JPY: 155.40,
-        CAD: 1.36,
-        AUD: 1.51,
-        AED: 3.67,
-        CNY: 7.24,
-        SGD: 1.35,
-        CHF: 0.90,
-        SAR: 3.75,
-        KRW: 1365.20,
-        BRL: 5.15,
-        ZAR: 18.25,
-        RUB: 91.50,
-        NZD: 1.63,
-        KWD: 0.31,
-        QAR: 3.64,
-        THB: 36.80
-    },
-    /** Timestamp when exchange rates were last synchronized */
-    ratesLastUpdated: null,
+        if (barInv && barInt && totalFutureValue > 0) {
+            const invPct = ((totalInvested / totalFutureValue) * 100).toFixed(1);
+            const intPct = ((totalInterest / totalFutureValue) * 100).toFixed(1);
+            barInv.style.width = `${invPct}%`;
+            barInt.style.width = `${intPct}%`;
+        }
+    }
 
     /**
-     * Asynchronously downloads real-time currency conversion rates via Open Exchange Rates API.
-     * Caches successful responses in localStorage. Gracefully falls back to cached data offline.
-     * 
-     * @param {boolean} [showFeedback=false] - Whether to show on-screen toast feedback upon completion.
+     * Queries live foreign exchange rates from open.er-api.com.
+     * @param {boolean} [showFeedback=false]
      */
     async fetchLiveRates(showFeedback = false) {
-        const statusText = document.getElementById('rateStatusText');
-        const refreshIcon = document.getElementById('refreshIcon');
-        if (refreshIcon) refreshIcon.style.animation = 'spin 1s infinite linear';
+        const refreshBtn = document.getElementById('currencyRefreshBtn');
+        const statusEl = document.getElementById('currencyStatusText');
 
-        if (!navigator.onLine) {
-            // Device is offline: Use cached rates immediately without throwing network errors
-            if (refreshIcon) refreshIcon.style.animation = '';
-            if (statusText) {
-                if (this.ratesLastUpdated) {
-                    statusText.textContent = `Offline • Cached (${this.ratesLastUpdated.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })})`;
-                } else {
-                    statusText.textContent = 'Offline • Baseline Rates';
-                }
-            }
-            this.convert('from');
-            this.renderPopularPairs();
-            if (showFeedback) showToast('🟠 Offline: Operating from cached data');
-            return;
-        }
+        if (refreshBtn) refreshBtn.classList.add('spinning');
+        if (statusEl) statusEl.textContent = 'Updating exchange rates...';
 
         try {
             const res = await fetch('https://open.er-api.com/v6/latest/USD');
-            if (res.ok) {
-                const data = await res.json();
-                if (data && data.rates) {
-                    this.rates = { ...this.rates, ...data.rates };
-                    this.ratesLastUpdated = new Date();
+            if (!res.ok) throw new Error('Network error');
+            const data = await res.json();
+
+            if (data && data.rates) {
+                this.rates = data.rates;
+                this.ratesLastUpdated = new Date();
+                try {
                     localStorage.setItem('calverse_rates_cache', JSON.stringify({
                         rates: this.rates,
                         time: this.ratesLastUpdated.toISOString()
                     }));
-                    if (statusText) {
-                        statusText.textContent = `🟢 Live Rates: Updated ${this.ratesLastUpdated.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}`;
-                    }
-                    if (showFeedback) showToast('🟢 Live exchange rates updated');
-                }
+                } catch (e) {}
+
+                if (statusEl) statusEl.textContent = `Updated: ${this.ratesLastUpdated.toLocaleTimeString()}`;
+                if (showFeedback) showToast('Live exchange rates updated!');
+                this.convert('from');
+                this.renderPopularPairs();
             }
-        } catch (e) {
-            // Offline fallback on fetch failure
-            if (statusText) {
-                statusText.textContent = this.ratesLastUpdated 
-                    ? `Offline • Cached (${this.ratesLastUpdated.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })})` 
-                    : 'Offline • Baseline Rates';
+        } catch (err) {
+            if (statusEl) {
+                statusEl.textContent = this.ratesLastUpdated
+                    ? `Offline (Cached: ${this.ratesLastUpdated.toLocaleDateString()})`
+                    : 'Using offline fallback rates';
             }
-        } finally {
-            if (refreshIcon) refreshIcon.style.animation = '';
+            if (showFeedback) showToast('Using offline exchange rates');
             this.convert('from');
             this.renderPopularPairs();
+        } finally {
+            if (refreshBtn) refreshBtn.classList.remove('spinning');
         }
-    },
+    }
 
     /**
-     * Converts currency amount between two selected currencies.
-     * 
-     * @param {'from'|'to'} [source='from'] - Field that triggered the calculation.
+     * Converts active currency inputs bidirectionally.
+     * @param {'from'|'to'} [source='from']
      */
     convert(source = 'from') {
         const fromUnit = document.getElementById('currencyUnitFrom')?.value || 'USD';
@@ -322,13 +301,13 @@ export const FinancialEngine = {
             const converted = (val / toRate) * fromRate;
             fromInput.value = parseFloat(converted.toFixed(4));
         }
-    },
+    }
 
     /**
-     * Swaps the "From" and "To" currency units and triggers conversion.
+     * Swaps From and To currencies.
      */
     swap() {
-        SoundFx.playClick(600);
+        this.playFeedback(600);
         const fromSelect = document.getElementById('currencyUnitFrom');
         const toSelect = document.getElementById('currencyUnitTo');
         if (fromSelect && toSelect) {
@@ -337,10 +316,10 @@ export const FinancialEngine = {
             toSelect.value = temp;
             this.convert('from');
         }
-    },
+    }
 
     /**
-     * Populates quick-action cards for popular global currency pairs (USD/INR, EUR/USD, etc.).
+     * Renders popular currency pair quick conversion cards.
      */
     renderPopularPairs() {
         const pairsGrid = document.getElementById('popularPairsGrid');
@@ -362,22 +341,21 @@ export const FinancialEngine = {
             const tRate = this.rates[to] || 1;
             const rate = (1 / fRate) * tRate;
             return `
-                <div class="pair-card" onclick="CalVerse.setQuickPair('${from}', '${to}')">
-                    <span class="pair-names">${from} / ${to}</span>
+                <div class="pair-card" onclick="CalVerse.setQuickPair('${escapeHtml(from)}', '${escapeHtml(to)}')">
+                    <span class="pair-names">${escapeHtml(from)} / ${escapeHtml(to)}</span>
                     <span class="pair-rate">${rate.toLocaleString(undefined, { maximumFractionDigits: 3 })}</span>
                 </div>
             `;
         }).join('');
-    },
+    }
 
     /**
-     * Selects a popular currency pair and refreshes conversion inputs.
-     * 
-     * @param {string} from - Source currency code.
-     * @param {string} to - Target currency code.
+     * Activates a currency pair.
+     * @param {string} from 
+     * @param {string} to 
      */
     setQuickPair(from, to) {
-        SoundFx.playClick(600);
+        this.playFeedback(600);
         const fromSelect = document.getElementById('currencyUnitFrom');
         const toSelect = document.getElementById('currencyUnitTo');
         if (fromSelect && toSelect) {
@@ -387,4 +365,7 @@ export const FinancialEngine = {
             showToast(`Switched pair to ${from}/${to}`);
         }
     }
-};
+}
+
+/** Default singleton instance of FinancialCalculator */
+export const FinancialEngine = new FinancialCalculator();

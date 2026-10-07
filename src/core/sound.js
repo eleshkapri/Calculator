@@ -27,7 +27,7 @@
 
 export const SoundFx = {
     /** Whether sound feedback is enabled by user preference */
-    enabled: localStorage.getItem('calverse_sound') === 'true',
+    enabled: typeof localStorage !== 'undefined' ? (localStorage.getItem('calverse_sound') === 'true') : true,
     /** Internal Web Audio API AudioContext instance */
     ctx: null,
     /** Guard flag preventing multiple unlock buffer allocations */

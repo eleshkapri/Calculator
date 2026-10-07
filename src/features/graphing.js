@@ -1,77 +1,70 @@
 /**
  * ============================================================================
- * CalVerse Pro - 2D Graphing & Function Visualizer Engine
+ * CalVerse Pro - 2D Graphing Visualizer Engine (OOP Architecture)
  * File: src/features/graphing.js
  * ============================================================================
  * 
  * MODULE OVERVIEW:
- * An interactive HTML5 Canvas 2D Cartesian graphing engine. Supports real-time
- * mathematical curve plotting (dual functions f₁(x) and f₂(x)), dynamic mouse/touch
- * pan and drag, mouse wheel zooming, responsive canvas resizing, coordinate HUD tracking,
- * and Cartesian grid rendering.
+ * Object-oriented HTML5 Canvas 2D Cartesian graphing engine with security hardening:
+ * 1. High-DPI Retina Scaling: Automatically scales canvas backing buffer with devicePixelRatio.
+ * 2. Secure Function Parser: Validates mathematical expressions with strict token whitelisting
+ *    and sandbox isolation before compilation.
+ * 3. Interactive Cartesian Grid: Smooth pan, zoom, touch gesture tracking, and coordinate HUD.
  * 
- * OBJECTS & METHODS PRESENT IN THIS FILE:
- * GraphEngine:
- * 1. init():
- *    - Acquires canvas context, sets up resize watchers, pan/drag event listeners
- *      for mouse and mobile touch, and mouse wheel zoom listeners.
- * 
- * 2. resize():
- *    - Dynamically resizes the HTML5 canvas buffer to match its container element
- *      dimensions and centers the Cartesian origin (0, 0).
- * 
- * 3. zoom(factor):
- *    - Multiplies current pixels-per-unit scale by zoom factor (clamped 10 to 300) and re-renders.
- * 
- * 4. reset():
- *    - Restores default zoom level (40 px/unit) and centers Cartesian origin in the viewport.
- * 
- * 5. parseFunction(funcStr):
- *    - Parses user mathematical expression into an executable JavaScript function f(x).
- *    - Auto-injects explicit multiplication (e.g., converts '2x' to '2*x').
- * 
- * 6. render():
- *    - Clears the canvas, paints theme-adaptive background gridlines, draws Cartesian X and Y axes,
- *      and renders active function curves.
- * 
- * 7. plotCurve(funcStr, color):
- *    - Samples the function f(x) across canvas pixel columns and renders a smooth 2D Bézier path.
+ * OOP PRINCIPLES:
+ * 1. Inheritance: Extends BaseCalculator.
+ * 2. Encapsulation: Canvas dimensions, scale limits, coordinate transforms, and dragging state
+ *    are protected inside the GraphingCalculator class.
  * ============================================================================
  */
 
-export const GraphEngine = {
-    /** Guard preventing duplicate event listener attachments */
-    _initialized: false,
-    /** Reference to HTML5 Canvas element */
-    canvas: null,
-    /** 2D rendering context */
-    ctx: null,
-    /** Current zoom scale: pixels per mathematical unit */
-    scale: 40,
-    /** Pixel coordinate of Cartesian origin (0,0) along the X-axis */
-    originX: 0,
-    /** Pixel coordinate of Cartesian origin (0,0) along the Y-axis */
-    originY: 0,
-    /** Dragging state flag */
-    isDragging: false,
-    /** Drag start anchor X */
-    startX: 0,
-    /** Drag start anchor Y */
-    startY: 0,
+import { BaseCalculator } from './base.js';
+
+export class GraphingCalculator extends BaseCalculator {
+    static #FORBIDDEN_KEYWORDS = Object.freeze([
+        'window', 'document', 'globalthis', 'self', 'top', 'parent', 'frames',
+        'location', 'fetch', 'xmlhttprequest', 'localstorage', 'sessionstorage',
+        'indexeddb', 'cookie', 'alert', 'prompt', 'confirm', 'eval', 'function',
+        'constructor', 'prototype', '__proto__', 'import', 'require', 'process'
+    ]);
+
+    static #SANDBOX_ARGS = Object.freeze([
+        'window', 'document', 'globalThis', 'self', 'top', 'parent', 'frames',
+        'location', 'fetch', 'XMLHttpRequest', 'localStorage', 'sessionStorage',
+        'indexedDB', 'alert', 'prompt', 'confirm', 'process'
+    ]);
+
+    constructor(id = 'graphing') {
+        super(id);
+        this.canvas = null;
+        this.ctx = null;
+        this.scale = 40;
+        this.originX = 0;
+        this.originY = 0;
+        this.isDragging = false;
+        this.startX = 0;
+        this.startY = 0;
+        this.dpr = 1;
+    }
 
     /**
-     * Initializes the canvas, dimensions, and interaction listeners.
+     * Bootstraps canvas bindings, event listeners, and default render.
      */
     init() {
-        if (GraphEngine._initialized) { GraphEngine.render(); return; }
-        GraphEngine._initialized = true;
+        if (this.isInitialized) {
+            this.render();
+            return;
+        }
+        this.markInitialized();
+
         this.canvas = document.getElementById('graphCanvas');
         if (!this.canvas) return;
         this.ctx = this.canvas.getContext('2d');
         this.resize();
+
         window.addEventListener('resize', () => this.resize());
 
-        // Mouse Pan & Coordinate HUD Tracking
+        // Mouse Pan & HUD Tracking
         this.canvas.addEventListener('mousedown', (e) => {
             this.isDragging = true;
             this.startX = e.clientX - this.originX;
@@ -84,7 +77,6 @@ export const GraphEngine = {
                 this.originY = e.clientY - this.startY;
                 this.render();
             } else if (this.canvas) {
-                // Update live coordinate HUD in bottom right corner
                 const rect = this.canvas.getBoundingClientRect();
                 if (e.clientX >= rect.left && e.clientX <= rect.right && e.clientY >= rect.top && e.clientY <= rect.bottom) {
                     const mouseX = e.clientX - rect.left;
@@ -99,7 +91,7 @@ export const GraphEngine = {
 
         window.addEventListener('mouseup', () => { this.isDragging = false; });
 
-        // Touch gestures for mobile dragging
+        // Touch gestures for responsive mobile pan
         this.canvas.addEventListener('touchstart', (e) => {
             if (e.touches.length === 1) {
                 this.isDragging = true;
@@ -123,51 +115,71 @@ export const GraphEngine = {
             e.preventDefault();
             const zoomFactor = e.deltaY < 0 ? 1.15 : 0.85;
             this.zoom(zoomFactor);
-        });
+        }, { passive: false });
 
         this.render();
-    },
+    }
 
     /**
-     * Resizes the canvas to fill its parent container and re-centers origin.
+     * Resizes the canvas with High-DPI / Retina scale support.
      */
     resize() {
         if (!this.canvas || !this.canvas.parentElement) return;
-        this.canvas.width = this.canvas.parentElement.clientWidth;
-        this.canvas.height = this.canvas.parentElement.clientHeight;
-        this.originX = this.canvas.width / 2;
-        this.originY = this.canvas.height / 2;
+        const rect = this.canvas.parentElement.getBoundingClientRect();
+        const w = rect.width || 600;
+        const h = rect.height || 420;
+
+        this.dpr = window.devicePixelRatio || 1;
+        this.canvas.width = w * this.dpr;
+        this.canvas.height = h * this.dpr;
+        this.canvas.style.width = `${w}px`;
+        this.canvas.style.height = `${h}px`;
+
+        this.originX = w / 2;
+        this.originY = h / 2;
         this.render();
-    },
+    }
 
     /**
-     * Zooms the Cartesian plane by the specified multiplication factor.
-     * 
-     * @param {number} factor - Scale multiplier (e.g. 1.15 for zoom in, 0.85 for zoom out).
+     * Zooms the Cartesian plane by factor.
+     * @param {number} factor
      */
     zoom(factor) {
         this.scale = Math.max(10, Math.min(300, this.scale * factor));
         this.render();
-    },
+    }
 
     /**
-     * Resets the scale to 40 px/unit and re-centers the view.
+     * Resets scale and re-centers origin.
      */
     reset() {
         this.scale = 40;
-        this.originX = this.canvas.width / 2;
-        this.originY = this.canvas.height / 2;
+        if (this.canvas && this.canvas.parentElement) {
+            const w = this.canvas.parentElement.clientWidth;
+            const h = this.canvas.parentElement.clientHeight;
+            this.originX = w / 2;
+            this.originY = h / 2;
+        }
         this.render();
-    },
+    }
 
     /**
-     * Converts a mathematical formula string (e.g. "sin(x) + cos(2x)") into an executable function f(x).
-     * 
-     * @param {string} funcStr - Input formula text.
-     * @returns {Function|null} Compiled function accepting numeric argument x, or null on error.
+     * Parses and compiles mathematical formula f(x) with strict security validation.
+     * @param {string} funcStr
+     * @returns {Function|null}
      */
     parseFunction(funcStr) {
-        if (!funcStr || !funcStr.trim()) return null;
+        if (!funcStr || typeof funcStr !== 'string' || !funcStr.trim()) return null;
+        if (funcStr.length > 500) return null; // Payload size cap
+
+        const lower = funcStr.toLowerCase();
+        for (const word of GraphingCalculator.#FORBIDDEN_KEYWORDS) {
+            const regex = new RegExp(`\\b${word}\\b|\\.${word}`, 'i');
+            if (regex.test(lower)) {
+                return null;
+            }
+        }
+
         try {
             let code = funcStr
                 .replace(/\^/g, '**')
@@ -184,24 +196,46 @@ export const GraphEngine = {
 
             // Automatic multiplication for coefficients adjacent to variable (e.g. "2x" -> "2*x")
             code = code.replace(/(\d+)\s*([a-zA-Z])/g, '$1*$2');
-            return new Function('x', `"use strict"; try { return (${code}); } catch(e){ return NaN; }`);
+
+            // Whitelist verification: strip known tokens
+            const testCode = code
+                .replace(/Math\.(sin|cos|tan|abs|exp|log|log10|sqrt|PI|E)/g, '')
+                .replace(/x/g, '')
+                .replace(/[0-9.]+/g, '')
+                .replace(/[\+\-\*\/\%\(\)\,\s\^]/g, '');
+
+            if (testCode.trim().length > 0) {
+                return null; // Contains unknown symbols or injection
+            }
+
+            // Secure function sandbox with shadowed browser globals
+            const sandboxFn = new Function(
+                'x',
+                ...GraphingCalculator.#SANDBOX_ARGS,
+                `"use strict"; try { return (${code}); } catch(e){ return NaN; }`
+            );
+
+            return (x) => sandboxFn(x, ...GraphingCalculator.#SANDBOX_ARGS.map(() => undefined));
         } catch (e) {
             return null;
         }
-    },
+    }
 
     /**
-     * Redraws the Cartesian grid, coordinate axes, and active function curves.
+     * Redraws Cartesian plane, axes, and function curves.
      */
     render() {
-        if (!this.ctx) return;
-        const w = this.canvas.width;
-        const h = this.canvas.height;
+        if (!this.ctx || !this.canvas) return;
+
+        const w = this.canvas.width / this.dpr;
+        const h = this.canvas.height / this.dpr;
         const isLight = document.body.classList.contains('light-theme');
 
+        this.ctx.save();
+        this.ctx.scale(this.dpr, this.dpr);
         this.ctx.clearRect(0, 0, w, h);
 
-        // 1. Draw Background Grid
+        // 1. Background Grid
         this.ctx.lineWidth = 1;
         this.ctx.strokeStyle = isLight ? 'rgba(0,0,0,0.06)' : 'rgba(255,255,255,0.06)';
 
@@ -210,7 +244,6 @@ export const GraphEngine = {
         const startY = Math.floor(-(h - this.originY) / this.scale);
         const endY = Math.ceil(this.originY / this.scale);
 
-        // Vertical grid lines
         for (let x = startX; x <= endX; x++) {
             const px = this.originX + x * this.scale;
             this.ctx.beginPath();
@@ -219,7 +252,6 @@ export const GraphEngine = {
             this.ctx.stroke();
         }
 
-        // Horizontal grid lines
         for (let y = startY; y <= endY; y++) {
             const py = this.originY - y * this.scale;
             this.ctx.beginPath();
@@ -228,53 +260,52 @@ export const GraphEngine = {
             this.ctx.stroke();
         }
 
-        // 2. Draw Main Axes
+        // 2. Axes
         this.ctx.lineWidth = 1.8;
         this.ctx.strokeStyle = isLight ? '#94a3b8' : '#475569';
         
-        // Horizontal X-Axis
+        // X-Axis
         this.ctx.beginPath();
         this.ctx.moveTo(0, this.originY);
         this.ctx.lineTo(w, this.originY);
         this.ctx.stroke();
 
-        // Vertical Y-Axis
+        // Y-Axis
         this.ctx.beginPath();
         this.ctx.moveTo(this.originX, 0);
         this.ctx.lineTo(this.originX, h);
         this.ctx.stroke();
 
-        // 3. Plot Curve Functions
+        // 3. Curves
         const fn1Str = document.getElementById('graphFuncInput1')?.value;
         const fn2Str = document.getElementById('graphFuncInput2')?.value;
 
-        this.plotCurve(fn1Str, '#3b82f6'); // Function 1 in Electric Blue
-        this.plotCurve(fn2Str, '#f43f5e'); // Function 2 in Rose Pink
-    },
+        this.plotCurve(fn1Str, '#3b82f6', w);
+        this.plotCurve(fn2Str, '#f43f5e', w);
+
+        this.ctx.restore();
+    }
 
     /**
-     * Evaluates and paints a single continuous function curve across visible pixels.
-     * 
-     * @param {string} funcStr - Math function string.
-     * @param {string} color - Stroke CSS color.
+     * Evaluates and paints a continuous curve.
+     * @param {string} funcStr 
+     * @param {string} color 
+     * @param {number} width 
      */
-    plotCurve(funcStr, color) {
+    plotCurve(funcStr, color, width) {
         const fn = this.parseFunction(funcStr);
         if (!fn) return;
 
-        const w = this.canvas.width;
         this.ctx.beginPath();
         this.ctx.lineWidth = 2.5;
         this.ctx.strokeStyle = color;
 
         let first = true;
-        // Sample every 2 pixels horizontally for optimal performance & sharpness
-        for (let px = 0; px <= w; px += 2) {
+        for (let px = 0; px <= width; px += 2) {
             const mathX = (px - this.originX) / this.scale;
             const mathY = fn(mathX);
 
-            // Handle asymptotes, singularities, and domain breaks (e.g. 1/x or sqrt(-1))
-            if (isNaN(mathY) || !isFinite(mathY)) {
+            if (isNaN(mathY) || !Number.isFinite(mathY)) {
                 first = true;
                 continue;
             }
@@ -289,4 +320,7 @@ export const GraphEngine = {
         }
         this.ctx.stroke();
     }
-};
+}
+
+/** Default singleton instance of GraphingCalculator */
+export const GraphEngine = new GraphingCalculator();

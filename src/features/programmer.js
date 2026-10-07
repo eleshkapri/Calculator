@@ -1,11 +1,11 @@
 /**
  * ============================================================================
- * CalVerse Pro - Programmer Calculator Engine
+ * CalVerse Pro - Programmer Calculator Engine (OOP Architecture)
  * File: src/features/programmer.js
  * ============================================================================
  * 
  * MODULE OVERVIEW:
- * Powers computing and hardware-level arithmetic:
+ * Object-oriented computing and hardware-level integer calculator:
  * 1. Multi-Radix Simultaneous Display: Synchronously renders Hexadecimal (HEX),
  *    Decimal (DEC), Octal (OCT), and Binary (BIN) representations using arbitrary
  *    precision JavaScript BigInt arithmetic.
@@ -13,64 +13,54 @@
  *    and 64-bit (QWord) hardware integer limits.
  * 3. Bitwise & Logical Operations: AND, OR, XOR, NOT, left-shift (<<), right-shift (>>),
  *    arithmetic (+, -, *, /, %), and sign negation.
- * 4. Dynamic Keypad Validation: Disables keys ineligible for the active radix
- *    (e.g., A-F disabled outside HEX, digits 2-9 disabled in BIN, 8-9 disabled in OCT).
+ * 4. Dynamic Keypad Validation: Disables keys ineligible for the active radix.
  * 
- * OBJECTS & METHODS PRESENT IN THIS FILE:
- * ProgrammerEngine:
- * 1. setRadix(radix): Sets primary radix ('HEX', 'DEC', 'OCT', 'BIN') and disables invalid keys.
- * 2. setWordSize(bits): Updates bit width (8, 16, 32, 64) and masks the stored BigInt value.
- * 3. getMask(): Returns the bitmask BigInt for the current word size.
- * 4. maskValue(): Clamps the current value according to getMask().
- * 5. inputDigit(d): Parses incoming character according to the current radix and updates state.
- * 6. inputBitwise(op): Buffers binary operator (AND, OR, XOR, <<, >>) or immediately calculates unary NOT (~).
- * 7. inputOp(op): Alias for inputBitwise to handle general arithmetic operators.
- * 8. calculate(): Evaluates pending bitwise or arithmetic operation on stored and current BigInt operands.
- * 9. clear(): Clears accumulator, inputs, and pending operators to 0.
- * 10. backspace(): Removes the last digit typed in the active radix.
- * 11. toggleSign(): Negates the current BigInt value and applies word-size bitmask.
- * 12. updateDisplay(): Updates HEX, DEC, OCT, and formatted 4-bit nibble spaced BIN display labels.
- * 13. updateKeypadState(): Toggles .disabled styling on keypad buttons based on the active base.
+ * OOP PRINCIPLES:
+ * 1. Inheritance: Extends BaseCalculator.
+ * 2. Encapsulation: BigInt states, bitmask computations, and radix constraints are
+ *    encapsulated in ProgrammerCalculator methods.
  * ============================================================================
  */
 
+import { BaseCalculator } from './base.js';
 import { state } from '../core/state.js';
 import { SoundFx } from '../core/sound.js';
 
-export const ProgrammerEngine = {
+export class ProgrammerCalculator extends BaseCalculator {
+    constructor(id = 'programmer') {
+        super(id);
+    }
+
     /**
      * Sets active radix base ('HEX', 'DEC', 'OCT', or 'BIN') and updates keypad states.
-     * 
-     * @param {'HEX'|'DEC'|'OCT'|'BIN'} radix - Selected radix numeral base.
+     * @param {'HEX'|'DEC'|'OCT'|'BIN'} radix
      */
     setRadix(radix) {
-        SoundFx.playClick(600);
+        this.playFeedback(600);
         state.prog.radix = radix;
         document.querySelectorAll('.radix-row').forEach(row => {
             row.classList.toggle('active', row.dataset.radix === radix);
         });
         this.updateKeypadState();
-    },
+    }
 
     /**
      * Sets the active integer word size bit width (8, 16, 32, or 64 bits).
-     * 
-     * @param {8|16|32|64} bits - Bit width limit.
+     * @param {8|16|32|64} bits
      */
     setWordSize(bits) {
-        SoundFx.playClick(600);
+        this.playFeedback(600);
         state.prog.wordSize = bits;
         document.querySelectorAll('.word-btn').forEach(btn => {
             btn.classList.toggle('active', parseInt(btn.dataset.bits, 10) === bits);
         });
         this.maskValue();
         this.updateDisplay();
-    },
+    }
 
     /**
      * Computes the BigInt bitmask for the currently active word size.
-     * 
-     * @returns {bigint} Bitmask representation (e.g. 0xFFFFFFFFn for 32-bit).
+     * @returns {bigint}
      */
     getMask() {
         const bits = state.prog.wordSize;
@@ -78,55 +68,64 @@ export const ProgrammerEngine = {
         if (bits === 16) return 0xFFFFn;
         if (bits === 32) return 0xFFFFFFFFn;
         return 0xFFFFFFFFFFFFFFFFn;
-    },
+    }
 
     /**
      * Clamps the active value to stay strictly within word-size bit limits.
      */
     maskValue() {
         state.prog.val = state.prog.val & this.getMask();
-    },
+    }
 
     /**
      * Handles keypad digit entry in the current radix base.
-     * 
-     * @param {string} d - Digit character ('0'-'9', 'A'-'F').
+     * @param {string} d
      */
     inputDigit(d) {
-        SoundFx.playClick(500);
+        this.playFeedback(500);
         const p = state.prog;
         let curStr = p.waitingForNew ? '' : p.currentInput;
 
         if (curStr === '0') curStr = '';
         curStr += d;
 
-        try {
-            let radixBase = 16;
-            if (p.radix === 'DEC') radixBase = 10;
-            if (p.radix === 'OCT') radixBase = 8;
-            if (p.radix === 'BIN') radixBase = 2;
+        // Parse according to current radix base
+        const rad = p.radix;
+        let base = 10;
+        if (rad === 'HEX') base = 16;
+        if (rad === 'OCT') base = 8;
+        if (rad === 'BIN') base = 2;
 
-            p.val = BigInt(parseInt(curStr, radixBase) || 0);
-            this.maskValue();
+        try {
+            // Validate and parse string to BigInt
+            let parsed = 0n;
+            if (base === 16) parsed = BigInt(`0x${curStr}`);
+            else if (base === 8) parsed = BigInt(`0o${curStr}`);
+            else if (base === 2) parsed = BigInt(`0b${curStr}`);
+            else parsed = BigInt(curStr);
+
+            p.val = parsed & this.getMask();
             p.currentInput = curStr;
             p.waitingForNew = false;
-            this.updateDisplay();
         } catch (e) {
-            // Silently ignore digits invalid for current base
+            // Keep previous value if invalid character was entered
         }
-    },
+        this.updateDisplay();
+    }
 
     /**
-     * Handles bitwise operations (AND, OR, XOR, NOT, <<, >>).
-     * 
-     * @param {string} op - Bitwise operator string.
+     * Handles bitwise operators (AND, OR, XOR, NOT, LSH, RSH) and binary arithmetic.
+     * @param {string} op
      */
     inputBitwise(op) {
-        SoundFx.playClick(550);
+        this.playFeedback(550);
         const p = state.prog;
-        // Unary NOT immediately inverts bits and reapplies mask
+
         if (op === 'NOT') {
+            // Unary NOT (Bitwise Inversion)
             p.val = (~p.val) & this.getMask();
+            p.currentInput = p.val.toString(p.radix === 'HEX' ? 16 : p.radix === 'OCT' ? 8 : p.radix === 'BIN' ? 2 : 10).toUpperCase();
+            p.waitingForNew = true;
             this.updateDisplay();
             return;
         }
@@ -134,79 +133,102 @@ export const ProgrammerEngine = {
         p.storedVal = p.val;
         p.pendingOp = op;
         p.waitingForNew = true;
-    },
+    }
 
     /**
-     * Alias for inputBitwise to handle binary operations.
-     * 
-     * @param {string} op - Operator symbol.
+     * Alias for inputBitwise to handle general arithmetic operators (+, -, *, /, %).
+     * @param {string} op
      */
     inputOp(op) {
         this.inputBitwise(op);
-    },
+    }
 
     /**
-     * Calculates the pending bitwise or arithmetic operation on stored operands.
+     * Evaluates buffered bitwise or binary arithmetic operation.
      */
     calculate() {
-        SoundFx.playClick(850);
+        this.playFeedback(850, 'triangle', 0.05);
         const p = state.prog;
-        if (p.storedVal === null || !p.pendingOp) return;
+        if (p.pendingOp === null || p.storedVal === null) return;
 
-        let a = p.storedVal;
-        let b = p.val;
+        const a = p.storedVal;
+        const b = p.val;
         let res = 0n;
 
-        switch (p.pendingOp) {
-            case 'AND': res = a & b; break;
-            case 'OR':  res = a | b; break;
-            case 'XOR': res = a ^ b; break;
-            case '<<':  res = a << b; break;
-            case '>>':  res = a >> b; break;
-            case '+':   res = a + b; break;
-            case '−':   res = a - b; break;
-            case '×':   res = a * b; break;
-            case '÷':   res = b !== 0n ? a / b : 0n; break;
-            case '%':   res = b !== 0n ? a % b : 0n; break;
+        try {
+            switch (p.pendingOp) {
+                case 'AND': res = a & b; break;
+                case 'OR':  res = a | b; break;
+                case 'XOR': res = a ^ b; break;
+                case 'LSH': res = a << (b & 63n); break;
+                case 'RSH': res = a >> (b & 63n); break;
+                case '+':   res = a + b; break;
+                case '−':
+                case '-':   res = a - b; break;
+                case '×':
+                case '*':   res = a * b; break;
+                case '÷':
+                case '/':   res = b === 0n ? 0n : a / b; break;
+                case '%':   res = b === 0n ? 0n : a % b; break;
+                default:    res = b; break;
+            }
+        } catch (e) {
+            res = 0n;
         }
 
-        p.val = res;
-        this.maskValue();
-        p.storedVal = null;
+        p.val = res & this.getMask();
+        p.currentInput = p.val.toString(p.radix === 'HEX' ? 16 : p.radix === 'OCT' ? 8 : p.radix === 'BIN' ? 2 : 10).toUpperCase();
         p.pendingOp = null;
+        p.storedVal = null;
         p.waitingForNew = true;
         this.updateDisplay();
-    },
+    }
 
     /**
-     * Clears all programmer calculator registers to zero.
+     * Resets the programmer calculator to zero.
      */
     clear() {
+        this.playFeedback(450);
         state.prog.val = 0n;
         state.prog.currentInput = '0';
         state.prog.storedVal = null;
         state.prog.pendingOp = null;
+        state.prog.waitingForNew = false;
         this.updateDisplay();
-    },
+    }
 
     /**
-     * Removes the rightmost digit from the active input.
+     * Removes the last digit typed in the active radix.
      */
     backspace() {
+        this.playFeedback(480);
         const p = state.prog;
-        let str = p.val.toString(p.radix === 'HEX' ? 16 : p.radix === 'DEC' ? 10 : p.radix === 'OCT' ? 8 : 2);
-        str = str.slice(0, -1);
-        p.val = str ? BigInt(parseInt(str, p.radix === 'HEX' ? 16 : p.radix === 'DEC' ? 10 : p.radix === 'OCT' ? 8 : 2)) : 0n;
+        if (p.currentInput.length > 1) {
+            p.currentInput = p.currentInput.slice(0, -1);
+            try {
+                const base = p.radix === 'HEX' ? 16 : p.radix === 'OCT' ? 8 : p.radix === 'BIN' ? 2 : 10;
+                let parsed = 0n;
+                if (base === 16) parsed = BigInt(`0x${p.currentInput}`);
+                else if (base === 8) parsed = BigInt(`0o${p.currentInput}`);
+                else if (base === 2) parsed = BigInt(`0b${p.currentInput}`);
+                else parsed = BigInt(p.currentInput);
+                p.val = parsed & this.getMask();
+            } catch (e) {}
+        } else {
+            p.currentInput = '0';
+            p.val = 0n;
+        }
         this.updateDisplay();
-    },
+    }
 
     /**
      * Negates value using two's complement and applies active word size mask.
      */
     toggleSign() {
+        this.playFeedback(500);
         state.prog.val = (-state.prog.val) & this.getMask();
         this.updateDisplay();
-    },
+    }
 
     /**
      * Renders synchronized representations in HEX, DEC, OCT, and nibble-separated BIN.
@@ -219,7 +241,6 @@ export const ProgrammerEngine = {
         const oct = val.toString(8);
         
         let bin = val.toString(2);
-        // Format binary output into neat 4-bit nibble groupings (e.g. "0000 1111")
         const padLen = state.prog.wordSize;
         bin = bin.padStart(padLen, '0');
         bin = bin.match(/.{1,4}/g)?.join(' ') || bin;
@@ -233,7 +254,7 @@ export const ProgrammerEngine = {
         if (decEl) decEl.textContent = dec || '0';
         if (octEl) octEl.textContent = oct || '0';
         if (binEl) binEl.textContent = bin;
-    },
+    }
 
     /**
      * Disables keypad keys that are mathematically illegal in the current radix base.
@@ -243,10 +264,8 @@ export const ProgrammerEngine = {
         const hexBtns = document.querySelectorAll('.btn-hex');
         const numBtns = document.querySelectorAll('.programmer-keypad .btn-num');
 
-        // Hexadecimal A-F only allowed in HEX mode
         hexBtns.forEach(b => b.classList.toggle('disabled', radix !== 'HEX'));
 
-        // Restrict numeric buttons according to base
         numBtns.forEach(b => {
             const digit = parseInt(b.textContent, 10);
             if (radix === 'BIN') {
@@ -258,4 +277,16 @@ export const ProgrammerEngine = {
             }
         });
     }
-};
+}
+
+/** Default singleton instance of ProgrammerCalculator */
+export const ProgrammerEngine = new ProgrammerCalculator();
+
+// Backward-compatible method exports
+export const setRadix = (r) => ProgrammerEngine.setRadix(r);
+export const setWordSize = (b) => ProgrammerEngine.setWordSize(b);
+export const inputDigit = (d) => ProgrammerEngine.inputDigit(d);
+export const inputBitwise = (op) => ProgrammerEngine.inputBitwise(op);
+export const inputOp = (op) => ProgrammerEngine.inputOp(op);
+export const calculateProg = () => ProgrammerEngine.calculate();
+export const toggleSignProg = () => ProgrammerEngine.toggleSign();
