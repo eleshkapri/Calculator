@@ -93,10 +93,18 @@ export function closeHistory() {
     if (drawerOverlay) drawerOverlay.classList.remove('open');
 }
 
+let lastHistoryToggleTime = 0;
+
 /**
- * Toggles calculation history slide-out drawer.
+ * Toggles calculation history slide-out drawer with debounce guard against double-firing.
  */
 export function toggleHistory() {
+    const now = Date.now();
+    if (now - lastHistoryToggleTime < 250) {
+        return;
+    }
+    lastHistoryToggleTime = now;
+
     const historyDrawer = document.getElementById('historyDrawer');
     if (historyDrawer && historyDrawer.classList.contains('open')) {
         closeHistory();
@@ -200,10 +208,30 @@ export function initNavigation() {
     const closeHistBtn = document.getElementById('closeHistoryBtn');
     const drawerOverlay = document.getElementById('drawerOverlay');
 
-    if (histBtn) histBtn.addEventListener('click', toggleHistory);
-    if (quickHistBtn) quickHistBtn.addEventListener('click', toggleHistory);
-    if (closeHistBtn) closeHistBtn.addEventListener('click', closeHistory);
-    if (drawerOverlay) drawerOverlay.addEventListener('click', closeHistory);
+    if (histBtn) {
+        histBtn.onclick = (e) => {
+            e.stopPropagation();
+            toggleHistory();
+        };
+    }
+    if (quickHistBtn) {
+        quickHistBtn.onclick = (e) => {
+            e.stopPropagation();
+            toggleHistory();
+        };
+    }
+    if (closeHistBtn) {
+        closeHistBtn.onclick = (e) => {
+            e.stopPropagation();
+            closeHistory();
+        };
+    }
+    if (drawerOverlay) {
+        drawerOverlay.onclick = (e) => {
+            e.stopPropagation();
+            closeHistory();
+        };
+    }
 
     // Quick Copy Display Buttons
     const stdCopy = document.getElementById('stdCopyBtn');

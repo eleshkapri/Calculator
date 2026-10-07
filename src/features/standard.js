@@ -31,10 +31,23 @@ export class StandardCalculator extends BaseCalculator {
     }
 
     /**
+     * Normalizes calculator mode strings to internal state keys ('std' or 'sci').
+     * @private
+     * @param {string} [type]
+     * @returns {'std'|'sci'}
+     */
+    #resolveType(type) {
+        if (!type || type === 'std' || type === 'standard') return 'std';
+        if (type === 'sci' || type === 'scientific') return 'sci';
+        return type;
+    }
+
+    /**
      * Synchronizes DOM display inputs and expression labels with state values.
-     * @param {'std'|'sci'} [type='std']
+     * @param {'std'|'sci'|'standard'|'scientific'} [type='std']
      */
     updateDisplay(type = 'std') {
+        type = this.#resolveType(type);
         const data = state[type];
         if (!data) return;
 
@@ -44,16 +57,17 @@ export class StandardCalculator extends BaseCalculator {
 
         if (dispElem) dispElem.value = data.current;
         if (exprElem) exprElem.textContent = data.expr;
-        if (memElem) memElem.textContent = state.memory[type] !== 0 ? `M (${state.memory[type]})` : '';
+        if (memElem) memElem.textContent = (state.memory && state.memory[type] !== 0) ? `M (${state.memory[type]})` : '';
     }
 
     /**
      * Handles numeric digit, arithmetic operator, parenthesis, and constant entries.
-     * @param {'std'|'sci'} type 
+     * @param {'std'|'sci'|'standard'|'scientific'} [type='std']
      * @param {string} val 
      */
-    inputVal(type, val) {
+    inputVal(type = 'std', val) {
         this.playFeedback(500);
+        type = this.#resolveType(type);
         const data = state[type];
         if (!data) return;
 
@@ -130,10 +144,11 @@ export class StandardCalculator extends BaseCalculator {
 
     /**
      * Resets expression buffer and active display value back to 0.
-     * @param {'std'|'sci'} [type='std']
+     * @param {'std'|'sci'|'standard'|'scientific'} [type='std']
      */
     clear(type = 'std') {
         this.playFeedback(450);
+        type = this.#resolveType(type);
         if (state[type]) {
             state[type].expr = '';
             state[type].current = '0';
@@ -144,10 +159,11 @@ export class StandardCalculator extends BaseCalculator {
 
     /**
      * Removes trailing character from the current display value.
-     * @param {'std'|'sci'} [type='std']
+     * @param {'std'|'sci'|'standard'|'scientific'} [type='std']
      */
     backspace(type = 'std') {
         this.playFeedback(480);
+        type = this.#resolveType(type);
         const data = state[type];
         if (!data) return;
 
@@ -164,10 +180,11 @@ export class StandardCalculator extends BaseCalculator {
 
     /**
      * Toggles algebraic sign (+/-) of current accumulator value.
-     * @param {'std'|'sci'} [type='std']
+     * @param {'std'|'sci'|'standard'|'scientific'} [type='std']
      */
     toggleSign(type = 'std') {
         this.playFeedback(500);
+        type = this.#resolveType(type);
         const data = state[type];
         if (!data) return;
 
@@ -179,10 +196,11 @@ export class StandardCalculator extends BaseCalculator {
 
     /**
      * Evaluates the complete accumulated mathematical expression and records history.
-     * @param {'std'|'sci'} [type='std']
+     * @param {'std'|'sci'|'standard'|'scientific'} [type='std']
      */
     calculate(type = 'std') {
         this.playFeedback(850, 'triangle', 0.05);
+        type = this.#resolveType(type);
         const data = state[type];
         if (!data) return;
 
@@ -215,11 +233,13 @@ export class StandardCalculator extends BaseCalculator {
 
     // --- Memory Register Operations ---
     memClear(type = 'std') {
+        type = this.#resolveType(type);
         if (state.memory) state.memory[type] = 0;
         this.updateDisplay(type);
     }
 
     memRecall(type = 'std') {
+        type = this.#resolveType(type);
         if (state.memory && state[type]) {
             state[type].current = state.memory[type].toString();
             state[type].waitingForNewNumber = true;
@@ -228,6 +248,7 @@ export class StandardCalculator extends BaseCalculator {
     }
 
     memStore(type = 'std') {
+        type = this.#resolveType(type);
         if (state.memory && state[type]) {
             state.memory[type] = parseFloat(state[type].current) || 0;
             this.updateDisplay(type);
@@ -235,6 +256,7 @@ export class StandardCalculator extends BaseCalculator {
     }
 
     memAdd(type = 'std') {
+        type = this.#resolveType(type);
         if (state.memory && state[type]) {
             state.memory[type] += parseFloat(state[type].current) || 0;
             this.updateDisplay(type);
@@ -242,6 +264,7 @@ export class StandardCalculator extends BaseCalculator {
     }
 
     memSub(type = 'std') {
+        type = this.#resolveType(type);
         if (state.memory && state[type]) {
             state.memory[type] -= parseFloat(state[type].current) || 0;
             this.updateDisplay(type);
@@ -316,6 +339,7 @@ export const memRecall = (type) => StandardEngine.memRecall(type);
 export const memStore = (type) => StandardEngine.memStore(type);
 export const memAdd = (type) => StandardEngine.memAdd(type);
 export const memSub = (type) => StandardEngine.memSub(type);
+export const memSubtract = (type) => StandardEngine.memSub(type);
 export const addHistory = (expr, res) => StandardEngine.addHistory(expr, res);
 export const renderHistoryList = () => StandardEngine.renderHistoryList();
 export const clearHistory = () => StandardEngine.clearHistory();
