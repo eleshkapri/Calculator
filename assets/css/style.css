@@ -532,10 +532,14 @@ body.dark-theme .chip-sym {
     height: 100vh;
     height: 100dvh;
     overflow-y: auto;
+    overflow-x: hidden;
     background-color: var(--bg-base);
     position: relative;
     scrollbar-width: thin;
     overscroll-behavior: contain;
+    width: 100%;
+    max-width: 100vw;
+    box-sizing: border-box;
 }
 
 .top-header {
@@ -632,12 +636,14 @@ body.dark-theme .chip-sym {
    Shared Calculator Cards & Displays
    ========================================================================== */
 
-.calc-card, .financial-card, .converter-card, .health-card, .date-card, .time-card, .time-keypad-card {
+.calc-card, .scientific-card, .programmer-card, .financial-card, .converter-card, .health-card, .date-card, .time-card, .time-keypad-card {
     background: var(--bg-surface);
     border: 1px solid var(--border-subtle);
     border-radius: var(--radius-xl);
     padding: 24px;
     box-shadow: var(--card-shadow);
+    box-sizing: border-box;
+    width: 100%;
 }
 
 #view-standard.calculator-view.active {
@@ -779,19 +785,37 @@ body.dark-theme .angle-mode-pill {
 /* Keypads */
 .keypad {
     display: grid;
+    gap: 8px;
+    width: 100%;
+    box-sizing: border-box;
+}
+
+.standard-keypad {
+    grid-template-columns: repeat(4, 1fr);
+    gap: 8px;
+}
+
+.scientific-keypad {
+    grid-template-columns: repeat(5, 1fr);
+    gap: 8px;
+}
+
+.time-unit-keypad {
+    grid-template-columns: repeat(4, 1fr);
+    gap: 8px;
+}
+
+.programmer-keypad {
+    grid-template-columns: repeat(6, 1fr);
     gap: 7px;
 }
 
-.standard-keypad { grid-template-columns: repeat(4, 1fr); }
-.scientific-keypad { grid-template-columns: repeat(5, 1fr); }
-.time-unit-keypad { grid-template-columns: repeat(4, 1fr); }
-
 .btn {
     border: 1px solid var(--btn-num-border);
-    height: 44px;
+    height: 46px;
     border-radius: var(--radius-sm);
     font-family: var(--font-ui);
-    font-size: 1.02rem;
+    font-size: 1.05rem;
     font-weight: 600;
     cursor: pointer;
     display: flex;
@@ -800,16 +824,26 @@ body.dark-theme .angle-mode-pill {
     transition: var(--transition);
     user-select: none;
     box-shadow: var(--btn-num-shadow);
+    min-width: 0;
+    box-sizing: border-box;
 }
 
 .scientific-keypad .btn {
     height: 40px;
     font-size: 0.88rem;
+    padding: 2px 4px;
 }
 
 .programmer-keypad .btn {
     height: 38px;
-    font-size: 0.88rem;
+    font-size: 0.84rem;
+    padding: 2px 2px;
+}
+
+.time-unit-keypad .btn {
+    height: 44px;
+    font-size: 0.95rem;
+    padding: 2px 4px;
 }
 
 .btn:active {
@@ -1412,6 +1446,10 @@ body.dark-theme .pair-rate {
     font-size: 0.95rem;
     outline: none;
     transition: var(--transition);
+    width: 100%;
+    max-width: 100%;
+    min-width: 0;
+    box-sizing: border-box;
 }
 
 .input-card input:focus,
@@ -1429,10 +1467,30 @@ body.dark-theme .pair-rate {
 .split-inputs {
     display: flex;
     gap: 8px;
+    width: 100%;
+    box-sizing: border-box;
+    align-items: center;
 }
 
 .split-inputs input, .split-inputs select {
-    flex: 1;
+    flex: 1 1 0;
+    min-width: 0;
+    width: 100%;
+    box-sizing: border-box;
+}
+
+.split-inputs button, .split-inputs .btn-primary {
+    flex-shrink: 0;
+    white-space: nowrap;
+}
+
+.time-math-grid {
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+    width: 100%;
+    box-sizing: border-box;
+    margin-bottom: 16px;
 }
 
 .btn-primary {
@@ -3519,12 +3577,15 @@ body.light-theme .stats-canvas-container {
         justify-content: flex-start;
         align-items: center;
         width: 100%;
+        max-width: 100%;
+        box-sizing: border-box;
         min-height: min-content;
     }
     
     .calculator-view {
         width: 100%;
         max-width: 440px;
+        box-sizing: border-box;
         margin: 0 auto;
     }
 
@@ -3535,6 +3596,7 @@ body.light-theme .stats-canvas-container {
         justify-content: flex-start;
         width: 100%;
         max-width: 440px;
+        box-sizing: border-box;
         margin: 0 auto;
     }
 
@@ -3545,13 +3607,16 @@ body.light-theme .stats-canvas-container {
         justify-content: center;
         align-items: center;
         margin: auto 0;
+        width: 100%;
+        box-sizing: border-box;
     }
     
-    .calc-card, .scientific-card, .financial-card, .converter-card, .health-card, .date-card, .time-card, .time-keypad-card {
+    .calc-card, .scientific-card, .programmer-card, .financial-card, .converter-card, .health-card, .date-card, .time-card, .time-keypad-card {
         padding: 16px 14px;
         border-radius: 20px;
         width: 100%;
         max-width: 440px;
+        box-sizing: border-box;
         box-shadow: 0 12px 32px rgba(0, 0, 0, 0.25);
     }
     
@@ -3560,15 +3625,19 @@ body.light-theme .stats-canvas-container {
         min-height: 110px;
         margin-bottom: 14px;
         border-radius: 16px;
+        box-sizing: border-box;
+        width: 100%;
     }
     
     .result-display {
         font-size: 2.2rem;
+        word-break: break-all;
     }
 
     .expression-line {
         font-size: 0.92rem;
         min-height: 22px;
+        word-break: break-all;
     }
     
     .time-calc-screen {
@@ -3576,6 +3645,8 @@ body.light-theme .stats-canvas-container {
         min-height: 130px;
         margin-bottom: 14px;
         border-radius: 16px;
+        box-sizing: border-box;
+        width: 100%;
     }
     
     .time-expression-display {
@@ -3586,14 +3657,60 @@ body.light-theme .stats-canvas-container {
         font-size: 1.6rem;
     }
 
+    /* Keypad responsive button gaps & sizing */
     .keypad {
+        width: 100%;
+        box-sizing: border-box;
+    }
+
+    .standard-keypad {
+        grid-template-columns: repeat(4, 1fr);
         gap: 10px;
     }
     
-    .btn {
-        height: 54px;
+    .standard-keypad .btn {
+        height: 52px;
         font-size: 1.18rem;
         border-radius: 14px;
+    }
+    
+    .scientific-keypad {
+        grid-template-columns: repeat(5, 1fr);
+        gap: 7px;
+    }
+
+    .scientific-keypad .btn {
+        height: 44px;
+        font-size: 0.9rem;
+        border-radius: 10px;
+        padding: 2px 4px;
+    }
+
+    .programmer-keypad {
+        grid-template-columns: repeat(6, 1fr);
+        gap: 6px;
+    }
+
+    .programmer-keypad .btn {
+        height: 40px;
+        font-size: 0.82rem;
+        border-radius: 8px;
+        padding: 2px 2px;
+    }
+
+    .programmer-keypad .prog-equals {
+        height: 42px;
+    }
+
+    .time-unit-keypad {
+        grid-template-columns: repeat(4, 1fr);
+        gap: 8px;
+    }
+
+    .time-unit-keypad .btn {
+        height: 48px;
+        font-size: 0.95rem;
+        border-radius: 12px;
     }
     
     .btn-tunit {
@@ -3604,18 +3721,41 @@ body.light-theme .stats-canvas-container {
     /* Form & Health mobile grid adjustments */
     .form-grid {
         display: grid;
-        grid-template-columns: repeat(2, 1fr);
-        gap: 10px;
+        grid-template-columns: 1fr;
+        gap: 12px;
         margin-bottom: 18px;
+        width: 100%;
+        box-sizing: border-box;
     }
 
     .form-grid .input-card {
         min-width: 0;
+        width: 100%;
+        box-sizing: border-box;
     }
 
     .form-grid .input-card input, .form-grid .input-card select {
         padding: 10px 12px;
         font-size: 0.9rem;
+        width: 100%;
+        box-sizing: border-box;
+    }
+
+    .financial-toolbar {
+        flex-direction: column;
+        align-items: stretch;
+        gap: 10px;
+        width: 100%;
+        max-width: 100%;
+        box-sizing: border-box;
+    }
+
+    .financial-toolbar .sub-tabs {
+        flex: 1 1 auto;
+        width: 100%;
+        max-width: 100%;
+        overflow-x: auto;
+        box-sizing: border-box;
     }
 
     .bmi-gauge-card {
@@ -3872,4 +4012,83 @@ body.light-theme .stats-canvas-container {
         padding: 20px 16px 28px 16px;
     }
 }
+
+/* Compact Mobile Keypad & Layout Tuning (<=380px, e.g. Samsung Galaxy F23 360px) */
+@media (max-width: 380px) {
+    .calculators-container {
+        padding: 8px 6px 40px 6px;
+    }
+
+    .calc-card, .scientific-card, .programmer-card, .financial-card, .converter-card, .health-card, .date-card, .time-card, .time-keypad-card {
+        padding: 12px 10px;
+        border-radius: 16px;
+    }
+
+    .display-container {
+        padding: 10px 12px;
+        min-height: 96px;
+        margin-bottom: 10px;
+    }
+
+    .result-display {
+        font-size: 1.85rem;
+    }
+
+    .standard-keypad {
+        gap: 8px;
+    }
+
+    .standard-keypad .btn {
+        height: 48px;
+        font-size: 1.05rem;
+        border-radius: 10px;
+    }
+
+    .scientific-keypad {
+        gap: 5px;
+    }
+
+    .scientific-keypad .btn {
+        height: 38px;
+        font-size: 0.78rem;
+        border-radius: 7px;
+        padding: 1px 2px;
+    }
+
+    .programmer-keypad {
+        gap: 4px;
+    }
+
+    .programmer-keypad .btn {
+        height: 36px;
+        font-size: 0.74rem;
+        border-radius: 6px;
+        padding: 1px;
+    }
+
+    .time-unit-keypad {
+        gap: 6px;
+    }
+
+    .time-unit-keypad .btn {
+        height: 42px;
+        font-size: 0.88rem;
+        border-radius: 8px;
+    }
+
+    .memory-bar {
+        gap: 4px;
+        margin-bottom: 8px;
+    }
+
+    .mem-btn {
+        padding: 4px 1px;
+        font-size: 0.68rem;
+    }
+
+    .split-inputs {
+        gap: 6px;
+    }
+}
+
 
