@@ -8,6 +8,16 @@
    Time Keypad Calculator Screen
    ========================================================================== */
 
+#view-time {
+    width: 100%;
+    max-width: 440px;
+    margin: 0 auto;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-start;
+}
+
 .time-calc-screen {
     background: var(--bg-input);
     border: 1px solid var(--border-subtle);
