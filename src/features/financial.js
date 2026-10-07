@@ -1,6 +1,33 @@
 /**
- * CalVerse Pro - Financial & Currency Feature
- * Loan EMI calculator, SIP compound growth & live real-time currency exchange
+ * ============================================================================
+ * CalVerse Pro - Financial & Currency Calculation Engine
+ * File: src/features/financial.js
+ * ============================================================================
+ * 
+ * MODULE OVERVIEW:
+ * Powers three financial computation modules:
+ * 1. Loan EMI (Equated Monthly Installment) Calculator:
+ *    - Amortization formula computing monthly payment, total interest, and principal/interest ratios.
+ * 2. Compound Interest & SIP (Systematic Investment Plan) Growth Calculator:
+ *    - Future value projections combining initial lump-sum compounding and monthly SIP contributions.
+ * 3. Live Foreign Exchange Rate Converter:
+ *    - Fetches real-time currency exchange rates from open.er-api.com with offline cache persistence.
+ *    - Bidirectional conversion and popular currency pairs grid.
+ * 
+ * OBJECTS & METHODS PRESENT IN THIS FILE:
+ * FinancialEngine:
+ * 1. init(): Restores saved currency & cached exchange rates, binds range sliders, runs initial models.
+ * 2. setCurrency(code): Updates active financial currency and re-renders labels and figures.
+ * 3. updateLabels(): Rewrites input header labels with active currency symbol.
+ * 4. formatMoney(amount): Formats numeric values according to the active financial currency locale.
+ * 5. calculateEMI(): Computes monthly EMI, total interest, principal ratio, and progress bar widths.
+ * 6. calculateCompound(): Computes future value of compound lump sum plus recurring monthly contributions.
+ * 7. fetchLiveRates(showFeedback): Queries real-time currency API; provides graceful offline fallback.
+ * 8. convert(source): Performs bidirectional currency exchange conversion.
+ * 9. swap(): Swaps 'From' and 'To' currency select values and reconverts.
+ * 10. renderPopularPairs(): Renders clickable quick-convert currency pair cards.
+ * 11. setQuickPair(from, to): Activates a currency pair when a card is clicked.
+ * ============================================================================
  */
 
 import { CURRENCY_CONFIG } from '../core/constants.js';
@@ -9,8 +36,12 @@ import { SoundFx } from '../core/sound.js';
 import { getFloatVal, showToast } from '../core/dom.js';
 
 export const FinancialEngine = {
+    /** Currently selected currency code for loans and investments (persisted) */
     currentCurrency: localStorage.getItem('calverse_fin_currency') || 'INR',
 
+    /**
+     * Initializes financial subtab inputs, range sync listeners, and triggers live rates fetch.
+     */
     init() {
         // Restore saved currency
         const curSelect = document.getElementById('finCurrencySelect');
@@ -31,7 +62,7 @@ export const FinancialEngine = {
             }
         } catch (e) {}
 
-        // Sliders & Number sync
+        // Two-way synchronization between number input boxes and range sliders
         const syncInputs = [
             ['loanAmount', 'loanAmountRange'],
             ['interestRate', 'interestRateRange'],
@@ -47,7 +78,7 @@ export const FinancialEngine = {
             }
         });
 
-        // Compound listeners
+        // Compound interest input listeners
         ['ciPrincipal', 'ciMonthly', 'ciRate', 'ciYears', 'ciCompoundFreq'].forEach(id => {
             const el = document.getElementById(id);
             if (el) el.addEventListener('input', () => this.calculateCompound());
@@ -58,6 +89,11 @@ export const FinancialEngine = {
         this.fetchLiveRates();
     },
 
+    /**
+     * Switches the currency code for loan and investment calculations.
+     * 
+     * @param {string} code - ISO 4217 currency code (e.g., 'INR', 'USD', 'EUR').
+     */
     setCurrency(code) {
         if (CURRENCY_CONFIG[code]) {
             SoundFx.playClick(600);
@@ -70,6 +106,9 @@ export const FinancialEngine = {
         }
     },
 
+    /**
+     * Updates label text in the UI to display the active currency symbol.
+     */
     updateLabels() {
         const cur = CURRENCY_CONFIG[this.currentCurrency] || CURRENCY_CONFIG.INR;
         const sym = cur.symbol;
@@ -84,10 +123,24 @@ export const FinancialEngine = {
         if (cMonth) cMonth.textContent = `Monthly Contribution (${sym})`;
     },
 
+    /**
+     * Formats an amount using the active financial currency settings.
+     * 
+     * @param {number} amount - Numeric monetary amount.
+     * @returns {string} Localized currency string.
+     */
     formatMoney(amount) {
         return formatMoney(amount, this.currentCurrency);
     },
 
+    /**
+     * Calculates loan EMI using the standard amortization formula:
+     *   E = P * r * (1 + r)^n / ((1 + r)^n - 1)
+     * Where:
+     *   P = Principal loan amount
+     *   r = Monthly interest rate (annual rate / 12 / 100)
+     *   n = Total number of monthly installments (years * 12)
+     */
     calculateEMI() {
         const P = getFloatVal('loanAmount');
         const annualRate = getFloatVal('interestRate');
@@ -98,7 +151,6 @@ export const FinancialEngine = {
         const r = annualRate / 12 / 100;
         const n = years * 12;
 
-        // EMI Formula: E = P * r * (1+r)^n / ((1+r)^n - 1)
         const emi = (P * r * Math.pow(1 + r, n)) / (Math.pow(1 + r, n) - 1);
         const totalPayable = emi * n;
         const totalInterest = totalPayable - P;
@@ -117,6 +169,12 @@ export const FinancialEngine = {
         document.getElementById('barInterest').style.width = `${interestRatio}%`;
     },
 
+    /**
+     * Calculates Compound Interest & Monthly SIP Investment Growth.
+     * Future Value:
+     *   FV_lump = P * (1 + r/n)^(n*t)
+     *   FV_sip  = PMT * (((1 + i)^months - 1) / i)
+     */
     calculateCompound() {
         const P = getFloatVal('ciPrincipal');
         const PMT = getFloatVal('ciMonthly');
@@ -130,7 +188,7 @@ export const FinancialEngine = {
         // Lump sum compound
         let FV_lump = P * Math.pow(1 + r / n, n * t);
 
-        // Monthly SIP Future Value: PMT * [ ( (1 + i)^months - 1 ) / i ]
+        // Monthly recurring investment compounding
         let FV_sip = 0;
         if (monthlyRate > 0) {
             FV_sip = PMT * ((Math.pow(1 + monthlyRate, months) - 1) / monthlyRate);
@@ -147,9 +205,11 @@ export const FinancialEngine = {
         document.getElementById('ciTotalInterest').textContent = this.formatMoney(totalInterest);
     },
 
-    // =====================================================================
+    // =========================================================================
     // Live Exchange Rates & Converter
-    // =====================================================================
+    // =========================================================================
+
+    /** Baseline exchange rates relative to USD (1.00) used offline or upon network failure */
     rates: {
         USD: 1,
         INR: 83.52,
@@ -172,8 +232,15 @@ export const FinancialEngine = {
         QAR: 3.64,
         THB: 36.80
     },
+    /** Timestamp when exchange rates were last synchronized */
     ratesLastUpdated: null,
 
+    /**
+     * Asynchronously downloads real-time currency conversion rates via Open Exchange Rates API.
+     * Caches successful responses in localStorage. Gracefully falls back to cached data offline.
+     * 
+     * @param {boolean} [showFeedback=false] - Whether to show on-screen toast feedback upon completion.
+     */
     async fetchLiveRates(showFeedback = false) {
         const statusText = document.getElementById('rateStatusText');
         const refreshIcon = document.getElementById('refreshIcon');
@@ -226,6 +293,11 @@ export const FinancialEngine = {
         }
     },
 
+    /**
+     * Converts currency amount between two selected currencies.
+     * 
+     * @param {'from'|'to'} [source='from'] - Field that triggered the calculation.
+     */
     convert(source = 'from') {
         const fromUnit = document.getElementById('currencyUnitFrom')?.value || 'USD';
         const toUnit = document.getElementById('currencyUnitTo')?.value || 'INR';
@@ -252,6 +324,9 @@ export const FinancialEngine = {
         }
     },
 
+    /**
+     * Swaps the "From" and "To" currency units and triggers conversion.
+     */
     swap() {
         SoundFx.playClick(600);
         const fromSelect = document.getElementById('currencyUnitFrom');
@@ -264,6 +339,9 @@ export const FinancialEngine = {
         }
     },
 
+    /**
+     * Populates quick-action cards for popular global currency pairs (USD/INR, EUR/USD, etc.).
+     */
     renderPopularPairs() {
         const pairsGrid = document.getElementById('popularPairsGrid');
         if (!pairsGrid) return;
@@ -292,6 +370,12 @@ export const FinancialEngine = {
         }).join('');
     },
 
+    /**
+     * Selects a popular currency pair and refreshes conversion inputs.
+     * 
+     * @param {string} from - Source currency code.
+     * @param {string} to - Target currency code.
+     */
     setQuickPair(from, to) {
         SoundFx.playClick(600);
         const fromSelect = document.getElementById('currencyUnitFrom');

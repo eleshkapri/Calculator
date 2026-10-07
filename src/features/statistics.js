@@ -1,6 +1,39 @@
 /**
- * CalVerse Pro - Statistics & Data Analyzer Feature
- * Statistical metrics (Mean, Median, Mode, Variance, StdDev, IQR) & HTML5 Canvas visual charts (Bars, Boxplot, Histogram)
+ * ============================================================================
+ * CalVerse Pro - Statistical Analysis & Data Visualization Engine
+ * File: src/features/statistics.js
+ * ============================================================================
+ * 
+ * MODULE OVERVIEW:
+ * A comprehensive statistical analytics and 2D canvas visualization engine:
+ * 1. Descriptive Statistics: Computes Sample & Population Mean, Median, Mode(s),
+ *    Sample Variance (s²), Population Variance (σ²), Sample Standard Deviation (s),
+ *    Population Standard Deviation (σ), Min, Max, Range, Quartiles (Q1, Q3), and IQR.
+ * 2. Five-Number Summary: Computes Min, Q1, Median, Q3, Max with Tukey IQR bounds.
+ * 3. 2D HTML5 Canvas Visualizations:
+ *    - Mode 1 ('bars'): Individual data point vertical bar charts with mean/median guide lines.
+ *    - Mode 2 ('boxplot'): Horizontal Tukey box-and-whisker plot highlighting outliers, IQR box,
+ *      and median line.
+ *    - Mode 3 ('histogram'): Binned frequency distribution with Scott/Sturges auto-binning.
+ * 4. Dataset Presets & Clipboard Export: Quick dataset presets (test scores, temperatures, heights)
+ *    and formatted markdown summary copying.
+ * 
+ * OBJECTS & METHODS PRESENT IN THIS FILE:
+ * StatisticsEngine:
+ * 1. init(): Binds canvas, sets up resize listener, and computes initial dataset stats.
+ * 2. setChartMode(mode): Switches visualization between 'bars', 'boxplot', and 'histogram'.
+ * 3. calculateStats(): Parses comma/space/line delimited raw data, calculates statistical metrics,
+ *    and refreshes the canvas plot.
+ * 4. updateMetrics(d): Populates DOM statistic summary badges with formatted numbers.
+ * 5. clearCanvas(): Clears the HTML5 2D canvas buffer.
+ * 6. renderChart(...): Dispatches rendering to the active chart mode renderer.
+ * 7. renderBarsChart(...): Paints individual bar heights with horizontal mean/median reference lines.
+ * 8. renderBoxplotChart(...): Paints horizontal Tukey box-and-whisker diagram with IQR brackets.
+ * 9. renderHistogramChart(...): Bins data values and draws frequency bars.
+ * 10. loadPreset(type): Loads sample educational datasets (scores, temps, heights, random).
+ * 11. clearData(): Clears input and resets metric badges.
+ * 12. copySummary(): Formats statistical summary into a clean clipboard text block.
+ * ============================================================================
  */
 
 import { state } from '../core/state.js';

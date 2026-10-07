@@ -1,6 +1,29 @@
 /**
+ * ============================================================================
  * CalVerse Pro - Navigation & UI Shell Router
- * Sidebar management, mode switching, subtabs navigation & history drawer
+ * File: src/ui/navigation.js
+ * ============================================================================
+ * 
+ * MODULE OVERVIEW:
+ * Coordinates the application shell, layout, and screen transitions:
+ * 1. Sidebar Drawer: Controls slide-out navigation for mobile and desktop, hamburger button,
+ *    and background backdrop dimming.
+ * 2. Calculator Mode Router: Switches active view among the 12 calculator tools, updates top
+ *    app bar titles, and lazily mounts engine lifecycles.
+ * 3. Subtab Navigation: Swaps inner view tabs (e.g. Loan EMI vs SIP vs Currency in Financial).
+ * 4. Audio Feedback Toggle: Manages sound toggle button icon, label, and persistent localStorage setting.
+ * 5. Calculation History Drawer: Slides out calculation history panel with tap-to-paste listeners.
+ * 
+ * FUNCTIONS PRESENT IN THIS FILE:
+ * 1. initNavigation():
+ *    - Binds sidebar open/close events, navigation item clicks, subtab switchers,
+ *      sound toggle button, history drawer toggle, and clipboard copy buttons.
+ * 
+ * 2. switchMode(mode):
+ *    - Transitions the UI to the requested calculator view mode.
+ *    - Updates header title and subtitle via TITLES dictionary.
+ *    - Lazily awakens and initializes the target engine (e.g. GraphEngine.init(), TimeEngine.init()).
+ * ============================================================================
  */
 
 import { state } from '../core/state.js';
@@ -20,6 +43,9 @@ import { EquationEngine } from '../features/equations.js';
 import { StatisticsEngine } from '../features/statistics.js';
 import { initTheme } from './theme.js';
 
+/**
+ * Initializes shell navigation controls, mobile drawer, subtabs, and global toggles.
+ */
 export function initNavigation() {
     const navItems = document.querySelectorAll('.nav-item');
     const sidebar = document.getElementById('sidebar');
@@ -37,6 +63,7 @@ export function initNavigation() {
         if (sidebarOverlay) sidebarOverlay.classList.remove('open');
     };
 
+    // Mobile Hamburger Toggle
     if (mobileBtn) {
         mobileBtn.addEventListener('click', () => {
             if (sidebar.classList.contains('open')) {
@@ -55,6 +82,7 @@ export function initNavigation() {
         sidebarOverlay.addEventListener('click', closeSidebar);
     }
 
+    // Sidebar navigation items
     navItems.forEach(item => {
         item.addEventListener('click', () => {
             const mode = item.dataset.mode;
@@ -63,7 +91,7 @@ export function initNavigation() {
         });
     });
 
-    // Subtabs
+    // Subtabs switcher within complex calculators (Financial, Discount, Time, Equations)
     document.querySelectorAll('.sub-tabs').forEach(container => {
         const tabs = container.querySelectorAll('.sub-tab');
         tabs.forEach(tab => {
@@ -94,7 +122,7 @@ export function initNavigation() {
     // Theme initialization
     initTheme();
 
-    // Sound Toggle
+    // Sound Toggle Controller
     const soundBtn = document.getElementById('soundToggleBtn');
     const soundIcon = document.getElementById('soundIcon');
     const soundText = soundBtn ? soundBtn.querySelector('.btn-text') : null;
@@ -115,7 +143,7 @@ export function initNavigation() {
         });
     }
 
-    // History Drawer
+    // Calculation History Drawer Toggle
     const historyDrawer = document.getElementById('historyDrawer');
     const drawerOverlay = document.getElementById('drawerOverlay');
     const toggleHistory = () => {
@@ -135,25 +163,33 @@ export function initNavigation() {
     if (closeHistBtn) closeHistBtn.addEventListener('click', toggleHistory);
     if (drawerOverlay) drawerOverlay.addEventListener('click', toggleHistory);
 
-    // Copy buttons
+    // Quick Copy Display Buttons
     const stdCopy = document.getElementById('stdCopyBtn');
     const sciCopy = document.getElementById('sciCopyBtn');
     if (stdCopy) stdCopy.addEventListener('click', () => copyToClipboard(document.getElementById('stdDisplay')?.value));
     if (sciCopy) sciCopy.addEventListener('click', () => copyToClipboard(document.getElementById('sciDisplay')?.value));
 }
 
+/**
+ * Switches the active calculator view, updates app bar header, and wakes target engine.
+ * 
+ * @param {string} mode - Calculator view key (e.g. 'standard', 'scientific', 'graphing', etc.).
+ */
 export function switchMode(mode) {
     SoundFx.playClick(700);
     state.currentMode = mode;
 
+    // Toggle active sidebar indicator
     document.querySelectorAll('.nav-item').forEach(item => {
         item.classList.toggle('active', item.dataset.mode === mode);
     });
 
+    // Toggle main calculator view visibility
     document.querySelectorAll('.calculator-view').forEach(view => {
         view.classList.toggle('active', view.id === `view-${mode}`);
     });
 
+    // Update Top App Bar Header & Subtitle
     if (TITLES[mode]) {
         const titleEl = document.getElementById('calculatorTitle');
         const subtitleEl = document.getElementById('calculatorSubtitle');
@@ -161,6 +197,7 @@ export function switchMode(mode) {
         if (subtitleEl) subtitleEl.textContent = TITLES[mode].subtitle;
     }
 
+    // Lazy initialization & refresh of engine calculations
     if (mode === 'graphing') {
         setTimeout(() => GraphEngine.init(), 50);
     } else if (mode === 'financial') {

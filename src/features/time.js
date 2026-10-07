@@ -1,6 +1,48 @@
 /**
- * CalVerse Pro - Time & Stopwatch Feature
- * Time unit keypad, duration calculator, time math, epoch timestamps & stopwatch with lap tracking
+ * ============================================================================
+ * CalVerse Pro - Time Calculation & Stopwatch Engine
+ * File: src/features/time.js
+ * ============================================================================
+ * 
+ * MODULE OVERVIEW:
+ * A multi-tool temporal calculation and chronometer engine:
+ * 1. Time Unit Keypad: Dedicated keypad accepting hours, minutes, seconds, and milliseconds
+ *    with direct arithmetic expressions (e.g., "2hour 35min + 45min").
+ *    Supports multiple format output views: Hours/Minutes/Seconds (HMS), Decimal Hours,
+ *    Total Minutes, and Total Seconds.
+ * 2. Time Duration & Shift: Computes elapsed duration between clock times (e.g. 09:30 to 18:15)
+ *    and shifts times forward or backward.
+ * 3. Unix Epoch Converter: Real-time live UTC epoch counter with bidirectional date-to-epoch
+ *    and epoch-to-date converters.
+ * 4. Precision Digital Stopwatch: Millisecond chronometer with Lap times recording,
+ *    fastest/slowest lap highlighting, and clipboard export.
+ * 
+ * OBJECTS & METHODS PRESENT IN THIS FILE:
+ * TimeEngine:
+ * 1. init(): Initializes default keypad screens, computes duration, and starts live epoch ticker.
+ * 2. Keypad Subsystem:
+ *    - inputKeypad(val): Handles numeric digits and operator buttons.
+ *    - inputUnit(unit): Appends temporal unit token ('hour', 'min', 'sec', 'm.sec').
+ *    - clearKeypad(): Resets keypad expression buffer.
+ *    - backspaceKeypad(): Removes last character or temporal unit word.
+ *    - updateKeypadScreen(): Synchronizes expression preview DOM element.
+ *    - calculateKeypad(recordHistory): Evaluates time tokens to total seconds and formats display.
+ *    - toggleFormat(): Cycles output mode through HMS -> Decimal Hours -> Total Minutes -> Total Seconds.
+ *    - copyKeypadResult(): Copies current keypad result to clipboard.
+ * 3. Duration & Arithmetic:
+ *    - calculateDuration(): Computes elapsed difference between start and end clock times.
+ *    - calculateMath(): Computes target clock time by adding/subtracting hours/minutes.
+ * 4. Epoch Timestamps:
+ *    - startEpochTicker(): Starts 1-second interval updating current live Unix epoch.
+ *    - convertEpochToDate(): Converts numeric epoch timestamp to UTC/Local date string.
+ *    - convertDateToEpoch(): Converts datetime picker value to integer Unix epoch seconds.
+ * 5. Stopwatch:
+ *    - startStopwatch(): Starts requestAnimationFrame/interval timer.
+ *    - pauseStopwatch(): Freezes elapsed time counter.
+ *    - resetStopwatch(): Resets timer and clears recorded laps.
+ *    - recordLap(): Stores split and cumulative lap records.
+ *    - renderLaps(): Renders lap table DOM.
+ * ============================================================================
  */
 
 import { SoundFx } from '../core/sound.js';

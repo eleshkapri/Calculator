@@ -1,15 +1,54 @@
 /**
- * CalVerse Pro - Equation & Algebra Feature
- * Quadratic roots & vertex solver, 2x2 linear systems & rational fraction reducer
+ * ============================================================================
+ * CalVerse Pro - Equation & Algebra Engine
+ * File: src/features/equations.js
+ * ============================================================================
+ * 
+ * MODULE OVERVIEW:
+ * Solves polynomial, linear, and rational algebraic problems with full
+ * pedagogical step-by-step mathematical breakdowns:
+ * 1. Quadratic Equation Solver: Solves ax² + bx + c = 0, calculates discriminant Δ,
+ *    identifies real/complex roots, and computes parabola vertex (h, k).
+ * 2. 2x2 Linear System Solver: Solves simultaneous linear equations via Cramer's Rule
+ *    with determinant analysis (unique solution, coincident infinite solutions, parallel).
+ * 3. Rational Fraction Engine: Adds, subtracts, multiplies, and divides fractions,
+ *    simplifies via Euclidean Greatest Common Divisor (GCD), and computes mixed numbers.
+ * 
+ * OBJECTS & METHODS PRESENT IN THIS FILE:
+ * EquationEngine:
+ * 1. init():
+ *    - Triggers initial solutions for quadratic, linear, and fraction engines.
+ * 
+ * 2. solveQuadratic():
+ *    - Reads a, b, c; calculates discriminant D; computes roots (real or complex with imaginary unit i);
+ *      computes parabola vertex (h, k); writes step-by-step explanations.
+ * 
+ * 3. updateLiveEquation(a, b, c):
+ *    - Dynamically formats the live LaTeX-style equation preview label with correct signs.
+ * 
+ * 4. solveLinearSystem():
+ *    - Solves a1*x + b1*y = c1 and a2*x + b2*y = c2 using Cramer's Rule determinants D, Dx, Dy.
+ * 
+ * 5. calculateFraction():
+ *    - Computes rational fractions (n1/d1) [+, -, *, /] (n2/d2), simplifies via GCD Euclidean
+ *      algorithm, formats mixed fractions and decimal approximations.
+ * ============================================================================
  */
 
 export const EquationEngine = {
+    /**
+     * Solves initial quadratic, linear, and fraction equations on boot.
+     */
     init() {
         this.solveQuadratic();
         this.solveLinearSystem();
         this.calculateFraction();
     },
 
+    /**
+     * Solves the quadratic equation ax² + bx + c = 0.
+     * Computes discriminant Δ = b² - 4ac, real/complex roots, and parabola vertex (h, k).
+     */
     solveQuadratic() {
         const a = parseFloat(document.getElementById('quadA')?.value);
         const b = parseFloat(document.getElementById('quadB')?.value);
@@ -21,11 +60,12 @@ export const EquationEngine = {
         const stepForm = document.getElementById('quadStepFormula');
         const stepVert = document.getElementById('quadStepVertex');
 
-        // Update live equation preview
+        // Update live formula preview banner
         this.updateLiveEquation(a, b, c);
 
         if (isNaN(a) || isNaN(b) || isNaN(c)) return;
 
+        // Linear degenerate case (a = 0)
         if (a === 0) {
             if (b !== 0) {
                 const x = (-c / b).toFixed(4);
@@ -41,12 +81,14 @@ export const EquationEngine = {
             return;
         }
 
+        // Quadratic analysis
         const D = b * b - 4 * a * c;
         const h = -b / (2 * a);
         const k = c - (b * b) / (4 * a);
         const opens = a > 0 ? 'Opens Upward (Minimum)' : 'Opens Downward (Maximum)';
 
         if (D > 0) {
+            // Case 1: Two distinct real roots
             const x1 = ((-b + Math.sqrt(D)) / (2 * a)).toFixed(4);
             const x2 = ((-b - Math.sqrt(D)) / (2 * a)).toFixed(4);
             if (r1El) r1El.textContent = x1;
@@ -55,6 +97,7 @@ export const EquationEngine = {
             if (stepForm) stepForm.innerHTML = `<span class="step-num">2.</span> Quadratic Formula: x = (−(${b}) ± √${D}) / (2 × ${a}) → x₁ = ${x1}, x₂ = ${x2}`;
             if (stepVert) stepVert.innerHTML = `<span class="step-num">3.</span> Vertex: (h, k) = (${h.toFixed(2)}, ${k.toFixed(2)}) • ${opens}`;
         } else if (D === 0) {
+            // Case 2: One repeated real root
             const x = ((-b) / (2 * a)).toFixed(4);
             if (r1El) r1El.textContent = x;
             if (r2El) r2El.textContent = `${x} (Double Root)`;
@@ -62,6 +105,7 @@ export const EquationEngine = {
             if (stepForm) stepForm.innerHTML = `<span class="step-num">2.</span> Root: x = −(${b}) / (2 × ${a}) = ${x}`;
             if (stepVert) stepVert.innerHTML = `<span class="step-num">3.</span> Vertex: (h, k) = (${h.toFixed(2)}, ${k.toFixed(2)}) • ${opens}`;
         } else {
+            // Case 3: Complex conjugate roots (imaginary unit i)
             const realPart = ((-b) / (2 * a)).toFixed(4);
             const imagPart = ((Math.sqrt(-D)) / (2 * Math.abs(a))).toFixed(4);
             if (r1El) r1El.textContent = `${realPart} + ${imagPart}i`;
@@ -72,6 +116,9 @@ export const EquationEngine = {
         }
     },
 
+    /**
+     * Updates the dynamic equation text preview to show current coefficients with correct signs.
+     */
     updateLiveEquation(a, b, c) {
         const el = document.getElementById('quadLiveEqText');
         if (!el) return;
@@ -85,6 +132,11 @@ export const EquationEngine = {
         el.textContent = `${aVal}x² ${bSign} ${bAbs}x ${cSign} ${cAbs} = 0`;
     },
 
+    /**
+     * Solves a 2x2 system of linear equations using Cramer's Rule:
+     *   a1*x + b1*y = c1
+     *   a2*x + b2*y = c2
+     */
     solveLinearSystem() {
         const a1 = parseFloat(document.getElementById('linA1')?.value);
         const b1 = parseFloat(document.getElementById('linB1')?.value);
@@ -101,6 +153,7 @@ export const EquationEngine = {
 
         if ([a1, b1, c1, a2, b2, c2].some(isNaN)) return;
 
+        // Cramer's determinants
         const D = a1 * b2 - a2 * b1;
         const Dx = c1 * b2 - c2 * b1;
         const Dy = a1 * c2 - a2 * c1;
@@ -126,6 +179,10 @@ export const EquationEngine = {
         }
     },
 
+    /**
+     * Performs fraction arithmetic and Euclidean GCD reduction:
+     * (n1/d1) [op] (n2/d2) -> reduced fraction, mixed fraction, and decimal.
+     */
     calculateFraction() {
         const n1 = parseInt(document.getElementById('fracNum1')?.value, 10);
         const d1 = parseInt(document.getElementById('fracDen1')?.value, 10);
@@ -165,17 +222,19 @@ export const EquationEngine = {
             den = d1 * n2;
         }
 
+        // Standardize negative sign to numerator
         if (den < 0) {
             num = -num;
             den = -den;
         }
 
+        // Euclidean Greatest Common Divisor
         const gcd = (a, b) => b === 0 ? Math.abs(a) : gcd(b, a % b);
         const common = gcd(num, den);
         const simNum = num / common;
         const simDen = den / common;
 
-        // Mixed fraction
+        // Mixed fraction formatting (e.g. 7/2 -> 3 1/2)
         let mixedStr = '';
         if (Math.abs(simNum) >= simDen && simDen !== 1) {
             const whole = Math.trunc(simNum / simDen);

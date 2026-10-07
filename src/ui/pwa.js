@@ -1,6 +1,36 @@
 /**
- * CalVerse Pro - PWA & Platform Controller
- * Installation modal, OS installer generation (.exe, .mobileconfig), Service Worker sync & offline events
+ * ============================================================================
+ * CalVerse Pro - Progressive Web App (PWA) & Platform Controller
+ * File: src/ui/pwa.js
+ * ============================================================================
+ * 
+ * MODULE OVERVIEW:
+ * Manages native app installation and platform-specific offline synchronization:
+ * 1. PWA Installation Prompt: Captures 'beforeinstallprompt' events and triggers
+ *    the browser's native installation sheet.
+ * 2. Cross-Platform App Generators:
+ *    - Windows (.exe): Generates a standalone launcher script package.
+ *    - iOS Apple WebClip (.mobileconfig): Dynamically generates an Apple XML
+ *      configuration profile for full-screen Home Screen installation on Safari iOS.
+ * 3. Network Lifecycle Auto-Sync: Listens for window 'online' and 'offline' events,
+ *    triggers immediate Service Worker update checks, and refreshes financial rates.
+ * 4. Mobile Overscroll Protection: Carefully cancels viewport pull-to-refresh
+ *    while preserving scroll freedom inside sidebars, drawers, and modal dialogs.
+ * 
+ * OBJECTS & FUNCTIONS PRESENT IN THIS FILE:
+ * PWAController:
+ * - openInstallModal(): Opens the modal dialog or triggers PWA prompt if available.
+ * - closeInstallModal(): Dismisses the installation modal backdrop.
+ * - downloadDetectedApp(): Detects user OS via navigator.userAgent and initiates installer.
+ * - installAndroidApp(): Triggers native Android Chrome install banner.
+ * - downloadExe(): Packages and triggers download of CalVerse-Setup.exe for Windows.
+ * - downloadIosProfile(): Generates and downloads CalVerse.mobileconfig for Apple iOS.
+ * - triggerPwaPrompt(): Invokes deferred browser prompt.
+ * 
+ * initPWA():
+ * - Registers service worker (sw.js), checks for updates, listens for online/offline events,
+ *   and guards pull-to-refresh on mobile viewports.
+ * ============================================================================
  */
 
 import { SoundFx } from '../core/sound.js';

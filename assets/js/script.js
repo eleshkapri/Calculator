@@ -1,7 +1,7 @@
 /**
  * CalVerse Pro - Compiled Production Bundle
  * Generated from modular src/ architecture
- * Built: 2026-10-07T11:32:23.266Z
+ * Built: 2026-10-07T11:50:45.802Z
  * Zero dependencies • Offline-ready PWA
  */
 
@@ -12,10 +12,36 @@
     // Module: src/core/constants.js
     // -------------------------------------------------------------------------
     /**
+     * ============================================================================
      * CalVerse Pro - Core Constants & Reference Data
-     * Centralized immutable configuration used across multiple calculators
+     * File: src/core/constants.js
+     * ============================================================================
+     * 
+     * MODULE OVERVIEW:
+     * This file serves as the single source of truth for global configuration,
+     * currency formatting metadata, mode header descriptions, and conversion
+     * ratios used throughout the CalVerse application.
+     * 
+     * EXPORTED DATA STRUCTURES:
+     * 1. CURRENCY_CONFIG:
+     *    - Metadata for supported world currencies (INR, USD, EUR, GBP, JPY, CAD, AUD, AED, CNY).
+     *    - Includes ISO symbol, Intl.NumberFormat locale, and human-readable currency name.
+     * 
+     * 2. TITLES:
+     *    - Header title and descriptive subtitle definitions for all 12 calculator modes.
+     *    - Used by the navigation router to dynamically update the top app bar header.
+     * 
+     * 3. CONVERTER_UNITS:
+     *    - Conversion multipliers and identifiers for 7 measurement categories:
+     *      Length, Mass, Temperature, Area, Speed, Digital Storage, and Time.
+     *    - All scalar values are normalized against standard SI base units.
+     * ============================================================================
      */
     
+    /**
+     * Currency configuration dictionary for financial calculations and discount formatting.
+     * Maps 3-letter ISO 4217 currency codes to locale formatting rules and currency symbols.
+     */
     const CURRENCY_CONFIG = {
         INR: { symbol: '₹', locale: 'en-IN', name: 'Indian Rupee' },
         USD: { symbol: '$', locale: 'en-US', name: 'US Dollar' },
@@ -28,6 +54,10 @@
         CNY: { symbol: '¥', locale: 'zh-CN', name: 'Chinese Yuan' }
     };
     
+    /**
+     * View Titles and Subtitles dictionary.
+     * Maps mode keys to display titles rendered in the top app navigation bar.
+     */
     const TITLES = {
         standard: { title: 'Standard Calculator', subtitle: 'Fast, precise everyday arithmetic' },
         scientific: { title: 'Scientific Calculator', subtitle: 'Advanced functions, trigonometry & algebra' },
@@ -43,6 +73,17 @@
         statistics: { title: 'Statistics & Data Analyzer', subtitle: 'Mean, median, variance, std dev & box plots' }
     };
     
+    /**
+     * Unit conversion factors relative to the standard SI base unit for each category.
+     * Base Units:
+     * - Length: Meter (m)
+     * - Mass: Kilogram (kg)
+     * - Area: Square Meter (m²)
+     * - Speed: Meter per Second (m/s)
+     * - Digital: Byte (B)
+     * - Time: Second (s)
+     * - Temperature: Evaluated via custom affine transformation formulas in converter.js
+     */
     const CONVERTER_UNITS = {
         length: {
             Meter: 1,
@@ -103,27 +144,58 @@
     // Module: src/core/sound.js
     // -------------------------------------------------------------------------
     /**
-     * CalVerse Pro - Audio & Haptic Synthesizer
-     * Zero-dependency Web Audio API tactile feedback system
+     * ============================================================================
+     * CalVerse Pro - Audio & Haptic Feedback Synthesizer
+     * File: src/core/sound.js
+     * ============================================================================
+     * 
+     * MODULE OVERVIEW:
+     * Implements a zero-dependency audio synthesizer using the native HTML5
+     * Web Audio API. Generates low-latency micro-tones (clicks/beeps) on user
+     * button taps, providing pleasant tactile feedback. Resolves autoplay policy
+     * constraints on mobile WebKit and Chrome.
+     * 
+     * OBJECTS & FUNCTIONS PRESENT IN THIS FILE:
+     * 1. SoundFx:
+     *    - Singleton object holding the AudioContext instance and sound preferences.
+     *    - Methods:
+     *      * unlockAudio(): Wakes suspended AudioContext and plays a silent buffer
+     *        to satisfy iOS/Android autoplay restrictions.
+     *      * playClick(freq, type, duration): Generates a custom frequency tone with
+     *        exponential decay gain envelope.
+     * 
+     * 2. initSoundAutoUnlock():
+     *    - Registers capture-phase event listeners on touchstart/touchend/click to
+     *      transparently unlock the audio subsystem on the user's very first interaction.
+     * ============================================================================
      */
     
     const SoundFx = {
+        /** Whether sound feedback is enabled by user preference */
         enabled: localStorage.getItem('calverse_sound') === 'true',
+        /** Internal Web Audio API AudioContext instance */
         ctx: null,
+        /** Guard flag preventing multiple unlock buffer allocations */
         _unlocked: false,
     
-        // Must be called from a user-gesture (touch/click) to unlock audio on mobile
+        /**
+         * Initializes and unlocks the Web Audio API context.
+         * Required to be invoked from a direct user gesture (click/touch) to satisfy
+         * modern browser audio autoplay policies.
+         */
         unlockAudio() {
             if (this._unlocked && this.ctx) return;
             try {
                 const AC = window.AudioContext || window.webkitAudioContext;
                 if (!AC) return;
                 if (!this.ctx) this.ctx = new AC();
-                // Resume if suspended (required by Chrome, Safari autoplay policy)
+    
+                // Resume context if suspended (common in Chromium background tabs)
                 if (this.ctx.state === 'suspended') {
                     this.ctx.resume();
                 }
-                // iOS Safari fix: play a silent buffer to fully unlock audio pipeline
+    
+                // iOS Safari requirement: Play a 1-sample silent buffer to unlock the hardware pipeline
                 const buf = this.ctx.createBuffer(1, 1, 22050);
                 const src = this.ctx.createBufferSource();
                 src.buffer = buf;
@@ -131,14 +203,22 @@
                 src.start(0);
                 this._unlocked = true;
             } catch (e) {
-                // AudioContext not supported
+                // Web Audio API unavailable in this environment
             }
         },
     
+        /**
+         * Synthesizes a soft, pleasant mechanical click tone.
+         * Uses an oscillator with an exponential decay gain ramp.
+         * 
+         * @param {number} [freq=600] - Tone frequency in Hertz (Hz).
+         * @param {OscillatorType} [type='sine'] - Waveform ('sine', 'triangle', 'square', 'sawtooth').
+         * @param {number} [duration=0.03] - Sound duration in seconds.
+         */
         playClick(freq = 600, type = 'sine', duration = 0.03) {
             if (!this.enabled) return;
             try {
-                // Ensure context exists and is running
+                // Lazy unlock if not already instantiated
                 if (!this.ctx) this.unlockAudio();
                 if (!this.ctx) return;
                 if (this.ctx.state === 'suspended') this.ctx.resume();
@@ -147,19 +227,25 @@
                 const gain = this.ctx.createGain();
                 osc.type = type;
                 osc.frequency.setValueAtTime(freq, this.ctx.currentTime);
+    
+                // Quick decay envelope: peak volume at 0.08, decay exponentially to 0.001
                 gain.gain.setValueAtTime(0.08, this.ctx.currentTime);
                 gain.gain.exponentialRampToValueAtTime(0.001, this.ctx.currentTime + duration);
+    
                 osc.connect(gain);
                 gain.connect(this.ctx.destination);
                 osc.start();
                 osc.stop(this.ctx.currentTime + duration);
             } catch (e) {
-                // AudioContext not permitted or supported
+                // Prevent audio errors from interfering with calculation logic
             }
         }
     };
     
-    // Unlock audio on first user interaction (required for mobile browsers)
+    /**
+     * Attaches one-time event listeners on document to unlock audio upon the user's
+     * very first touch or click event, then removes listeners to prevent overhead.
+     */
     function initSoundAutoUnlock() {
         function _onFirstInteraction() {
             SoundFx.unlockAudio();
@@ -177,17 +263,49 @@
     // Module: src/core/dom.js
     // -------------------------------------------------------------------------
     /**
-     * CalVerse Pro - DOM Utilities
-     * Reusable DOM extraction, toast notification & clipboard helpers
+     * ============================================================================
+     * CalVerse Pro - DOM Utilities & User Feedback Helpers
+     * File: src/core/dom.js
+     * ============================================================================
+     * 
+     * MODULE OVERVIEW:
+     * Provides standardized cross-component helper utilities for extracting
+     * numeric values from HTML input elements, triggering transient toast
+     * notifications, and interacting with the system clipboard.
+     * 
+     * FUNCTIONS PRESENT IN THIS FILE:
+     * 1. getFloatVal(id):
+     *    - Safely reads the .value of an input element by ID and parses it into a Float.
+     *    - Returns 0 if element does not exist or value is NaN.
+     * 
+     * 2. showToast(msg):
+     *    - Displays a non-intrusive floating toast message to the user for 2.2 seconds.
+     * 
+     * 3. copyToClipboard(text):
+     *    - Asynchronously writes string text to the user's OS clipboard using the
+     *      Navigator Clipboard API, provides affirmative audio feedback, and shows a toast.
+     * ============================================================================
      */
     
     
     
+    /**
+     * Safely extracts and parses a floating-point number from an input element.
+     * 
+     * @param {string} id - The DOM element ID of the target input element.
+     * @returns {number} The parsed numeric float value, or 0 if empty/invalid/missing.
+     */
     function getFloatVal(id) {
         const el = document.getElementById(id);
         return el ? (parseFloat(el.value) || 0) : 0;
     }
     
+    /**
+     * Displays a transient toast notification banner at the bottom of the screen.
+     * Automatically dims and hides itself after 2,200 milliseconds.
+     * 
+     * @param {string} msg - The notification message text to display.
+     */
     function showToast(msg) {
         const toast = document.getElementById('toast');
         if (!toast) return;
@@ -196,6 +314,12 @@
         setTimeout(() => toast.classList.remove('show'), 2200);
     }
     
+    /**
+     * Copies the provided string text to the system clipboard.
+     * Plays an audio click confirmation and displays an on-screen toast notification.
+     * 
+     * @param {string} text - Text string to be copied into the user's clipboard.
+     */
     function copyToClipboard(text) {
         if (!text) return;
         navigator.clipboard.writeText(text).then(() => {
@@ -211,12 +335,37 @@
     // Module: src/core/format.js
     // -------------------------------------------------------------------------
     /**
+     * ============================================================================
      * CalVerse Pro - Core Formatting Engine
-     * Consistent currency and number localization across all calculators
+     * File: src/core/format.js
+     * ============================================================================
+     * 
+     * MODULE OVERVIEW:
+     * Centralizes international number and monetary formatting. Provides
+     * consistent currency symbols, thousands separators, and fractional precision
+     * across the Financial, Discount, Tip, and Health calculation engines.
+     * 
+     * FUNCTIONS PRESENT IN THIS FILE:
+     * 1. formatMoney(amount, currencyCode):
+     *    - Formats a numeric value into a localized currency string using
+     *      ECMAScript Intl.NumberFormat with graceful fallback support.
+     * 
+     * 2. formatNumber(val, maxDecimals):
+     *    - Formats general decimal numbers with thousands groupings and custom
+     *      decimal limits, returning '--' if the input is not a valid number.
+     * ============================================================================
      */
     
     
     
+    /**
+     * Formats a numeric amount into a localized currency string.
+     * Uses Intl.NumberFormat based on the configured locale for that currency.
+     * 
+     * @param {number|string} amount - The numeric monetary value to format.
+     * @param {string} [currencyCode='INR'] - The 3-letter ISO 4217 currency code (e.g., 'INR', 'USD', 'EUR').
+     * @returns {string} Fully formatted monetary string (e.g., "$1,234.50" or "₹1,23,456.00").
+     */
     function formatMoney(amount, currencyCode = 'INR') {
         const cur = CURRENCY_CONFIG[currencyCode] || CURRENCY_CONFIG.INR;
         try {
@@ -227,11 +376,19 @@
                 minimumFractionDigits: 2
             }).format(amount);
         } catch (e) {
+            // Fallback for environments lacking specific currency code definitions
             const formatted = Number(amount).toLocaleString(cur.locale, { minimumFractionDigits: 2, maximumFractionDigits: 2 });
             return `${cur.symbol}${formatted}`;
         }
     }
     
+    /**
+     * Formats a general numeric value with thousands separators and limited decimal precision.
+     * 
+     * @param {number|string} val - Numeric value to format.
+     * @param {number} [maxDecimals=4] - Maximum count of fractional decimal digits to retain.
+     * @returns {string} Formatted number string (e.g., "1,234.5678"), or "--" if NaN.
+     */
     function formatNumber(val, maxDecimals = 4) {
         if (isNaN(val)) return '--';
         return Number(Number(val).toFixed(maxDecimals)).toLocaleString();
@@ -242,13 +399,41 @@
     // Module: src/core/storage.js
     // -------------------------------------------------------------------------
     /**
-     * CalVerse Pro - Storage & History Store
-     * Safe persistent localStorage interactions with fallback
+     * ============================================================================
+     * CalVerse Pro - Persistent Storage & Calculation History Store
+     * File: src/core/storage.js
+     * ============================================================================
+     * 
+     * MODULE OVERVIEW:
+     * Wraps browser localStorage access in robust try/catch blocks to prevent
+     * DOMExceptions in private browsing modes, disabled storage settings, or
+     * quota exceeded conditions. Manages calculation history persistence.
+     * 
+     * OBJECTS & METHODS PRESENT IN THIS FILE:
+     * StorageEngine:
+     * - getItem(key, defaultVal): Safely retrieves a stored string value or returns default.
+     * - setItem(key, val): Safely persists a string key/value pair.
+     * - removeItem(key): Safely removes a stored key.
+     * - loadHistory(): Deserializes calculation history array from localStorage.
+     * - saveHistory(history): Serializes and saves calculation history array.
+     * - clearHistory(): Purges calculation history entries from storage.
+     * ============================================================================
      */
     
+    /** LocalStorage key for calculation history */
     const HISTORY_KEY = 'omni_calc_history';
     
+    /**
+     * StorageEngine provides fail-safe access to browser localStorage.
+     */
     const StorageEngine = {
+        /**
+         * Safely retrieves a value from localStorage with a fallback default.
+         * 
+         * @param {string} key - Storage key name.
+         * @param {*} [defaultVal=null] - Default fallback returned if key does not exist or errors occur.
+         * @returns {string|*} Retrieved string value or fallback.
+         */
         getItem(key, defaultVal = null) {
             try {
                 const val = localStorage.getItem(key);
@@ -258,6 +443,13 @@
             }
         },
     
+        /**
+         * Safely stores a string value in localStorage.
+         * 
+         * @param {string} key - Storage key name.
+         * @param {string} val - String value to store.
+         * @returns {boolean} True on success, false if quota exceeded or disabled.
+         */
         setItem(key, val) {
             try {
                 localStorage.setItem(key, val);
@@ -267,6 +459,12 @@
             }
         },
     
+        /**
+         * Safely deletes a key from localStorage.
+         * 
+         * @param {string} key - Storage key name.
+         * @returns {boolean} True on success, false on error.
+         */
         removeItem(key) {
             try {
                 localStorage.removeItem(key);
@@ -276,6 +474,11 @@
             }
         },
     
+        /**
+         * Loads and parses saved calculation history from localStorage.
+         * 
+         * @returns {Array<Object>} Array of calculation history objects [{expr, res, time}].
+         */
         loadHistory() {
             try {
                 return JSON.parse(localStorage.getItem(HISTORY_KEY) || '[]');
@@ -284,16 +487,28 @@
             }
         },
     
+        /**
+         * Serializes and writes calculation history to localStorage.
+         * 
+         * @param {Array<Object>} history - Array of calculation history objects to serialize.
+         */
         saveHistory(history) {
             try {
                 localStorage.setItem(HISTORY_KEY, JSON.stringify(history));
-            } catch (e) {}
+            } catch (e) {
+                // Silently swallow quota errors
+            }
         },
     
+        /**
+         * Deletes all saved calculation history records from localStorage.
+         */
         clearHistory() {
             try {
                 localStorage.removeItem(HISTORY_KEY);
-            } catch (e) {}
+            } catch (e) {
+                // Silently swallow errors
+            }
         }
     };
     
@@ -302,28 +517,78 @@
     // Module: src/core/state.js
     // -------------------------------------------------------------------------
     /**
-     * CalVerse Pro - Central Application State
-     * Single source of truth for calculator states, memory registers & active views
+     * ============================================================================
+     * CalVerse Pro - Centralized Global Application State
+     * File: src/core/state.js
+     * ============================================================================
+     * 
+     * MODULE OVERVIEW:
+     * Acts as the centralized state store for CalVerse. Tracks active application
+     * view modes, trigonometric units, standard/scientific display buffers,
+     * memory registers, programmer bitwise buffers, health unit preferences,
+     * and calculation history.
+     * 
+     * EXPORTED STATE OBJECT:
+     * - state.currentMode: Active calculator view identifier (e.g. 'standard', 'scientific').
+     * - state.angleMode: Current trigonometric angle unit ('DEG' or 'RAD').
+     * - state.memory: Independent memory registers for standard and scientific keypads.
+     * - state.std: Expression, current display value, and entry flag for Standard mode.
+     * - state.sci: Expression, current display value, and entry flag for Scientific mode.
+     * - state.prog: Programmer calculator state (Radix, Bit width, BigInt accumulator, pending operation).
+     * - state.health: Preferred units for BMI/health calculations ('metric' or 'imperial').
+     * - state.history: In-memory array of historical calculations synced to localStorage.
+     * ============================================================================
      */
     
     
     
+    /**
+     * Global reactive state object shared by all calculator features and UI components.
+     */
     const state = {
+        /** Currently active calculator view mode ('standard', 'scientific', 'graphing', etc.) */
         currentMode: 'standard',
-        angleMode: 'DEG', // DEG or RAD
-        memory: { std: 0, sci: 0 },
-        std: { expr: '', current: '0', waitingForNewNumber: false },
-        sci: { expr: '', current: '0', waitingForNewNumber: false },
-        prog: {
-            radix: 'HEX',
-            wordSize: 32, // 8, 16, 32, 64
-            val: 0n,
-            currentInput: '0',
-            pendingOp: null,
-            storedVal: null,
-            waitingForNew: false
+    
+        /** Active trigonometric angle mode: 'DEG' (degrees) or 'RAD' (radians) */
+        angleMode: 'DEG',
+    
+        /** Memory registers for memory buttons (MC, MR, M+, M-, MS) */
+        memory: {
+            std: 0,
+            sci: 0
         },
-        health: { unit: 'metric' },
+    
+        /** Standard calculator operational buffer */
+        std: {
+            expr: '',
+            current: '0',
+            waitingForNewNumber: false
+        },
+    
+        /** Scientific calculator operational buffer */
+        sci: {
+            expr: '',
+            current: '0',
+            waitingForNewNumber: false
+        },
+    
+        /** Programmer calculator operational buffer supporting arbitrary precision BigInt */
+        prog: {
+            radix: 'HEX',         // 'HEX', 'DEC', 'OCT', or 'BIN'
+            wordSize: 32,         // 8, 16, 32, or 64 bits
+            val: 0n,              // Primary numeric value in BigInt format
+            currentInput: '0',    // Raw string input in current radix
+            pendingOp: null,      // Active binary operator ('+', '-', '&', '|', etc.)
+            storedVal: null,      // Value buffered before operator was pressed
+            waitingForNew: false  // Reset input buffer upon subsequent keypress
+        },
+    
+        /** Health module unit system: 'metric' (kg, cm) or 'imperial' (lbs, ft/in) */
+        health: {
+            unit: 'metric'
+        },
+    
+        /** Calculation history records loaded from persistent local storage */
         history: StorageEngine.loadHistory()
     };
     
@@ -332,10 +597,43 @@
     // Module: src/core/math.js
     // -------------------------------------------------------------------------
     /**
-     * CalVerse Pro - Core Mathematical Evaluator
-     * High-precision safe math parser, factorial, and trigonometric functions
+     * ============================================================================
+     * CalVerse Pro - Core Mathematical Evaluator & Parser
+     * File: src/core/math.js
+     * ============================================================================
+     * 
+     * MODULE OVERVIEW:
+     * Contains the mathematical parser, expression sanitizer, factorial algorithm,
+     * and safe evaluation engine used by both the Standard and Scientific calculators,
+     * as well as the 2D Graphing engine.
+     * 
+     * FUNCTIONS PRESENT IN THIS FILE:
+     * 1. sanitizeForEval(expr, angleMode):
+     *    - Normalizes mathematical display glyphs (×, ÷, −, π, ^) into valid JavaScript syntax.
+     *    - Injects angle conversions (degrees to radians, or inverse radians to degrees)
+     *      around trigonometric calls (sin, cos, tan, asin, acos, atan).
+     *    - Replaces ln, log, sqrt, abs, exp with standard Math equivalents.
+     * 
+     * 2. factorial(n):
+     *    - Computes n! for non-negative integers using an iterative multiplication loop.
+     * 
+     * 3. evaluateMath(expression, angleMode):
+     *    - Executes expressions safely inside an isolated Function scope.
+     *    - Handles trailing factorial operators (e.g. "5!").
+     *    - Rounds precision to 10 decimal digits to eliminate IEEE-754 floating-point artifacts.
+     *    - Returns string representation or 'Error' upon divide-by-zero or syntax invalidity.
+     * ============================================================================
      */
     
+    /**
+     * Sanitizes and converts a human-readable mathematical formula into executable JS.
+     * Maps custom UI symbols (×, ÷, −, π) to operators and standard Math methods,
+     * and handles degree/radian conversion for trigonometry.
+     * 
+     * @param {string} expr - Human-readable mathematical formula (e.g., "sin(30) + 5 × 2").
+     * @param {'DEG'|'RAD'} [angleMode='DEG'] - Angle mode for trigonometric computations.
+     * @returns {string} Executable JavaScript arithmetic string.
+     */
     function sanitizeForEval(expr, angleMode = 'DEG') {
         let s = expr
             .replace(/×/g, '*')
@@ -345,16 +643,21 @@
             .replace(/\be\b/g, `${Math.E}`)
             .replace(/\^/g, '**');
     
-        // Functions replacement with angle mode conversion
+        // Angle mode conversion factor injection
         const radFactor = angleMode === 'DEG' ? `* (${Math.PI} / 180)` : '';
         const invFactor = angleMode === 'DEG' ? `* (180 / ${Math.PI})` : '';
     
+        // Direct trigonometric replacements
         s = s.replace(/sin\(([^)]+)\)/g, `Math.sin(($1)${radFactor})`);
         s = s.replace(/cos\(([^)]+)\)/g, `Math.cos(($1)${radFactor})`);
         s = s.replace(/tan\(([^)]+)\)/g, `Math.tan(($1)${radFactor})`);
+    
+        // Inverse trigonometric replacements (convert radians back to degrees if DEG mode)
         s = s.replace(/asin\(([^)]+)\)/g, `(Math.asin($1)${invFactor})`);
         s = s.replace(/acos\(([^)]+)\)/g, `(Math.acos($1)${invFactor})`);
         s = s.replace(/atan\(([^)]+)\)/g, `(Math.atan($1)${invFactor})`);
+    
+        // Common scientific functions
         s = s.replace(/ln\(([^)]+)\)/g, 'Math.log($1)');
         s = s.replace(/log\(([^)]+)\)/g, 'Math.log10($1)');
         s = s.replace(/sqrt\(([^)]+)\)/g, 'Math.sqrt($1)');
@@ -364,6 +667,12 @@
         return s;
     }
     
+    /**
+     * Calculates the factorial of an integer n (n!).
+     * 
+     * @param {number} n - Non-negative integer.
+     * @returns {number} Factorial result, or NaN if input is negative or non-integer.
+     */
     function factorial(n) {
         if (n < 0 || !Number.isInteger(n)) return NaN;
         if (n === 0 || n === 1) return 1;
@@ -372,14 +681,25 @@
         return r;
     }
     
+    /**
+     * Safely evaluates a mathematical expression string and returns the computed result.
+     * Supports factorials, trigonometric angle modes, and IEEE-754 precision correction.
+     * 
+     * @param {string} expression - The math expression string to evaluate.
+     * @param {'DEG'|'RAD'} [angleMode='DEG'] - Selected angle mode.
+     * @returns {string} String representation of evaluated number, or 'Error'.
+     */
     function evaluateMath(expression, angleMode = 'DEG') {
         try {
-            // Factorial handling: e.g. 5!
+            // Pre-process factorial notation (e.g. "5!" becomes "120")
             let exp = expression.replace(/(\d+)!/g, (_, num) => factorial(parseInt(num, 10)));
             const sanitized = sanitizeForEval(exp, angleMode);
-            // Safe evaluation using Function constructor
+    
+            // Execute in strict sandbox Function constructor
             const result = Function(`"use strict"; return (${sanitized});`)();
             if (!isFinite(result)) return 'Error';
+    
+            // Trim float rounding drift up to 10 decimal places
             return parseFloat(result.toFixed(10)).toString();
         } catch (e) {
             return 'Error';
@@ -391,8 +711,48 @@
     // Module: src/features/standard.js
     // -------------------------------------------------------------------------
     /**
-     * CalVerse Pro - Standard Calculator Feature
-     * Core 4-operation arithmetic, memory registers & calculation history
+     * ============================================================================
+     * CalVerse Pro - Standard Arithmetic & Memory Engine
+     * File: src/features/standard.js
+     * ============================================================================
+     * 
+     * MODULE OVERVIEW:
+     * Powers everyday arithmetic, keypad input routing, memory register management
+     * (MC, MR, MS, M+, M-), and calculation history for both Standard and Scientific
+     * calculators.
+     * 
+     * FUNCTIONS PRESENT IN THIS FILE:
+     * 1. updateDisplay(type):
+     *    - Updates the primary output value, expression preview line, and memory badge indicator.
+     * 
+     * 2. inputVal(type, val):
+     *    - Core keypad input processor. Handles chained operations, decimal points, constants (π, e),
+     *      parentheses, and numbers.
+     * 
+     * 3. clear(type):
+     *    - Resets expression and display buffer to '0'.
+     * 
+     * 4. backspace(type):
+     *    - Deletes rightmost character from active display value.
+     * 
+     * 5. toggleSign(type):
+     *    - Flips positive/negative sign of current accumulator value.
+     * 
+     * 6. calculate(type):
+     *    - Evaluates complete arithmetic expression, records result in history, and updates UI.
+     * 
+     * 7. Memory Operations:
+     *    - memClear(type): Resets memory register to 0.
+     *    - memRecall(type): Recalls stored memory value into active display.
+     *    - memStore(type): Stores current display value into memory register.
+     *    - memAdd(type): Adds current display value to memory register.
+     *    - memSub(type): Subtracts current display value from memory register.
+     * 
+     * 8. History Management:
+     *    - addHistory(expr, result): Appends new calculation record to history list (max 50 records).
+     *    - renderHistoryList(): Renders calculation history drawer DOM list with tap-to-reuse listeners.
+     *    - clearHistory(): Purges calculation history from memory and persistent localStorage.
+     * ============================================================================
      */
     
     
@@ -401,6 +761,11 @@
     
     
     
+    /**
+     * Synchronizes DOM display inputs and expression labels with state values.
+     * 
+     * @param {'std'|'sci'} type - Keypad type identifier ('std' for standard, 'sci' for scientific).
+     */
     function updateDisplay(type) {
         const data = state[type];
         const dispElem = document.getElementById(`${type}Display`);
@@ -412,6 +777,12 @@
         if (memElem) memElem.textContent = state.memory[type] !== 0 ? `M (${state.memory[type]})` : '';
     }
     
+    /**
+     * Handles numeric digit, arithmetic operator, parenthesis, and constant entries.
+     * 
+     * @param {'std'|'sci'} type - Calculator type ('std' or 'sci').
+     * @param {string} val - Pressed key value (e.g. '7', '+', '.', 'π', 'e').
+     */
     function inputVal(type, val) {
         SoundFx.playClick(500);
         const data = state[type];
@@ -419,14 +790,14 @@
         // If the expression was just evaluated (contains '='):
         if (data.expr && data.expr.includes('=')) {
             if (['+', '−', '×', '÷', '^', '%'].includes(val)) {
-                // Operator after equals: chain on previous answer
+                // Operator after equals: chain forward using previous computed answer
                 if (data.current === 'Error') data.current = '0';
                 data.expr = `${data.current} ${val} `;
                 data.waitingForNewNumber = true;
                 updateDisplay(type);
                 return;
             } else {
-                // New digit or function after equals: clear expression line
+                // New digit or constant after equals: reset expression line
                 data.expr = '';
                 if (val === '.') {
                     data.current = '0.';
@@ -458,7 +829,7 @@
             data.current = Math.E.toString();
             data.waitingForNewNumber = true;
         } else {
-            // Number
+            // Numeric digit 0-9
             if (data.current === '0' || data.waitingForNewNumber) {
                 data.current = val;
                 data.waitingForNewNumber = false;
@@ -469,6 +840,11 @@
         updateDisplay(type);
     }
     
+    /**
+     * Resets the calculator's expression buffer and active display value back to 0.
+     * 
+     * @param {'std'|'sci'} type - Calculator type identifier.
+     */
     function clear(type) {
         SoundFx.playClick(450);
         state[type].expr = '';
@@ -477,6 +853,11 @@
         updateDisplay(type);
     }
     
+    /**
+     * Removes the trailing character from the current display value.
+     * 
+     * @param {'std'|'sci'} type - Calculator type identifier.
+     */
     function backspace(type) {
         SoundFx.playClick(480);
         const data = state[type];
@@ -491,6 +872,11 @@
         updateDisplay(type);
     }
     
+    /**
+     * Toggles the negative/positive algebraic sign of the current active number.
+     * 
+     * @param {'std'|'sci'} type - Calculator type identifier.
+     */
     function toggleSign(type) {
         SoundFx.playClick(500);
         const data = state[type];
@@ -500,11 +886,16 @@
         }
     }
     
+    /**
+     * Evaluates the complete accumulated mathematical expression and stores the calculation in history.
+     * 
+     * @param {'std'|'sci'} type - Calculator type identifier.
+     */
     function calculate(type) {
         SoundFx.playClick(850, 'triangle', 0.05);
         const data = state[type];
     
-        // If empty or already calculated with '=', prevent repeating
+        // Avoid duplicate evaluation if already computed
         if (!data.expr && (data.current === '0' || data.current === 'Error' || data.current === '')) return;
         if (data.expr.endsWith('=')) return;
     
@@ -523,14 +914,31 @@
         updateDisplay(type);
     }
     
-    // Memory registers
+    // =============================================================================
+    // Memory Register Operations (MC, MR, MS, M+, M-)
+    // =============================================================================
+    
+    /** Clears the memory register (MC) */
     function memClear(type) { state.memory[type] = 0; updateDisplay(type); }
+    /** Recalls the stored memory register value into the active display (MR) */
     function memRecall(type) { state[type].current = state.memory[type].toString(); state[type].waitingForNewNumber = true; updateDisplay(type); }
+    /** Stores current display value into memory register (MS) */
     function memStore(type) { state.memory[type] = parseFloat(state[type].current) || 0; updateDisplay(type); }
+    /** Adds current display value to memory register (M+) */
     function memAdd(type) { state.memory[type] += parseFloat(state[type].current) || 0; updateDisplay(type); }
+    /** Subtracts current display value from memory register (M-) */
     function memSub(type) { state.memory[type] -= parseFloat(state[type].current) || 0; updateDisplay(type); }
     
-    // History storage & rendering
+    // =============================================================================
+    // Calculation History Management
+    // =============================================================================
+    
+    /**
+     * Appends a successful calculation entry to history and saves to localStorage.
+     * 
+     * @param {string} expr - Mathematical formula string.
+     * @param {string} result - Calculated answer string.
+     */
     function addHistory(expr, result) {
         state.history.unshift({ expr, result, timestamp: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }) });
         if (state.history.length > 50) state.history.pop();
@@ -538,6 +946,10 @@
         renderHistoryList();
     }
     
+    /**
+     * Renders calculation history list items inside the slide-out history drawer.
+     * Attaches click-to-load listeners that populate the result back into the display.
+     */
     function renderHistoryList() {
         const list = document.getElementById('historyList');
         const count = document.getElementById('historyCount');
@@ -569,6 +981,9 @@
         });
     }
     
+    /**
+     * Purges all historical calculations from the drawer and persistent local storage.
+     */
     function clearHistory() {
         state.history = [];
         StorageEngine.clearHistory();
@@ -580,8 +995,29 @@
     // Module: src/features/scientific.js
     // -------------------------------------------------------------------------
     /**
+     * ============================================================================
      * CalVerse Pro - Scientific Calculator Feature
-     * High-precision scientific functions, trigonometry, logarithms & powers
+     * File: src/features/scientific.js
+     * ============================================================================
+     * 
+     * MODULE OVERVIEW:
+     * Extends basic arithmetic with scientific and transcendental functions:
+     * 1. Scientific Operations: Square (x²), Square Root (√x), Factorial (n!),
+     *    Multiplicative Inverse (1/x), and Absolute Value (|x|).
+     * 2. Trigonometry & Logarithms: sin, cos, tan, asin, acos, atan, ln, log₁₀, exp.
+     * 3. Angular Mode Toggle: Switches trigonometric calculations dynamically between
+     *    Degrees (DEG) and Radians (RAD).
+     * 
+     * FUNCTIONS PRESENT IN THIS FILE:
+     * 1. inputFunc(fn):
+     *    - Applies a unary scientific function to the currently buffered display value.
+     *    - Immediately evaluates result, sets the mathematical expression preview,
+     *      and sets waitingForNewNumber to true.
+     * 
+     * 2. toggleAngleMode():
+     *    - Switches global angle mode state between 'DEG' and 'RAD'.
+     *    - Updates UI angle pill badge text and plays click feedback sound.
+     * ============================================================================
      */
     
     
@@ -589,6 +1025,12 @@
     
     
     
+    /**
+     * Executes a unary scientific function (e.g. sin, cos, tan, sqrt, sqr, fact, inv, abs)
+     * on the current accumulator value and updates the scientific display.
+     * 
+     * @param {string} fn - Function identifier ('sqr', 'sqrt', 'fact', 'inv', 'abs', 'sin', 'cos', etc.).
+     */
     function inputFunc(fn) {
         SoundFx.playClick(550);
         const data = state.sci;
@@ -610,7 +1052,7 @@
             data.current = Math.abs(parseFloat(cur)).toString();
             data.expr = `|${cur}| =`;
         } else {
-            // Trigonometry / Log
+            // Trigonometric or Logarithmic function (sin, cos, tan, ln, log, exp)
             data.current = evaluateMath(`${fn}(${cur})`, state.angleMode);
             data.expr = `${fn}(${cur}) =`;
         }
@@ -618,6 +1060,9 @@
         updateDisplay('sci');
     }
     
+    /**
+     * Toggles trigonometric angle evaluation unit between Degrees (DEG) and Radians (RAD).
+     */
     function toggleAngleMode() {
         SoundFx.playClick(600);
         state.angleMode = state.angleMode === 'DEG' ? 'RAD' : 'DEG';
@@ -630,21 +1075,69 @@
     // Module: src/features/graphing.js
     // -------------------------------------------------------------------------
     /**
-     * CalVerse Pro - Graphing Calculator Feature
-     * Interactive 2D function visualizer & HTML5 canvas plotting engine
+     * ============================================================================
+     * CalVerse Pro - 2D Graphing & Function Visualizer Engine
+     * File: src/features/graphing.js
+     * ============================================================================
+     * 
+     * MODULE OVERVIEW:
+     * An interactive HTML5 Canvas 2D Cartesian graphing engine. Supports real-time
+     * mathematical curve plotting (dual functions f₁(x) and f₂(x)), dynamic mouse/touch
+     * pan and drag, mouse wheel zooming, responsive canvas resizing, coordinate HUD tracking,
+     * and Cartesian grid rendering.
+     * 
+     * OBJECTS & METHODS PRESENT IN THIS FILE:
+     * GraphEngine:
+     * 1. init():
+     *    - Acquires canvas context, sets up resize watchers, pan/drag event listeners
+     *      for mouse and mobile touch, and mouse wheel zoom listeners.
+     * 
+     * 2. resize():
+     *    - Dynamically resizes the HTML5 canvas buffer to match its container element
+     *      dimensions and centers the Cartesian origin (0, 0).
+     * 
+     * 3. zoom(factor):
+     *    - Multiplies current pixels-per-unit scale by zoom factor (clamped 10 to 300) and re-renders.
+     * 
+     * 4. reset():
+     *    - Restores default zoom level (40 px/unit) and centers Cartesian origin in the viewport.
+     * 
+     * 5. parseFunction(funcStr):
+     *    - Parses user mathematical expression into an executable JavaScript function f(x).
+     *    - Auto-injects explicit multiplication (e.g., converts '2x' to '2*x').
+     * 
+     * 6. render():
+     *    - Clears the canvas, paints theme-adaptive background gridlines, draws Cartesian X and Y axes,
+     *      and renders active function curves.
+     * 
+     * 7. plotCurve(funcStr, color):
+     *    - Samples the function f(x) across canvas pixel columns and renders a smooth 2D Bézier path.
+     * ============================================================================
      */
     
     const GraphEngine = {
+        /** Guard preventing duplicate event listener attachments */
         _initialized: false,
+        /** Reference to HTML5 Canvas element */
         canvas: null,
+        /** 2D rendering context */
         ctx: null,
-        scale: 40, // pixels per unit
+        /** Current zoom scale: pixels per mathematical unit */
+        scale: 40,
+        /** Pixel coordinate of Cartesian origin (0,0) along the X-axis */
         originX: 0,
+        /** Pixel coordinate of Cartesian origin (0,0) along the Y-axis */
         originY: 0,
+        /** Dragging state flag */
         isDragging: false,
+        /** Drag start anchor X */
         startX: 0,
+        /** Drag start anchor Y */
         startY: 0,
     
+        /**
+         * Initializes the canvas, dimensions, and interaction listeners.
+         */
         init() {
             if (GraphEngine._initialized) { GraphEngine.render(); return; }
             GraphEngine._initialized = true;
@@ -654,7 +1147,7 @@
             this.resize();
             window.addEventListener('resize', () => this.resize());
     
-            // Pan & Zoom Listeners
+            // Mouse Pan & Coordinate HUD Tracking
             this.canvas.addEventListener('mousedown', (e) => {
                 this.isDragging = true;
                 this.startX = e.clientX - this.originX;
@@ -667,6 +1160,7 @@
                     this.originY = e.clientY - this.startY;
                     this.render();
                 } else if (this.canvas) {
+                    // Update live coordinate HUD in bottom right corner
                     const rect = this.canvas.getBoundingClientRect();
                     if (e.clientX >= rect.left && e.clientX <= rect.right && e.clientY >= rect.top && e.clientY <= rect.bottom) {
                         const mouseX = e.clientX - rect.left;
@@ -681,7 +1175,7 @@
     
             window.addEventListener('mouseup', () => { this.isDragging = false; });
     
-            // Touch support for mobile dragging
+            // Touch gestures for mobile dragging
             this.canvas.addEventListener('touchstart', (e) => {
                 if (e.touches.length === 1) {
                     this.isDragging = true;
@@ -700,6 +1194,7 @@
     
             window.addEventListener('touchend', () => { this.isDragging = false; });
     
+            // Mouse Wheel Zoom
             this.canvas.addEventListener('wheel', (e) => {
                 e.preventDefault();
                 const zoomFactor = e.deltaY < 0 ? 1.15 : 0.85;
@@ -709,6 +1204,9 @@
             this.render();
         },
     
+        /**
+         * Resizes the canvas to fill its parent container and re-centers origin.
+         */
         resize() {
             if (!this.canvas || !this.canvas.parentElement) return;
             this.canvas.width = this.canvas.parentElement.clientWidth;
@@ -718,11 +1216,19 @@
             this.render();
         },
     
+        /**
+         * Zooms the Cartesian plane by the specified multiplication factor.
+         * 
+         * @param {number} factor - Scale multiplier (e.g. 1.15 for zoom in, 0.85 for zoom out).
+         */
         zoom(factor) {
             this.scale = Math.max(10, Math.min(300, this.scale * factor));
             this.render();
         },
     
+        /**
+         * Resets the scale to 40 px/unit and re-centers the view.
+         */
         reset() {
             this.scale = 40;
             this.originX = this.canvas.width / 2;
@@ -730,6 +1236,12 @@
             this.render();
         },
     
+        /**
+         * Converts a mathematical formula string (e.g. "sin(x) + cos(2x)") into an executable function f(x).
+         * 
+         * @param {string} funcStr - Input formula text.
+         * @returns {Function|null} Compiled function accepting numeric argument x, or null on error.
+         */
         parseFunction(funcStr) {
             if (!funcStr || !funcStr.trim()) return null;
             try {
@@ -746,7 +1258,7 @@
                     .replace(/\bpi\b/gi, 'Math.PI')
                     .replace(/\be\b/g, 'Math.E');
     
-                // Auto multiplication e.g. 2x -> 2*x
+                // Automatic multiplication for coefficients adjacent to variable (e.g. "2x" -> "2*x")
                 code = code.replace(/(\d+)\s*([a-zA-Z])/g, '$1*$2');
                 return new Function('x', `"use strict"; try { return (${code}); } catch(e){ return NaN; }`);
             } catch (e) {
@@ -754,6 +1266,9 @@
             }
         },
     
+        /**
+         * Redraws the Cartesian grid, coordinate axes, and active function curves.
+         */
         render() {
             if (!this.ctx) return;
             const w = this.canvas.width;
@@ -762,7 +1277,7 @@
     
             this.ctx.clearRect(0, 0, w, h);
     
-            // Draw Grid
+            // 1. Draw Background Grid
             this.ctx.lineWidth = 1;
             this.ctx.strokeStyle = isLight ? 'rgba(0,0,0,0.06)' : 'rgba(255,255,255,0.06)';
     
@@ -771,6 +1286,7 @@
             const startY = Math.floor(-(h - this.originY) / this.scale);
             const endY = Math.ceil(this.originY / this.scale);
     
+            // Vertical grid lines
             for (let x = startX; x <= endX; x++) {
                 const px = this.originX + x * this.scale;
                 this.ctx.beginPath();
@@ -779,6 +1295,7 @@
                 this.ctx.stroke();
             }
     
+            // Horizontal grid lines
             for (let y = startY; y <= endY; y++) {
                 const py = this.originY - y * this.scale;
                 this.ctx.beginPath();
@@ -787,30 +1304,36 @@
                 this.ctx.stroke();
             }
     
-            // Axes
+            // 2. Draw Main Axes
             this.ctx.lineWidth = 1.8;
             this.ctx.strokeStyle = isLight ? '#94a3b8' : '#475569';
             
-            // X-Axis
+            // Horizontal X-Axis
             this.ctx.beginPath();
             this.ctx.moveTo(0, this.originY);
             this.ctx.lineTo(w, this.originY);
             this.ctx.stroke();
     
-            // Y-Axis
+            // Vertical Y-Axis
             this.ctx.beginPath();
             this.ctx.moveTo(this.originX, 0);
             this.ctx.lineTo(this.originX, h);
             this.ctx.stroke();
     
-            // Plot curves
+            // 3. Plot Curve Functions
             const fn1Str = document.getElementById('graphFuncInput1')?.value;
             const fn2Str = document.getElementById('graphFuncInput2')?.value;
     
-            this.plotCurve(fn1Str, '#3b82f6');
-            this.plotCurve(fn2Str, '#f43f5e');
+            this.plotCurve(fn1Str, '#3b82f6'); // Function 1 in Electric Blue
+            this.plotCurve(fn2Str, '#f43f5e'); // Function 2 in Rose Pink
         },
     
+        /**
+         * Evaluates and paints a single continuous function curve across visible pixels.
+         * 
+         * @param {string} funcStr - Math function string.
+         * @param {string} color - Stroke CSS color.
+         */
         plotCurve(funcStr, color) {
             const fn = this.parseFunction(funcStr);
             if (!fn) return;
@@ -821,10 +1344,12 @@
             this.ctx.strokeStyle = color;
     
             let first = true;
+            // Sample every 2 pixels horizontally for optimal performance & sharpness
             for (let px = 0; px <= w; px += 2) {
                 const mathX = (px - this.originX) / this.scale;
                 const mathY = fn(mathX);
     
+                // Handle asymptotes, singularities, and domain breaks (e.g. 1/x or sqrt(-1))
                 if (isNaN(mathY) || !isFinite(mathY)) {
                     first = true;
                     continue;
@@ -847,8 +1372,35 @@
     // Module: src/features/financial.js
     // -------------------------------------------------------------------------
     /**
-     * CalVerse Pro - Financial & Currency Feature
-     * Loan EMI calculator, SIP compound growth & live real-time currency exchange
+     * ============================================================================
+     * CalVerse Pro - Financial & Currency Calculation Engine
+     * File: src/features/financial.js
+     * ============================================================================
+     * 
+     * MODULE OVERVIEW:
+     * Powers three financial computation modules:
+     * 1. Loan EMI (Equated Monthly Installment) Calculator:
+     *    - Amortization formula computing monthly payment, total interest, and principal/interest ratios.
+     * 2. Compound Interest & SIP (Systematic Investment Plan) Growth Calculator:
+     *    - Future value projections combining initial lump-sum compounding and monthly SIP contributions.
+     * 3. Live Foreign Exchange Rate Converter:
+     *    - Fetches real-time currency exchange rates from open.er-api.com with offline cache persistence.
+     *    - Bidirectional conversion and popular currency pairs grid.
+     * 
+     * OBJECTS & METHODS PRESENT IN THIS FILE:
+     * FinancialEngine:
+     * 1. init(): Restores saved currency & cached exchange rates, binds range sliders, runs initial models.
+     * 2. setCurrency(code): Updates active financial currency and re-renders labels and figures.
+     * 3. updateLabels(): Rewrites input header labels with active currency symbol.
+     * 4. formatMoney(amount): Formats numeric values according to the active financial currency locale.
+     * 5. calculateEMI(): Computes monthly EMI, total interest, principal ratio, and progress bar widths.
+     * 6. calculateCompound(): Computes future value of compound lump sum plus recurring monthly contributions.
+     * 7. fetchLiveRates(showFeedback): Queries real-time currency API; provides graceful offline fallback.
+     * 8. convert(source): Performs bidirectional currency exchange conversion.
+     * 9. swap(): Swaps 'From' and 'To' currency select values and reconverts.
+     * 10. renderPopularPairs(): Renders clickable quick-convert currency pair cards.
+     * 11. setQuickPair(from, to): Activates a currency pair when a card is clicked.
+     * ============================================================================
      */
     
     
@@ -857,8 +1409,12 @@
     
     
     const FinancialEngine = {
+        /** Currently selected currency code for loans and investments (persisted) */
         currentCurrency: localStorage.getItem('calverse_fin_currency') || 'INR',
     
+        /**
+         * Initializes financial subtab inputs, range sync listeners, and triggers live rates fetch.
+         */
         init() {
             // Restore saved currency
             const curSelect = document.getElementById('finCurrencySelect');
@@ -879,7 +1435,7 @@
                 }
             } catch (e) {}
     
-            // Sliders & Number sync
+            // Two-way synchronization between number input boxes and range sliders
             const syncInputs = [
                 ['loanAmount', 'loanAmountRange'],
                 ['interestRate', 'interestRateRange'],
@@ -895,7 +1451,7 @@
                 }
             });
     
-            // Compound listeners
+            // Compound interest input listeners
             ['ciPrincipal', 'ciMonthly', 'ciRate', 'ciYears', 'ciCompoundFreq'].forEach(id => {
                 const el = document.getElementById(id);
                 if (el) el.addEventListener('input', () => this.calculateCompound());
@@ -906,6 +1462,11 @@
             this.fetchLiveRates();
         },
     
+        /**
+         * Switches the currency code for loan and investment calculations.
+         * 
+         * @param {string} code - ISO 4217 currency code (e.g., 'INR', 'USD', 'EUR').
+         */
         setCurrency(code) {
             if (CURRENCY_CONFIG[code]) {
                 SoundFx.playClick(600);
@@ -918,6 +1479,9 @@
             }
         },
     
+        /**
+         * Updates label text in the UI to display the active currency symbol.
+         */
         updateLabels() {
             const cur = CURRENCY_CONFIG[this.currentCurrency] || CURRENCY_CONFIG.INR;
             const sym = cur.symbol;
@@ -932,10 +1496,24 @@
             if (cMonth) cMonth.textContent = `Monthly Contribution (${sym})`;
         },
     
+        /**
+         * Formats an amount using the active financial currency settings.
+         * 
+         * @param {number} amount - Numeric monetary amount.
+         * @returns {string} Localized currency string.
+         */
         formatMoney(amount) {
             return formatMoney(amount, this.currentCurrency);
         },
     
+        /**
+         * Calculates loan EMI using the standard amortization formula:
+         *   E = P * r * (1 + r)^n / ((1 + r)^n - 1)
+         * Where:
+         *   P = Principal loan amount
+         *   r = Monthly interest rate (annual rate / 12 / 100)
+         *   n = Total number of monthly installments (years * 12)
+         */
         calculateEMI() {
             const P = getFloatVal('loanAmount');
             const annualRate = getFloatVal('interestRate');
@@ -946,7 +1524,6 @@
             const r = annualRate / 12 / 100;
             const n = years * 12;
     
-            // EMI Formula: E = P * r * (1+r)^n / ((1+r)^n - 1)
             const emi = (P * r * Math.pow(1 + r, n)) / (Math.pow(1 + r, n) - 1);
             const totalPayable = emi * n;
             const totalInterest = totalPayable - P;
@@ -965,6 +1542,12 @@
             document.getElementById('barInterest').style.width = `${interestRatio}%`;
         },
     
+        /**
+         * Calculates Compound Interest & Monthly SIP Investment Growth.
+         * Future Value:
+         *   FV_lump = P * (1 + r/n)^(n*t)
+         *   FV_sip  = PMT * (((1 + i)^months - 1) / i)
+         */
         calculateCompound() {
             const P = getFloatVal('ciPrincipal');
             const PMT = getFloatVal('ciMonthly');
@@ -978,7 +1561,7 @@
             // Lump sum compound
             let FV_lump = P * Math.pow(1 + r / n, n * t);
     
-            // Monthly SIP Future Value: PMT * [ ( (1 + i)^months - 1 ) / i ]
+            // Monthly recurring investment compounding
             let FV_sip = 0;
             if (monthlyRate > 0) {
                 FV_sip = PMT * ((Math.pow(1 + monthlyRate, months) - 1) / monthlyRate);
@@ -995,9 +1578,11 @@
             document.getElementById('ciTotalInterest').textContent = this.formatMoney(totalInterest);
         },
     
-        // =====================================================================
+        // =========================================================================
         // Live Exchange Rates & Converter
-        // =====================================================================
+        // =========================================================================
+    
+        /** Baseline exchange rates relative to USD (1.00) used offline or upon network failure */
         rates: {
             USD: 1,
             INR: 83.52,
@@ -1020,8 +1605,15 @@
             QAR: 3.64,
             THB: 36.80
         },
+        /** Timestamp when exchange rates were last synchronized */
         ratesLastUpdated: null,
     
+        /**
+         * Asynchronously downloads real-time currency conversion rates via Open Exchange Rates API.
+         * Caches successful responses in localStorage. Gracefully falls back to cached data offline.
+         * 
+         * @param {boolean} [showFeedback=false] - Whether to show on-screen toast feedback upon completion.
+         */
         async fetchLiveRates(showFeedback = false) {
             const statusText = document.getElementById('rateStatusText');
             const refreshIcon = document.getElementById('refreshIcon');
@@ -1074,6 +1666,11 @@
             }
         },
     
+        /**
+         * Converts currency amount between two selected currencies.
+         * 
+         * @param {'from'|'to'} [source='from'] - Field that triggered the calculation.
+         */
         convert(source = 'from') {
             const fromUnit = document.getElementById('currencyUnitFrom')?.value || 'USD';
             const toUnit = document.getElementById('currencyUnitTo')?.value || 'INR';
@@ -1100,6 +1697,9 @@
             }
         },
     
+        /**
+         * Swaps the "From" and "To" currency units and triggers conversion.
+         */
         swap() {
             SoundFx.playClick(600);
             const fromSelect = document.getElementById('currencyUnitFrom');
@@ -1112,6 +1712,9 @@
             }
         },
     
+        /**
+         * Populates quick-action cards for popular global currency pairs (USD/INR, EUR/USD, etc.).
+         */
         renderPopularPairs() {
             const pairsGrid = document.getElementById('popularPairsGrid');
             if (!pairsGrid) return;
@@ -1140,6 +1743,12 @@
             }).join('');
         },
     
+        /**
+         * Selects a popular currency pair and refreshes conversion inputs.
+         * 
+         * @param {string} from - Source currency code.
+         * @param {string} to - Target currency code.
+         */
         setQuickPair(from, to) {
             SoundFx.playClick(600);
             const fromSelect = document.getElementById('currencyUnitFrom');
@@ -1158,14 +1767,50 @@
     // Module: src/features/programmer.js
     // -------------------------------------------------------------------------
     /**
-     * CalVerse Pro - Programmer Calculator Feature
-     * Multi-radix conversion (HEX, DEC, OCT, BIN), bitwise operations & word-size bit masking
+     * ============================================================================
+     * CalVerse Pro - Programmer Calculator Engine
+     * File: src/features/programmer.js
+     * ============================================================================
+     * 
+     * MODULE OVERVIEW:
+     * Powers computing and hardware-level arithmetic:
+     * 1. Multi-Radix Simultaneous Display: Synchronously renders Hexadecimal (HEX),
+     *    Decimal (DEC), Octal (OCT), and Binary (BIN) representations using arbitrary
+     *    precision JavaScript BigInt arithmetic.
+     * 2. Word Size Masking: Enforces 8-bit (Byte), 16-bit (Word), 32-bit (DWord),
+     *    and 64-bit (QWord) hardware integer limits.
+     * 3. Bitwise & Logical Operations: AND, OR, XOR, NOT, left-shift (<<), right-shift (>>),
+     *    arithmetic (+, -, *, /, %), and sign negation.
+     * 4. Dynamic Keypad Validation: Disables keys ineligible for the active radix
+     *    (e.g., A-F disabled outside HEX, digits 2-9 disabled in BIN, 8-9 disabled in OCT).
+     * 
+     * OBJECTS & METHODS PRESENT IN THIS FILE:
+     * ProgrammerEngine:
+     * 1. setRadix(radix): Sets primary radix ('HEX', 'DEC', 'OCT', 'BIN') and disables invalid keys.
+     * 2. setWordSize(bits): Updates bit width (8, 16, 32, 64) and masks the stored BigInt value.
+     * 3. getMask(): Returns the bitmask BigInt for the current word size.
+     * 4. maskValue(): Clamps the current value according to getMask().
+     * 5. inputDigit(d): Parses incoming character according to the current radix and updates state.
+     * 6. inputBitwise(op): Buffers binary operator (AND, OR, XOR, <<, >>) or immediately calculates unary NOT (~).
+     * 7. inputOp(op): Alias for inputBitwise to handle general arithmetic operators.
+     * 8. calculate(): Evaluates pending bitwise or arithmetic operation on stored and current BigInt operands.
+     * 9. clear(): Clears accumulator, inputs, and pending operators to 0.
+     * 10. backspace(): Removes the last digit typed in the active radix.
+     * 11. toggleSign(): Negates the current BigInt value and applies word-size bitmask.
+     * 12. updateDisplay(): Updates HEX, DEC, OCT, and formatted 4-bit nibble spaced BIN display labels.
+     * 13. updateKeypadState(): Toggles .disabled styling on keypad buttons based on the active base.
+     * ============================================================================
      */
     
     
     
     
     const ProgrammerEngine = {
+        /**
+         * Sets active radix base ('HEX', 'DEC', 'OCT', or 'BIN') and updates keypad states.
+         * 
+         * @param {'HEX'|'DEC'|'OCT'|'BIN'} radix - Selected radix numeral base.
+         */
         setRadix(radix) {
             SoundFx.playClick(600);
             state.prog.radix = radix;
@@ -1175,6 +1820,11 @@
             this.updateKeypadState();
         },
     
+        /**
+         * Sets the active integer word size bit width (8, 16, 32, or 64 bits).
+         * 
+         * @param {8|16|32|64} bits - Bit width limit.
+         */
         setWordSize(bits) {
             SoundFx.playClick(600);
             state.prog.wordSize = bits;
@@ -1185,6 +1835,11 @@
             this.updateDisplay();
         },
     
+        /**
+         * Computes the BigInt bitmask for the currently active word size.
+         * 
+         * @returns {bigint} Bitmask representation (e.g. 0xFFFFFFFFn for 32-bit).
+         */
         getMask() {
             const bits = state.prog.wordSize;
             if (bits === 8) return 0xFFn;
@@ -1193,10 +1848,18 @@
             return 0xFFFFFFFFFFFFFFFFn;
         },
     
+        /**
+         * Clamps the active value to stay strictly within word-size bit limits.
+         */
         maskValue() {
             state.prog.val = state.prog.val & this.getMask();
         },
     
+        /**
+         * Handles keypad digit entry in the current radix base.
+         * 
+         * @param {string} d - Digit character ('0'-'9', 'A'-'F').
+         */
         inputDigit(d) {
             SoundFx.playClick(500);
             const p = state.prog;
@@ -1217,13 +1880,19 @@
                 p.waitingForNew = false;
                 this.updateDisplay();
             } catch (e) {
-                // invalid digit for base
+                // Silently ignore digits invalid for current base
             }
         },
     
+        /**
+         * Handles bitwise operations (AND, OR, XOR, NOT, <<, >>).
+         * 
+         * @param {string} op - Bitwise operator string.
+         */
         inputBitwise(op) {
             SoundFx.playClick(550);
             const p = state.prog;
+            // Unary NOT immediately inverts bits and reapplies mask
             if (op === 'NOT') {
                 p.val = (~p.val) & this.getMask();
                 this.updateDisplay();
@@ -1235,10 +1904,18 @@
             p.waitingForNew = true;
         },
     
+        /**
+         * Alias for inputBitwise to handle binary operations.
+         * 
+         * @param {string} op - Operator symbol.
+         */
         inputOp(op) {
             this.inputBitwise(op);
         },
     
+        /**
+         * Calculates the pending bitwise or arithmetic operation on stored operands.
+         */
         calculate() {
             SoundFx.playClick(850);
             const p = state.prog;
@@ -1250,15 +1927,15 @@
     
             switch (p.pendingOp) {
                 case 'AND': res = a & b; break;
-                case 'OR': res = a | b; break;
+                case 'OR':  res = a | b; break;
                 case 'XOR': res = a ^ b; break;
-                case '<<': res = a << b; break;
-                case '>>': res = a >> b; break;
-                case '+': res = a + b; break;
-                case '−': res = a - b; break;
-                case '×': res = a * b; break;
-                case '÷': res = b !== 0n ? a / b : 0n; break;
-                case '%': res = b !== 0n ? a % b : 0n; break;
+                case '<<':  res = a << b; break;
+                case '>>':  res = a >> b; break;
+                case '+':   res = a + b; break;
+                case '−':   res = a - b; break;
+                case '×':   res = a * b; break;
+                case '÷':   res = b !== 0n ? a / b : 0n; break;
+                case '%':   res = b !== 0n ? a % b : 0n; break;
             }
     
             p.val = res;
@@ -1269,6 +1946,9 @@
             this.updateDisplay();
         },
     
+        /**
+         * Clears all programmer calculator registers to zero.
+         */
         clear() {
             state.prog.val = 0n;
             state.prog.currentInput = '0';
@@ -1277,6 +1957,9 @@
             this.updateDisplay();
         },
     
+        /**
+         * Removes the rightmost digit from the active input.
+         */
         backspace() {
             const p = state.prog;
             let str = p.val.toString(p.radix === 'HEX' ? 16 : p.radix === 'DEC' ? 10 : p.radix === 'OCT' ? 8 : 2);
@@ -1285,11 +1968,17 @@
             this.updateDisplay();
         },
     
+        /**
+         * Negates value using two's complement and applies active word size mask.
+         */
         toggleSign() {
             state.prog.val = (-state.prog.val) & this.getMask();
             this.updateDisplay();
         },
     
+        /**
+         * Renders synchronized representations in HEX, DEC, OCT, and nibble-separated BIN.
+         */
         updateDisplay() {
             const p = state.prog;
             const val = p.val;
@@ -1298,7 +1987,7 @@
             const oct = val.toString(8);
             
             let bin = val.toString(2);
-            // Pad binary with spacing
+            // Format binary output into neat 4-bit nibble groupings (e.g. "0000 1111")
             const padLen = state.prog.wordSize;
             bin = bin.padStart(padLen, '0');
             bin = bin.match(/.{1,4}/g)?.join(' ') || bin;
@@ -1314,13 +2003,18 @@
             if (binEl) binEl.textContent = bin;
         },
     
+        /**
+         * Disables keypad keys that are mathematically illegal in the current radix base.
+         */
         updateKeypadState() {
             const radix = state.prog.radix;
             const hexBtns = document.querySelectorAll('.btn-hex');
             const numBtns = document.querySelectorAll('.programmer-keypad .btn-num');
     
+            // Hexadecimal A-F only allowed in HEX mode
             hexBtns.forEach(b => b.classList.toggle('disabled', radix !== 'HEX'));
     
+            // Restrict numeric buttons according to base
             numBtns.forEach(b => {
                 const digit = parseInt(b.textContent, 10);
                 if (radix === 'BIN') {
@@ -1339,8 +2033,35 @@
     // Module: src/features/converter.js
     // -------------------------------------------------------------------------
     /**
-     * CalVerse Pro - Unit Converter Feature
-     * Instant multi-category conversions: length, mass, temperature, area, speed, digital, time
+     * ============================================================================
+     * CalVerse Pro - Unit Converter Engine
+     * File: src/features/converter.js
+     * ============================================================================
+     * 
+     * MODULE OVERVIEW:
+     * Powers the real-time bidirectional unit conversion system across 7 physical
+     * and digital categories: Length, Mass, Temperature, Area, Speed, Digital, and Time.
+     * Handles linear scaling via SI base multipliers as well as affine transformations
+     * for temperature units (Celsius, Fahrenheit, Kelvin).
+     * 
+     * OBJECTS & METHODS PRESENT IN THIS FILE:
+     * ConverterEngine:
+     * 1. init():
+     *    - Binds category switcher tab buttons, bidirectional input listeners,
+     *      dropdown selectors, and unit swap button.
+     * 
+     * 2. populateUnits():
+     *    - Populates the "From" and "To" <select> dropdowns based on the currently
+     *      selected measurement category.
+     * 
+     * 3. convert(source):
+     *    - Performs bidirectional real-time unit calculation (from -> to, or to -> from).
+     *    - Normalizes values to SI base unit before converting to the target unit.
+     *    - Updates the human-readable formula summary indicator.
+     * 
+     * 4. convertTemp(val, from, to):
+     *    - Specialized non-linear converter for temperature (scales between °C, °F, and K).
+     * ============================================================================
      */
     
     
@@ -1348,9 +2069,14 @@
     
     
     const ConverterEngine = {
+        /** Currently selected unit category (defaults to 'length') */
         currentCategory: 'length',
+        /** Reference map of conversion coefficients */
         units: CONVERTER_UNITS,
     
+        /**
+         * Initializes UI event listeners for categories, input synchronization, and unit swapping.
+         */
         init() {
             const catBtns = document.querySelectorAll('.cat-btn');
             catBtns.forEach(btn => {
@@ -1363,11 +2089,13 @@
                 });
             });
     
+            // Live bidirectional typing listeners
             document.getElementById('convertValFrom').addEventListener('input', () => this.convert('from'));
             document.getElementById('convertValTo').addEventListener('input', () => this.convert('to'));
             document.getElementById('convertUnitFrom').addEventListener('change', () => this.convert('from'));
             document.getElementById('convertUnitTo').addEventListener('change', () => this.convert('from'));
     
+            // Swap units button
             document.getElementById('swapUnitsBtn').addEventListener('click', () => {
                 SoundFx.playClick(600);
                 const fromUnit = document.getElementById('convertUnitFrom');
@@ -1378,10 +2106,14 @@
                 this.convert('from');
             });
     
+            // Initial setup
             this.populateUnits();
             this.convert('from');
         },
     
+        /**
+         * Rebuilds <option> elements in source and target dropdowns when the active category changes.
+         */
         populateUnits() {
             const uList = Object.keys(this.units[this.currentCategory]);
             const fromSelect = document.getElementById('convertUnitFrom');
@@ -1394,11 +2126,17 @@
             toSelect.selectedIndex = Math.min(1, uList.length - 1);
         },
     
+        /**
+         * Executes bidirectional unit conversion.
+         * 
+         * @param {'from'|'to'} source - Identifies which input field triggered the conversion.
+         */
         convert(source) {
             const cat = this.currentCategory;
             const fromUnit = document.getElementById('convertUnitFrom').value;
             const toUnit = document.getElementById('convertUnitTo').value;
     
+            // Temperature uses affine shift/scale formulas
             if (cat === 'temperature') {
                 if (source === 'from') {
                     const val = getFloatVal('convertValFrom');
@@ -1410,6 +2148,7 @@
                     document.getElementById('convertValFrom').value = res.toFixed(3);
                 }
             } else {
+                // Standard SI linear multiplier conversion
                 const uMap = this.units[cat];
                 const fromFactor = uMap[fromUnit];
                 const toFactor = uMap[toUnit];
@@ -1427,17 +2166,28 @@
                 }
             }
     
+            // Update the formula summary label (e.g. "1 Meter = 3.28084 Foot")
             const fromVal = document.getElementById('convertValFrom').value;
             const toVal = document.getElementById('convertValTo').value;
             document.getElementById('conversionFormula').textContent = `${fromVal} ${fromUnit} = ${toVal} ${toUnit}`;
         },
     
+        /**
+         * Converts temperature values between Celsius, Fahrenheit, and Kelvin.
+         * 
+         * @param {number} val - Input temperature reading.
+         * @param {string} from - Source unit name ('Celsius', 'Fahrenheit', 'Kelvin').
+         * @param {string} to - Destination unit name ('Celsius', 'Fahrenheit', 'Kelvin').
+         * @returns {number} Converted temperature reading.
+         */
         convertTemp(val, from, to) {
             if (from === to) return val;
+            // Step 1: Normalize input to Celsius
             let c = val;
             if (from === 'Fahrenheit') c = (val - 32) * (5 / 9);
             if (from === 'Kelvin') c = val - 273.15;
     
+            // Step 2: Convert Celsius to target unit
             if (to === 'Celsius') return c;
             if (to === 'Fahrenheit') return c * (9 / 5) + 32;
             if (to === 'Kelvin') return c + 273.15;
@@ -1450,8 +2200,32 @@
     // Module: src/features/health.js
     // -------------------------------------------------------------------------
     /**
-     * CalVerse Pro - BMI & Health Feature
-     * Body mass index, gauge visualizer, healthy weight range, BMR & TDEE
+     * ============================================================================
+     * CalVerse Pro - BMI & Metabolic Health Engine
+     * File: src/features/health.js
+     * ============================================================================
+     * 
+     * MODULE OVERVIEW:
+     * Computes essential biometric and metabolic health indicators:
+     * 1. Body Mass Index (BMI): Supports Metric (cm, kg) and Imperial (ft/in, lbs) units.
+     * 2. Visual Color Gauge Indicator: Positions the UI pointer dynamically across 4 WHO zones:
+     *    Underweight (<18.5), Normal (18.5-24.9), Overweight (25-29.9), and Obese (>=30).
+     * 3. Ideal Healthy Weight Range: Computes optimal weight bounds based on target BMI 18.5 - 24.9.
+     * 4. Basal Metabolic Rate (BMR): Computes resting energy expenditure via the Mifflin-St Jeor formula.
+     * 5. Total Daily Energy Expenditure (TDEE): Estimates daily caloric maintenance needs.
+     * 
+     * OBJECTS & METHODS PRESENT IN THIS FILE:
+     * HealthEngine:
+     * 1. setUnit(unit):
+     *    - Toggles between 'metric' and 'imperial' input modes and re-runs calculations.
+     * 
+     * 2. calculate():
+     *    - Converts inputs to standard SI units (meters and kilograms).
+     *    - Computes BMI = weight / (height²).
+     *    - Updates gauge pointer percentage position and category status badge.
+     *    - Computes healthy weight range.
+     *    - Computes gender-adjusted Mifflin-St Jeor BMR and activity TDEE.
+     * ============================================================================
      */
     
     
@@ -1459,6 +2233,11 @@
     
     
     const HealthEngine = {
+        /**
+         * Toggles between Metric and Imperial measurement systems.
+         * 
+         * @param {'metric'|'imperial'} unit - Selected measurement unit system.
+         */
         setUnit(unit) {
             state.health.unit = unit;
             document.getElementById('healthMetricBtn').classList.toggle('active', unit === 'metric');
@@ -1472,12 +2251,17 @@
             this.calculate();
         },
     
+        /**
+         * Executes complete biometric calculations: BMI, health category, gauge position,
+         * healthy weight range, Mifflin-St Jeor BMR, and light-activity TDEE.
+         */
         calculate() {
             SoundFx.playClick(600);
             const unit = state.health.unit;
             let heightM = 0;
             let weightKg = 0;
     
+            // Convert user inputs into metric base units (meters & kilograms)
             if (unit === 'metric') {
                 const cm = getFloatVal('healthHeightCm') || 175;
                 weightKg = getFloatVal('healthWeightKg') || 70;
@@ -1493,11 +2277,12 @@
     
             if (heightM <= 0 || weightKg <= 0) return;
     
+            // BMI Formula: weight (kg) / [height (m)]²
             const bmi = weightKg / (heightM * heightM);
             const age = parseInt(document.getElementById('healthAge')?.value, 10) || 25;
             const gender = document.querySelector('input[name="healthGender"]:checked')?.value || 'male';
     
-            // Category
+            // Determine WHO Classification & visual gauge pointer percentage position
             let cat = 'Normal Weight';
             let badgeClass = 'badge-normal';
             let pointerPercent = 45;
@@ -1532,7 +2317,7 @@
             const pointerEl = document.getElementById('bmiPointer');
             if (pointerEl) pointerEl.style.left = `${pointerPercent}%`;
     
-            // Healthy Range: 18.5 to 24.9 BMI
+            // Healthy Weight Range: Target BMI between 18.5 and 24.9
             const minW = (18.5 * heightM * heightM).toFixed(1);
             const maxW = (24.9 * heightM * heightM).toFixed(1);
             const healthyRangeEl = document.getElementById('healthyRangeVal');
@@ -1542,10 +2327,14 @@
                     : `${(minW * 2.20462).toFixed(1)} lbs - ${(maxW * 2.20462).toFixed(1)} lbs`;
             }
     
-            // BMR (Mifflin-St Jeor)
+            // Basal Metabolic Rate (BMR) via Mifflin-St Jeor Equation
+            // Men:   BMR = 10*W + 6.25*H - 5*Age + 5
+            // Women: BMR = 10*W + 6.25*H - 5*Age - 161
             let bmr = (10 * weightKg) + (6.25 * heightM * 100) - (5 * age);
             bmr = gender === 'male' ? bmr + 5 : bmr - 161;
-            const tdee = bmr * 1.375; // light activity baseline
+    
+            // Total Daily Energy Expenditure (TDEE) with light activity factor (1.375x)
+            const tdee = bmr * 1.375;
     
             const bmrEl = document.getElementById('bmrVal');
             if (bmrEl) bmrEl.textContent = `${Math.round(bmr).toLocaleString()} kcal / day`;
@@ -1560,13 +2349,39 @@
     // Module: src/features/date.js
     // -------------------------------------------------------------------------
     /**
-     * CalVerse Pro - Date & Age Feature
-     * Precise duration between dates, chronological age breakdown & date math
+     * ============================================================================
+     * CalVerse Pro - Date & Age Calculation Engine
+     * File: src/features/date.js
+     * ============================================================================
+     * 
+     * MODULE OVERVIEW:
+     * Provides calendar and chronological date algorithms:
+     * 1. Date Duration / Difference: Calculates absolute days, weeks, and hours between two dates.
+     * 2. Chronological Age Breakdown: Computes exact years, months, and days lived from date of birth.
+     * 3. Date Arithmetic: Computes future or past calendar dates by adding or subtracting an arbitrary number of days.
+     * 
+     * OBJECTS & METHODS PRESENT IN THIS FILE:
+     * DateEngine:
+     * 1. init():
+     *    - Defaults date inputs to today's date and runs initial calculations.
+     * 
+     * 2. calculateDiff():
+     *    - Reads 'dateFrom' and 'dateTo', computes the day delta, and updates display badges.
+     * 
+     * 3. calculateAge():
+     *    - Computes exact chronological age taking into account leap years and varying month lengths.
+     * 
+     * 4. calculateAddSub():
+     *    - Adds or subtracts specified days from a seed date and outputs the target weekday and date.
+     * ============================================================================
      */
     
     
     
     const DateEngine = {
+        /**
+         * Initializes default dates to today / year 2000 and calculates initial results.
+         */
         init() {
             const today = new Date().toISOString().split('T')[0];
             const dFrom = document.getElementById('dateFrom');
@@ -1586,6 +2401,9 @@
             this.calculateAddSub();
         },
     
+        /**
+         * Computes the absolute difference in days, weeks, and hours between two calendar dates.
+         */
         calculateDiff() {
             SoundFx.playClick(600);
             const dFromEl = document.getElementById('dateFrom');
@@ -1597,6 +2415,7 @@
     
             if (isNaN(from.getTime()) || isNaN(to.getTime())) return;
     
+            // Calculate absolute time difference in milliseconds
             const diffTime = Math.abs(to - from);
             const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
             const weeks = (diffDays / 7).toFixed(1);
@@ -1609,6 +2428,10 @@
             }
         },
     
+        /**
+         * Calculates exact chronological age (Years, Months, Days) from birthdate up to an 'as of' date.
+         * Accurately borrows days from previous months when day subtraction goes negative.
+         */
         calculateAge() {
             SoundFx.playClick(600);
             const bDateEl = document.getElementById('birthDate');
@@ -1624,11 +2447,13 @@
             let months = asOf.getMonth() - dob.getMonth();
             let days = asOf.getDate() - dob.getDate();
     
+            // Adjust negative day borrowing from previous month
             if (days < 0) {
                 months--;
                 const prevMonthDays = new Date(asOf.getFullYear(), asOf.getMonth(), 0).getDate();
                 days += prevMonthDays;
             }
+            // Adjust negative month borrowing from previous year
             if (months < 0) {
                 years--;
                 months += 12;
@@ -1644,6 +2469,9 @@
             }
         },
     
+        /**
+         * Adds or subtracts days from a specified date and displays the resulting date and day of week.
+         */
         calculateAddSub() {
             SoundFx.playClick(600);
             const asDateEl = document.getElementById('addsubDate');
@@ -1677,8 +2505,50 @@
     // Module: src/features/time.js
     // -------------------------------------------------------------------------
     /**
-     * CalVerse Pro - Time & Stopwatch Feature
-     * Time unit keypad, duration calculator, time math, epoch timestamps & stopwatch with lap tracking
+     * ============================================================================
+     * CalVerse Pro - Time Calculation & Stopwatch Engine
+     * File: src/features/time.js
+     * ============================================================================
+     * 
+     * MODULE OVERVIEW:
+     * A multi-tool temporal calculation and chronometer engine:
+     * 1. Time Unit Keypad: Dedicated keypad accepting hours, minutes, seconds, and milliseconds
+     *    with direct arithmetic expressions (e.g., "2hour 35min + 45min").
+     *    Supports multiple format output views: Hours/Minutes/Seconds (HMS), Decimal Hours,
+     *    Total Minutes, and Total Seconds.
+     * 2. Time Duration & Shift: Computes elapsed duration between clock times (e.g. 09:30 to 18:15)
+     *    and shifts times forward or backward.
+     * 3. Unix Epoch Converter: Real-time live UTC epoch counter with bidirectional date-to-epoch
+     *    and epoch-to-date converters.
+     * 4. Precision Digital Stopwatch: Millisecond chronometer with Lap times recording,
+     *    fastest/slowest lap highlighting, and clipboard export.
+     * 
+     * OBJECTS & METHODS PRESENT IN THIS FILE:
+     * TimeEngine:
+     * 1. init(): Initializes default keypad screens, computes duration, and starts live epoch ticker.
+     * 2. Keypad Subsystem:
+     *    - inputKeypad(val): Handles numeric digits and operator buttons.
+     *    - inputUnit(unit): Appends temporal unit token ('hour', 'min', 'sec', 'm.sec').
+     *    - clearKeypad(): Resets keypad expression buffer.
+     *    - backspaceKeypad(): Removes last character or temporal unit word.
+     *    - updateKeypadScreen(): Synchronizes expression preview DOM element.
+     *    - calculateKeypad(recordHistory): Evaluates time tokens to total seconds and formats display.
+     *    - toggleFormat(): Cycles output mode through HMS -> Decimal Hours -> Total Minutes -> Total Seconds.
+     *    - copyKeypadResult(): Copies current keypad result to clipboard.
+     * 3. Duration & Arithmetic:
+     *    - calculateDuration(): Computes elapsed difference between start and end clock times.
+     *    - calculateMath(): Computes target clock time by adding/subtracting hours/minutes.
+     * 4. Epoch Timestamps:
+     *    - startEpochTicker(): Starts 1-second interval updating current live Unix epoch.
+     *    - convertEpochToDate(): Converts numeric epoch timestamp to UTC/Local date string.
+     *    - convertDateToEpoch(): Converts datetime picker value to integer Unix epoch seconds.
+     * 5. Stopwatch:
+     *    - startStopwatch(): Starts requestAnimationFrame/interval timer.
+     *    - pauseStopwatch(): Freezes elapsed time counter.
+     *    - resetStopwatch(): Resets timer and clears recorded laps.
+     *    - recordLap(): Stores split and cumulative lap records.
+     *    - renderLaps(): Renders lap table DOM.
+     * ============================================================================
      */
     
     
@@ -2095,8 +2965,49 @@
     // Module: src/features/discount.js
     // -------------------------------------------------------------------------
     /**
-     * CalVerse Pro - Discount & Tip Feature
-     * Shopping savings, sales tax, coupon reduction & bill splitting with tip
+     * ============================================================================
+     * CalVerse Pro - Discount, Tax & Tip Calculation Engine
+     * File: src/features/discount.js
+     * ============================================================================
+     * 
+     * MODULE OVERVIEW:
+     * Handles shopping discount calculations, multi-tier coupon reductions, sales tax,
+     * restaurant tipping, and multi-person bill splitting. Provides instantaneous
+     * currency-aware feedback and clipboard summary generation.
+     * 
+     * OBJECTS & METHODS PRESENT IN THIS FILE:
+     * DiscountEngine:
+     * 1. init():
+     *    - Loads persisted currency preference from localStorage and runs initial evaluations.
+     * 
+     * 2. setCurrency(code):
+     *    - Changes active currency, updates input label symbols, and re-renders results.
+     * 
+     * 3. formatMoney(amount):
+     *    - Delegates monetary formatting to the core formatMoney utility using the active currency.
+     * 
+     * 4. updateLabels():
+     *    - Dynamically updates UI input labels with the active currency symbol.
+     * 
+     * 5. calculateDiscount():
+     *    - Computes final price after primary discount %, extra coupon %, and sales tax %.
+     *    - Calculates absolute and relative monetary savings.
+     * 
+     * 6. setDiscountPct(val):
+     *    - Quick preset button handler for standard discount percentages (e.g. 10%, 20%, 50%).
+     * 
+     * 7. calculateTip():
+     *    - Computes total tip amount, grand total, and per-person split amounts.
+     * 
+     * 8. setTipPct(val):
+     *    - Quick preset button handler for standard tip percentages (10%, 15%, 20%).
+     * 
+     * 9. stepTipPeople(delta):
+     *    - Increments or decrements the number of persons splitting the bill (clamped 1-100).
+     * 
+     * 10. copyTipSummary():
+     *     - Generates and copies a cleanly formatted text receipt to the system clipboard.
+     * ============================================================================
      */
     
     
@@ -2105,8 +3016,12 @@
     
     
     const DiscountEngine = {
+        /** Currently active currency code (persisted in localStorage) */
         currentCurrency: localStorage.getItem('calverse_disc_currency') || 'INR',
     
+        /**
+         * Initializes currency selection, updates DOM labels, and performs initial calculations.
+         */
         init() {
             const curSelect = document.getElementById('discCurrencySelect');
             if (curSelect) {
@@ -2117,6 +3032,11 @@
             this.calculateTip();
         },
     
+        /**
+         * Switches the active currency, saves to localStorage, and updates UI representations.
+         * 
+         * @param {string} code - ISO 4217 currency code (e.g., 'INR', 'USD', 'EUR').
+         */
         setCurrency(code) {
             if (CURRENCY_CONFIG[code]) {
                 this.currentCurrency = code;
@@ -2130,10 +3050,19 @@
             }
         },
     
+        /**
+         * Helper to format amounts using the active discount currency.
+         * 
+         * @param {number} amount - Numeric amount to format.
+         * @returns {string} Formatted localized currency string.
+         */
         formatMoney(amount) {
             return formatMoney(amount, this.currentCurrency);
         },
     
+        /**
+         * Synchronizes form input labels to reflect the active currency symbol.
+         */
         updateLabels() {
             const conf = CURRENCY_CONFIG[this.currentCurrency] || CURRENCY_CONFIG.INR;
             const origLabel = document.getElementById('discOriginalPriceLabel');
@@ -2143,6 +3072,13 @@
             if (tipBillLabel) tipBillLabel.textContent = `Bill Amount (${conf.symbol.trim()})`;
         },
     
+        /**
+         * Calculates compounded discount, coupon reductions, and tax additions.
+         * Formula:
+         *   afterDiscount = original - (original * discountPct / 100)
+         *   afterCoupon   = afterDiscount - (afterDiscount * couponPct / 100)
+         *   finalPrice    = afterCoupon + (afterCoupon * taxPct / 100)
+         */
         calculateDiscount() {
             const orig = parseFloat(document.getElementById('discOriginalPrice')?.value) || 0;
             const pct = parseFloat(document.getElementById('discPercent')?.value) || 0;
@@ -2179,12 +3115,18 @@
             if (origEl) origEl.textContent = formattedOrig;
             if (amtEl) amtEl.textContent = `-${formattedDiscAmt}`;
     
+            // Toggle visibility of optional breakdown rows
             if (coupRow) coupRow.style.display = coup > 0 ? 'flex' : 'none';
             if (coupEl) coupEl.textContent = `-${formattedCoupAmt}`;
             if (taxRow) taxRow.style.display = tax > 0 ? 'flex' : 'none';
             if (taxEl) taxEl.textContent = `+${formattedTaxAmt}`;
         },
     
+        /**
+         * Applies a quick percentage preset chip to the discount input.
+         * 
+         * @param {number} val - Discount percentage (e.g., 10, 20, 50).
+         */
         setDiscountPct(val) {
             SoundFx.playClick(600);
             const el = document.getElementById('discPercent');
@@ -2194,6 +3136,9 @@
             this.calculateDiscount();
         },
     
+        /**
+         * Calculates bill tip, grand total, and per-person split amounts.
+         */
         calculateTip() {
             const bill = parseFloat(document.getElementById('tipBillAmount')?.value) || 0;
             const tipPct = parseFloat(document.getElementById('tipPercent')?.value) || 0;
@@ -2225,6 +3170,11 @@
             if (peopleEl) peopleEl.textContent = people.toString();
         },
     
+        /**
+         * Applies a quick percentage preset chip to the tip input.
+         * 
+         * @param {number} val - Tip percentage (e.g., 10, 15, 20).
+         */
         setTipPct(val) {
             SoundFx.playClick(600);
             const el = document.getElementById('tipPercent');
@@ -2234,6 +3184,11 @@
             this.calculateTip();
         },
     
+        /**
+         * Adjusts the number of people splitting the bill.
+         * 
+         * @param {number} delta - Positive or negative integer step (+1 or -1).
+         */
         stepTipPeople(delta) {
             SoundFx.playClick(500);
             const el = document.getElementById('tipPeopleCount');
@@ -2244,6 +3199,9 @@
             this.calculateTip();
         },
     
+        /**
+         * Copies a clean ASCII bill receipt to the clipboard for sharing with friends.
+         */
         copyTipSummary() {
             const bill = document.getElementById('tipTotalBillShow')?.textContent || this.formatMoney(0);
             const tip = document.getElementById('tipTotalTipShow')?.textContent || this.formatMoney(0);
@@ -2261,17 +3219,56 @@
     // Module: src/features/equations.js
     // -------------------------------------------------------------------------
     /**
-     * CalVerse Pro - Equation & Algebra Feature
-     * Quadratic roots & vertex solver, 2x2 linear systems & rational fraction reducer
+     * ============================================================================
+     * CalVerse Pro - Equation & Algebra Engine
+     * File: src/features/equations.js
+     * ============================================================================
+     * 
+     * MODULE OVERVIEW:
+     * Solves polynomial, linear, and rational algebraic problems with full
+     * pedagogical step-by-step mathematical breakdowns:
+     * 1. Quadratic Equation Solver: Solves ax² + bx + c = 0, calculates discriminant Δ,
+     *    identifies real/complex roots, and computes parabola vertex (h, k).
+     * 2. 2x2 Linear System Solver: Solves simultaneous linear equations via Cramer's Rule
+     *    with determinant analysis (unique solution, coincident infinite solutions, parallel).
+     * 3. Rational Fraction Engine: Adds, subtracts, multiplies, and divides fractions,
+     *    simplifies via Euclidean Greatest Common Divisor (GCD), and computes mixed numbers.
+     * 
+     * OBJECTS & METHODS PRESENT IN THIS FILE:
+     * EquationEngine:
+     * 1. init():
+     *    - Triggers initial solutions for quadratic, linear, and fraction engines.
+     * 
+     * 2. solveQuadratic():
+     *    - Reads a, b, c; calculates discriminant D; computes roots (real or complex with imaginary unit i);
+     *      computes parabola vertex (h, k); writes step-by-step explanations.
+     * 
+     * 3. updateLiveEquation(a, b, c):
+     *    - Dynamically formats the live LaTeX-style equation preview label with correct signs.
+     * 
+     * 4. solveLinearSystem():
+     *    - Solves a1*x + b1*y = c1 and a2*x + b2*y = c2 using Cramer's Rule determinants D, Dx, Dy.
+     * 
+     * 5. calculateFraction():
+     *    - Computes rational fractions (n1/d1) [+, -, *, /] (n2/d2), simplifies via GCD Euclidean
+     *      algorithm, formats mixed fractions and decimal approximations.
+     * ============================================================================
      */
     
     const EquationEngine = {
+        /**
+         * Solves initial quadratic, linear, and fraction equations on boot.
+         */
         init() {
             this.solveQuadratic();
             this.solveLinearSystem();
             this.calculateFraction();
         },
     
+        /**
+         * Solves the quadratic equation ax² + bx + c = 0.
+         * Computes discriminant Δ = b² - 4ac, real/complex roots, and parabola vertex (h, k).
+         */
         solveQuadratic() {
             const a = parseFloat(document.getElementById('quadA')?.value);
             const b = parseFloat(document.getElementById('quadB')?.value);
@@ -2283,11 +3280,12 @@
             const stepForm = document.getElementById('quadStepFormula');
             const stepVert = document.getElementById('quadStepVertex');
     
-            // Update live equation preview
+            // Update live formula preview banner
             this.updateLiveEquation(a, b, c);
     
             if (isNaN(a) || isNaN(b) || isNaN(c)) return;
     
+            // Linear degenerate case (a = 0)
             if (a === 0) {
                 if (b !== 0) {
                     const x = (-c / b).toFixed(4);
@@ -2303,12 +3301,14 @@
                 return;
             }
     
+            // Quadratic analysis
             const D = b * b - 4 * a * c;
             const h = -b / (2 * a);
             const k = c - (b * b) / (4 * a);
             const opens = a > 0 ? 'Opens Upward (Minimum)' : 'Opens Downward (Maximum)';
     
             if (D > 0) {
+                // Case 1: Two distinct real roots
                 const x1 = ((-b + Math.sqrt(D)) / (2 * a)).toFixed(4);
                 const x2 = ((-b - Math.sqrt(D)) / (2 * a)).toFixed(4);
                 if (r1El) r1El.textContent = x1;
@@ -2317,6 +3317,7 @@
                 if (stepForm) stepForm.innerHTML = `<span class="step-num">2.</span> Quadratic Formula: x = (−(${b}) ± √${D}) / (2 × ${a}) → x₁ = ${x1}, x₂ = ${x2}`;
                 if (stepVert) stepVert.innerHTML = `<span class="step-num">3.</span> Vertex: (h, k) = (${h.toFixed(2)}, ${k.toFixed(2)}) • ${opens}`;
             } else if (D === 0) {
+                // Case 2: One repeated real root
                 const x = ((-b) / (2 * a)).toFixed(4);
                 if (r1El) r1El.textContent = x;
                 if (r2El) r2El.textContent = `${x} (Double Root)`;
@@ -2324,6 +3325,7 @@
                 if (stepForm) stepForm.innerHTML = `<span class="step-num">2.</span> Root: x = −(${b}) / (2 × ${a}) = ${x}`;
                 if (stepVert) stepVert.innerHTML = `<span class="step-num">3.</span> Vertex: (h, k) = (${h.toFixed(2)}, ${k.toFixed(2)}) • ${opens}`;
             } else {
+                // Case 3: Complex conjugate roots (imaginary unit i)
                 const realPart = ((-b) / (2 * a)).toFixed(4);
                 const imagPart = ((Math.sqrt(-D)) / (2 * Math.abs(a))).toFixed(4);
                 if (r1El) r1El.textContent = `${realPart} + ${imagPart}i`;
@@ -2334,6 +3336,9 @@
             }
         },
     
+        /**
+         * Updates the dynamic equation text preview to show current coefficients with correct signs.
+         */
         updateLiveEquation(a, b, c) {
             const el = document.getElementById('quadLiveEqText');
             if (!el) return;
@@ -2347,6 +3352,11 @@
             el.textContent = `${aVal}x² ${bSign} ${bAbs}x ${cSign} ${cAbs} = 0`;
         },
     
+        /**
+         * Solves a 2x2 system of linear equations using Cramer's Rule:
+         *   a1*x + b1*y = c1
+         *   a2*x + b2*y = c2
+         */
         solveLinearSystem() {
             const a1 = parseFloat(document.getElementById('linA1')?.value);
             const b1 = parseFloat(document.getElementById('linB1')?.value);
@@ -2363,6 +3373,7 @@
     
             if ([a1, b1, c1, a2, b2, c2].some(isNaN)) return;
     
+            // Cramer's determinants
             const D = a1 * b2 - a2 * b1;
             const Dx = c1 * b2 - c2 * b1;
             const Dy = a1 * c2 - a2 * c1;
@@ -2388,6 +3399,10 @@
             }
         },
     
+        /**
+         * Performs fraction arithmetic and Euclidean GCD reduction:
+         * (n1/d1) [op] (n2/d2) -> reduced fraction, mixed fraction, and decimal.
+         */
         calculateFraction() {
             const n1 = parseInt(document.getElementById('fracNum1')?.value, 10);
             const d1 = parseInt(document.getElementById('fracDen1')?.value, 10);
@@ -2427,17 +3442,19 @@
                 den = d1 * n2;
             }
     
+            // Standardize negative sign to numerator
             if (den < 0) {
                 num = -num;
                 den = -den;
             }
     
+            // Euclidean Greatest Common Divisor
             const gcd = (a, b) => b === 0 ? Math.abs(a) : gcd(b, a % b);
             const common = gcd(num, den);
             const simNum = num / common;
             const simDen = den / common;
     
-            // Mixed fraction
+            // Mixed fraction formatting (e.g. 7/2 -> 3 1/2)
             let mixedStr = '';
             if (Math.abs(simNum) >= simDen && simDen !== 1) {
                 const whole = Math.trunc(simNum / simDen);
@@ -2464,8 +3481,41 @@
     // Module: src/features/statistics.js
     // -------------------------------------------------------------------------
     /**
-     * CalVerse Pro - Statistics & Data Analyzer Feature
-     * Statistical metrics (Mean, Median, Mode, Variance, StdDev, IQR) & HTML5 Canvas visual charts (Bars, Boxplot, Histogram)
+     * ============================================================================
+     * CalVerse Pro - Statistical Analysis & Data Visualization Engine
+     * File: src/features/statistics.js
+     * ============================================================================
+     * 
+     * MODULE OVERVIEW:
+     * A comprehensive statistical analytics and 2D canvas visualization engine:
+     * 1. Descriptive Statistics: Computes Sample & Population Mean, Median, Mode(s),
+     *    Sample Variance (s²), Population Variance (σ²), Sample Standard Deviation (s),
+     *    Population Standard Deviation (σ), Min, Max, Range, Quartiles (Q1, Q3), and IQR.
+     * 2. Five-Number Summary: Computes Min, Q1, Median, Q3, Max with Tukey IQR bounds.
+     * 3. 2D HTML5 Canvas Visualizations:
+     *    - Mode 1 ('bars'): Individual data point vertical bar charts with mean/median guide lines.
+     *    - Mode 2 ('boxplot'): Horizontal Tukey box-and-whisker plot highlighting outliers, IQR box,
+     *      and median line.
+     *    - Mode 3 ('histogram'): Binned frequency distribution with Scott/Sturges auto-binning.
+     * 4. Dataset Presets & Clipboard Export: Quick dataset presets (test scores, temperatures, heights)
+     *    and formatted markdown summary copying.
+     * 
+     * OBJECTS & METHODS PRESENT IN THIS FILE:
+     * StatisticsEngine:
+     * 1. init(): Binds canvas, sets up resize listener, and computes initial dataset stats.
+     * 2. setChartMode(mode): Switches visualization between 'bars', 'boxplot', and 'histogram'.
+     * 3. calculateStats(): Parses comma/space/line delimited raw data, calculates statistical metrics,
+     *    and refreshes the canvas plot.
+     * 4. updateMetrics(d): Populates DOM statistic summary badges with formatted numbers.
+     * 5. clearCanvas(): Clears the HTML5 2D canvas buffer.
+     * 6. renderChart(...): Dispatches rendering to the active chart mode renderer.
+     * 7. renderBarsChart(...): Paints individual bar heights with horizontal mean/median reference lines.
+     * 8. renderBoxplotChart(...): Paints horizontal Tukey box-and-whisker diagram with IQR brackets.
+     * 9. renderHistogramChart(...): Bins data values and draws frequency bars.
+     * 10. loadPreset(type): Loads sample educational datasets (scores, temps, heights, random).
+     * 11. clearData(): Clears input and resets metric badges.
+     * 12. copySummary(): Formats statistical summary into a clean clipboard text block.
+     * ============================================================================
      */
     
     
@@ -3118,8 +4168,34 @@
     // Module: src/ui/theme.js
     // -------------------------------------------------------------------------
     /**
-     * CalVerse Pro - Theme Controller
-     * Dual-theme architecture (Dark Obsidian / Light), OS mood synchronization & persistent storage
+     * ============================================================================
+     * CalVerse Pro - Theme Controller & OS Mood Synchronization
+     * File: src/ui/theme.js
+     * ============================================================================
+     * 
+     * MODULE OVERVIEW:
+     * Controls the dual-theme visual appearance of CalVerse:
+     * 1. Themes:
+     *    - Dark Obsidian (#0a0e17): Premium OLED dark mode with neon accents.
+     *    - Modern Light (#f1f5f9): High-contrast clean daylight interface.
+     * 2. Mobile OS Status Bar Integration: Dynamically updates the <meta name="theme-color">
+     *    tag to seamlessly color the mobile browser status and notch bar.
+     * 3. System Preferences & Persistence: Automatically synchronizes with OS light/dark
+     *    color schemes (matchMedia) and persists user manual override in localStorage.
+     * 4. Canvas Refresh: Triggers immediate re-rendering of Graphing and Statistics
+     *    canvas charts so grid lines and text colors instantly adapt to the active theme.
+     * 
+     * FUNCTIONS PRESENT IN THIS FILE:
+     * 1. applyTheme(themeName):
+     *    - Toggles .light-theme and .dark-theme CSS classes on document.body and documentElement.
+     *    - Updates toggle button icon and text label.
+     *    - Updates meta theme-color tag.
+     *    - Redraws active canvas curves and plots.
+     * 
+     * 2. initTheme():
+     *    - Loads saved preference from localStorage or detects OS preference via matchMedia.
+     *    - Attaches live OS scheme change listeners and toggle button click handlers.
+     * ============================================================================
      */
     
     
@@ -3127,6 +4203,11 @@
     
     
     
+    /**
+     * Applies the requested visual theme to the DOM and synchronizes platform indicators.
+     * 
+     * @param {'light'|'dark'} themeName - Target theme identifier.
+     */
     function applyTheme(themeName) {
         const isLight = themeName === 'light';
         document.body.classList.toggle('light-theme', isLight);
@@ -3141,20 +4222,23 @@
         if (themeIcon) themeIcon.textContent = isLight ? '🌙' : '☀️';
         if (themeText) themeText.textContent = isLight ? 'Dark Mode' : 'Light Mode';
         
-        // Sync mobile OS status bar color
+        // Sync mobile browser status bar tint color
         const themeMeta = document.querySelector('meta[name="theme-color"]');
         if (themeMeta) {
             themeMeta.setAttribute('content', isLight ? '#f1f5f9' : '#0a0e17');
         }
     
-        // Remember this mood for next app open
+        // Persist user theme choice for subsequent sessions
         try { localStorage.setItem('calverse_last_theme', isLight ? 'light' : 'dark'); } catch(e) {}
     
-        // Redraw charts if active
+        // Redraw canvas graphs and statistical diagrams to match theme contrast
         if (state.currentMode === 'graphing' && typeof GraphEngine !== 'undefined') GraphEngine.render();
         if (state.currentMode === 'statistics' && typeof StatisticsEngine !== 'undefined') StatisticsEngine.calculateStats();
     }
     
+    /**
+     * Initializes theme engine: restores saved theme, hooks OS changes, and attaches toggle button.
+     */
     function initTheme() {
         const saved = localStorage.getItem('calverse_last_theme');
         if (saved) {
@@ -3164,7 +4248,7 @@
             applyTheme(prefersLight ? 'light' : 'dark');
         }
     
-        // Listen for LIVE OS theme switches (e.g. phone sunrise/sunset auto mode)
+        // Listen for live OS theme changes (e.g. automatic sunset light/dark toggle)
         if (window.matchMedia) {
             const colorSchemeMedia = window.matchMedia('(prefers-color-scheme: light)');
             colorSchemeMedia.addEventListener('change', (e) => {
@@ -3172,7 +4256,7 @@
             });
         }
     
-        // Toggle button: switches theme and saves for next visit
+        // Manual theme toggle button listener
         const themeBtn = document.getElementById('themeToggleBtn');
         if (themeBtn) {
             themeBtn.addEventListener('click', () => {
@@ -3188,10 +4272,26 @@
     // Module: src/ui/clock.js
     // -------------------------------------------------------------------------
     /**
-     * CalVerse Pro - Sidebar Live Clock & Calendar
-     * Real-time time display with auto-updating second ticks
+     * ============================================================================
+     * CalVerse Pro - Sidebar Live Clock & Calendar Controller
+     * File: src/ui/clock.js
+     * ============================================================================
+     * 
+     * MODULE OVERVIEW:
+     * Renders real-time digital clock time (HH:MM:SS AM/PM) and calendar date
+     * (e.g. "Wed, Oct 7") inside the bottom desktop sidebar and mobile navigation drawer.
+     * Automatically updates every 1,000 milliseconds using a background interval timer.
+     * 
+     * FUNCTIONS PRESENT IN THIS FILE:
+     * 1. initSidebarClock():
+     *    - Finds clock DOM elements (#sidebarLiveClock and #sidebarLiveDate), performs
+     *      immediate render, and schedules a 1-second recurring interval tick.
+     * ============================================================================
      */
     
+    /**
+     * Initializes and starts the sidebar real-time clock and calendar date ticker.
+     */
     function initSidebarClock() {
         const timeEl = document.getElementById('sidebarLiveClock');
         const dateEl = document.getElementById('sidebarLiveDate');
@@ -3211,8 +4311,31 @@
     // Module: src/ui/keyboard.js
     // -------------------------------------------------------------------------
     /**
-     * CalVerse Pro - Keyboard Shortcuts Controller
-     * Global physical and virtual keyboard event routing
+     * ============================================================================
+     * CalVerse Pro - Keyboard Shortcuts & Hotkey Router
+     * File: src/ui/keyboard.js
+     * ============================================================================
+     * 
+     * MODULE OVERVIEW:
+     * Listens for hardware keyboard keydown events and routes them intelligently
+     * to the appropriate calculator subsystem based on the active view mode:
+     * 1. Standard & Scientific Modes:
+     *    - Maps numeric keys (0-9) and '.' to display entries.
+     *    - Maps arithmetic keys (+, -, *, /, %) to visual mathematical glyphs (+, −, ×, ÷, %).
+     *    - Maps 'Enter' or '=' to evaluate the expression.
+     *    - Maps 'Backspace' to delete the last character.
+     *    - Maps 'Escape', 'c', or 'C' to clear.
+     * 2. Programmer Mode:
+     *    - Maps hex/dec/bin digits (0-9, A-F).
+     *    - Maps Enter to calculate bitwise operation, Backspace to delete, Escape to clear.
+     * 3. Focus Guard:
+     *    - Automatically ignores hotkeys when the user is actively focused in an <input>,
+     *      <select>, or <textarea> element (e.g., typing inside the graphing formula input).
+     * 
+     * FUNCTIONS PRESENT IN THIS FILE:
+     * 1. initKeyboard():
+     *    - Registers the global window 'keydown' event listener and routes key presses.
+     * ============================================================================
      */
     
     
@@ -3220,9 +4343,12 @@
     
     
     
+    /**
+     * Initializes global hardware keyboard hotkey routing.
+     */
     function initKeyboard() {
         window.addEventListener('keydown', (e) => {
-            // Ignore when focused in text/number input
+            // Prevent hotkeys from interfering when the user is typing in form inputs
             if (['INPUT', 'SELECT', 'TEXTAREA'].includes(document.activeElement.tagName)) {
                 if (e.key === 'Enter' && state.currentMode === 'graphing') {
                     GraphEngine.render();
@@ -3232,6 +4358,7 @@
     
             const key = e.key;
     
+            // Route Standard and Scientific calculator keystrokes
             if (state.currentMode === 'standard' || state.currentMode === 'scientific') {
                 const mode = state.currentMode;
                 if (!isNaN(key) && key !== ' ') {
@@ -3256,7 +4383,9 @@
                 } else if (key === 'Escape' || key === 'c' || key === 'C') {
                     clear(mode);
                 }
-            } else if (state.currentMode === 'programmer') {
+            } 
+            // Route Programmer calculator keystrokes
+            else if (state.currentMode === 'programmer') {
                 if (/^[0-9A-Fa-f]$/.test(key)) {
                     ProgrammerEngine.inputDigit(key.toUpperCase());
                 } else if (key === 'Enter' || key === '=') {
@@ -3276,8 +4405,31 @@
     // Module: src/ui/navigation.js
     // -------------------------------------------------------------------------
     /**
+     * ============================================================================
      * CalVerse Pro - Navigation & UI Shell Router
-     * Sidebar management, mode switching, subtabs navigation & history drawer
+     * File: src/ui/navigation.js
+     * ============================================================================
+     * 
+     * MODULE OVERVIEW:
+     * Coordinates the application shell, layout, and screen transitions:
+     * 1. Sidebar Drawer: Controls slide-out navigation for mobile and desktop, hamburger button,
+     *    and background backdrop dimming.
+     * 2. Calculator Mode Router: Switches active view among the 12 calculator tools, updates top
+     *    app bar titles, and lazily mounts engine lifecycles.
+     * 3. Subtab Navigation: Swaps inner view tabs (e.g. Loan EMI vs SIP vs Currency in Financial).
+     * 4. Audio Feedback Toggle: Manages sound toggle button icon, label, and persistent localStorage setting.
+     * 5. Calculation History Drawer: Slides out calculation history panel with tap-to-paste listeners.
+     * 
+     * FUNCTIONS PRESENT IN THIS FILE:
+     * 1. initNavigation():
+     *    - Binds sidebar open/close events, navigation item clicks, subtab switchers,
+     *      sound toggle button, history drawer toggle, and clipboard copy buttons.
+     * 
+     * 2. switchMode(mode):
+     *    - Transitions the UI to the requested calculator view mode.
+     *    - Updates header title and subtitle via TITLES dictionary.
+     *    - Lazily awakens and initializes the target engine (e.g. GraphEngine.init(), TimeEngine.init()).
+     * ============================================================================
      */
     
     
@@ -3297,6 +4449,9 @@
     
     
     
+    /**
+     * Initializes shell navigation controls, mobile drawer, subtabs, and global toggles.
+     */
     function initNavigation() {
         const navItems = document.querySelectorAll('.nav-item');
         const sidebar = document.getElementById('sidebar');
@@ -3314,6 +4469,7 @@
             if (sidebarOverlay) sidebarOverlay.classList.remove('open');
         };
     
+        // Mobile Hamburger Toggle
         if (mobileBtn) {
             mobileBtn.addEventListener('click', () => {
                 if (sidebar.classList.contains('open')) {
@@ -3332,6 +4488,7 @@
             sidebarOverlay.addEventListener('click', closeSidebar);
         }
     
+        // Sidebar navigation items
         navItems.forEach(item => {
             item.addEventListener('click', () => {
                 const mode = item.dataset.mode;
@@ -3340,7 +4497,7 @@
             });
         });
     
-        // Subtabs
+        // Subtabs switcher within complex calculators (Financial, Discount, Time, Equations)
         document.querySelectorAll('.sub-tabs').forEach(container => {
             const tabs = container.querySelectorAll('.sub-tab');
             tabs.forEach(tab => {
@@ -3371,7 +4528,7 @@
         // Theme initialization
         initTheme();
     
-        // Sound Toggle
+        // Sound Toggle Controller
         const soundBtn = document.getElementById('soundToggleBtn');
         const soundIcon = document.getElementById('soundIcon');
         const soundText = soundBtn ? soundBtn.querySelector('.btn-text') : null;
@@ -3392,7 +4549,7 @@
             });
         }
     
-        // History Drawer
+        // Calculation History Drawer Toggle
         const historyDrawer = document.getElementById('historyDrawer');
         const drawerOverlay = document.getElementById('drawerOverlay');
         const toggleHistory = () => {
@@ -3412,25 +4569,33 @@
         if (closeHistBtn) closeHistBtn.addEventListener('click', toggleHistory);
         if (drawerOverlay) drawerOverlay.addEventListener('click', toggleHistory);
     
-        // Copy buttons
+        // Quick Copy Display Buttons
         const stdCopy = document.getElementById('stdCopyBtn');
         const sciCopy = document.getElementById('sciCopyBtn');
         if (stdCopy) stdCopy.addEventListener('click', () => copyToClipboard(document.getElementById('stdDisplay')?.value));
         if (sciCopy) sciCopy.addEventListener('click', () => copyToClipboard(document.getElementById('sciDisplay')?.value));
     }
     
+    /**
+     * Switches the active calculator view, updates app bar header, and wakes target engine.
+     * 
+     * @param {string} mode - Calculator view key (e.g. 'standard', 'scientific', 'graphing', etc.).
+     */
     function switchMode(mode) {
         SoundFx.playClick(700);
         state.currentMode = mode;
     
+        // Toggle active sidebar indicator
         document.querySelectorAll('.nav-item').forEach(item => {
             item.classList.toggle('active', item.dataset.mode === mode);
         });
     
+        // Toggle main calculator view visibility
         document.querySelectorAll('.calculator-view').forEach(view => {
             view.classList.toggle('active', view.id === `view-${mode}`);
         });
     
+        // Update Top App Bar Header & Subtitle
         if (TITLES[mode]) {
             const titleEl = document.getElementById('calculatorTitle');
             const subtitleEl = document.getElementById('calculatorSubtitle');
@@ -3438,6 +4603,7 @@
             if (subtitleEl) subtitleEl.textContent = TITLES[mode].subtitle;
         }
     
+        // Lazy initialization & refresh of engine calculations
         if (mode === 'graphing') {
             setTimeout(() => GraphEngine.init(), 50);
         } else if (mode === 'financial') {
@@ -3467,8 +4633,38 @@
     // Module: src/ui/pwa.js
     // -------------------------------------------------------------------------
     /**
-     * CalVerse Pro - PWA & Platform Controller
-     * Installation modal, OS installer generation (.exe, .mobileconfig), Service Worker sync & offline events
+     * ============================================================================
+     * CalVerse Pro - Progressive Web App (PWA) & Platform Controller
+     * File: src/ui/pwa.js
+     * ============================================================================
+     * 
+     * MODULE OVERVIEW:
+     * Manages native app installation and platform-specific offline synchronization:
+     * 1. PWA Installation Prompt: Captures 'beforeinstallprompt' events and triggers
+     *    the browser's native installation sheet.
+     * 2. Cross-Platform App Generators:
+     *    - Windows (.exe): Generates a standalone launcher script package.
+     *    - iOS Apple WebClip (.mobileconfig): Dynamically generates an Apple XML
+     *      configuration profile for full-screen Home Screen installation on Safari iOS.
+     * 3. Network Lifecycle Auto-Sync: Listens for window 'online' and 'offline' events,
+     *    triggers immediate Service Worker update checks, and refreshes financial rates.
+     * 4. Mobile Overscroll Protection: Carefully cancels viewport pull-to-refresh
+     *    while preserving scroll freedom inside sidebars, drawers, and modal dialogs.
+     * 
+     * OBJECTS & FUNCTIONS PRESENT IN THIS FILE:
+     * PWAController:
+     * - openInstallModal(): Opens the modal dialog or triggers PWA prompt if available.
+     * - closeInstallModal(): Dismisses the installation modal backdrop.
+     * - downloadDetectedApp(): Detects user OS via navigator.userAgent and initiates installer.
+     * - installAndroidApp(): Triggers native Android Chrome install banner.
+     * - downloadExe(): Packages and triggers download of CalVerse-Setup.exe for Windows.
+     * - downloadIosProfile(): Generates and downloads CalVerse.mobileconfig for Apple iOS.
+     * - triggerPwaPrompt(): Invokes deferred browser prompt.
+     * 
+     * initPWA():
+     * - Registers service worker (sw.js), checks for updates, listens for online/offline events,
+     *   and guards pull-to-refresh on mobile viewports.
+     * ============================================================================
      */
     
     
@@ -3752,8 +4948,44 @@
     // Module: src/main.js
     // -------------------------------------------------------------------------
     /**
-     * CalVerse Pro - Main Application Entry Point
-     * Orchestrates all modular subsystems & exports public window.CalVerse API
+     * ============================================================================
+     * CalVerse Pro - Main Application Entry Point & Global Public API
+     * File: src/main.js
+     * ============================================================================
+     * 
+     * MODULE OVERVIEW:
+     * The orchestrator and bootstrapper of the entire CalVerse Pro suite.
+     * 1. Module Aggregator: Imports the 12 feature engines, 7 core utility services,
+     *    and 5 UI presentation controllers.
+     * 2. Public API Surface: Assembles the public `CalVerse` namespace object and attaches
+     *    it directly to `window.CalVerse`, ensuring 100% backward compatibility with
+     *    all inline HTML element event listeners (onclick="CalVerse.xxx()").
+     * 3. Lifecycle Bootstrapper: Listens for document 'DOMContentLoaded' and initializes
+     *    audio auto-unlock, navigation shell, physical keyboard hotkeys, financial defaults,
+     *    algebra solvers, statistics models, history drawers, live clocks, and PWA workers.
+     * 
+     * EXPOSED GLOBAL API METHODS (window.CalVerse):
+     * - Navigation: switchMode(mode)
+     * - Standard & Scientific: inputVal, inputFunc, clear, backspace, toggleSign, calculate,
+     *   memClear, memRecall, memStore, memAdd, memSub, toggleAngleMode, clearHistory
+     * - Graphing: plotGraph, setGraphPreset, zoomGraph, resetGraph
+     * - Financial: calculateEMI, calculateCompound, setFinancialCurrency, refreshExchangeRates,
+     *   convertCurrency, swapCurrencyUnits, setQuickPair
+     * - Programmer: setRadix, setWordSize, inputProgDigit, inputProgBitwise, inputProgOp,
+     *   calculateProg, toggleProgSign
+     * - Health: setHealthUnit, calculateHealth
+     * - Date: calculateDateDiff, calculateAge, calculateAddSubDate
+     * - Time: inputTimeKeypad, inputTimeUnit, clearTimeKeypad, backspaceTimeKeypad,
+     *   calculateTimeKeypad, toggleTimeResultFormat, copyTimeKeypadResult, calculateTimeDuration,
+     *   calculateTimeMath, convertEpochToDate, convertDateToEpoch
+     * - Constants: copyConstant
+     * - Discount & Tip: setDiscountCurrency, calculateDiscount, setDiscountPct, calculateTip,
+     *   setTipPct, stepTipPeople, copyTipSummary
+     * - Equations: solveQuadratic, solveLinearSystem, calculateFraction
+     * - Statistics: calculateStats, setStatsChartMode, loadStatsPreset, clearStatsData, copyStatsSummary
+     * - PWA & Install: openInstallModal, closeInstallModal, downloadDetectedApp, installAndroidApp,
+     *   downloadExe, downloadIosProfile, triggerPwaPrompt
+     * ============================================================================
      */
     
     

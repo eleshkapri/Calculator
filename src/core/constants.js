@@ -1,8 +1,34 @@
 /**
+ * ============================================================================
  * CalVerse Pro - Core Constants & Reference Data
- * Centralized immutable configuration used across multiple calculators
+ * File: src/core/constants.js
+ * ============================================================================
+ * 
+ * MODULE OVERVIEW:
+ * This file serves as the single source of truth for global configuration,
+ * currency formatting metadata, mode header descriptions, and conversion
+ * ratios used throughout the CalVerse application.
+ * 
+ * EXPORTED DATA STRUCTURES:
+ * 1. CURRENCY_CONFIG:
+ *    - Metadata for supported world currencies (INR, USD, EUR, GBP, JPY, CAD, AUD, AED, CNY).
+ *    - Includes ISO symbol, Intl.NumberFormat locale, and human-readable currency name.
+ * 
+ * 2. TITLES:
+ *    - Header title and descriptive subtitle definitions for all 12 calculator modes.
+ *    - Used by the navigation router to dynamically update the top app bar header.
+ * 
+ * 3. CONVERTER_UNITS:
+ *    - Conversion multipliers and identifiers for 7 measurement categories:
+ *      Length, Mass, Temperature, Area, Speed, Digital Storage, and Time.
+ *    - All scalar values are normalized against standard SI base units.
+ * ============================================================================
  */
 
+/**
+ * Currency configuration dictionary for financial calculations and discount formatting.
+ * Maps 3-letter ISO 4217 currency codes to locale formatting rules and currency symbols.
+ */
 export const CURRENCY_CONFIG = {
     INR: { symbol: '₹', locale: 'en-IN', name: 'Indian Rupee' },
     USD: { symbol: '$', locale: 'en-US', name: 'US Dollar' },
@@ -15,6 +41,10 @@ export const CURRENCY_CONFIG = {
     CNY: { symbol: '¥', locale: 'zh-CN', name: 'Chinese Yuan' }
 };
 
+/**
+ * View Titles and Subtitles dictionary.
+ * Maps mode keys to display titles rendered in the top app navigation bar.
+ */
 export const TITLES = {
     standard: { title: 'Standard Calculator', subtitle: 'Fast, precise everyday arithmetic' },
     scientific: { title: 'Scientific Calculator', subtitle: 'Advanced functions, trigonometry & algebra' },
@@ -30,6 +60,17 @@ export const TITLES = {
     statistics: { title: 'Statistics & Data Analyzer', subtitle: 'Mean, median, variance, std dev & box plots' }
 };
 
+/**
+ * Unit conversion factors relative to the standard SI base unit for each category.
+ * Base Units:
+ * - Length: Meter (m)
+ * - Mass: Kilogram (kg)
+ * - Area: Square Meter (m²)
+ * - Speed: Meter per Second (m/s)
+ * - Digital: Byte (B)
+ * - Time: Second (s)
+ * - Temperature: Evaluated via custom affine transformation formulas in converter.js
+ */
 export const CONVERTER_UNITS = {
     length: {
         Meter: 1,

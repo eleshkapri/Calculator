@@ -1,6 +1,27 @@
 /**
+ * ============================================================================
  * CalVerse Pro - Scientific Calculator Feature
- * High-precision scientific functions, trigonometry, logarithms & powers
+ * File: src/features/scientific.js
+ * ============================================================================
+ * 
+ * MODULE OVERVIEW:
+ * Extends basic arithmetic with scientific and transcendental functions:
+ * 1. Scientific Operations: Square (x²), Square Root (√x), Factorial (n!),
+ *    Multiplicative Inverse (1/x), and Absolute Value (|x|).
+ * 2. Trigonometry & Logarithms: sin, cos, tan, asin, acos, atan, ln, log₁₀, exp.
+ * 3. Angular Mode Toggle: Switches trigonometric calculations dynamically between
+ *    Degrees (DEG) and Radians (RAD).
+ * 
+ * FUNCTIONS PRESENT IN THIS FILE:
+ * 1. inputFunc(fn):
+ *    - Applies a unary scientific function to the currently buffered display value.
+ *    - Immediately evaluates result, sets the mathematical expression preview,
+ *      and sets waitingForNewNumber to true.
+ * 
+ * 2. toggleAngleMode():
+ *    - Switches global angle mode state between 'DEG' and 'RAD'.
+ *    - Updates UI angle pill badge text and plays click feedback sound.
+ * ============================================================================
  */
 
 import { state } from '../core/state.js';
@@ -8,6 +29,12 @@ import { SoundFx } from '../core/sound.js';
 import { evaluateMath, factorial } from '../core/math.js';
 import { updateDisplay } from './standard.js';
 
+/**
+ * Executes a unary scientific function (e.g. sin, cos, tan, sqrt, sqr, fact, inv, abs)
+ * on the current accumulator value and updates the scientific display.
+ * 
+ * @param {string} fn - Function identifier ('sqr', 'sqrt', 'fact', 'inv', 'abs', 'sin', 'cos', etc.).
+ */
 export function inputFunc(fn) {
     SoundFx.playClick(550);
     const data = state.sci;
@@ -29,7 +56,7 @@ export function inputFunc(fn) {
         data.current = Math.abs(parseFloat(cur)).toString();
         data.expr = `|${cur}| =`;
     } else {
-        // Trigonometry / Log
+        // Trigonometric or Logarithmic function (sin, cos, tan, ln, log, exp)
         data.current = evaluateMath(`${fn}(${cur})`, state.angleMode);
         data.expr = `${fn}(${cur}) =`;
     }
@@ -37,6 +64,9 @@ export function inputFunc(fn) {
     updateDisplay('sci');
 }
 
+/**
+ * Toggles trigonometric angle evaluation unit between Degrees (DEG) and Radians (RAD).
+ */
 export function toggleAngleMode() {
     SoundFx.playClick(600);
     state.angleMode = state.angleMode === 'DEG' ? 'RAD' : 'DEG';

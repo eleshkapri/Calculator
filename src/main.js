@@ -1,6 +1,42 @@
 /**
- * CalVerse Pro - Main Application Entry Point
- * Orchestrates all modular subsystems & exports public window.CalVerse API
+ * ============================================================================
+ * CalVerse Pro - Main Application Entry Point & Global Public API
+ * File: src/main.js
+ * ============================================================================
+ * 
+ * MODULE OVERVIEW:
+ * The orchestrator and bootstrapper of the entire CalVerse Pro suite.
+ * 1. Module Aggregator: Imports the 12 feature engines, 7 core utility services,
+ *    and 5 UI presentation controllers.
+ * 2. Public API Surface: Assembles the public `CalVerse` namespace object and attaches
+ *    it directly to `window.CalVerse`, ensuring 100% backward compatibility with
+ *    all inline HTML element event listeners (onclick="CalVerse.xxx()").
+ * 3. Lifecycle Bootstrapper: Listens for document 'DOMContentLoaded' and initializes
+ *    audio auto-unlock, navigation shell, physical keyboard hotkeys, financial defaults,
+ *    algebra solvers, statistics models, history drawers, live clocks, and PWA workers.
+ * 
+ * EXPOSED GLOBAL API METHODS (window.CalVerse):
+ * - Navigation: switchMode(mode)
+ * - Standard & Scientific: inputVal, inputFunc, clear, backspace, toggleSign, calculate,
+ *   memClear, memRecall, memStore, memAdd, memSub, toggleAngleMode, clearHistory
+ * - Graphing: plotGraph, setGraphPreset, zoomGraph, resetGraph
+ * - Financial: calculateEMI, calculateCompound, setFinancialCurrency, refreshExchangeRates,
+ *   convertCurrency, swapCurrencyUnits, setQuickPair
+ * - Programmer: setRadix, setWordSize, inputProgDigit, inputProgBitwise, inputProgOp,
+ *   calculateProg, toggleProgSign
+ * - Health: setHealthUnit, calculateHealth
+ * - Date: calculateDateDiff, calculateAge, calculateAddSubDate
+ * - Time: inputTimeKeypad, inputTimeUnit, clearTimeKeypad, backspaceTimeKeypad,
+ *   calculateTimeKeypad, toggleTimeResultFormat, copyTimeKeypadResult, calculateTimeDuration,
+ *   calculateTimeMath, convertEpochToDate, convertDateToEpoch
+ * - Constants: copyConstant
+ * - Discount & Tip: setDiscountCurrency, calculateDiscount, setDiscountPct, calculateTip,
+ *   setTipPct, stepTipPeople, copyTipSummary
+ * - Equations: solveQuadratic, solveLinearSystem, calculateFraction
+ * - Statistics: calculateStats, setStatsChartMode, loadStatsPreset, clearStatsData, copyStatsSummary
+ * - PWA & Install: openInstallModal, closeInstallModal, downloadDetectedApp, installAndroidApp,
+ *   downloadExe, downloadIosProfile, triggerPwaPrompt
+ * ============================================================================
  */
 
 import { initSoundAutoUnlock, SoundFx } from './core/sound.js';
