@@ -1,221 +1,228 @@
-# CalVerse Pro 🚀 — Universal Multi-Calculator & Financial Suite
+# <div align="center">🧮 CalVerse Pro</div>
 
-[![Live Demo](https://img.shields.io/static/v1?label=Live%20Demo&message=calverse-esk.vercel.app&color=2563eb&style=for-the-badge&logo=vercel)](https://calverse-esk.vercel.app/)
-[![PWA Ready](https://img.shields.io/badge/PWA-Ready-10b981?style=for-the-badge&logo=pwa)](https://calverse-esk.vercel.app/)
-[![Platforms](https://img.shields.io/static/v1?label=Platforms&message=Android%20|%20Windows%20|%20iOS%20|%20Web&color=8b5cf6&style=for-the-badge)](https://calverse-esk.vercel.app/)
-[![License](https://img.shields.io/badge/License-MIT-green?style=for-the-badge)](LICENSE)
+<div align="center">
 
-**CalVerse Pro** is an all-in-one, zero-dependency multi-calculator suite engineered for everyday productivity, scientific research, financial planning, unit conversion, algebraic solving, statistical analysis, and multi-platform native deployment (Android APK, Windows Desktop Launcher, Apple iOS WebClip, and PWA Web App).
+### Next-Generation Universal Multi-Calculator, Financial & Analytical Suite
+
+[![Live Demo](https://img.shields.io/badge/Live%20Demo-calverse--esk.vercel.app-2563eb?style=for-the-badge&logo=vercel&logoColor=white)](https://calverse-esk.vercel.app/)
+[![PWA Ready](https://img.shields.io/badge/PWA-Installable%20%26%20Offline%20Ready-10b981?style=for-the-badge&logo=pwa&logoColor=white)](https://calverse-esk.vercel.app/)
+[![JavaScript](https://img.shields.io/badge/ES6%2B%20Modular-OOP%20Architecture-f59e0b?style=for-the-badge&logo=javascript&logoColor=white)](https://calverse-esk.vercel.app/)
+[![Zero Dependencies](https://img.shields.io/badge/Dependencies-0%20(Pure%20Vanilla)-8b5cf6?style=for-the-badge)](https://calverse-esk.vercel.app/)
+[![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg?style=for-the-badge)](LICENSE)
+
+**A blazing-fast, zero-dependency, offline-first Progressive Web Application featuring 12 professional calculator engines.**
+
+[🚀 Launch Live Web App](https://calverse-esk.vercel.app/) • [✨ 12 Calculator Engines](#-12-dedicated-calculator-engines) • [📱 1-Click PWA Install](#-1-click-multi-platform-installation-pwa) • [⌨️ Keyboard Shortcuts](#️-keyboard-shortcuts-reference) • [📂 Architecture](#-project-architecture)
+
+</div>
 
 ---
 
 ## 🌐 Live Web Application
+
 👉 **[https://calverse-esk.vercel.app/](https://calverse-esk.vercel.app/)**  
 📁 **GitHub Repository**: **[https://github.com/eleshkapri/Calculator](https://github.com/eleshkapri/Calculator)**
 
 ---
 
-## 📱 1-Click Multi-Platform Installation (PWA)
+## 🌟 Overview & Highlights
 
-CalVerse can be installed directly onto any mobile or desktop device with **1-click**, providing a full-screen standalone app experience with full offline support:
+**CalVerse Pro** is an all-in-one computational suite engineered from the ground up using **pure vanilla web standards** (ES6+ JavaScript, CSS3 variables, and semantic HTML5). It delivers desktop-grade computational capability directly in the browser and as an installable native-like app on Android, iOS, Windows, and macOS.
 
-| Platform | Installation Method | Experience |
-| :--- | :--- | :--- |
-| **Android** | In Chrome, tap **⋮** ➔ **"Install app"** or click **"📲 Install App"** in sidebar | Native WebAPK with icon in App Drawer & Home Screen |
-| **iOS (iPhone/iPad)** | In Safari, tap Share **📤** ➔ **"Add to Home Screen"** or download WebClip profile | Full-screen standalone web app on iOS Home Screen |
-| **Windows / macOS** | In Chrome/Edge, click the install icon in address bar or download launcher | Desktop standalone application launcher |
-
----
-
-## ⚡ Offline-First Architecture & Smart Sync
-
-- **100% Offline Capability**: Uses a modern Service Worker (`sw.js`) with cache-first pre-caching. Launch and operate all 12 calculator engines anywhere without internet.
-- **Smart Online Auto-Sync**: Automatically detects when your device reconnects to Wi-Fi or Mobile Data to fetch the latest real-time exchange rates and background cache updates without page reloads.
-- **Persistent Local Storage**: Saves your preferences (Dark/Light mode, Sound FX, preferred currency, and calculation history) locally on your device.
+* **Zero External Dependencies**: Pure vanilla implementation — zero framework overhead, instant startup, and tiny bundle size.
+* **Modular OOP Architecture**: Built with modern Object-Oriented Programming (encapsulation, inheritance, and facade design pattern).
+* **100% Offline-First PWA**: Powered by a Service Worker with network-first caching, ensuring full operational capability without an internet connection.
+* **Dual Obsidian Dark & Crisp Light Themes**: Beautiful glassmorphic styling with high-contrast accessibility and seamless theme toggle.
+* **Tactile Web Audio Synthesizer**: Low-latency synthesized sound feedback powered by the Web Audio API with zero audio file downloads.
+* **Full Hardware Keyboard Support**: Complete keyboard navigation for standard, scientific, and programmer keypads, plus hotkeys like `h` for History.
 
 ---
 
 ## ✨ 12 Dedicated Calculator Engines
 
-### 1. 🔢 Standard Calculator
-- Precise arithmetic with standard operator precedence ($+$, $-$, $\times$, $\div$).
-- **Live Equation Retention**: Upper expression line keeps the full question with equals ($888 + 1 =$) while the result ($889$) remains in the primary display.
-- Seamless operation chaining, parentheses $(...)$, percentage ($\%$) and sign toggle ($\pm$).
-- Full memory stack ($MC, MR, M+, M-, MS$) with active status indicator.
-
-### 2. 🔬 Scientific Calculator
-- Trigonometric functions ($\sin, \cos, \tan, \sin^{-1}, \cos^{-1}, \tan^{-1}$) with **DEG / RAD** modes.
-- Logarithms ($\ln, \log_{10}$), powers ($x^y, x^2, \sqrt{x}$), factorials ($n!$), and reciprocals ($1/x$).
-- Mathematical constants ($\pi, e$) and 2nd function key switcher.
-
-### 3. 📈 Graphing Calculator
-- High-performance HTML5 2D canvas function plotter ($y = f(x)$).
-- Multi-curve overlay with distinct color coding (e.g. $y_1 = \sin(x)$, $y_2 = \cos(x)$).
-- **Interactive Controls**: Touch pan dragging on mobile, mouse drag-to-pan, zoom in/out ($1.25\times / 0.8\times$), and view reset.
-- Live coordinate HUD tracking $(x, y)$ under cursor/touch.
-- One-click presets: *Sine & Cosine, Parabola & Line, Cubic Curve, Hyperbola, V-Curves, Gaussian Bell*.
-
-### 4. 💰 Financial & Currency Suite
-- **Loan & EMI Calculator**: Monthly installments, total payable, total interest, and color-coded visual amortization progress bar.
-- **Compound Interest & SIP**: Projections for initial lump sum + recurring monthly deposits with custom compounding frequencies (Monthly, Quarterly, Annually, Daily).
-- **💱 Real-Time Live Currency Converter**:
-  - Live exchange rate fetching via **Open Exchange Rates API** with automatic offline fallback.
-  - Bidirectional real-time conversion across 20+ world currencies (`USD`, `INR`, `EUR`, `GBP`, `JPY`, `CAD`, `AUD`, `AED`, `CNY`, `SGD`, `CHF`, `SAR`, etc.).
-  - Instant **⇄ Swap** currencies and live exchange formula display.
-  - **Live Popular Pairs Matrix**: 1-click quick-switch cards (`USD/INR`, `EUR/USD`, `GBP/INR`, `USD/AED`, `EUR/INR`, `USD/CAD`, `USD/JPY`, `AED/INR`).
-- **Global Currency Selector**: Set preferred calculation currency (`₹ INR`, `$ USD`, `€ EUR`, `£ GBP`, `¥ JPY`, `CA$ CAD`, `AU$ AUD`, `AED`, `¥ CNY`).
-
-### 5. 🔄 Unit Converter
-- Real-time instant bidirectional conversions across 7 categories:
-  - 📏 **Length**: Meters, Kilometers, Centimeters, Millimeters, Miles, Yards, Feet, Inches, Nautical Miles.
-  - ⚖️ **Weight / Mass**: Kilograms, Grams, Milligrams, Pounds, Ounces, Metric Tons.
-  - 🌡️ **Temperature**: Celsius ($^\circ\text{C}$), Fahrenheit ($^\circ\text{F}$), Kelvin ($\text{K}$).
-  - 📐 **Area**: Sq Meters, Sq Kilometers, Sq Feet, Sq Miles, Acres, Hectares.
-  - ⚡ **Speed**: m/s, km/h, mph, Knots.
-  - 💾 **Digital Data**: Bytes, KB, MB, GB, TB.
-  - ⏱️ **Time**: Seconds, Minutes, Hours, Days, Weeks.
-
-### 6. 💻 Programmer Calculator
-- Simultaneous real-time conversion and representation across 4 number bases:
-  - **HEX** (Hexadecimal)
-  - **DEC** (Decimal)
-  - **OCT** (Octal)
-  - **BIN** (Binary with 4-bit nibble formatting)
-- Dynamic bit word size masking: **8-bit (Byte)**, **16-bit (Word)**, **32-bit (DWord)**, **64-bit (QWord)**.
-- Bitwise Logic: `AND`, `OR`, `XOR`, `NOT`, Left Shift (`<<`), Right Shift (`>>`).
-
-### 7. ⚖️ BMI & Health Calculator
-- Metric ($\text{cm}/\text{kg}$) and Imperial ($\text{ft}/\text{in}/\text{lbs}$) measurement modes.
-- Visual BMI category gauge (*Underweight, Normal, Overweight, Obese*).
-- Personalized **Healthy Weight Target Range**, **BMR (Basal Metabolic Rate)**, and **Daily Maintenance Calories**.
-
-### 8. 📅 Date & Age Calculator
-- **Date Difference**: Exact count of calendar days, working weeks, total hours, and elapsed time.
-- **Exact Age Breakdown**: Exact age in Years, Months, and Days with Next Birthday countdown.
-- **Add / Subtract Days**: Calculate future or past target dates with custom day offsets.
-
-### 9. ⏱️ Time Calculator
-- **Time Unit Keypad**: Dedicated keypad for entering hours, minutes, seconds, and milliseconds (`10h 30m 45s`).
-- **Work Shift Duration**: Calculates exact shift hours minus unpaid lunch/break times.
-- **Time Arithmetic**: Add or subtract multiple time intervals.
-- **Millisecond Stopwatch**: High-precision stopwatch with real-time lap recording.
-- **Unix Epoch Converter**: Live ticking Unix timestamp converter (Epoch $\leftrightarrow$ Human Date).
-
-### 10. 🧾 Discount & Tip Calculator
-- **Multi-Currency Support**: Choose from 9 global currencies with saved preferences.
-- **Discount & Sales Tax**: Original price, discount %, extra coupon %, and sales tax with live savings breakdown.
-- **Tip & Bill Splitting**: Custom tip percentage chips, number of people stepper, per-person split, and 1-click shareable receipt copy.
-
-### 11. 🧮 Equation & Algebra Solver
-- **Live Equation Preview**: Real-time formula display formatted in clean mathematical typography ($ax^2 + bx + c = 0$).
-- **Quadratic Equations**: Solves real and complex roots, discriminant $\Delta = b^2 - 4ac$, and parabola vertex $(h, k)$ coordinates with step-by-step solutions.
-- **$2\times 2$ Linear System**: Solves simultaneous linear equations ($a_1 x + b_1 y = c_1$, $a_2 x + b_2 y = c_2$) using Cramer's Rule determinants.
-- **Fraction Calculator**: Arithmetic with step-by-step reduction, mixed numbers, and decimal conversions.
-
-### 12. 📊 Statistics & Visual Data Analyzer
-- **Interactive Multi-Mode Visualizer**:
-  - **📊 Sorted Distribution & Trend**: Gradient vertical bars with top glowing dots, exact value labels, smooth trendline, and highlighted IQR zone.
-  - **📦 Box & Whisker Plot**: 5-number summary ($MIN, Q_1, MEDIAN, Q_3, MAX$) with mean diamond marker and scatter points.
-  - **📈 Frequency Histogram**: Dynamic frequency bins with interval ranges and counts.
-- **Comprehensive Metrics**: Mean ($\bar{x}$), Median, Mode, Sample & Population Standard Deviation ($\sigma, s$), Variance ($s^2$), Count ($N$), Sum ($\Sigma x$), Min/Max, Range, and Quartiles ($Q_1, Q_3, \text{IQR}$).
-- **5-Number Summary Quick Bar**: Dedicated persistent statistical summary chips.
+| # | Engine | Key Capabilities |
+| :-: | :--- | :--- |
+| **1** | **🔢 Standard Calculator** | Everyday arithmetic with live equation retention, expression chaining, parenthesis parsing, percentage, sign toggle, and persistent memory register stack ($MC, MR, M+, M-, MS$). |
+| **2** | **🔬 Scientific Calculator** | Trigonometric functions ($\sin, \cos, \tan, \sin^{-1}, \cos^{-1}, \tan^{-1}$) with **DEG/RAD** switching, logarithms ($\ln, \log_{10}$), powers ($x^y, x^2, \sqrt{x}$), factorials ($n!$), and constants ($\pi, e$). |
+| **3** | **📈 Graphing Calculator** | Interactive HTML5 2D canvas function plotter ($y = f(x)$), multi-curve color-coded overlays, touch pan and pinch zoom, live coordinate HUD, and 1-click function presets. |
+| **4** | **💰 Financial & Currency** | **Loan & EMI Calculator** with interactive visual amortization breakdown, **Compound Interest & SIP** projections, and **Real-Time Live Currency Converter** supporting 20+ world currencies via live rates with offline cache. |
+| **5** | **🔄 Unit Converter** | Instant bidirectional conversions across 7 categories: Length, Weight/Mass, Temperature, Area, Speed, Digital Data, and Time with real-time reactive outputs. |
+| **6** | **💻 Programmer Calculator** | Multi-radix representation across **HEX, DEC, OCT, and BIN** (with 4-bit nibbles), dynamic word size masking (**8-bit, 16-bit, 32-bit, 64-bit**), and bitwise logic (`AND`, `OR`, `XOR`, `NOT`, `<<`, `>>`). |
+| **7** | **⚖️ BMI & Health** | Metric and Imperial health metrics, visual BMI gauge, personalized Healthy Weight Target Range, Basal Metabolic Rate (BMR), and Daily Maintenance Calorie targets. |
+| **8** | **📅 Date & Age** | Exact age calculation breakdown (Years, Months, Days), Next Birthday countdown, Date Difference analyzer (days, weeks, elapsed hours), and Add/Subtract Days calculator. |
+| **9** | **⏱️ Time Calculator** | Dedicated time unit keypad (`h`, `m`, `s`, `ms`), Work Shift duration calculator with unpaid break deduction, Time arithmetic interval solver, high-precision Stopwatch with laps, and live Unix Epoch converter. |
+| **10** | **🧾 Discount & Tip** | Multi-currency discount calculator with sales tax and coupon deductions, live savings breakdown, and Tip/Bill Splitting with shareable summary receipt. |
+| **11** | **🧮 Equation & Algebra** | Quadratic Equation solver ($ax^2 + bx + c = 0$) with discriminant analysis and vertex coordinates, $2 \times 2$ Linear System solver using Cramer's Determinants, and Fraction arithmetic with step-by-step reduction. |
+| **12** | **📊 Statistics Analyzer** | Interactive statistical visualizer featuring Distribution Bars with IQR highlight, Box & Whisker Plot, and Frequency Histogram, paired with comprehensive metrics ($\bar{x}, \text{Med}, \text{Mode}, \sigma, s, s^2, \Sigma x$). |
 
 ---
 
-## 🎛️ Sidebar Mini-Widgets
+## 📱 1-Click Multi-Platform Installation (PWA)
 
-- **Live Digital Clock & Date**: Real-time ticking 12-hour clock with active date and day indicator.
-- **Quick Math Constants Pill Box**: 1-click clipboard copy for mathematical constants:
-  - $\pi = 3.1415926535$
-  - $e = 2.7182818284$
-  - $\phi = 1.6180339887$ (Golden Ratio)
-  - $\sqrt{2} = 1.4142135623$ (Pythagoras Constant)
+CalVerse Pro is configured as a standalone Progressive Web Application. You can install it on any modern operating system without an app store:
+
+```
+┌─────────────────────────────────────────────────────────────────────────────┐
+│                       CALVERSE PRO - PWA ECOSYSTEM                         │
+├────────────────────┬────────────────────┬───────────────────────────────────┤
+│     Android        │   iOS (Apple)      │      Desktop (Windows / Mac)      │
+│  Tap Chrome menu ⋮ │ Tap Safari Share 📤│ Click Install Icon in address bar │
+│  ➔ "Install app"   │➔ "Add to Home"     │ or download standalone launcher   │
+└────────────────────┴────────────────────┴───────────────────────────────────┘
+```
+
+* **Offline Readiness**: All core scripts, stylesheets, and logic are pre-cached by `sw.js` for instant, offline launch.
+* **Auto-Sync**: Background network listeners update exchange rates and refresh caches whenever connectivity returns.
+* **Storage Protection**: Preferences, audio toggles, and calculation histories persist reliably in `localStorage`.
 
 ---
 
-## 🎨 UI, Aesthetics & Accessibility
+## ⌨️ Hardware Keyboard Shortcuts Reference
 
-- **Dark Obsidian & Crisp Light Themes**: Tailored palettes with smooth CSS variable transitions and saved preferences.
-- **Tactile Audio Feedback**: Mobile-unlocked Web Audio API synthesizer with dedicated `Sound ON / OFF` toggle.
-- **Calculation History Drawer**: Complete persistent history storage, click-to-recall, and 1-tap clipboard copying.
-- **Responsive Fluid Layout**: Centered desktop & laptop presentations with adaptive mobile swipe carousels and backdrop slide-out menus.
+CalVerse Pro features seamless desktop and laptop hardware keyboard mapping:
 
----
-
-## ⌨️ Keyboard Shortcuts Reference
-
-| Key | Action |
-| :--- | :--- |
-| `0` - `9` | Input Digits |
-| `.` | Decimal Point |
-| `+`, `-`, `*`, `/` | Add, Subtract, Multiply, Divide |
-| `Enter` or `=` | Calculate Result / Plot Graph |
-| `Backspace` | Delete last character |
-| `Escape` | Clear All (`AC`) |
-| `(` / `)` | Open / Close Parentheses |
-| `%` | Percentage |
-| `^` | Power ($x^y$) |
+| Key | Calculator Action | Engine |
+| :--- | :--- | :--- |
+| `0` - `9` | Input Numeric Digits | Standard & Scientific |
+| `.` or `,` | Decimal Point | Standard & Scientific |
+| `+`, `-`, `*`, `/` | Addition, Subtraction, Multiplication, Division | Standard & Scientific |
+| `(` and `)` | Open / Close Parentheses | Standard & Scientific |
+| `%` | Percentage | Standard & Scientific |
+| `^` | Exponent / Power ($x^y$) | Scientific |
+| `Enter` or `=` | Calculate Result / Plot Graph / Solve | All Keypads |
+| `Backspace` | Delete last character | All Keypads |
+| `Escape` or `Delete` | Clear All (`C` / `AC`) | All Keypads |
+| `c` or `C` | Clear All (`C`) | Standard & Scientific |
+| `h` or `H` | **Toggle Calculation History Drawer** | Global Hotkey |
+| `Escape` | Close History Drawer or Active Modal | Global Hotkey |
+| `0` - `9`, `A` - `F` | Hexadecimal & Decimal Digits | Programmer |
 
 ---
 
 ## 📂 Project Architecture
 
+The codebase follows a modular Object-Oriented architecture, separating core state management, feature engines, UI controllers, and design systems:
+
 ```
 Calculator/
 ├── assets/
 │   ├── css/
-│   │   └── style.css      # Design system, dual theme (Dark/Light), typography & layouts
-│   ├── js/
-│   │   └── script.js      # 17 modular calculator engines & public CalVerse API
+│   │   ├── core/
+│   │   │   ├── reset.css              # Cross-browser CSS baseline normalization
+│   │   │   └── variables.css          # Design system tokens (Dark/Light palettes, spacing)
+│   │   ├── features/                  # 11 Modular Feature Stylesheets
+│   │   │   ├── converter.css          # Unit converter grid & card styling
+│   │   │   ├── date.css               # Date picker & countdown card layouts
+│   │   │   ├── discount.css           # Discount summary & receipt card styles
+│   │   │   ├── equations.css          # Math equation rendering & step-by-step boxes
+│   │   │   ├── financial.css          # Loan amortization, SIP & currency converter UI
+│   │   │   ├── graphing.css           # 2D Canvas graphing viewport & control HUD
+│   │   │   ├── health.css             # BMI gauge & calorie recommendation cards
+│   │   │   ├── programmer.css         # Programmer bit-word grids & radix displays
+│   │   │   ├── standard.css           # Arithmetic keypad & memory indicator styling
+│   │   │   ├── statistics.css         # Data visualizer charts & metric summary chips
+│   │   │   └── time.css               # Time unit keypad, shift tracker & stopwatch
+│   │   ├── ui/                        # 7 Application Shell Stylesheets
+│   │   │   ├── display.css            # Result screens, expression lines & cursors
+│   │   │   ├── footer.css             # Mobile utility bar & bottom controls
+│   │   │   ├── header.css             # Top app bar, live titles & action buttons
+│   │   │   ├── keypad.css             # Universal button grid & tactile press states
+│   │   │   ├── layout.css             # Fluid responsive shell & viewport grid
+│   │   │   ├── modals.css             # History slide drawer, install sheet & toasts
+│   │   │   └── sidebar.css            # Navigation drawer, clock & constant chips
+│   │   ├── responsive.css             # Adaptive breakpoint rules for all devices
+│   │   └── style.css                  # Master CSS orchestrator (@import bundle)
 │   └── icons/
-│       ├── favicon.svg    # Scalable vector brand icon
-│       ├── icon-192.png   # 192x192 PWA launcher icon
-│       └── icon-512.png   # 512x512 high-resolution PWA launcher icon
-├── index.html             # Application shell & 12 modular calculator views
-├── manifest.json          # PWA Web App manifest for Android, iOS & Desktop
-├── sw.js                  # Offline-first Service Worker with smart auto-sync
-├── LICENSE                # MIT License
-└── README.md              # Comprehensive documentation and project guide
+│       ├── favicon.svg                # Scalable vector brand emblem
+│       ├── icon-192.png               # 192x192 PWA launcher icon
+│       └── icon-512.png               # 512x512 high-resolution PWA launcher icon
+├── src/
+│   ├── core/                          # Foundation Services & State Singleton
+│   │   ├── constants.js               # Application constants, currencies & mode titles
+│   │   ├── dom.js                     # Safe DOM manipulation & XSS-hardened utilities
+│   │   ├── format.js                  # Internationalized number formatting & rounding
+│   │   ├── math.js                    # Math evaluator, token parser & trig engines
+│   │   ├── sound.js                   # Web Audio API procedural sound synthesizer
+│   │   ├── state.js                   # Centralized StateManager Singleton
+│   │   └── storage.js                 # Web Storage persistence & history serialization
+│   ├── features/                      # 13 Object-Oriented Feature Engines
+│   │   ├── base.js                    # BaseCalculator abstract parent class
+│   │   ├── standard.js                # Standard arithmetic & history manager
+│   │   ├── scientific.js              # Scientific, trigonometric & power operations
+│   │   ├── graphing.js                # HTML5 2D Canvas function plotter
+│   │   ├── financial.js               # Loan EMI, SIP & live exchange rate converter
+│   │   ├── converter.js               # 7-category reactive unit conversion engine
+│   │   ├── programmer.js              # Multi-radix & bitwise logical manipulator
+│   │   ├── health.js                  # BMI gauge, BMR & calorie computation
+│   │   ├── date.js                    # Date differential & exact age solver
+│   │   ├── time.js                    # Time arithmetic, shift calculator & stopwatch
+│   │   ├── discount.js                # Discount, sales tax & bill splitting engine
+│   │   ├── equations.js               # Quadratic, 2x2 linear & fraction algebra solver
+│   │   └── statistics.js              # Multi-mode statistical analyzer & chart renderer
+│   ├── ui/                            # User Interface Controllers
+│   │   ├── clock.js                   # Live sidebar digital clock & calendar ticker
+│   │   ├── keyboard.js                # Global hardware keyboard shortcut router
+│   │   ├── navigation.js              # App shell router, drawer toggles & view swapper
+│   │   ├── pwa.js                     # PWA install prompt & standalone detection
+│   │   └── theme.js                   # Dark/Light theme manager & persistent storage
+│   └── main.js                        # Application bootstrapper & global CalVerse facade
+├── favicon.ico                        # Multi-resolution native browser favicon
+├── index.html                         # High-performance semantic application shell
+├── manifest.json                      # W3C Web App Manifest for mobile & desktop
+├── sw.js                              # Offline-first Service Worker with auto-sync
+├── LICENSE                            # MIT Open Source License
+└── README.md                          # Comprehensive project documentation
 ```
 
 ---
 
 ## 🛠️ Technology Stack
 
-- **Frontend**: Semantic HTML5, Vanilla JavaScript (ES6+ Modular Pattern), Vanilla CSS3 (Custom Design System).
-- **APIs**: Web Audio API, HTML5 Canvas API, Open Exchange Rates API, Web Storage API (`localStorage`), Service Worker API (PWA Cache).
-- **PWA Capabilities**: Full offline caching via Service Worker (`sw.js`), WebAPK integration, responsive layout for Mobile & Desktop.
-- **Zero External Dependencies**: Fast load times, lightweight, and completely self-contained.
+| Layer | Technology |
+| :--- | :--- |
+| **Language & Architecture** | Pure Vanilla JavaScript (ES6+ Modules, Object-Oriented Programming, Facade Pattern) |
+| **Styling & Theming** | Semantic Vanilla CSS3, CSS Custom Properties (Variables), Fluid CSS Grid & Flexbox |
+| **Web Standards & APIs** | HTML5 Canvas API, Web Audio API, Service Worker API, Cache Storage API, Web Storage (`localStorage`) |
+| **Network & Data** | Open Exchange Rates API (with offline cache fallback) |
+| **PWA & Native Integration** | W3C Web App Manifest (`manifest.json`), WebAPK standalone execution |
+| **Dependencies** | **0 External Dependencies** (No npm build step, zero third-party script bloat) |
 
 ---
 
 ## 🚀 Local Development Setup
 
-Clone the repository and run locally using any web server:
+To run CalVerse Pro locally on your machine, clone the repository and serve it using any lightweight local web server:
 
 ```bash
 # 1. Clone the repository
 git clone https://github.com/eleshkapri/Calculator.git
 
-# 2. Navigate to project directory
+# 2. Enter the project directory
 cd Calculator
 
-# 3. Start local development server
+# 3. Start a local server (choose any preferred method)
+# Option A: Node.js (npx)
 npx serve .
+
+# Option B: Python 3
+python -m http.server 3000
+
+# Option C: VS Code
+# Open with Live Server extension
 ```
 
-Open your browser at `http://localhost:3000`.
+Navigate to `http://localhost:3000` (or the port specified by your server) in your browser.
 
 ---
 
 ## 👨‍💻 Author
 
-**Elesh Kapri**  
-- GitHub: [@eleshkapri](https://github.com/eleshkapri)  
-- Project: [CalVerse](https://calverse-esk.vercel.app/)
+**Elesh Kapri**
+* GitHub: [@eleshkapri](https://github.com/eleshkapri)
+* Live Project: [CalVerse](https://calverse-esk.vercel.app/)
 
 ---
 
 ## 📄 License
 
-This project is licensed under the **MIT License**. Feel free to use, modify, and distribute.
+This project is licensed under the **MIT License**. See the [LICENSE](LICENSE) file for details.
