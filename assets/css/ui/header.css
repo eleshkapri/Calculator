@@ -40,6 +40,12 @@
     margin-top: 2px;
 }
 
+.header-actions {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
 .action-icon-btn {
     background: var(--bg-surface-elevated);
     border: 1px solid var(--border-subtle);
@@ -58,4 +64,8 @@
     color: #2563eb;
     border-color: rgba(37, 99, 235, 0.4);
     background-color: var(--bg-surface-hover);
+}
+
+.action-icon-btn:active {
+    transform: scale(0.92);
 }

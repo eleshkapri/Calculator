@@ -82,6 +82,27 @@ body.dark-theme .angle-mode-pill {
     letter-spacing: -0.5px;
 }
 
+.blinking-cursor {
+    display: inline-block;
+    color: #3b82f6;
+    font-size: 2.2rem;
+    font-weight: 300;
+    line-height: 1;
+    animation: blinkCursor 1.1s infinite steps(2, start);
+    pointer-events: none;
+    margin-left: -2px;
+    user-select: none;
+}
+
+body.light-theme .blinking-cursor {
+    color: #2563eb;
+}
+
+@keyframes blinkCursor {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0; }
+}
+
 .copy-btn {
     background: transparent;
     border: none;

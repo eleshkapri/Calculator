@@ -4,6 +4,58 @@
  * ============================================================================
  */
 
+/* Utility Quick Bar (Native Mobile & Desktop Shortcut Toolbar) */
+.calc-utility-bar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 6px 4px;
+    border-bottom: 1px solid var(--border-subtle);
+    margin-bottom: 12px;
+    width: 100%;
+    box-sizing: border-box;
+}
+
+.utility-left {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+}
+
+.utility-right {
+    display: flex;
+    align-items: center;
+}
+
+.util-icon-btn {
+    background: transparent;
+    border: none;
+    color: var(--text-secondary);
+    width: 36px;
+    height: 36px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    cursor: pointer;
+    transition: var(--transition);
+    padding: 0;
+    -webkit-tap-highlight-color: transparent;
+}
+
+.util-icon-btn:hover {
+    color: var(--text-primary);
+    background: var(--bg-surface-hover);
+}
+
+.util-icon-btn:active {
+    transform: scale(0.92);
+}
+
+.util-backspace-btn {
+    color: var(--text-secondary);
+}
+
 /* Memory Bar */
 .memory-bar {
     display: flex;

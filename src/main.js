@@ -42,7 +42,8 @@ import { TimeEngine } from './features/time.js';
 import { DiscountEngine } from './features/discount.js';
 import { EquationEngine } from './features/equations.js';
 import { StatisticsEngine } from './features/statistics.js';
-import { initNavigation, switchMode } from './ui/navigation.js';
+import { initNavigation, switchMode, openSidebar, closeSidebar, toggleSidebar, toggleHistory } from './ui/navigation.js';
+import { toggleTheme } from './ui/theme.js';
 import { initKeyboard } from './ui/keyboard.js';
 import { initSidebarClock } from './ui/clock.js';
 import { PWAController, initPWA } from './ui/pwa.js';
@@ -53,8 +54,13 @@ import { PWAController, initPWA } from './ui/pwa.js';
  */
 export class CalVerseFacade {
     constructor() {
-        // Navigation
+        // Navigation & Shell Controls
         this.switchMode = (mode) => switchMode(mode);
+        this.openSidebar = () => openSidebar();
+        this.closeSidebar = () => closeSidebar();
+        this.toggleSidebar = () => toggleSidebar();
+        this.toggleHistory = () => toggleHistory();
+        this.toggleTheme = () => toggleTheme();
 
         // Standard & Scientific Keypad API
         this.inputVal = inputVal;

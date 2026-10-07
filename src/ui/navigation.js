@@ -44,34 +44,62 @@ import { StatisticsEngine } from '../features/statistics.js';
 import { initTheme } from './theme.js';
 
 /**
+ * Controls the slide-out navigation sidebar drawer.
+ */
+export function openSidebar() {
+    const sidebar = document.getElementById('sidebar');
+    const sidebarOverlay = document.getElementById('sidebarOverlay');
+    if (sidebar) sidebar.classList.add('open');
+    if (sidebarOverlay) sidebarOverlay.classList.add('open');
+}
+
+export function closeSidebar() {
+    const sidebar = document.getElementById('sidebar');
+    const sidebarOverlay = document.getElementById('sidebarOverlay');
+    if (sidebar) sidebar.classList.remove('open');
+    if (sidebarOverlay) sidebarOverlay.classList.remove('open');
+}
+
+export function toggleSidebar() {
+    const sidebar = document.getElementById('sidebar');
+    if (sidebar && sidebar.classList.contains('open')) {
+        closeSidebar();
+    } else {
+        openSidebar();
+    }
+}
+
+/**
+ * Toggles calculation history slide-out drawer.
+ */
+export function toggleHistory() {
+    const historyDrawer = document.getElementById('historyDrawer');
+    const drawerOverlay = document.getElementById('drawerOverlay');
+    if (historyDrawer && drawerOverlay) {
+        historyDrawer.classList.toggle('open');
+        drawerOverlay.classList.toggle('open');
+        renderHistoryList();
+    }
+}
+
+/**
  * Initializes shell navigation controls, mobile drawer, subtabs, and global toggles.
  */
 export function initNavigation() {
     const navItems = document.querySelectorAll('.nav-item');
-    const sidebar = document.getElementById('sidebar');
     const mobileBtn = document.getElementById('mobileMenuBtn');
+    const mobileTitleWrap = document.getElementById('mobileTitleWrap');
     const sidebarCloseBtn = document.getElementById('sidebarCloseBtn');
     const sidebarOverlay = document.getElementById('sidebarOverlay');
 
-    const openSidebar = () => {
-        if (sidebar) sidebar.classList.add('open');
-        if (sidebarOverlay) sidebarOverlay.classList.add('open');
-    };
-
-    const closeSidebar = () => {
-        if (sidebar) sidebar.classList.remove('open');
-        if (sidebarOverlay) sidebarOverlay.classList.remove('open');
-    };
-
     // Mobile Hamburger Toggle
     if (mobileBtn) {
-        mobileBtn.addEventListener('click', () => {
-            if (sidebar.classList.contains('open')) {
-                closeSidebar();
-            } else {
-                openSidebar();
-            }
-        });
+        mobileBtn.addEventListener('click', toggleSidebar);
+    }
+
+    // Mobile Title bar click opens sidebar mode chooser
+    if (mobileTitleWrap) {
+        mobileTitleWrap.addEventListener('click', openSidebar);
     }
 
     if (sidebarCloseBtn) {
@@ -144,19 +172,10 @@ export function initNavigation() {
     }
 
     // Calculation History Drawer Toggle
-    const historyDrawer = document.getElementById('historyDrawer');
-    const drawerOverlay = document.getElementById('drawerOverlay');
-    const toggleHistory = () => {
-        if (historyDrawer && drawerOverlay) {
-            historyDrawer.classList.toggle('open');
-            drawerOverlay.classList.toggle('open');
-            renderHistoryList();
-        }
-    };
-
     const histBtn = document.getElementById('historyToggleBtn');
     const quickHistBtn = document.getElementById('quickHistoryBtn');
     const closeHistBtn = document.getElementById('closeHistoryBtn');
+    const drawerOverlay = document.getElementById('drawerOverlay');
 
     if (histBtn) histBtn.addEventListener('click', toggleHistory);
     if (quickHistBtn) quickHistBtn.addEventListener('click', toggleHistory);

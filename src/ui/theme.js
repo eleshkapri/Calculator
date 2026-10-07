@@ -47,10 +47,11 @@ export function applyTheme(themeName) {
     document.documentElement.classList.toggle('dark-theme', !isLight);
     
     const themeBtn = document.getElementById('themeToggleBtn');
-    const themeIcon = document.getElementById('themeIcon');
-    const themeText = themeBtn ? themeBtn.querySelector('.btn-text') : null;
+    const headerThemeBtn = document.getElementById('headerThemeBtn');
+    const headerThemeIcon = document.getElementById('headerThemeIcon');
 
     if (themeIcon) themeIcon.textContent = isLight ? '🌙' : '☀️';
+    if (headerThemeIcon) headerThemeIcon.textContent = isLight ? '🌙' : '☀️';
     if (themeText) themeText.textContent = isLight ? 'Dark Mode' : 'Light Mode';
     
     // Sync mobile browser status bar tint color
@@ -65,6 +66,15 @@ export function applyTheme(themeName) {
     // Redraw canvas graphs and statistical diagrams to match theme contrast
     if (state.currentMode === 'graphing' && typeof GraphEngine !== 'undefined') GraphEngine.render();
     if (state.currentMode === 'statistics' && typeof StatisticsEngine !== 'undefined') StatisticsEngine.calculateStats();
+}
+
+/**
+ * Toggles theme between Light and Dark modes with audio feedback.
+ */
+export function toggleTheme() {
+    SoundFx.playClick(800);
+    const nextTheme = document.body.classList.contains('light-theme') ? 'dark' : 'light';
+    applyTheme(nextTheme);
 }
 
 /**
@@ -87,13 +97,9 @@ export function initTheme() {
         });
     }
 
-    // Manual theme toggle button listener
+    // Manual theme toggle button listeners
     const themeBtn = document.getElementById('themeToggleBtn');
-    if (themeBtn) {
-        themeBtn.addEventListener('click', () => {
-            SoundFx.playClick(800);
-            const nextTheme = document.body.classList.contains('light-theme') ? 'dark' : 'light';
-            applyTheme(nextTheme);
-        });
-    }
+    const headerThemeBtn = document.getElementById('headerThemeBtn');
+    if (themeBtn) themeBtn.addEventListener('click', toggleTheme);
+    if (headerThemeBtn) headerThemeBtn.addEventListener('click', toggleTheme);
 }

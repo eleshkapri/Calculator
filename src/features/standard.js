@@ -80,11 +80,29 @@ export class StandardCalculator extends BaseCalculator {
 
         if (['+', '−', '×', '÷', '^', '%'].includes(val)) {
             if (data.current === 'Error') data.current = '0';
-            data.expr += `${data.current} ${val} `;
-            data.current = '0';
+            if (data.waitingForNewNumber && data.expr.trim().endsWith(')')) {
+                data.expr = data.expr.trim() + ` ${val} `;
+            } else {
+                data.expr += `${data.current} ${val} `;
+                data.current = '0';
+            }
             data.waitingForNewNumber = true;
-        } else if (val === '(' || val === ')') {
-            data.expr += val;
+        } else if (val === '()' || val === '(' || val === ')') {
+            if (val === '()') {
+                const expr = data.expr || '';
+                const openCount = (expr.match(/\(/g) || []).length;
+                const closeCount = (expr.match(/\)/g) || []).length;
+                if (openCount > closeCount && !data.waitingForNewNumber && data.current !== '0') {
+                    data.expr += `${data.current}) `;
+                    data.current = '0';
+                    data.waitingForNewNumber = true;
+                } else {
+                    data.expr += (expr && !expr.endsWith(' ') ? ' ' : '') + '(';
+                    data.waitingForNewNumber = true;
+                }
+            } else {
+                data.expr += val;
+            }
         } else if (val === '.') {
             if (data.waitingForNewNumber) {
                 data.current = '0.';
@@ -172,7 +190,15 @@ export class StandardCalculator extends BaseCalculator {
         if (!data.expr && (data.current === '0' || data.current === 'Error' || data.current === '')) return;
         if (data.expr.endsWith('=')) return;
 
-        const fullExpr = (data.expr + data.current).trim();
+        let fullExpr = (data.expr + (data.waitingForNewNumber && data.expr.trim().endsWith(')') ? '' : data.current)).trim();
+        
+        // Auto-close any unclosed opening parentheses
+        const openCount = (fullExpr.match(/\(/g) || []).length;
+        const closeCount = (fullExpr.match(/\)/g) || []).length;
+        if (openCount > closeCount) {
+            fullExpr += ')'.repeat(openCount - closeCount);
+        }
+
         const res = evaluateMath(fullExpr, state.angleMode);
 
         if (res !== 'Error') {

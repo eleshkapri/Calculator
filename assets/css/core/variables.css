@@ -46,15 +46,15 @@
     --btn-num-border: rgba(255, 255, 255, 0.08);
     --btn-num-shadow: 0 4px 10px rgba(0, 0, 0, 0.35);
     
-    --btn-op-bg: #1e2a3e;
-    --btn-op-hover: #293852;
-    --btn-op-text: #38bdf8;
-    --btn-op-border: rgba(56, 189, 248, 0.18);
+    --btn-op-bg: #182232;
+    --btn-op-hover: #222f44;
+    --btn-op-text: #4ade80;       /* Vibrant Emerald Green */
+    --btn-op-border: rgba(74, 222, 128, 0.18);
 
-    --btn-fn-bg: #2a1b24;
-    --btn-fn-hover: #3d2433;
-    --btn-fn-text: #fb7185;
-    --btn-fn-border: rgba(251, 113, 133, 0.2);
+    --btn-fn-bg: #182232;
+    --btn-fn-hover: #222f44;
+    --btn-fn-text: #f87171;       /* Coral Red */
+    --btn-fn-border: rgba(248, 113, 113, 0.2);
 
     --btn-sci-bg: #151d2c;
     --btn-sci-hover: #202c40;
@@ -69,8 +69,8 @@
     --btn-bit-text: #a78bfa;
     --btn-bit-border: rgba(167, 139, 250, 0.15);
 
-    --btn-equals-bg: linear-gradient(135deg, #2563eb, #7c3aed);
-    --btn-equals-hover: linear-gradient(135deg, #1d4ed8, #6d28d9);
+    --btn-equals-bg: linear-gradient(135deg, #22c55e, #16a34a);
+    --btn-equals-hover: linear-gradient(135deg, #16a34a, #15803d);
     --btn-equals-text: #ffffff;
 
     /* Unit Button Colors */
@@ -125,21 +125,21 @@ body.light-theme {
     --text-secondary: #475569;
     --text-muted: #94a3b8;
 
-    --btn-num-bg: #ffffff;
-    --btn-num-hover: #f1f5f9;
-    --btn-num-text: #0f172a;
-    --btn-num-border: #e2e8f0;
-    --btn-num-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
+    --btn-num-bg: #eef3f8;
+    --btn-num-hover: #e2e8f0;
+    --btn-num-text: #1e3a5f;
+    --btn-num-border: transparent;
+    --btn-num-shadow: 0 1px 3px rgba(0, 0, 0, 0.04);
 
-    --btn-op-bg: #eff6ff;
-    --btn-op-hover: #dbeafe;
-    --btn-op-text: #0284c7;
-    --btn-op-border: #bae6fd;
+    --btn-op-bg: #eef3f8;
+    --btn-op-hover: #e2e8f0;
+    --btn-op-text: #2e7d32;       /* Samsung Green Operator */
+    --btn-op-border: transparent;
 
-    --btn-fn-bg: #fff1f2;
-    --btn-fn-hover: #ffe4e6;
-    --btn-fn-text: #e11d48;
-    --btn-fn-border: #fecdd3;
+    --btn-fn-bg: #eef3f8;
+    --btn-fn-hover: #e2e8f0;
+    --btn-fn-text: #dc2626;       /* Clean Red Clear Button */
+    --btn-fn-border: transparent;
 
     --btn-sci-bg: #f8fafc;
     --btn-sci-hover: #f1f5f9;
@@ -154,8 +154,8 @@ body.light-theme {
     --btn-bit-text: #7c3aed;
     --btn-bit-border: #e9d5ff;
 
-    --btn-equals-bg: linear-gradient(135deg, #2563eb, #6366f1);
-    --btn-equals-hover: linear-gradient(135deg, #1d4ed8, #4f46e5);
+    --btn-equals-bg: linear-gradient(135deg, #4caf50, #2e7d32);
+    --btn-equals-hover: linear-gradient(135deg, #43a047, #1b5e20);
     --btn-equals-text: #ffffff;
 
     --unit-hour-bg: #ecfeff;

@@ -65,52 +65,95 @@
         font-size: 0.82rem;
     }
     
+    html, body {
+        height: 100%;
+        height: 100dvh;
+        overflow: hidden;
+    }
+
+    .app-container {
+        height: 100%;
+        height: 100dvh;
+        overflow: hidden;
+    }
+
+    .main-viewport {
+        height: 100%;
+        height: 100dvh;
+        overflow: hidden;
+        display: flex;
+        flex-direction: column;
+    }
+
+    .top-header {
+        padding: 8px 14px;
+        height: 52px;
+        min-height: 52px;
+        gap: 10px;
+        border-bottom: 1px solid var(--border-subtle);
+        background-color: var(--bg-base);
+        flex-shrink: 0;
+        z-index: 25;
+    }
+
     .mobile-toggle {
         display: flex;
         align-items: center;
         justify-content: center;
-        width: 38px;
-        height: 38px;
+        width: 42px;
+        height: 42px;
         flex-shrink: 0;
+        border-radius: 50%;
+        cursor: pointer;
+        color: var(--text-primary);
+        transition: var(--transition);
     }
-    
-    .top-header {
-        padding: 12px 18px;
-        gap: 12px;
+
+    .mobile-toggle:active {
+        background: var(--bg-surface-hover);
+        transform: scale(0.92);
     }
     
     .active-calculator-title {
         flex: 1;
         min-width: 0;
+        cursor: pointer;
     }
     
     .active-calculator-title h1 {
-        font-size: 1.15rem;
+        font-size: 1.05rem;
         font-weight: 700;
         line-height: 1.2;
         white-space: nowrap;
         overflow: hidden;
         text-overflow: ellipsis;
+        display: inline-flex;
+        align-items: center;
+        gap: 5px;
+    }
+
+    .active-calculator-title h1::after {
+        content: "▾";
+        font-size: 0.8rem;
+        color: var(--text-muted);
     }
     
     .active-calculator-title p {
-        font-size: 0.75rem;
-        line-height: 1.2;
-        margin-top: 1px;
-        white-space: nowrap;
-        overflow: hidden;
-        text-overflow: ellipsis;
+        display: none; /* Hide subtitle on phone view for maximum breathing space */
     }
     
     .action-icon-btn {
         width: 38px;
         height: 38px;
         flex-shrink: 0;
+        border-radius: 50%;
     }
     
     .calculators-container {
         flex: 1;
-        padding: 12px 10px 50px 10px;
+        min-height: 0;
+        padding: 0;
+        margin: 0;
         display: flex;
         flex-direction: column;
         justify-content: flex-start;
@@ -118,17 +161,91 @@
         width: 100%;
         max-width: 100%;
         box-sizing: border-box;
-        min-height: min-content;
+        overflow: hidden;
     }
     
     .calculator-view {
         width: 100%;
-        max-width: 440px;
+        max-width: 100%;
         box-sizing: border-box;
         margin: 0 auto;
     }
 
-    .calculator-view.active {
+    /* Standard Calculator Full-Screen Phone Mode (Matching Native Phone Apps) */
+    #view-standard.calculator-view.active {
+        height: 100%;
+        width: 100%;
+        max-width: 100%;
+        margin: 0;
+        padding: 0;
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+        overflow: hidden;
+    }
+
+    #view-standard .calc-card {
+        height: 100%;
+        width: 100%;
+        max-width: 100%;
+        margin: 0;
+        padding: 4px 16px 14px 16px;
+        border: none;
+        border-radius: 0;
+        box-shadow: none;
+        background: transparent;
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+        box-sizing: border-box;
+    }
+
+    #view-standard .display-container {
+        flex: 1;
+        min-height: 0;
+        width: 100%;
+        border: none;
+        box-shadow: none;
+        background: transparent;
+        padding: 10px 8px 4px 8px;
+        margin-bottom: 0;
+        display: flex;
+        flex-direction: column;
+        justify-content: flex-end;
+    }
+
+    #view-standard .expression-line {
+        font-size: 1.15rem;
+        min-height: 28px;
+        color: var(--text-secondary);
+        margin-bottom: 6px;
+    }
+
+    #view-standard .result-display {
+        font-size: 3.2rem;
+        font-weight: 500;
+        letter-spacing: -1px;
+    }
+
+    #view-standard .memory-bar {
+        display: none; /* Replaced by native utility quick bar */
+    }
+
+    #view-standard .calc-utility-bar {
+        margin-bottom: 8px;
+        padding: 6px 4px;
+        border-bottom: 1px solid var(--border-subtle);
+    }
+
+    /* Scrollable form view for non-standard calculators on mobile */
+    .calculator-view:not(#view-standard) {
+        height: 100%;
+        overflow-y: auto;
+        -webkit-overflow-scrolling: touch;
+        padding: 12px 14px 44px 14px;
+    }
+
+    .calculator-view:not(#view-standard).active {
         display: flex;
         flex-direction: column;
         align-items: center;
@@ -138,19 +255,11 @@
         box-sizing: border-box;
         margin: 0 auto;
     }
-
-    #view-standard.calculator-view.active {
-        min-height: calc(100vh - 100px);
-        display: flex;
-        flex-direction: column;
-        justify-content: center;
-        align-items: center;
-        margin: auto 0;
-        width: 100%;
-        box-sizing: border-box;
-    }
     
-    .calc-card, .scientific-card, .programmer-card, .financial-card, .converter-card, .health-card, .date-card, .time-card, .time-keypad-card {
+    .calculator-view:not(#view-standard) .calc-card,
+    .calculator-view:not(#view-standard) .scientific-card,
+    .programmer-card, .financial-card, .converter-card,
+    .health-card, .date-card, .time-card, .time-keypad-card {
         padding: 16px 14px;
         border-radius: 20px;
         width: 100%;
@@ -158,8 +267,8 @@
         box-sizing: border-box;
         box-shadow: 0 12px 32px rgba(0, 0, 0, 0.25);
     }
-    
-    .display-container {
+
+    .calculator-view:not(#view-standard) .display-container {
         padding: 14px 18px;
         min-height: 110px;
         margin-bottom: 14px;
@@ -168,12 +277,12 @@
         width: 100%;
     }
     
-    .result-display {
+    .calculator-view:not(#view-standard) .result-display {
         font-size: 2.2rem;
         word-break: break-all;
     }
 
-    .expression-line {
+    .calculator-view:not(#view-standard) .expression-line {
         font-size: 0.92rem;
         min-height: 22px;
         word-break: break-all;
@@ -202,15 +311,41 @@
         box-sizing: border-box;
     }
 
+    /* Circular Keypad Grid in Phone View (Matching Screenshot) */
     .standard-keypad {
+        display: grid;
         grid-template-columns: repeat(4, 1fr);
-        gap: 10px;
+        gap: 12px;
+        width: 100%;
+        max-width: 420px;
+        margin: 0 auto;
+        justify-items: center;
+        align-items: center;
+        padding-bottom: max(14px, env(safe-area-inset-bottom, 10px));
     }
-    
+
     .standard-keypad .btn {
-        height: 52px;
-        font-size: 1.18rem;
-        border-radius: 14px;
+        width: 100%;
+        aspect-ratio: 1 / 1;
+        max-width: 72px;
+        max-height: 72px;
+        border-radius: 50%;
+        font-size: 1.55rem;
+        font-weight: 500;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        box-shadow: none;
+        border: none;
+    }
+
+    .standard-keypad .btn:active {
+        transform: scale(0.92);
+    }
+
+    .standard-keypad .btn-equals {
+        border-radius: 50%;
+        box-shadow: 0 4px 14px rgba(46, 125, 50, 0.35);
     }
     
     .scientific-keypad {
@@ -476,9 +611,12 @@
     }
 
     .standard-keypad .btn {
-        height: 48px;
-        font-size: 1.05rem;
-        border-radius: 10px;
+        width: 100%;
+        aspect-ratio: 1 / 1;
+        max-width: 64px;
+        max-height: 64px;
+        font-size: 1.35rem;
+        border-radius: 50%;
     }
 
     .scientific-keypad {

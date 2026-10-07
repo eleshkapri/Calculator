@@ -22,18 +22,18 @@
     <meta name="twitter:title" content="CalVerse">
     <meta name="twitter:description" content="All-in-one calculator suite with 12+ modes. Works offline.">
     <meta name="twitter:image" content="https://calverse-esk.vercel.app/assets/icons/icon-512.png">
-    <link rel="manifest" href="manifest.json?v=5.4">
-    <link rel="shortcut icon" href="favicon.ico?v=5.4">
-    <link rel="icon" type="image/x-icon" href="favicon.ico?v=5.4">
-    <link rel="icon" type="image/png" sizes="192x192" href="assets/icons/icon-192.png?v=5.4">
-    <link rel="icon" type="image/png" sizes="512x512" href="assets/icons/icon-512.png?v=5.4">
-    <link rel="icon" type="image/svg+xml" href="assets/icons/favicon.svg?v=5.4">
-    <link rel="apple-touch-icon" href="assets/icons/icon-192.png?v=5.4">
+    <link rel="manifest" href="manifest.json?v=5.5">
+    <link rel="shortcut icon" href="favicon.ico?v=5.5">
+    <link rel="icon" type="image/x-icon" href="favicon.ico?v=5.5">
+    <link rel="icon" type="image/png" sizes="192x192" href="assets/icons/icon-192.png?v=5.5">
+    <link rel="icon" type="image/png" sizes="512x512" href="assets/icons/icon-512.png?v=5.5">
+    <link rel="icon" type="image/svg+xml" href="assets/icons/favicon.svg?v=5.5">
+    <link rel="apple-touch-icon" href="assets/icons/icon-192.png?v=5.5">
     <title>CalVerse</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;600;700&family=Outfit:wght@400;500;600;700;800&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="assets/css/style.css?v=5.4">
+    <link rel="stylesheet" href="assets/css/style.css?v=5.5">
     <script>
         // Theme Boot: Remember last mood, first visit follows OS
         (function() {
@@ -184,19 +184,22 @@
         <!-- Main Viewport -->
         <main class="main-viewport">
             <header class="top-header">
-                <button class="mobile-toggle" id="mobileMenuBtn" aria-label="Toggle menu">
-                    <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <button class="mobile-toggle" id="mobileMenuBtn" aria-label="Toggle calculator menu" title="Open Menu">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
                         <line x1="3" y1="12" x2="21" y2="12"></line>
                         <line x1="3" y1="6" x2="21" y2="6"></line>
                         <line x1="3" y1="18" x2="21" y2="18"></line>
                     </svg>
                 </button>
-                <div class="active-calculator-title">
+                <div class="active-calculator-title" id="mobileTitleWrap" onclick="CalVerse.openSidebar()" title="Tap to switch calculator mode">
                     <h1 id="calculatorTitle">Standard Calculator</h1>
                     <p id="calculatorSubtitle">Fast, precise everyday arithmetic</p>
                 </div>
                 <div class="header-actions">
-                    <button class="action-icon-btn" id="quickHistoryBtn" title="View History" aria-label="View Calculation History">
+                    <button class="action-icon-btn" id="headerThemeBtn" title="Toggle Theme" aria-label="Toggle Theme" onclick="CalVerse.toggleTheme()">
+                        <span id="headerThemeIcon">☀️</span>
+                    </button>
+                    <button class="action-icon-btn" id="quickHistoryBtn" title="View History" aria-label="View Calculation History" onclick="CalVerse.toggleHistory()">
                         <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                             <circle cx="12" cy="12" r="10"></circle>
                             <polyline points="12 6 12 12 16 14"></polyline>
@@ -215,24 +218,51 @@
                             <div class="expression-line" id="stdExpression"></div>
                             <div class="result-line-wrapper">
                                 <input type="text" class="result-display" id="stdDisplay" value="0" readonly>
+                                <span class="blinking-cursor" id="stdCursor">|</span>
                                 <button class="copy-btn" id="stdCopyBtn" title="Copy result" aria-label="Copy result">📋</button>
                             </div>
                         </div>
 
-                        <!-- Memory Bar -->
-                        <div class="memory-bar">
-                            <button class="mem-btn" onclick="CalVerse.memClear('std')">MC</button>
-                            <button class="mem-btn" onclick="CalVerse.memRecall('std')">MR</button>
-                            <button class="mem-btn" onclick="CalVerse.memAdd('std')">M+</button>
-                            <button class="mem-btn" onclick="CalVerse.memSub('std')">M-</button>
-                            <button class="mem-btn" onclick="CalVerse.memStore('std')">MS</button>
+                        <!-- Utility Quick Bar (History, Unit Converter, Scientific, Backspace) -->
+                        <div class="calc-utility-bar">
+                            <div class="utility-left">
+                                <button class="util-icon-btn" onclick="CalVerse.toggleHistory()" title="Calculation History" aria-label="Calculation History">
+                                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                        <circle cx="12" cy="12" r="10"></circle>
+                                        <polyline points="12 6 12 12 16 14"></polyline>
+                                    </svg>
+                                </button>
+                                <button class="util-icon-btn" onclick="CalVerse.switchMode('converter')" title="Unit Converter" aria-label="Unit Converter">
+                                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                        <path d="M21.3 8.7 8.7 21.3c-.4.4-1 .4-1.4 0l-5.6-5.6c-.4-.4-.4-1 0-1.4L14.3 1.7c.4-.4 1-.4 1.4 0l5.6 5.6c.4.4.4 1 0 1.4z"></path>
+                                        <path d="m7.5 10.5 2 2"></path>
+                                        <path d="m10.5 7.5 2 2"></path>
+                                        <path d="m13.5 4.5 2 2"></path>
+                                    </svg>
+                                </button>
+                                <button class="util-icon-btn" onclick="CalVerse.switchMode('scientific')" title="Scientific Calculator" aria-label="Scientific Calculator">
+                                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                        <path d="M4 19h16"></path>
+                                        <path d="M4 5h4l3 10 3-10h6"></path>
+                                    </svg>
+                                </button>
+                            </div>
+                            <div class="utility-right">
+                                <button class="util-icon-btn util-backspace-btn" onclick="CalVerse.backspace('std')" title="Backspace" aria-label="Backspace">
+                                    <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                        <path d="M21 4H8l-7 8 7 8h13a2 2 0 0 0 2-2V6a2 2 0 0 0-2-2z"></path>
+                                        <line x1="18" y1="9" x2="12" y2="15"></line>
+                                        <line x1="12" y1="9" x2="18" y2="15"></line>
+                                    </svg>
+                                </button>
+                            </div>
                         </div>
 
-                        <!-- Keypad -->
+                        <!-- Keypad matching screenshot -->
                         <div class="keypad standard-keypad">
-                            <button class="btn btn-fn" onclick="CalVerse.clear('std')">AC</button>
-                            <button class="btn btn-fn" onclick="CalVerse.backspace('std')" aria-label="Backspace">⌫</button>
-                            <button class="btn btn-fn" onclick="CalVerse.inputVal('std', '%')">%</button>
+                            <button class="btn btn-fn btn-clear" onclick="CalVerse.clear('std')">C</button>
+                            <button class="btn btn-op btn-parens" onclick="CalVerse.inputVal('std', '()')">( )</button>
+                            <button class="btn btn-op btn-percent" onclick="CalVerse.inputVal('std', '%')">%</button>
                             <button class="btn btn-op" onclick="CalVerse.inputVal('std', '÷')">÷</button>
 
                             <button class="btn btn-num" onclick="CalVerse.inputVal('std', '7')">7</button>
@@ -250,7 +280,7 @@
                             <button class="btn btn-num" onclick="CalVerse.inputVal('std', '3')">3</button>
                             <button class="btn btn-op" onclick="CalVerse.inputVal('std', '+')">+</button>
 
-                            <button class="btn btn-fn" onclick="CalVerse.toggleSign('std')">±</button>
+                            <button class="btn btn-num btn-plus-minus" onclick="CalVerse.toggleSign('std')">+/-</button>
                             <button class="btn btn-num" onclick="CalVerse.inputVal('std', '0')">0</button>
                             <button class="btn btn-num" onclick="CalVerse.inputVal('std', '.')">.</button>
                             <button class="btn btn-equals" onclick="CalVerse.calculate('std')">=</button>
