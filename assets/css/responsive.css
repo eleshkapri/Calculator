@@ -171,22 +171,23 @@
         margin: 0 auto;
     }
 
-    /* Standard Calculator: Mobile Full-Height Native Layout */
+    /* Standard Calculator: Shifted Upward, Balanced Space from Header, Negative Space at Bottom */
     #view-standard.calculator-view.active {
         height: 100%;
         max-height: 100%;
         width: 100%;
-        max-width: 440px;
+        max-width: 380px;
         margin: 0 auto;
-        padding: 4px 12px 6px 12px;
+        padding: clamp(14px, 3vh, 22px) 14px clamp(28px, 6vh, 48px) 14px;
         display: flex;
         flex-direction: column;
-        justify-content: space-between;
+        justify-content: flex-start;
+        align-items: center;
         box-sizing: border-box;
     }
 
     #view-standard .calc-card {
-        height: 100%;
+        height: auto;
         width: 100%;
         max-width: 100%;
         margin: 0;
@@ -197,19 +198,20 @@
         background: transparent;
         display: flex;
         flex-direction: column;
-        justify-content: space-between;
+        justify-content: flex-start;
+        align-items: center;
         box-sizing: border-box;
     }
 
     #view-standard .display-container {
-        flex: 1 1 auto;
-        min-height: 0;
+        flex: 0 0 auto;
+        height: clamp(110px, 16vh, 140px);
         width: 100%;
         border: none;
         box-shadow: none;
         background: transparent;
-        padding: 8px 6px 12px 6px;
-        margin-bottom: 0;
+        padding: 6px 8px 10px 8px;
+        margin-bottom: 4px;
         display: flex;
         flex-direction: column;
         justify-content: flex-end;
@@ -218,8 +220,8 @@
     }
 
     #view-standard .expression-line {
-        font-size: clamp(1.05rem, 3.8vw, 1.35rem);
-        min-height: 26px;
+        font-size: clamp(1.05rem, 3.8vw, 1.3rem);
+        min-height: 24px;
         color: var(--text-secondary);
         margin-bottom: 4px;
         text-align: right;
@@ -238,7 +240,7 @@
     }
 
     #view-standard .result-display {
-        font-size: clamp(3rem, 11.5vw, 4.4rem);
+        font-size: clamp(2.9rem, 11vw, 4rem);
         font-weight: 500;
         letter-spacing: -1.5px;
         line-height: 1.1;
@@ -251,7 +253,7 @@
     }
 
     #view-standard .blinking-cursor {
-        font-size: clamp(2.8rem, 10vw, 4rem);
+        font-size: clamp(2.8rem, 10vw, 3.8rem);
         line-height: 1;
     }
 
@@ -261,7 +263,8 @@
 
     #view-standard .calc-utility-bar {
         width: 100%;
-        margin-bottom: 8px;
+        max-width: 340px;
+        margin: 4px auto 14px auto;
         padding: 6px 4px;
         border-bottom: 1px solid var(--border-subtle);
         flex-shrink: 0;
@@ -278,8 +281,8 @@
     }
 
     #view-standard .calc-utility-bar .util-icon-btn {
-        width: 40px;
-        height: 40px;
+        width: 38px;
+        height: 38px;
         border-radius: 50%;
         color: var(--text-secondary);
     }
@@ -288,27 +291,31 @@
         color: var(--accent-std, #38bdf8);
     }
 
-    /* Standard Keypad: 5 circular rows, scaled proportionally to screen width & height */
+    /* Standard Keypad: Perfectly Circular Buttons with Balanced Spacing & Floating Above Negative Space */
     .standard-keypad {
         display: grid;
         grid-template-columns: repeat(4, 1fr);
-        gap: clamp(8px, 2.5vw, 12px);
+        gap: clamp(10px, 3vw, 14px);
         width: 100%;
-        max-width: 440px;
+        max-width: 340px;
         margin: 0 auto;
         justify-items: center;
         align-items: center;
-        padding-bottom: 4px;
+        padding-bottom: 0;
         flex-shrink: 0;
         box-sizing: border-box;
     }
 
     .standard-keypad .btn {
-        width: 100%;
+        width: clamp(60px, 16.5vw, 68px);
+        height: clamp(60px, 16.5vw, 68px);
+        max-width: 68px;
+        max-height: 68px;
         aspect-ratio: 1 / 1;
-        max-height: clamp(56px, 11.5vh, 78px);
         border-radius: 50%;
-        font-size: clamp(1.4rem, 4.6vw, 1.85rem);
+        justify-self: center;
+        align-self: center;
+        font-size: clamp(1.35rem, 4.4vw, 1.7rem);
         font-weight: 500;
         display: flex;
         align-items: center;
@@ -324,16 +331,16 @@
     }
 
     .standard-keypad .btn-op {
-        font-size: clamp(1.6rem, 5.5vw, 2.1rem);
+        font-size: clamp(1.55rem, 5vw, 1.95rem);
     }
 
     .standard-keypad .btn-fn {
-        font-size: clamp(1.25rem, 4.2vw, 1.55rem);
+        font-size: clamp(1.2rem, 3.8vw, 1.45rem);
     }
 
     .standard-keypad .btn-equals {
         border-radius: 50%;
-        font-size: clamp(1.6rem, 5.5vw, 2.1rem);
+        font-size: clamp(1.55rem, 5vw, 1.95rem);
         box-shadow: 0 4px 14px rgba(34, 197, 94, 0.4);
     }
 
@@ -828,30 +835,41 @@
     }
 
     #view-standard.calculator-view.active {
-        padding: 2px 10px 4px 10px;
+        padding-top: 12px;
+        padding-bottom: 24px;
+        max-width: 330px;
     }
 
     #view-standard .display-container {
-        padding: 6px 4px 8px 4px;
-        min-height: 0;
-        max-height: none;
+        height: 110px;
+        padding: 4px 6px 8px 6px;
+        margin-bottom: 2px;
     }
 
     #view-standard .result-display {
-        font-size: clamp(2.8rem, 12vw, 3.4rem);
+        font-size: clamp(2.6rem, 11vw, 3.2rem);
+    }
+
+    #view-standard .calc-utility-bar {
+        max-width: 300px;
+        margin: 2px auto 10px auto;
     }
 
     .standard-keypad {
-        gap: 8px;
-        max-width: 100%;
+        gap: 10px;
+        max-width: 300px;
     }
 
     .standard-keypad .btn {
-        width: 100%;
+        width: 62px;
+        height: 62px;
+        max-width: 62px;
+        max-height: 62px;
         aspect-ratio: 1 / 1;
-        max-height: clamp(54px, 11vh, 72px);
         font-size: 1.45rem;
         border-radius: 50%;
+        justify-self: center;
+        align-self: center;
     }
 
     .standard-keypad .btn-op,

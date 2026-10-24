@@ -45,8 +45,10 @@ import { GateEngine } from '../features/gate.js';
 import { initTheme } from './theme.js';
 import { updateSidebarClock } from './clock.js';
 
+let lastSidebarToggleTime = 0;
+
 /**
- * Controls the slide-out navigation sidebar drawer.
+ * Controls the slide-out navigation sidebar drawer with debounce protection.
  */
 export function openSidebar() {
     const sidebar = document.getElementById('sidebar');
@@ -64,6 +66,10 @@ export function closeSidebar() {
 }
 
 export function toggleSidebar() {
+    const now = Date.now();
+    if (now - lastSidebarToggleTime < 250) return;
+    lastSidebarToggleTime = now;
+
     const sidebar = document.getElementById('sidebar');
     if (sidebar && sidebar.classList.contains('open')) {
         closeSidebar();

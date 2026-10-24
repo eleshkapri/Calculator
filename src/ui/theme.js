@@ -70,12 +70,22 @@ export function applyTheme(themeName) {
     if (state.currentMode === 'statistics' && typeof StatisticsEngine !== 'undefined') StatisticsEngine.calculateStats();
 }
 
+let lastThemeToggleTime = 0;
+
 /**
- * Toggles theme between Light and Dark modes with audio feedback.
+ * Toggles theme between Light and Dark modes with audio feedback and double-tap debounce.
  */
 export function toggleTheme() {
+    const now = Date.now();
+    if (now - lastThemeToggleTime < 250) {
+        return;
+    }
+    lastThemeToggleTime = now;
+
     SoundFx.playClick(800);
-    const nextTheme = document.body.classList.contains('light-theme') ? 'dark' : 'light';
+    const isLight = document.body.classList.contains('light-theme') || 
+                    document.documentElement.classList.contains('light-theme');
+    const nextTheme = isLight ? 'dark' : 'light';
     applyTheme(nextTheme);
 }
 
