@@ -27,13 +27,13 @@
     <link rel="icon" type="image/x-icon" href="favicon.ico?v=6.4">
     <link rel="icon" type="image/png" sizes="192x192" href="assets/icons/icon-192.png?v=6.4">
     <link rel="icon" type="image/png" sizes="512x512" href="assets/icons/icon-512.png?v=6.4">
-    <link rel="icon" type="image/svg+xml" href="assets/icons/favicon.svg?v=6.4">
-    <link rel="apple-touch-icon" href="assets/icons/icon-192.png?v=6.4">
+    <link rel="icon" type="image/svg+xml" href="assets/icons/favicon.svg?v=6.5">
+    <link rel="apple-touch-icon" href="assets/icons/icon-192.png?v=6.5">
     <title>CalVerse</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;600;700&family=Outfit:wght@400;500;600;700;800&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="assets/css/style.css?v=6.4">
+    <link rel="stylesheet" href="assets/css/style.css?v=6.5">
     <script>
         // Theme Boot: Remember last mood, first visit follows OS
         (function() {
@@ -181,7 +181,7 @@
                     <span>📲</span>
                     <span class="btn-text">Install App</span>
                 </button>
-                <button id="themeToggleBtn" class="utility-btn" title="Toggle Theme">
+                <button id="themeToggleBtn" class="utility-btn" onclick="CalVerse.toggleTheme(event)" title="Toggle Theme">
                     <span id="themeIcon">☀️</span>
                     <span class="btn-text">Light Mode</span>
                 </button>
@@ -199,22 +199,22 @@
         <!-- Main Viewport -->
         <main class="main-viewport">
             <header class="top-header">
-                <button class="mobile-toggle" id="mobileMenuBtn" aria-label="Toggle calculator menu" title="Open Menu">
+                <button class="mobile-toggle" id="mobileMenuBtn" aria-label="Toggle calculator menu" title="Open Menu" onclick="CalVerse.toggleSidebar(event)">
                     <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
                         <line x1="3" y1="12" x2="21" y2="12"></line>
                         <line x1="3" y1="6" x2="21" y2="6"></line>
                         <line x1="3" y1="18" x2="21" y2="18"></line>
                     </svg>
                 </button>
-                <div class="active-calculator-title" id="mobileTitleWrap" title="Tap to switch calculator mode">
+                <div class="active-calculator-title" id="mobileTitleWrap" role="button" tabindex="0" title="Tap to switch calculator mode" onclick="CalVerse.toggleSidebar(event)">
                     <h1 id="calculatorTitle">Standard Calculator</h1>
                     <p id="calculatorSubtitle">Fast, precise everyday arithmetic</p>
                 </div>
                 <div class="header-actions">
-                    <button class="action-icon-btn" id="headerThemeBtn" title="Toggle Theme" aria-label="Toggle Theme">
+                    <button class="action-icon-btn" id="headerThemeBtn" title="Toggle Theme" aria-label="Toggle Theme" onclick="CalVerse.toggleTheme(event)">
                         <span id="headerThemeIcon">☀️</span>
                     </button>
-                    <button class="action-icon-btn" id="quickHistoryBtn" title="View History" aria-label="View Calculation History" onclick="CalVerse.toggleHistory()">
+                    <button class="action-icon-btn" id="quickHistoryBtn" title="View History" aria-label="View Calculation History" onclick="CalVerse.toggleHistory(event)">
                         <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                             <circle cx="12" cy="12" r="10"></circle>
                             <polyline points="12 6 12 12 16 14"></polyline>
@@ -1827,6 +1827,6 @@
     <!-- Toast Notification -->
     <div class="toast" id="toast">Copied to clipboard!</div>
 
-    <script type="module" src="src/main.js?v=6.4"></script>
+    <script type="module" src="src/main.js?v=6.5"></script>
 </body>
 </html>

@@ -57,13 +57,13 @@ export class CalVerseFacade {
     constructor() {
         // Navigation & Shell Controls
         this.switchMode = (mode) => switchMode(mode);
-        this.openSidebar = () => openSidebar();
-        this.closeSidebar = () => closeSidebar();
-        this.toggleSidebar = () => toggleSidebar();
-        this.openHistory = () => openHistory();
-        this.closeHistory = () => closeHistory();
-        this.toggleHistory = () => toggleHistory();
-        this.toggleTheme = () => toggleTheme();
+        this.openSidebar = (e) => openSidebar(e);
+        this.closeSidebar = (e) => closeSidebar(e);
+        this.toggleSidebar = (e) => toggleSidebar(e);
+        this.openHistory = (e) => openHistory(e);
+        this.closeHistory = (e) => closeHistory(e);
+        this.toggleHistory = (e) => toggleHistory(e);
+        this.toggleTheme = (e) => toggleTheme(e);
 
         // Standard & Scientific Keypad API
         this.inputVal = inputVal;

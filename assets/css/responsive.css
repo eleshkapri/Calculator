@@ -93,7 +93,11 @@
         border-bottom: 1px solid var(--border-subtle);
         background-color: var(--bg-base);
         flex-shrink: 0;
-        z-index: 25;
+        z-index: 50;
+        position: relative;
+        touch-action: manipulation;
+        -webkit-user-select: none;
+        user-select: none;
     }
 
     .mobile-toggle {
@@ -107,6 +111,13 @@
         cursor: pointer;
         color: var(--text-primary);
         transition: var(--transition);
+        touch-action: manipulation;
+        -webkit-tap-highlight-color: transparent;
+        pointer-events: auto;
+    }
+
+    .mobile-toggle * {
+        pointer-events: none;
     }
 
     .mobile-toggle:active {
@@ -118,6 +129,13 @@
         flex: 1;
         min-width: 0;
         cursor: pointer;
+        touch-action: manipulation;
+        -webkit-tap-highlight-color: transparent;
+        pointer-events: auto;
+    }
+
+    .active-calculator-title * {
+        pointer-events: none;
     }
     
     .active-calculator-title h1 {
@@ -147,6 +165,14 @@
         height: 38px;
         flex-shrink: 0;
         border-radius: 50%;
+        cursor: pointer;
+        touch-action: manipulation;
+        -webkit-tap-highlight-color: transparent;
+        pointer-events: auto;
+    }
+
+    .action-icon-btn * {
+        pointer-events: none;
     }
     
     .calculators-container {

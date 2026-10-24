@@ -287,8 +287,8 @@ export function initPWA() {
     }, { passive: true });
 
     document.addEventListener('touchmove', (e) => {
-        // NEVER block or cancel touch scrolling inside sidebar, history drawer, or modals
-        if (e.target.closest('.sidebar, .history-drawer, .modal-backdrop, .install-modal')) {
+        // NEVER block or cancel touch interactions on header, buttons, sidebar, history drawer, or modals
+        if (e.target.closest('.sidebar, .history-drawer, .modal-backdrop, .install-modal, .top-header, button, .action-icon-btn, .mobile-toggle, .active-calculator-title')) {
             return;
         }
 
@@ -296,11 +296,11 @@ export function initPWA() {
             const touchY = e.touches[0].clientY;
             const touchDiff = touchY - _touchStartY;
             
-            // Only prevent pull-down at the very top of the main viewport to stop browser page reloads
+            // Only prevent pull-down at the very top of the main viewport to stop browser page reloads (with minimum 12px drag deadzone)
             const mainViewport = document.querySelector('.main-viewport');
             const isAtTop = mainViewport ? mainViewport.scrollTop <= 0 : window.scrollY <= 0;
 
-            if (isAtTop && touchDiff > 0 && !e.target.closest('input, textarea, select, canvas')) {
+            if (isAtTop && touchDiff > 12 && !e.target.closest('input, textarea, select, canvas, button, a')) {
                 if (e.cancelable) {
                     e.preventDefault();
                 }

@@ -56,6 +56,13 @@ export function openSidebar() {
     if (sidebar) sidebar.classList.add('open');
     if (sidebarOverlay) sidebarOverlay.classList.add('open');
     updateSidebarClock();
+
+    try {
+        const activeNav = sidebar?.querySelector('.nav-item.active');
+        if (activeNav) {
+            activeNav.scrollIntoView({ block: 'nearest', behavior: 'smooth' });
+        }
+    } catch (e) {}
 }
 
 export function closeSidebar() {
@@ -65,9 +72,10 @@ export function closeSidebar() {
     if (sidebarOverlay) sidebarOverlay.classList.remove('open');
 }
 
-export function toggleSidebar() {
+export function toggleSidebar(e) {
+    if (e && typeof e.stopPropagation === 'function') e.stopPropagation();
     const now = Date.now();
-    if (now - lastSidebarToggleTime < 250) return;
+    if (now - lastSidebarToggleTime < 180) return;
     lastSidebarToggleTime = now;
 
     const sidebar = document.getElementById('sidebar');
@@ -130,14 +138,14 @@ export function initNavigation() {
     const sidebarCloseBtn = document.getElementById('sidebarCloseBtn');
     const sidebarOverlay = document.getElementById('sidebarOverlay');
 
-    // Mobile Hamburger Toggle
+    // Mobile Hamburger Toggle and Mode Switcher Header
     if (mobileBtn) {
-        mobileBtn.addEventListener('click', toggleSidebar);
+        mobileBtn.onclick = (e) => toggleSidebar(e);
     }
 
-    // Mobile Title bar click opens sidebar mode chooser
+    // Mobile Title bar click toggles mode drawer
     if (mobileTitleWrap) {
-        mobileTitleWrap.addEventListener('click', openSidebar);
+        mobileTitleWrap.onclick = (e) => toggleSidebar(e);
     }
 
     if (sidebarCloseBtn) {

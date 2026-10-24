@@ -66,23 +66,32 @@ export function applyTheme(themeName) {
     try { localStorage.setItem('calverse_last_theme', isLight ? 'light' : 'dark'); } catch(e) {}
 
     // Redraw canvas graphs and statistical diagrams to match theme contrast
-    if (state.currentMode === 'graphing' && typeof GraphEngine !== 'undefined') GraphEngine.render();
-    if (state.currentMode === 'statistics' && typeof StatisticsEngine !== 'undefined') StatisticsEngine.calculateStats();
+    try {
+        if (state.currentMode === 'graphing' && typeof GraphEngine !== 'undefined' && GraphEngine.render) GraphEngine.render();
+        if (state.currentMode === 'statistics' && typeof StatisticsEngine !== 'undefined' && StatisticsEngine.calculateStats) StatisticsEngine.calculateStats();
+    } catch (err) {}
 }
 
 let lastThemeToggleTime = 0;
 
 /**
- * Toggles theme between Light and Dark modes with audio feedback and double-tap debounce.
+ * Toggles theme between Light and Dark modes with audio feedback and debounce guard.
+ * Supports invocation from inline HTML onclick, touch handlers, or event listeners.
+ * 
+ * @param {Event} [e] - Optional user interaction event.
  */
-export function toggleTheme() {
+export function toggleTheme(e) {
+    if (e) {
+        if (typeof e.stopPropagation === 'function') e.stopPropagation();
+    }
     const now = Date.now();
-    if (now - lastThemeToggleTime < 250) {
+    if (now - lastThemeToggleTime < 180) {
         return;
     }
     lastThemeToggleTime = now;
 
-    SoundFx.playClick(800);
+    try { SoundFx.playClick(800); } catch (err) {}
+
     const isLight = document.body.classList.contains('light-theme') || 
                     document.documentElement.classList.contains('light-theme');
     const nextTheme = isLight ? 'dark' : 'light';
@@ -109,9 +118,14 @@ export function initTheme() {
         });
     }
 
-    // Manual theme toggle button listeners
+    // Manual theme toggle button listeners (Header and Sidebar)
     const themeBtn = document.getElementById('themeToggleBtn');
     const headerThemeBtn = document.getElementById('headerThemeBtn');
-    if (themeBtn) themeBtn.addEventListener('click', toggleTheme);
-    if (headerThemeBtn) headerThemeBtn.addEventListener('click', toggleTheme);
+
+    if (themeBtn) {
+        themeBtn.onclick = (e) => toggleTheme(e);
+    }
+    if (headerThemeBtn) {
+        headerThemeBtn.onclick = (e) => toggleTheme(e);
+    }
 }

@@ -111,6 +111,8 @@
    Light Mode Theme Overrides (High-Contrast, Crisp & Harmonious)
    ========================================================================== */
 
+:root.light-theme,
+html.light-theme,
 body.light-theme {
     --bg-base: #f1f5f9;
     --bg-surface: #ffffff;
