@@ -727,6 +727,97 @@
         padding: 11px;
         font-size: 0.9rem;
     }
+
+    /* GATE Virtual Calculator Mobile Rules */
+    #view-gate.calculator-view.active {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: flex-start;
+        width: 100%;
+        max-width: 480px;
+        padding: 6px 8px 24px 8px;
+        box-sizing: border-box;
+        overflow-y: auto;
+    }
+
+    .gate-card {
+        width: 100%;
+        max-width: 100%;
+        border-radius: 12px;
+    }
+
+    .gate-mobile-mode-bar {
+        display: flex;
+    }
+
+    /* Default Mobile Mode: Adaptive Stacked Layout */
+    .gate-keypad-container:not(.gate-exam-view) .gate-keypad {
+        display: flex;
+        flex-direction: column;
+        gap: 8px;
+        min-width: 0;
+        width: 100%;
+    }
+
+    .gate-keypad-container:not(.gate-exam-view) .gate-sci-section {
+        display: grid;
+        grid-template-columns: repeat(6, 1fr);
+        gap: 4px;
+        width: 100%;
+    }
+
+    .gate-keypad-container:not(.gate-exam-view) .gate-num-section {
+        display: grid;
+        grid-template-columns: repeat(5, 1fr);
+        gap: 5px;
+        width: 100%;
+    }
+
+    .gate-keypad-container:not(.gate-exam-view) .gate-btn {
+        height: 38px;
+        font-size: 0.85rem;
+    }
+
+    .gate-keypad-container:not(.gate-exam-view) .gate-btn-num,
+    .gate-keypad-container:not(.gate-exam-view) .gate-btn-op,
+    .gate-keypad-container:not(.gate-exam-view) .gate-btn-danger {
+        height: 42px;
+        font-size: 0.95rem;
+    }
+
+    .gate-keypad-container:not(.gate-exam-view) .gate-btn-equals {
+        height: 100%;
+        min-height: 89px;
+    }
+
+    /* 11-Col Exam View Mode on Mobile: Horizontal touch scrollable replica */
+    .gate-keypad-container.gate-exam-view {
+        overflow-x: auto;
+        -webkit-overflow-scrolling: touch;
+        padding-bottom: 8px;
+    }
+
+    .gate-keypad-container.gate-exam-view .gate-keypad {
+        display: flex;
+        flex-direction: row;
+        gap: 4px;
+        min-width: 580px;
+    }
+
+    .gate-keypad-container.gate-exam-view .gate-sci-section {
+        display: grid;
+        grid-template-columns: repeat(6, 1fr);
+        gap: 3px;
+        flex: 6;
+    }
+
+    .gate-keypad-container.gate-exam-view .gate-num-section {
+        display: grid;
+        grid-template-columns: repeat(5, 1fr);
+        gap: 3px;
+        flex: 5;
+    }
 }
 
 /* Compact Mobile Keypad & Layout Tuning (<=380px, e.g. Samsung Galaxy F23 360px) */
@@ -859,5 +950,23 @@
 
     .split-inputs {
         gap: 6px;
+    }
+
+    /* GATE Virtual Calculator Compact Mobile Tuning (<=380px) */
+    .gate-keypad-container:not(.gate-exam-view) .gate-btn {
+        height: 35px;
+        font-size: 0.78rem;
+    }
+    .gate-keypad-container:not(.gate-exam-view) .gate-btn-num,
+    .gate-keypad-container:not(.gate-exam-view) .gate-btn-op,
+    .gate-keypad-container:not(.gate-exam-view) .gate-btn-danger {
+        height: 39px;
+        font-size: 0.88rem;
+    }
+    .gate-keypad-container:not(.gate-exam-view) .gate-btn-equals {
+        min-height: 83px;
+    }
+    .gate-keypad-container.gate-exam-view .gate-keypad {
+        min-width: 530px;
     }
 }

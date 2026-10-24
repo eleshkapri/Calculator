@@ -1,0 +1,433 @@
+/**
+ * ============================================================================
+ * CalVerse Pro - GATE Virtual Calculator Stylesheet (TCS iON Replica)
+ * File: assets/css/features/gate.css
+ * ============================================================================
+ */
+
+/* View Container */
+#view-gate.calculator-view.active {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-start;
+    width: 100%;
+    padding: 16px 12px 32px 12px;
+    box-sizing: border-box;
+    overflow-y: auto;
+    -webkit-overflow-scrolling: touch;
+}
+
+/* Master GATE Card - Exact Window Frame Replica */
+.gate-card {
+    width: 100%;
+    max-width: 740px;
+    background: var(--bg-surface);
+    border: 1px solid var(--border-subtle);
+    border-radius: 10px;
+    box-shadow: 0 12px 36px rgba(0, 0, 0, 0.35);
+    overflow: hidden;
+    box-sizing: border-box;
+    margin: 0 auto;
+}
+
+/* Official Blue Window Header */
+.gate-window-header {
+    background: linear-gradient(135deg, #1d4ed8, #2563eb);
+    color: #ffffff;
+    padding: 8px 14px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    user-select: none;
+    border-bottom: 1px solid rgba(0, 0, 0, 0.15);
+}
+
+.gate-header-left {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.gate-window-icon {
+    font-size: 1rem;
+}
+
+.gate-window-title {
+    font-size: 0.95rem;
+    font-weight: 700;
+    letter-spacing: 0.2px;
+}
+
+.gate-header-right {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.gate-help-btn {
+    background: rgba(255, 255, 255, 0.2);
+    color: #ffffff;
+    border: 1px solid rgba(255, 255, 255, 0.35);
+    border-radius: 4px;
+    padding: 3px 10px;
+    font-size: 0.78rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: var(--transition);
+}
+
+.gate-help-btn:hover {
+    background: rgba(255, 255, 255, 0.32);
+}
+
+.gate-window-ctrl {
+    background: transparent;
+    border: none;
+    color: rgba(255, 255, 255, 0.8);
+    font-size: 0.9rem;
+    width: 24px;
+    height: 24px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+.gate-window-ctrl:hover {
+    background: rgba(255, 255, 255, 0.2);
+    color: #ffffff;
+}
+
+/* Card Body */
+.gate-body {
+    padding: 12px 14px 16px 14px;
+    box-sizing: border-box;
+    background: var(--bg-surface);
+}
+
+/* Dual Display Screens */
+.gate-display-panel {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    margin-bottom: 10px;
+    width: 100%;
+}
+
+.gate-expr-box {
+    width: 100%;
+    height: 32px;
+    background: var(--bg-input);
+    color: var(--text-secondary);
+    border: 1px solid var(--border-subtle);
+    border-radius: 4px;
+    padding: 4px 10px;
+    font-family: var(--font-mono);
+    font-size: 0.92rem;
+    text-align: right;
+    box-sizing: border-box;
+    outline: none;
+}
+
+.gate-result-box {
+    width: 100%;
+    height: 38px;
+    background: var(--bg-input);
+    color: var(--text-primary);
+    border: 1px solid var(--border-subtle);
+    border-radius: 4px;
+    padding: 4px 10px;
+    font-family: var(--font-mono);
+    font-size: 1.35rem;
+    font-weight: 700;
+    text-align: right;
+    box-sizing: border-box;
+    outline: none;
+}
+
+/* Toolbar: Mod, Deg/Rad, Memory Keys */
+.gate-toolbar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-bottom: 10px;
+    padding: 4px 2px;
+}
+
+.gate-toolbar-left {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.gate-toolbar-right {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+}
+
+.gate-angle-group {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    font-size: 0.85rem;
+    font-weight: 600;
+    color: var(--text-primary);
+    user-select: none;
+}
+
+.gate-radio-label {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    cursor: pointer;
+}
+
+.gate-radio-label input[type="radio"] {
+    cursor: pointer;
+    accent-color: #2563eb;
+}
+
+.gate-mem-indicator {
+    font-size: 0.74rem;
+    font-weight: 700;
+    color: #22c55e;
+    min-width: 18px;
+    margin-right: 4px;
+}
+
+/* Keypad Grid (6 Cols Scientific + 5 Cols Numpad = 11 Columns on Desktop / Laptop) */
+.gate-keypad-container {
+    width: 100%;
+    box-sizing: border-box;
+}
+
+.gate-keypad {
+    display: flex;
+    gap: 6px;
+    width: 100%;
+    box-sizing: border-box;
+}
+
+.gate-sci-section {
+    display: grid;
+    grid-template-columns: repeat(6, 1fr);
+    gap: 4px;
+    flex: 6;
+}
+
+.gate-num-section {
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    gap: 4px;
+    flex: 5;
+}
+
+/* Button Primitives */
+.gate-btn {
+    height: 38px;
+    background: var(--bg-surface-elevated);
+    border: 1px solid var(--border-subtle);
+    border-radius: 4px;
+    color: var(--text-primary);
+    font-family: var(--font-ui);
+    font-size: 0.84rem;
+    font-weight: 600;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    user-select: none;
+    transition: background-color 0.1s, transform 0.1s;
+    padding: 2px 4px;
+    box-sizing: border-box;
+    min-width: 0;
+}
+
+.gate-btn:hover {
+    background: var(--bg-surface-hover);
+    border-color: var(--border-highlight);
+}
+
+.gate-btn:active {
+    transform: scale(0.95);
+}
+
+/* Modulo & Memory Buttons */
+.gate-btn-mod {
+    min-width: 44px;
+    height: 32px;
+    font-size: 0.84rem;
+    font-weight: 600;
+}
+
+.gate-btn-mem {
+    min-width: 36px;
+    height: 32px;
+    font-size: 0.78rem;
+    font-weight: 700;
+    color: var(--text-secondary);
+}
+
+/* Number Keys */
+.gate-btn-num {
+    background: var(--btn-num-bg);
+    color: var(--btn-num-text);
+    font-size: 0.95rem;
+    font-weight: 700;
+}
+
+/* Standard Operator Keys */
+.gate-btn-op {
+    background: var(--btn-op-bg);
+    color: var(--btn-op-text);
+    font-size: 1rem;
+    font-weight: 700;
+}
+
+/* Red Control Keys: Backspace, Clear, Plus/Minus */
+.gate-btn-danger {
+    background: #dc2626 !important;
+    color: #ffffff !important;
+    border-color: #b91c1c !important;
+    font-weight: 700;
+}
+
+.gate-btn-danger:hover {
+    background: #b91c1c !important;
+}
+
+/* Green Equals Button (Spans 2 rows) */
+.gate-btn-equals {
+    background: #16a34a !important;
+    color: #ffffff !important;
+    border-color: #15803d !important;
+    grid-row: span 2;
+    height: 100%;
+    min-height: 80px;
+    font-size: 1.25rem;
+    font-weight: 700;
+    box-shadow: 0 4px 12px rgba(22, 163, 74, 0.35);
+}
+
+.gate-btn-equals:hover {
+    background: #15803d !important;
+}
+
+/* Spans */
+.gate-span-2 {
+    grid-column: span 2;
+}
+
+/* Mobile View Switcher Pill Bar (Visible on phone) */
+.gate-mobile-mode-bar {
+    display: none;
+    width: 100%;
+    gap: 8px;
+    margin-bottom: 12px;
+}
+
+.gate-mode-pill {
+    flex: 1;
+    padding: 7px 10px;
+    font-size: 0.8rem;
+    font-weight: 600;
+    border-radius: 6px;
+    border: 1px solid var(--border-subtle);
+    background: var(--bg-surface-elevated);
+    color: var(--text-secondary);
+    cursor: pointer;
+    text-align: center;
+    transition: var(--transition);
+}
+
+.gate-mode-pill.active {
+    background: var(--accent-primary);
+    color: #ffffff;
+    border-color: var(--accent-primary);
+}
+
+/* Help Modal Styling */
+.gate-modal-backdrop {
+    position: fixed;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.65);
+    backdrop-filter: blur(3px);
+    z-index: 1000;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 16px;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.25s ease;
+}
+
+.gate-modal-backdrop.open {
+    opacity: 1;
+    pointer-events: auto;
+}
+
+.gate-help-dialog {
+    width: 100%;
+    max-width: 580px;
+    background: var(--bg-surface);
+    border: 1px solid var(--border-subtle);
+    border-radius: 12px;
+    box-shadow: 0 16px 40px rgba(0, 0, 0, 0.45);
+    overflow: hidden;
+    max-height: 88vh;
+    display: flex;
+    flex-direction: column;
+}
+
+.gate-help-header {
+    background: linear-gradient(135deg, #1d4ed8, #2563eb);
+    color: #ffffff;
+    padding: 12px 18px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.gate-help-header h3 {
+    font-size: 1.05rem;
+    font-weight: 700;
+    margin: 0;
+}
+
+.gate-help-close {
+    background: transparent;
+    border: none;
+    color: #ffffff;
+    font-size: 1.2rem;
+    cursor: pointer;
+    line-height: 1;
+}
+
+.gate-help-content {
+    padding: 16px 20px;
+    overflow-y: auto;
+    font-size: 0.88rem;
+    line-height: 1.5;
+    color: var(--text-primary);
+}
+
+.gate-help-content h4 {
+    color: var(--accent-primary);
+    margin: 12px 0 6px 0;
+    font-size: 0.95rem;
+}
+
+.gate-help-content ul {
+    margin: 4px 0 12px 18px;
+    padding: 0;
+}
+
+.gate-help-content li {
+    margin-bottom: 4px;
+}

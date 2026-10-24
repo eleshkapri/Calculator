@@ -10,9 +10,9 @@
 [![Zero Dependencies](https://img.shields.io/badge/Dependencies-0%20(Pure%20Vanilla)-8b5cf6?style=for-the-badge)](https://calverse-esk.vercel.app/)
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg?style=for-the-badge)](LICENSE)
 
-**An ultra-responsive, zero-dependency, offline-first Progressive Web Application featuring 12 professional calculation and graphing engines.**
+**An ultra-responsive, zero-dependency, offline-first Progressive Web Application featuring 13 professional calculation and graphing engines.**
 
-[🚀 Launch Live Web App](https://calverse-esk.vercel.app/) • [✨ 12 Engines Breakdown](#-12-dedicated-calculator-engines) • [📱 PWA Installation](#-1-click-multi-platform-installation-pwa) • [⌨️ Keyboard Shortcuts](#️-hardware-keyboard-shortcuts-reference) • [🛡️ Security & OOP](#-core-engineering--security-principles) • [📂 Architecture](#-project-architecture)
+[🚀 Launch Live Web App](https://calverse-esk.vercel.app/) • [✨ 13 Engines Breakdown](#-13-dedicated-calculator-engines) • [📱 PWA Installation](#-1-click-multi-platform-installation-pwa) • [⌨️ Keyboard Shortcuts](#️-hardware-keyboard-shortcuts-reference) • [🛡️ Security & OOP](#-core-engineering--security-principles) • [📂 Architecture](#-project-architecture)
 
 </div>
 
@@ -22,7 +22,7 @@
 
 - [🌐 Live Web Application](#-live-web-application)
 - [🌟 Overview & Key Highlights](#-overview--key-highlights)
-- [✨ 12 Dedicated Calculator Engines](#-12-dedicated-calculator-engines)
+- [✨ 13 Dedicated Calculator Engines](#-13-dedicated-calculator-engines)
   - [1. Standard Calculator](#1--standard-calculator)
   - [2. Scientific Calculator](#2--scientific-calculator)
   - [3. Graphing Calculator](#3--graphing-calculator)
@@ -35,6 +35,7 @@
   - [10. Discount & Tip Calculator](#10--discount--tip-calculator)
   - [11. Equation & Algebra Solver](#11--equation--algebra-solver)
   - [12. Statistics & Visual Data Analyzer](#12--statistics--visual-data-analyzer)
+  - [13. GATE Virtual Calculator](#13--gate-virtual-calculator)
 - [📱 1-Click Multi-Platform Installation (PWA)](#-1-click-multi-platform-installation-pwa)
 - [⌨️ Hardware Keyboard Shortcuts Reference](#️-hardware-keyboard-shortcuts-reference)
 - [🛡️ Core Engineering & Security Principles](#-core-engineering--security-principles)
@@ -67,7 +68,7 @@
 
 ---
 
-## ✨ 12 Dedicated Calculator Engines
+## ✨ 13 Dedicated Calculator Engines
 
 ### 1. 🔢 Standard Calculator
 * **Live Equation Retention**: Displays the full expression line with equals (e.g. `888 + 1 =`) while the computed output (`889`) remains displayed in the accumulator.
@@ -150,6 +151,17 @@ Instant, bidirectional conversion across 7 measurement categories:
   * 📦 **Box & Whisker Plot**: 5-number summary ($MIN, Q_1, MEDIAN, Q_3, MAX$) with diamond mean marker.
   * 📈 **Frequency Histogram**: Dynamic class intervals and frequency counts.
 * **Comprehensive Statistical Metrics**: Mean ($\bar{x}$), Median, Mode, Sample and Population Standard Deviation ($\sigma, s$), Variance ($s^2$), Count ($N$), Sum ($\Sigma x$), Range, and Quartiles ($Q_1, Q_3, \text{IQR}$).
+
+### 13. 🎓 GATE Virtual Calculator
+* **Official TCS iON Exam Replica**: Pixel-accurate simulation of the virtual scientific calculator provided during the Graduate Aptitude Test in Engineering (GATE).
+* **Dual Display Screens**: Upper formula sequence line and lower active numeric operand/result box.
+* **Complete 11-Column Keypad**: 6 columns of scientific functions + 5 columns of arithmetic numpad keys matching the official exam interface.
+* **Hyperbolic & Inverse Functions**: `sinh`, `cosh`, `tanh`, `sinh⁻¹`, `cosh⁻¹`, `tanh⁻¹`.
+* **Trigonometry with DEG/RAD Modes**: `sin`, `cos`, `tan`, `sin⁻¹`, `cos⁻¹`, `tan⁻¹`.
+* **Triple Logarithms & Powers**: `ln`, `log` (base 10), `log₂x` (base 2), `logyx` (base $y$), $e^x$, $10^x$, $\text{Exp}$, $x^2$, $x^3$, $x^y$, $\sqrt{x}$, $\sqrt[3]{x}$, $\sqrt[y]{x}$.
+* **Full Memory Bank**: `MC` (Clear), `MR` (Recall), `MS` (Store), `M+` (Add), `M-` (Subtract) with active memory badge.
+* **Dual Device Optimization**: 1:1 authentic desktop exam layout and adaptive touch-friendly mobile layout for seamless practice on phones and laptops.
+* **Built-in Exam Guidelines**: Official TCS iON user manual and operator precedence rules.
 
 ---
 
@@ -239,12 +251,13 @@ Calculator/
 │   │   ├── core/
 │   │   │   ├── reset.css              # Cross-browser CSS baseline normalization
 │   │   │   └── variables.css          # Design system tokens (Dark/Light palettes, spacing)
-│   │   ├── features/                  # 11 Modular Feature Stylesheets
+│   │   ├── features/                  # 12 Modular Feature Stylesheets
 │   │   │   ├── converter.css          # Unit converter grid & card styling
 │   │   │   ├── date.css               # Date picker & countdown card layouts
 │   │   │   ├── discount.css           # Discount summary & receipt card styles
 │   │   │   ├── equations.css          # Math equation rendering & step-by-step boxes
 │   │   │   ├── financial.css          # Loan amortization, SIP & currency converter UI
+│   │   │   ├── gate.css               # GATE virtual calculator TCS iON window & keypads
 │   │   │   ├── graphing.css           # 2D Canvas graphing viewport & control HUD
 │   │   │   ├── health.css             # BMI gauge & calorie recommendation cards
 │   │   │   ├── programmer.css         # Programmer bit-word grids & radix displays
@@ -274,10 +287,11 @@ Calculator/
 │   │   ├── sound.js                   # Web Audio API procedural sound synthesizer
 │   │   ├── state.js                   # Centralized StateManager Singleton
 │   │   └── storage.js                 # Web Storage persistence & history serialization
-│   ├── features/                      # 13 Object-Oriented Feature Engines
+│   ├── features/                      # 14 Object-Oriented Feature Engines
 │   │   ├── base.js                    # BaseCalculator abstract parent class
 │   │   ├── standard.js                # Standard arithmetic & history manager
 │   │   ├── scientific.js              # Scientific, trigonometric & power operations
+│   │   ├── gate.js                    # Official GATE Virtual Calculator TCS iON engine
 │   │   ├── graphing.js                # HTML5 2D Canvas function plotter
 │   │   ├── financial.js               # Loan EMI, SIP & live exchange rate converter
 │   │   ├── converter.js               # 7-category reactive unit conversion engine

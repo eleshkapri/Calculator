@@ -57,7 +57,8 @@ export const TITLES = {
     time: { title: 'Time Calculator', subtitle: 'Work duration, time math, stopwatch & unix timestamps' },
     discount: { title: 'Discount & Tip Calculator', subtitle: 'Shopping savings, sales tax & bill splitting' },
     equation: { title: 'Equation & Algebra Solver', subtitle: 'Quadratic roots, 2x2 linear systems & fractions' },
-    statistics: { title: 'Statistics & Data Analyzer', subtitle: 'Mean, median, variance, std dev & box plots' }
+    statistics: { title: 'Statistics & Data Analyzer', subtitle: 'Mean, median, variance, std dev & box plots' },
+    gate: { title: 'GATE Virtual Calculator', subtitle: 'Official TCS iON Exam Layout & Scientific Functions' }
 };
 
 /**

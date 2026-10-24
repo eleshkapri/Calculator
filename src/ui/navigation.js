@@ -41,6 +41,7 @@ import { TimeEngine } from '../features/time.js';
 import { DiscountEngine } from '../features/discount.js';
 import { EquationEngine } from '../features/equations.js';
 import { StatisticsEngine } from '../features/statistics.js';
+import { GateEngine } from '../features/gate.js';
 import { initTheme } from './theme.js';
 import { updateSidebarClock } from './clock.js';
 
@@ -297,5 +298,7 @@ export function switchMode(mode) {
         EquationEngine.init();
     } else if (mode === 'statistics') {
         StatisticsEngine.init();
+    } else if (mode === 'gate') {
+        GateEngine.updateDisplay();
     }
 }

@@ -38,6 +38,7 @@
 @import './features/equations.css';
 @import './features/statistics.css';
 @import './features/converter.css';
+@import './features/gate.css';
 
 /* --- 4. Cross-Device Responsive Layouts --- */
 @import './responsive.css';

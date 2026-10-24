@@ -66,7 +66,7 @@ export class MathEvaluator {
 
         // Strip known safe Math members and numeric tokens
         const stripped = sanitizedExpr
-            .replace(/Math\.(sin|cos|tan|asin|acos|atan|log|log10|log2|sqrt|cbrt|abs|exp|pow|PI|E)/g, '')
+            .replace(/Math\.(asinh|acosh|atanh|asin|acos|atan|sinh|cosh|tanh|sin|cos|tan|log10|log2|log|sqrt|cbrt|abs|exp|pow|PI|E)/g, '')
             .replace(/Infinity|NaN/g, '')
             .replace(/[0-9.]+/g, '')
             .replace(/[\+\-\*\/\%\(\)\,\s\^]/g, '');
@@ -93,21 +93,30 @@ export class MathEvaluator {
             .replace(/−/g, '-')
             .replace(/π/g, `${Math.PI}`)
             .replace(/\be\b/g, `${Math.E}`)
-            .replace(/\^/g, '**');
+            .replace(/\^/g, '**')
+            .replace(/\s+mod\s+/gi, ' % ');
 
         // Angle mode conversion factor injection
         const radFactor = angleMode === 'DEG' ? `* (${Math.PI} / 180)` : '';
         const invFactor = angleMode === 'DEG' ? `* (180 / ${Math.PI})` : '';
 
-        // Direct trigonometric replacements
-        s = s.replace(/sin\(([^)]+)\)/g, `Math.sin(($1)${radFactor})`);
-        s = s.replace(/cos\(([^)]+)\)/g, `Math.cos(($1)${radFactor})`);
-        s = s.replace(/tan\(([^)]+)\)/g, `Math.tan(($1)${radFactor})`);
+        // Hyperbolic replacements (independent of angular mode, replaced before regular trig)
+        s = s.replace(/(?<![a-zA-Z\.])asinh\(([^)]+)\)/g, 'Math.asinh($1)');
+        s = s.replace(/(?<![a-zA-Z\.])acosh\(([^)]+)\)/g, 'Math.acosh($1)');
+        s = s.replace(/(?<![a-zA-Z\.])atanh\(([^)]+)\)/g, 'Math.atanh($1)');
+        s = s.replace(/(?<![a-zA-Z\.])sinh\(([^)]+)\)/g, 'Math.sinh($1)');
+        s = s.replace(/(?<![a-zA-Z\.])cosh\(([^)]+)\)/g, 'Math.cosh($1)');
+        s = s.replace(/(?<![a-zA-Z\.])tanh\(([^)]+)\)/g, 'Math.tanh($1)');
 
         // Inverse trigonometric replacements (convert radians back to degrees if DEG mode)
-        s = s.replace(/asin\(([^)]+)\)/g, `(Math.asin($1)${invFactor})`);
-        s = s.replace(/acos\(([^)]+)\)/g, `(Math.acos($1)${invFactor})`);
-        s = s.replace(/atan\(([^)]+)\)/g, `(Math.atan($1)${invFactor})`);
+        s = s.replace(/(?<![a-zA-Z\.])asin\(([^)]+)\)/g, `(Math.asin($1)${invFactor})`);
+        s = s.replace(/(?<![a-zA-Z\.])acos\(([^)]+)\)/g, `(Math.acos($1)${invFactor})`);
+        s = s.replace(/(?<![a-zA-Z\.])atan\(([^)]+)\)/g, `(Math.atan($1)${invFactor})`);
+
+        // Direct trigonometric replacements
+        s = s.replace(/(?<![a-zA-Z\.])sin\(([^)]+)\)/g, `Math.sin(($1)${radFactor})`);
+        s = s.replace(/(?<![a-zA-Z\.])cos\(([^)]+)\)/g, `Math.cos(($1)${radFactor})`);
+        s = s.replace(/(?<![a-zA-Z\.])tan\(([^)]+)\)/g, `Math.tan(($1)${radFactor})`);
 
         // Two-argument custom base logarithm: log(base, value) -> (Math.log(value) / Math.log(base))
         s = s.replace(/(?<!Math\.)log\s*\(\s*([^,]+)\s*,\s*([^)]+)\s*\)/g, '(Math.log($2) / Math.log($1))');

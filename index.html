@@ -89,6 +89,10 @@
                     <span class="icon">🔬</span>
                     <span class="label">Scientific</span>
                 </button>
+                <button class="nav-item" data-mode="gate">
+                    <span class="icon">🎓</span>
+                    <span class="label">GATE Calculator</span>
+                </button>
                 <button class="nav-item" data-mode="graphing">
                     <span class="icon">📈</span>
                     <span class="label">Graphing</span>
@@ -1547,6 +1551,147 @@
                     </div>
                 </section>
 
+                <!-- 13. GATE VIRTUAL CALCULATOR (OFFICIAL TCS iON REPLICA) -->
+                <section class="calculator-view" id="view-gate">
+                    <div class="gate-card">
+                        <!-- Official Blue Window Header -->
+                        <div class="gate-window-header">
+                            <div class="gate-header-left">
+                                <span class="gate-window-icon">🎓</span>
+                                <span class="gate-window-title">Scientific Calculator</span>
+                            </div>
+                            <div class="gate-header-right">
+                                <button type="button" class="gate-help-btn" onclick="CalVerse.gateOpenHelp()" title="Official GATE Calculator Instructions">Help</button>
+                                <button type="button" class="gate-window-ctrl" title="Minimize">−</button>
+                                <button type="button" class="gate-window-ctrl" onclick="CalVerse.switchMode('standard')" title="Close">✕</button>
+                            </div>
+                        </div>
+
+                        <!-- Card Body -->
+                        <div class="gate-body">
+                            <!-- Dual Display Screens -->
+                            <div class="gate-display-panel">
+                                <input type="text" class="gate-expr-box" id="gateExpr" readonly placeholder="" aria-label="GATE Expression formula">
+                                <input type="text" class="gate-result-box" id="gateDisplay" value="0" readonly aria-label="GATE Result Display">
+                            </div>
+
+                            <!-- Toolbar: Mod, Deg/Rad, Memory Keys -->
+                            <div class="gate-toolbar">
+                                <div class="gate-toolbar-left">
+                                    <button type="button" class="gate-btn gate-btn-mod" onclick="CalVerse.gateInputVal('mod')" title="Modulo (mod)">mod</button>
+                                    <div class="gate-angle-group">
+                                        <label class="gate-radio-label">
+                                            <input type="radio" name="gateAngle" id="gateRadioDeg" checked onchange="CalVerse.gateSetAngleMode('DEG')">
+                                            <span>Deg</span>
+                                        </label>
+                                        <label class="gate-radio-label">
+                                            <input type="radio" name="gateAngle" id="gateRadioRad" onchange="CalVerse.gateSetAngleMode('RAD')">
+                                            <span>Rad</span>
+                                        </label>
+                                    </div>
+                                </div>
+                                <div class="gate-toolbar-right">
+                                    <span class="gate-mem-indicator" id="gateMemoryIndicator"></span>
+                                    <button type="button" class="gate-btn gate-btn-mem" onclick="CalVerse.gateMemClear()" title="Memory Clear (MC)">MC</button>
+                                    <button type="button" class="gate-btn gate-btn-mem" onclick="CalVerse.gateMemRecall()" title="Memory Recall (MR)">MR</button>
+                                    <button type="button" class="gate-btn gate-btn-mem" onclick="CalVerse.gateMemStore()" title="Memory Store (MS)">MS</button>
+                                    <button type="button" class="gate-btn gate-btn-mem" onclick="CalVerse.gateMemAdd()" title="Memory Add (M+)">M+</button>
+                                    <button type="button" class="gate-btn gate-btn-mem" onclick="CalVerse.gateMemSub()" title="Memory Subtract (M-)">M-</button>
+                                </div>
+                            </div>
+
+                            <!-- Mobile Layout Mode Switcher (Visible on phone) -->
+                            <div class="gate-mobile-mode-bar" id="gateMobileModeBar">
+                                <button type="button" class="gate-mode-pill active" id="gateModeAdaptive" onclick="CalVerse.gateSetMobileLayout('adaptive')">📱 Mobile Touch View</button>
+                                <button type="button" class="gate-mode-pill" id="gateModeExam" onclick="CalVerse.gateSetMobileLayout('exam')">💻 11-Col Exam View</button>
+                            </div>
+
+                            <!-- 11-Column Keypad Container -->
+                            <div class="gate-keypad-container" id="gateKeypadContainer">
+                                <div class="gate-keypad" id="gateKeypad">
+                                    <!-- Left 6 Columns: Scientific Functions -->
+                                    <div class="gate-sci-section">
+                                        <!-- Row 1 -->
+                                        <button type="button" class="gate-btn" onclick="CalVerse.gateInputFunc('sinh')" title="Hyperbolic Sine">sinh</button>
+                                        <button type="button" class="gate-btn" onclick="CalVerse.gateInputFunc('cosh')" title="Hyperbolic Cosine">cosh</button>
+                                        <button type="button" class="gate-btn" onclick="CalVerse.gateInputFunc('tanh')" title="Hyperbolic Tangent">tanh</button>
+                                        <button type="button" class="gate-btn" onclick="CalVerse.gateInputVal('Exp')" title="Scientific Exponent (Exp)">Exp</button>
+                                        <button type="button" class="gate-btn" onclick="CalVerse.gateInputVal('(')" title="Open Parenthesis">(</button>
+                                        <button type="button" class="gate-btn" onclick="CalVerse.gateInputVal(')')" title="Close Parenthesis">)</button>
+
+                                        <!-- Row 2 -->
+                                        <button type="button" class="gate-btn" onclick="CalVerse.gateInputFunc('asinh')" title="Inverse Hyperbolic Sine">sinh⁻¹</button>
+                                        <button type="button" class="gate-btn" onclick="CalVerse.gateInputFunc('acosh')" title="Inverse Hyperbolic Cosine">cosh⁻¹</button>
+                                        <button type="button" class="gate-btn" onclick="CalVerse.gateInputFunc('atanh')" title="Inverse Hyperbolic Tangent">tanh⁻¹</button>
+                                        <button type="button" class="gate-btn" onclick="CalVerse.gateInputFunc('log2')" title="Base-2 Logarithm">log₂x</button>
+                                        <button type="button" class="gate-btn" onclick="CalVerse.gateInputFunc('ln')" title="Natural Logarithm (base e)">ln</button>
+                                        <button type="button" class="gate-btn" onclick="CalVerse.gateInputFunc('log')" title="Common Logarithm (base 10)">log</button>
+
+                                        <!-- Row 3 -->
+                                        <button type="button" class="gate-btn" onclick="CalVerse.gateInputVal('π')" title="Pi Constant (3.14159...)">π</button>
+                                        <button type="button" class="gate-btn" onclick="CalVerse.gateInputVal('e')" title="Euler Constant (2.71828...)">e</button>
+                                        <button type="button" class="gate-btn" onclick="CalVerse.gateInputFunc('fact')" title="Factorial (n!)">n!</button>
+                                        <button type="button" class="gate-btn" onclick="CalVerse.gateInputFunc('logyx')" title="Logarithm Base y">logyx</button>
+                                        <button type="button" class="gate-btn" onclick="CalVerse.gateInputFunc('exp')" title="Exponential e^x">eˣ</button>
+                                        <button type="button" class="gate-btn" onclick="CalVerse.gateInputFunc('tenPow')" title="10 to the power x">10ˣ</button>
+
+                                        <!-- Row 4 -->
+                                        <button type="button" class="gate-btn" onclick="CalVerse.gateInputFunc('sin')" title="Sine">sin</button>
+                                        <button type="button" class="gate-btn" onclick="CalVerse.gateInputFunc('cos')" title="Cosine">cos</button>
+                                        <button type="button" class="gate-btn" onclick="CalVerse.gateInputFunc('tan')" title="Tangent">tan</button>
+                                        <button type="button" class="gate-btn" onclick="CalVerse.gateInputFunc('pow')" title="x to power y (xʸ)">xʸ</button>
+                                        <button type="button" class="gate-btn" onclick="CalVerse.gateInputFunc('cube')" title="Cube (x³)">x³</button>
+                                        <button type="button" class="gate-btn" onclick="CalVerse.gateInputFunc('sqr')" title="Square (x²)">x²</button>
+
+                                        <!-- Row 5 -->
+                                        <button type="button" class="gate-btn" onclick="CalVerse.gateInputFunc('asin')" title="Inverse Sine (sin⁻¹)">sin⁻¹</button>
+                                        <button type="button" class="gate-btn" onclick="CalVerse.gateInputFunc('acos')" title="Inverse Cosine (cos⁻¹)">cos⁻¹</button>
+                                        <button type="button" class="gate-btn" onclick="CalVerse.gateInputFunc('atan')" title="Inverse Tangent (tan⁻¹)">tan⁻¹</button>
+                                        <button type="button" class="gate-btn" onclick="CalVerse.gateInputFunc('yroot')" title="y-th Root of x">ʸ√x</button>
+                                        <button type="button" class="gate-btn" onclick="CalVerse.gateInputFunc('cbrt')" title="Cube Root (³√x)">³√x</button>
+                                        <button type="button" class="gate-btn" onclick="CalVerse.gateInputFunc('abs')" title="Absolute Value (|x|)">|x|</button>
+                                    </div>
+
+                                    <!-- Right 5 Columns: Numpad & Arithmetic Operators -->
+                                    <div class="gate-num-section">
+                                        <!-- Row 1 -->
+                                        <button type="button" class="gate-btn gate-btn-danger gate-span-2" onclick="CalVerse.gateBackspace()" title="Backspace">←</button>
+                                        <button type="button" class="gate-btn gate-btn-danger" onclick="CalVerse.gateClear()" title="Clear All (C)">C</button>
+                                        <button type="button" class="gate-btn gate-btn-danger" onclick="CalVerse.gateToggleSign()" title="Toggle Sign (+/-)">+/-</button>
+                                        <button type="button" class="gate-btn" onclick="CalVerse.gateInputFunc('sqrt')" title="Square Root (√)">√</button>
+
+                                        <!-- Row 2 -->
+                                        <button type="button" class="gate-btn gate-btn-num" onclick="CalVerse.gateInputVal('7')">7</button>
+                                        <button type="button" class="gate-btn gate-btn-num" onclick="CalVerse.gateInputVal('8')">8</button>
+                                        <button type="button" class="gate-btn gate-btn-num" onclick="CalVerse.gateInputVal('9')">9</button>
+                                        <button type="button" class="gate-btn gate-btn-op" onclick="CalVerse.gateInputVal('/')">/</button>
+                                        <button type="button" class="gate-btn gate-btn-op" onclick="CalVerse.gateInputVal('%')">%</button>
+
+                                        <!-- Row 3 -->
+                                        <button type="button" class="gate-btn gate-btn-num" onclick="CalVerse.gateInputVal('4')">4</button>
+                                        <button type="button" class="gate-btn gate-btn-num" onclick="CalVerse.gateInputVal('5')">5</button>
+                                        <button type="button" class="gate-btn gate-btn-num" onclick="CalVerse.gateInputVal('6')">6</button>
+                                        <button type="button" class="gate-btn gate-btn-op" onclick="CalVerse.gateInputVal('*')">*</button>
+                                        <button type="button" class="gate-btn" onclick="CalVerse.gateInputFunc('inv')" title="Reciprocal (1/x)">1/x</button>
+
+                                        <!-- Row 4 -->
+                                        <button type="button" class="gate-btn gate-btn-num" onclick="CalVerse.gateInputVal('1')">1</button>
+                                        <button type="button" class="gate-btn gate-btn-num" onclick="CalVerse.gateInputVal('2')">2</button>
+                                        <button type="button" class="gate-btn gate-btn-num" onclick="CalVerse.gateInputVal('3')">3</button>
+                                        <button type="button" class="gate-btn gate-btn-op" onclick="CalVerse.gateInputVal('-')">-</button>
+                                        <button type="button" class="gate-btn gate-btn-equals" onclick="CalVerse.gateCalculate()" title="Calculate (=)">=</button>
+
+                                        <!-- Row 5 -->
+                                        <button type="button" class="gate-btn gate-btn-num gate-span-2" onclick="CalVerse.gateInputVal('0')">0</button>
+                                        <button type="button" class="gate-btn gate-btn-num" onclick="CalVerse.gateInputVal('.')">.</button>
+                                        <button type="button" class="gate-btn gate-btn-op" onclick="CalVerse.gateInputVal('+')">+</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
             </div>
 
             <!-- App Footer -->
@@ -1637,9 +1782,51 @@
         </div>
     </div>
 
+    <!-- GATE Virtual Calculator Help Modal -->
+    <div class="gate-modal-backdrop" id="gateHelpModal" onclick="if(event.target===this) CalVerse.gateCloseHelp()">
+        <div class="gate-help-dialog">
+            <div class="gate-help-header">
+                <div class="gate-header-left">
+                    <span class="gate-window-icon">🎓</span>
+                    <h3>Official GATE Virtual Calculator Guidelines</h3>
+                </div>
+                <button type="button" class="gate-help-close" onclick="CalVerse.gateCloseHelp()" aria-label="Close Help">✕</button>
+            </div>
+            <div class="gate-help-content">
+                <h4>1. Examination Overview</h4>
+                <p>This is the official simulation of the virtual scientific calculator provided by <strong>TCS iON</strong> during the online Graduate Aptitude Test in Engineering (GATE). Physical calculators are strictly prohibited in the exam hall.</p>
+
+                <h4>2. Display Windows</h4>
+                <ul>
+                    <li><strong>Upper Formula Display:</strong> Shows the active mathematical formula sequence and open parentheses.</li>
+                    <li><strong>Lower Result Display:</strong> Shows the current numeric operand or final evaluated result.</li>
+                </ul>
+
+                <h4>3. Angular Modes</h4>
+                <ul>
+                    <li><strong>Deg (Degrees):</strong> Standard angle mode for <code>sin</code>, <code>cos</code>, <code>tan</code>, and inverse trigonometric functions.</li>
+                    <li><strong>Rad (Radians):</strong> Mathematical radian mode for calculus and scientific formulas.</li>
+                    <li><em>Note: Hyperbolic functions (<code>sinh</code>, <code>cosh</code>, <code>tanh</code>) operate strictly on real numbers independent of the angle mode.</em></li>
+                </ul>
+
+                <h4>4. Memory Keys</h4>
+                <ul>
+                    <li><strong>MC:</strong> Memory Clear - resets memory register to 0.</li>
+                    <li><strong>MS:</strong> Memory Store - stores current display value into memory.</li>
+                    <li><strong>MR:</strong> Memory Recall - places stored memory number into the display.</li>
+                    <li><strong>M+:</strong> Memory Add - adds current display value to stored memory.</li>
+                    <li><strong>M-:</strong> Memory Subtract - subtracts current display value from stored memory.</li>
+                </ul>
+
+                <h4>5. Precedence of Operations</h4>
+                <p>Standard mathematical operator precedence applies: Parentheses <code>()</code> &gt; Exponents &amp; Roots &gt; Multiplication/Division &gt; Addition/Subtraction.</p>
+            </div>
+        </div>
+    </div>
+
     <!-- Toast Notification -->
     <div class="toast" id="toast">Copied to clipboard!</div>
 
-    <script type="module" src="src/main.js?v=6.2"></script>
+    <script type="module" src="src/main.js?v=6.3"></script>
 </body>
 </html>

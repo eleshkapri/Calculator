@@ -30,7 +30,8 @@ export class StateManager {
 
         this.memory = {
             std: 0,
-            sci: 0
+            sci: 0,
+            gate: 0
         };
 
         this.std = {
@@ -43,6 +44,13 @@ export class StateManager {
             expr: '',
             current: '0',
             waitingForNewNumber: false
+        };
+
+        this.gate = {
+            expr: '',
+            current: '0',
+            waitingForNewNumber: false,
+            angleMode: 'DEG'
         };
 
         this.prog = {

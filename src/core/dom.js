@@ -43,6 +43,7 @@ export function getFloatVal(id) {
  * @param {string} msg - The notification message text to display.
  */
 export function showToast(msg) {
+    if (typeof document === 'undefined') return;
     const toast = document.getElementById('toast');
     if (!toast) return;
     toast.textContent = msg;

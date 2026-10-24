@@ -1,5 +1,5 @@
 // Service Worker for CalVerse Pro — Network-First for Fast Sync
-const CACHE_NAME = 'calverse-v42';
+const CACHE_NAME = 'calverse-v43';
 
 // Core static assets required for complete offline operation
 const PRECACHE_ASSETS = [
@@ -29,6 +29,7 @@ const PRECACHE_ASSETS = [
   './assets/css/features/equations.css',
   './assets/css/features/statistics.css',
   './assets/css/features/converter.css',
+  './assets/css/features/gate.css',
   './assets/icons/favicon.svg',
   './assets/icons/favicon.ico',
   './assets/icons/icon-192.png',
@@ -47,6 +48,7 @@ const PRECACHE_ASSETS = [
   './src/features/discount.js',
   './src/features/equations.js',
   './src/features/financial.js',
+  './src/features/gate.js',
   './src/features/graphing.js',
   './src/features/health.js',
   './src/features/programmer.js',

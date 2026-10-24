@@ -42,6 +42,7 @@ import { TimeEngine } from './features/time.js';
 import { DiscountEngine } from './features/discount.js';
 import { EquationEngine } from './features/equations.js';
 import { StatisticsEngine } from './features/statistics.js';
+import { GateEngine } from './features/gate.js';
 import { initNavigation, switchMode, openSidebar, closeSidebar, toggleSidebar, openHistory, closeHistory, toggleHistory } from './ui/navigation.js';
 import { toggleTheme } from './ui/theme.js';
 import { initKeyboard } from './ui/keyboard.js';
@@ -160,6 +161,23 @@ export class CalVerseFacade {
         this.clearStatsData = () => StatisticsEngine.clearData();
         this.copyStatsSummary = () => StatisticsEngine.copySummary();
 
+        // GATE Virtual Calculator API (TCS iON Examination Engine)
+        this.gateInputVal = (val) => GateEngine.inputVal(val);
+        this.gateInputFunc = (fn) => GateEngine.inputFunc(fn);
+        this.gateCalculate = () => GateEngine.calculate();
+        this.gateClear = () => GateEngine.clear();
+        this.gateBackspace = () => GateEngine.backspace();
+        this.gateToggleSign = () => GateEngine.toggleSign();
+        this.gateSetAngleMode = (mode) => GateEngine.setAngleMode(mode);
+        this.gateMemClear = () => GateEngine.memClear();
+        this.gateMemRecall = () => GateEngine.memRecall();
+        this.gateMemStore = () => GateEngine.memStore();
+        this.gateMemAdd = () => GateEngine.memAdd();
+        this.gateMemSub = () => GateEngine.memSub();
+        this.gateOpenHelp = () => GateEngine.openHelp();
+        this.gateCloseHelp = () => GateEngine.closeHelp();
+        this.gateSetMobileLayout = (mode) => GateEngine.setMobileLayout(mode);
+
         // Install Modal & Platform API
         this.openInstallModal = () => PWAController.openInstallModal();
         this.closeInstallModal = () => PWAController.closeInstallModal();
@@ -192,6 +210,7 @@ function boot() {
     try { EquationEngine.init(); } catch (e) { console.error('Equation init error:', e); }
     try { StatisticsEngine.init(); } catch (e) { console.error('Statistics init error:', e); }
     try { DateEngine.init(); } catch (e) { console.error('Date init error:', e); }
+    try { GateEngine.updateDisplay(); } catch (e) { console.error('Gate init error:', e); }
     try { renderHistoryList(); } catch (e) { console.error('History init error:', e); }
     try { initPWA(); } catch (e) { console.error('PWA init error:', e); }
 }
