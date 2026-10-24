@@ -55,7 +55,17 @@ export class StandardCalculator extends BaseCalculator {
         const exprElem = document.getElementById(`${type}Expression`);
         const memElem = document.getElementById(`${type}MemoryIndicator`);
 
-        if (dispElem) dispElem.value = data.current;
+        if (dispElem) {
+            dispElem.value = data.current;
+            const len = data.current ? data.current.length : 1;
+            if (len > 13) {
+                dispElem.style.fontSize = 'clamp(1.6rem, 5.5vw, 2.2rem)';
+            } else if (len > 9) {
+                dispElem.style.fontSize = 'clamp(2.1rem, 7.5vw, 2.8rem)';
+            } else {
+                dispElem.style.fontSize = '';
+            }
+        }
         if (exprElem) exprElem.textContent = data.expr;
         if (memElem) memElem.textContent = (state.memory && state.memory[type] !== 0) ? `M (${state.memory[type]})` : '';
     }

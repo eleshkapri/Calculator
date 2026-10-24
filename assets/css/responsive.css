@@ -171,17 +171,17 @@
         margin: 0 auto;
     }
 
-    /* Standard Calculator: Sits cleanly ABOVE the footer */
+    /* Standard Calculator: Mobile Full-Height Native Layout */
     #view-standard.calculator-view.active {
         height: 100%;
         max-height: 100%;
         width: 100%;
-        max-width: 420px;
+        max-width: 440px;
         margin: 0 auto;
-        padding: 2px 10px 4px 10px;
+        padding: 4px 12px 6px 12px;
         display: flex;
         flex-direction: column;
-        justify-content: flex-end;
+        justify-content: space-between;
         box-sizing: border-box;
     }
 
@@ -197,37 +197,62 @@
         background: transparent;
         display: flex;
         flex-direction: column;
-        justify-content: flex-end;
+        justify-content: space-between;
         box-sizing: border-box;
     }
 
     #view-standard .display-container {
-        flex: 1;
-        min-height: 56px;
-        max-height: 140px;
+        flex: 1 1 auto;
+        min-height: 0;
         width: 100%;
         border: none;
         box-shadow: none;
         background: transparent;
-        padding: 2px 8px;
+        padding: 8px 6px 12px 6px;
         margin-bottom: 0;
         display: flex;
         flex-direction: column;
         justify-content: flex-end;
+        align-items: flex-end;
         box-sizing: border-box;
     }
 
     #view-standard .expression-line {
-        font-size: 1.05rem;
-        min-height: 22px;
+        font-size: clamp(1.05rem, 3.8vw, 1.35rem);
+        min-height: 26px;
         color: var(--text-secondary);
-        margin-bottom: 2px;
+        margin-bottom: 4px;
+        text-align: right;
+        width: 100%;
+        word-break: break-all;
+        overflow-x: auto;
+        white-space: nowrap;
+    }
+
+    #view-standard .result-line-wrapper {
+        display: flex;
+        align-items: center;
+        justify-content: flex-end;
+        width: 100%;
+        position: relative;
     }
 
     #view-standard .result-display {
-        font-size: clamp(2.2rem, 7.5vw, 3rem);
+        font-size: clamp(3rem, 11.5vw, 4.4rem);
         font-weight: 500;
-        letter-spacing: -1px;
+        letter-spacing: -1.5px;
+        line-height: 1.1;
+        width: 100%;
+        text-align: right;
+        padding: 0;
+        border: none;
+        background: transparent;
+        color: var(--text-primary);
+    }
+
+    #view-standard .blinking-cursor {
+        font-size: clamp(2.8rem, 10vw, 4rem);
+        line-height: 1;
     }
 
     #view-standard .memory-bar {
@@ -235,48 +260,81 @@
     }
 
     #view-standard .calc-utility-bar {
-        margin-bottom: 6px;
-        padding: 4px 2px;
+        width: 100%;
+        margin-bottom: 8px;
+        padding: 6px 4px;
         border-bottom: 1px solid var(--border-subtle);
         flex-shrink: 0;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        box-sizing: border-box;
     }
 
-    /* Standard Keypad: 5 circular rows, sized to fit comfortably above footer */
+    #view-standard .calc-utility-bar .utility-left {
+        display: flex;
+        align-items: center;
+        gap: 14px;
+    }
+
+    #view-standard .calc-utility-bar .util-icon-btn {
+        width: 40px;
+        height: 40px;
+        border-radius: 50%;
+        color: var(--text-secondary);
+    }
+
+    #view-standard .calc-utility-bar .util-backspace-btn {
+        color: var(--accent-std, #38bdf8);
+    }
+
+    /* Standard Keypad: 5 circular rows, scaled proportionally to screen width & height */
     .standard-keypad {
         display: grid;
         grid-template-columns: repeat(4, 1fr);
-        gap: clamp(6px, 1.8vw, 10px);
+        gap: clamp(8px, 2.5vw, 12px);
         width: 100%;
-        max-width: 360px;
+        max-width: 440px;
         margin: 0 auto;
         justify-items: center;
         align-items: center;
-        padding-bottom: 2px;
+        padding-bottom: 4px;
         flex-shrink: 0;
+        box-sizing: border-box;
     }
 
     .standard-keypad .btn {
         width: 100%;
         aspect-ratio: 1 / 1;
-        max-width: clamp(48px, 13.5vw, 60px);
-        max-height: clamp(48px, 13.5vw, 60px);
+        max-height: clamp(56px, 11.5vh, 78px);
         border-radius: 50%;
-        font-size: clamp(1.2rem, 3.8vw, 1.5rem);
+        font-size: clamp(1.4rem, 4.6vw, 1.85rem);
         font-weight: 500;
         display: flex;
         align-items: center;
         justify-content: center;
-        box-shadow: none;
-        border: none;
+        box-shadow: 0 4px 10px rgba(0, 0, 0, 0.25);
+        border: 1px solid var(--btn-num-border);
+        transition: transform 0.12s ease, filter 0.12s ease, background-color 0.12s ease;
     }
 
     .standard-keypad .btn:active {
         transform: scale(0.92);
+        filter: brightness(1.25);
+    }
+
+    .standard-keypad .btn-op {
+        font-size: clamp(1.6rem, 5.5vw, 2.1rem);
+    }
+
+    .standard-keypad .btn-fn {
+        font-size: clamp(1.25rem, 4.2vw, 1.55rem);
     }
 
     .standard-keypad .btn-equals {
         border-radius: 50%;
-        box-shadow: 0 4px 14px rgba(46, 125, 50, 0.35);
+        font-size: clamp(1.6rem, 5.5vw, 2.1rem);
+        box-shadow: 0 4px 14px rgba(34, 197, 94, 0.4);
     }
 
     /* Dedicated Time Calculator Rules: Top subtabs bar 100% visible below header, zero clipping */
@@ -679,32 +737,39 @@
     }
 
     #view-standard.calculator-view.active {
-        padding: 2px 8px 4px 8px;
+        padding: 2px 10px 4px 10px;
     }
 
     #view-standard .display-container {
-        padding: 2px 6px;
-        min-height: 50px;
-        max-height: 110px;
-        margin-bottom: 0;
+        padding: 6px 4px 8px 4px;
+        min-height: 0;
+        max-height: none;
     }
 
     #view-standard .result-display {
-        font-size: 2.1rem;
+        font-size: clamp(2.8rem, 12vw, 3.4rem);
     }
 
     .standard-keypad {
-        gap: 6px;
-        max-width: 330px;
+        gap: 8px;
+        max-width: 100%;
     }
 
     .standard-keypad .btn {
         width: 100%;
         aspect-ratio: 1 / 1;
-        max-width: 54px;
-        max-height: 54px;
-        font-size: 1.25rem;
+        max-height: clamp(54px, 11vh, 72px);
+        font-size: 1.45rem;
         border-radius: 50%;
+    }
+
+    .standard-keypad .btn-op,
+    .standard-keypad .btn-equals {
+        font-size: 1.65rem;
+    }
+
+    .standard-keypad .btn-fn {
+        font-size: 1.3rem;
     }
 
     /* Time Calculator Compact Screen Rules */
