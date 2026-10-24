@@ -102,14 +102,21 @@
 }
 
 .scientific-keypad {
-    grid-template-columns: repeat(5, 1fr);
-    gap: 10px;
+    grid-template-columns: repeat(6, 1fr);
+    gap: 8px;
 }
 
 .scientific-keypad .btn {
     height: 44px;
-    font-size: 0.90rem;
-    padding: 2px 4px;
+    font-size: 0.88rem;
+    padding: 2px 2px;
+}
+
+.btn-2nd.active {
+    background: var(--accent-primary) !important;
+    color: #ffffff !important;
+    border-color: var(--accent-primary) !important;
+    box-shadow: 0 0 10px rgba(37, 99, 235, 0.4);
 }
 
 .time-unit-keypad {

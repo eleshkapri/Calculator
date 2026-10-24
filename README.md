@@ -78,7 +78,8 @@
 
 ### 2. 🔬 Scientific Calculator
 * **Trigonometry**: Sine, Cosine, Tangent, and their inverse functions ($\sin, \cos, \tan, \sin^{-1}, \cos^{-1}, \tan^{-1}$) with **DEG / RAD** mode toggle.
-* **Logarithms & Powers**: Natural log ($\ln$), base-10 log ($\log_{10}$), exponentiation ($x^y$), square ($x^2$), square root ($\sqrt{x}$), reciprocal ($1/x$), and absolute value ($|x|$).
+* **Triple Logarithms & Powers**: Natural log ($\ln$, base $e$), Common log ($\log_{10}$, base 10), and Binary log ($\log_2$, base 2) with arbitrary base $\log(b, x)$ support, exponentiation ($x^y$), square ($x^2$), cube ($x^3$), square root ($\sqrt{x}$), cube root ($\sqrt[3]{x}$), reciprocal ($1/x$), and absolute value ($|x|$).
+* **Interactive 2nd Function Key**: 1-click switcher between standard and alternate functions ($\sin^{-1}, \cos^{-1}, \tan^{-1}, e^x, 10^x, 2^x, \sqrt[3]{x}, x^3$).
 * **Combinatorics**: Integer factorial computation ($n!$).
 * **Fundamental Constants**: 1-click access to $\pi$ and Euler's number $e$.
 

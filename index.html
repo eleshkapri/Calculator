@@ -22,18 +22,18 @@
     <meta name="twitter:title" content="CalVerse">
     <meta name="twitter:description" content="All-in-one calculator suite with 12+ modes. Works offline.">
     <meta name="twitter:image" content="https://calverse-esk.vercel.app/assets/icons/icon-512.png">
-    <link rel="manifest" href="manifest.json?v=6.1">
-    <link rel="shortcut icon" href="favicon.ico?v=6.1">
-    <link rel="icon" type="image/x-icon" href="favicon.ico?v=6.1">
-    <link rel="icon" type="image/png" sizes="192x192" href="assets/icons/icon-192.png?v=6.1">
-    <link rel="icon" type="image/png" sizes="512x512" href="assets/icons/icon-512.png?v=6.1">
-    <link rel="icon" type="image/svg+xml" href="assets/icons/favicon.svg?v=6.1">
-    <link rel="apple-touch-icon" href="assets/icons/icon-192.png?v=6.1">
+    <link rel="manifest" href="manifest.json?v=6.2">
+    <link rel="shortcut icon" href="favicon.ico?v=6.2">
+    <link rel="icon" type="image/x-icon" href="favicon.ico?v=6.2">
+    <link rel="icon" type="image/png" sizes="192x192" href="assets/icons/icon-192.png?v=6.2">
+    <link rel="icon" type="image/png" sizes="512x512" href="assets/icons/icon-512.png?v=6.2">
+    <link rel="icon" type="image/svg+xml" href="assets/icons/favicon.svg?v=6.2">
+    <link rel="apple-touch-icon" href="assets/icons/icon-192.png?v=6.2">
     <title>CalVerse</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;600;700&family=Outfit:wght@400;500;600;700;800&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="assets/css/style.css?v=6.1">
+    <link rel="stylesheet" href="assets/css/style.css?v=6.2">
     <script>
         // Theme Boot: Remember last mood, first visit follows OS
         (function() {
@@ -323,53 +323,55 @@
                             <button class="mem-btn" onclick="CalVerse.memSub('sci')">M-</button>
                         </div>
 
-                        <!-- Scientific Keypad -->
+                        <!-- Scientific Keypad (6x6 Perfect Grid) -->
                         <div class="keypad scientific-keypad">
-                            <!-- Row 1 -->
-                            <button class="btn btn-sci" onclick="CalVerse.inputFunc('sin')">sin</button>
-                            <button class="btn btn-sci" onclick="CalVerse.inputFunc('cos')">cos</button>
-                            <button class="btn btn-sci" onclick="CalVerse.inputFunc('tan')">tan</button>
-                            <button class="btn btn-fn" onclick="CalVerse.clear('sci')">AC</button>
-                            <button class="btn btn-fn" onclick="CalVerse.backspace('sci')" aria-label="Backspace">⌫</button>
+                            <!-- Row 1: 2nd, Trig Functions, Clear All & Backspace -->
+                            <button class="btn btn-fn btn-2nd" id="sci2ndBtn" onclick="CalVerse.toggle2nd()" title="Toggle Inverse / Alternate Functions">2nd</button>
+                            <button class="btn btn-sci" id="btnSin" onclick="CalVerse.inputFunc('sin')" title="Sine">sin</button>
+                            <button class="btn btn-sci" id="btnCos" onclick="CalVerse.inputFunc('cos')" title="Cosine">cos</button>
+                            <button class="btn btn-sci" id="btnTan" onclick="CalVerse.inputFunc('tan')" title="Tangent">tan</button>
+                            <button class="btn btn-fn btn-clear" onclick="CalVerse.clear('sci')" title="Clear All">AC</button>
+                            <button class="btn btn-fn btn-backspace" onclick="CalVerse.backspace('sci')" title="Backspace" aria-label="Backspace">⌫</button>
 
-                            <!-- Row 2 -->
-                            <button class="btn btn-sci" onclick="CalVerse.inputFunc('ln')">ln</button>
-                            <button class="btn btn-sci" onclick="CalVerse.inputFunc('log')">log</button>
-                            <button class="btn btn-sci" onclick="CalVerse.inputVal('sci', '(')">(</button>
-                            <button class="btn btn-sci" onclick="CalVerse.inputVal('sci', ')')">)</button>
-                            <button class="btn btn-op" onclick="CalVerse.inputVal('sci', '÷')">÷</button>
+                            <!-- Row 2: All 3 Logarithms (base e, base 10, base 2), Parentheses & Divide -->
+                            <button class="btn btn-sci" id="btnLn" onclick="CalVerse.inputFunc('ln')" title="Natural Logarithm (base e)">ln</button>
+                            <button class="btn btn-sci" id="btnLog" onclick="CalVerse.inputFunc('log10')" title="Common Logarithm (base 10)">log₁₀</button>
+                            <button class="btn btn-sci" id="btnLog2" onclick="CalVerse.inputFunc('log2')" title="Binary Logarithm (base 2)">log₂</button>
+                            <button class="btn btn-op btn-parens" onclick="CalVerse.inputVal('sci', '(')" title="Open Parenthesis">(</button>
+                            <button class="btn btn-op btn-parens" onclick="CalVerse.inputVal('sci', ')')" title="Close Parenthesis">)</button>
+                            <button class="btn btn-op" onclick="CalVerse.inputVal('sci', '÷')" title="Divide">÷</button>
 
-                            <!-- Row 3 -->
-                            <button class="btn btn-sci" onclick="CalVerse.inputFunc('sqrt')">√x</button>
-                            <button class="btn btn-sci" onclick="CalVerse.inputVal('sci', '^')">xʸ</button>
+                            <!-- Row 3: Square Root, Power, Numbers 7 8 9, Multiply -->
+                            <button class="btn btn-sci" id="btnSqrt" onclick="CalVerse.inputFunc('sqrt')" title="Square Root (√x)">√x</button>
+                            <button class="btn btn-sci" id="btnPower" onclick="CalVerse.inputVal('sci', '^')" title="Power (x^y)">xʸ</button>
                             <button class="btn btn-num" onclick="CalVerse.inputVal('sci', '7')">7</button>
                             <button class="btn btn-num" onclick="CalVerse.inputVal('sci', '8')">8</button>
                             <button class="btn btn-num" onclick="CalVerse.inputVal('sci', '9')">9</button>
-                            <button class="btn btn-op" onclick="CalVerse.inputVal('sci', '×')">×</button>
+                            <button class="btn btn-op" onclick="CalVerse.inputVal('sci', '×')" title="Multiply">×</button>
 
-                            <!-- Row 4 -->
-                            <button class="btn btn-sci" onclick="CalVerse.inputFunc('sqr')">x²</button>
-                            <button class="btn btn-sci" onclick="CalVerse.inputFunc('fact')">n!</button>
+                            <!-- Row 4: Square, Factorial, Numbers 4 5 6, Subtract -->
+                            <button class="btn btn-sci" id="btnSqr" onclick="CalVerse.inputFunc('sqr')" title="Square (x²)">x²</button>
+                            <button class="btn btn-sci" id="btnFact" onclick="CalVerse.inputFunc('fact')" title="Factorial (n!)">n!</button>
                             <button class="btn btn-num" onclick="CalVerse.inputVal('sci', '4')">4</button>
                             <button class="btn btn-num" onclick="CalVerse.inputVal('sci', '5')">5</button>
                             <button class="btn btn-num" onclick="CalVerse.inputVal('sci', '6')">6</button>
-                            <button class="btn btn-op" onclick="CalVerse.inputVal('sci', '−')">−</button>
+                            <button class="btn btn-op" onclick="CalVerse.inputVal('sci', '−')" title="Subtract">−</button>
 
-                            <!-- Row 5 -->
-                            <button class="btn btn-sci" onclick="CalVerse.inputVal('sci', 'π')">π</button>
-                            <button class="btn btn-sci" onclick="CalVerse.inputVal('sci', 'e')">e</button>
+                            <!-- Row 5: Constants π, e, Numbers 1 2 3, Add -->
+                            <button class="btn btn-sci" onclick="CalVerse.inputVal('sci', 'π')" title="Pi (3.14159...)">π</button>
+                            <button class="btn btn-sci" onclick="CalVerse.inputVal('sci', 'e')" title="Euler's Number (2.71828...)">e</button>
                             <button class="btn btn-num" onclick="CalVerse.inputVal('sci', '1')">1</button>
                             <button class="btn btn-num" onclick="CalVerse.inputVal('sci', '2')">2</button>
                             <button class="btn btn-num" onclick="CalVerse.inputVal('sci', '3')">3</button>
-                            <button class="btn btn-op" onclick="CalVerse.inputVal('sci', '+')">+</button>
+                            <button class="btn btn-op" onclick="CalVerse.inputVal('sci', '+')" title="Add">+</button>
 
-                            <!-- Row 6 -->
-                            <button class="btn btn-sci" onclick="CalVerse.inputFunc('inv')">1/x</button>
-                            <button class="btn btn-sci" onclick="CalVerse.inputFunc('abs')">|x|</button>
-                            <button class="btn btn-fn" onclick="CalVerse.toggleSign('sci')">±</button>
+                            <!-- Row 6: Reciprocal, Abs, Sign ±, 0, Decimal, Equals -->
+                            <button class="btn btn-sci" id="btnInv" onclick="CalVerse.inputFunc('inv')" title="Reciprocal (1/x)">1/x</button>
+                            <button class="btn btn-sci" id="btnAbs" onclick="CalVerse.inputFunc('abs')" title="Absolute Value (|x|)">|x|</button>
+                            <button class="btn btn-fn" onclick="CalVerse.toggleSign('sci')" title="Toggle Sign (±)">±</button>
                             <button class="btn btn-num" onclick="CalVerse.inputVal('sci', '0')">0</button>
                             <button class="btn btn-num" onclick="CalVerse.inputVal('sci', '.')">.</button>
-                            <button class="btn btn-equals" onclick="CalVerse.calculate('sci')">=</button>
+                            <button class="btn btn-equals" onclick="CalVerse.calculate('sci')" title="Calculate (=)">=</button>
                         </div>
                     </div>
                 </section>
@@ -1638,6 +1640,6 @@
     <!-- Toast Notification -->
     <div class="toast" id="toast">Copied to clipboard!</div>
 
-    <script type="module" src="src/main.js?v=6.1"></script>
+    <script type="module" src="src/main.js?v=6.2"></script>
 </body>
 </html>

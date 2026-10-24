@@ -436,15 +436,15 @@
     }
     
     .scientific-keypad {
-        grid-template-columns: repeat(5, 1fr);
-        gap: 7px;
+        grid-template-columns: repeat(6, 1fr);
+        gap: 6px;
     }
 
     .scientific-keypad .btn {
-        height: 44px;
-        font-size: 0.9rem;
-        border-radius: 10px;
-        padding: 2px 4px;
+        height: 42px;
+        font-size: 0.82rem;
+        border-radius: 8px;
+        padding: 2px 2px;
     }
 
     .programmer-keypad {

@@ -30,6 +30,7 @@ import { state } from '../core/state.js';
 import { inputVal, calculate, backspace, clear } from '../features/standard.js';
 import { GraphEngine } from '../features/graphing.js';
 import { ProgrammerEngine } from '../features/programmer.js';
+import { ScientificEngine } from '../features/scientific.js';
 import { toggleHistory, closeHistory } from './navigation.js';
 
 /**
@@ -103,6 +104,18 @@ export function initKeyboard() {
             } else if (key === '^') {
                 e.preventDefault();
                 inputVal(mode, '^');
+            } else if (mode === 'sci' && (key === 'e' || key === 'E')) {
+                e.preventDefault();
+                inputVal(mode, 'e');
+            } else if (mode === 'sci' && (key === 'p' || key === 'P')) {
+                e.preventDefault();
+                inputVal(mode, 'π');
+            } else if (mode === 'sci' && key === '!') {
+                e.preventDefault();
+                ScientificEngine.inputFunc('fact');
+            } else if (mode === 'sci' && (key === 'l' || key === 'L')) {
+                e.preventDefault();
+                ScientificEngine.inputFunc('ln');
             } else if (key === 'Enter' || key === '=') {
                 e.preventDefault();
                 calculate(mode);

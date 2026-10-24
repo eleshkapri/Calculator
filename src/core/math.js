@@ -66,7 +66,7 @@ export class MathEvaluator {
 
         // Strip known safe Math members and numeric tokens
         const stripped = sanitizedExpr
-            .replace(/Math\.(sin|cos|tan|asin|acos|atan|log|log10|sqrt|abs|exp|PI|E)/g, '')
+            .replace(/Math\.(sin|cos|tan|asin|acos|atan|log|log10|log2|sqrt|cbrt|abs|exp|pow|PI|E)/g, '')
             .replace(/Infinity|NaN/g, '')
             .replace(/[0-9.]+/g, '')
             .replace(/[\+\-\*\/\%\(\)\,\s\^]/g, '');
@@ -109,9 +109,28 @@ export class MathEvaluator {
         s = s.replace(/acos\(([^)]+)\)/g, `(Math.acos($1)${invFactor})`);
         s = s.replace(/atan\(([^)]+)\)/g, `(Math.atan($1)${invFactor})`);
 
-        // Common scientific functions
-        s = s.replace(/ln\(([^)]+)\)/g, 'Math.log($1)');
-        s = s.replace(/log\(([^)]+)\)/g, 'Math.log10($1)');
+        // Two-argument custom base logarithm: log(base, value) -> (Math.log(value) / Math.log(base))
+        s = s.replace(/(?<!Math\.)log\s*\(\s*([^,]+)\s*,\s*([^)]+)\s*\)/g, '(Math.log($2) / Math.log($1))');
+
+        // Binary logarithm: log2(x), log₂(x)
+        s = s.replace(/(?<!Math\.)log(?:2|₂)\s*\(([^)]+)\)/g, 'Math.log2($1)');
+
+        // Common logarithm: log10(x), log₁₀(x), log(x)
+        s = s.replace(/(?<!Math\.)log(?:10|₁₀)?\s*\(([^)]+)\)/g, 'Math.log10($1)');
+
+        // Natural logarithm: ln(x)
+        s = s.replace(/(?<!Math\.)ln\s*\(([^)]+)\)/g, 'Math.log($1)');
+
+        // Powers of 10 and 2: tenPow(x) -> (10 ** (x)), twoPow(x) -> (2 ** (x))
+        s = s.replace(/tenPow\s*\(([^)]+)\)/g, '(10 ** ($1))');
+        s = s.replace(/twoPow\s*\(([^)]+)\)/g, '(2 ** ($1))');
+
+        // Square and cube polynomials: sqr(x), cube(x)
+        s = s.replace(/sqr\s*\(([^)]+)\)/g, '(($1) * ($1))');
+        s = s.replace(/cube\s*\(([^)]+)\)/g, '(($1) * ($1) * ($1))');
+
+        // Roots
+        s = s.replace(/cbrt\s*\(([^)]+)\)/g, 'Math.cbrt($1)');
         s = s.replace(/sqrt\(([^)]+)\)/g, 'Math.sqrt($1)');
         s = s.replace(/abs\(([^)]+)\)/g, 'Math.abs($1)');
         s = s.replace(/exp\(([^)]+)\)/g, 'Math.exp($1)');

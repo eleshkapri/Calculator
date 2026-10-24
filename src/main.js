@@ -32,7 +32,7 @@ import {
     renderHistoryList,
     clearHistory
 } from './features/standard.js';
-import { ScientificEngine, inputFunc, toggleAngleMode } from './features/scientific.js';
+import { ScientificEngine, inputFunc, toggleAngleMode, toggle2nd } from './features/scientific.js';
 import { GraphEngine } from './features/graphing.js';
 import { FinancialEngine } from './features/financial.js';
 import { ProgrammerEngine } from './features/programmer.js';
@@ -77,6 +77,7 @@ export class CalVerseFacade {
         this.memAdd = memAdd;
         this.memSub = memSub;
         this.toggleAngleMode = toggleAngleMode;
+        this.toggle2nd = toggle2nd;
         this.clearHistory = clearHistory;
 
         // Graphing API
