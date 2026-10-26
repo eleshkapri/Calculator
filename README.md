@@ -5,6 +5,7 @@
 ### Next-Generation Universal Multi-Calculator, Financial & Analytical Suite
 
 [![Live Demo](https://img.shields.io/badge/Live%20Demo-calverse--esk.vercel.app-2563eb?style=for-the-badge&logo=vercel&logoColor=white)](https://calverse-esk.vercel.app/)
+[![Version](https://img.shields.io/badge/Version-v7.0%20Release-7c3aed?style=for-the-badge)](https://calverse-esk.vercel.app/)
 [![PWA Ready](https://img.shields.io/badge/PWA-Installable%20%26%20Offline%20Ready-10b981?style=for-the-badge&logo=pwa&logoColor=white)](https://calverse-esk.vercel.app/)
 [![JavaScript](https://img.shields.io/badge/ES6%2B%20Modular-OOP%20Architecture-f59e0b?style=for-the-badge&logo=javascript&logoColor=white)](https://calverse-esk.vercel.app/)
 [![Zero Dependencies](https://img.shields.io/badge/Dependencies-0%20(Pure%20Vanilla)-8b5cf6?style=for-the-badge)](https://calverse-esk.vercel.app/)
