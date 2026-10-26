@@ -43,6 +43,7 @@
 - [📂 Project Architecture](#-project-architecture)
 - [🛠️ Technology Stack](#️-technology-stack)
 - [🌐 Browser & Platform Compatibility](#-browser--platform-compatibility)
+- [🚀 Version History & Milestones](#-version-history--milestones)
 - [🚀 Local Development Setup](#-local-development-setup)
 - [🤝 Contributing](#-contributing)
 - [👨‍💻 Author & License](#-author--license)
@@ -58,9 +59,11 @@
 
 ## 🌟 Overview & Key Highlights
 
-**CalVerse Pro** is an all-in-one computational suite engineered using **pure vanilla web standards** (ES6+ JavaScript, CSS3 custom properties, and semantic HTML5). It delivers desktop-grade computational capability directly in any web browser and operates as an installable standalone application on Android, iOS, Windows, and macOS.
+**CalVerse Pro v7.0** is an all-in-one computational suite engineered using **pure vanilla web standards** (ES6+ JavaScript, CSS3 custom properties, and semantic HTML5). It delivers desktop-grade computational capability directly in any web browser and operates as an installable standalone application on Android, iOS, Windows, and macOS.
 
 * ⚡ **Zero External Dependencies**: Zero npm dependencies, zero framework runtime overhead, instant initialization, and tiny footprint.
+* 🎓 **Official GATE Virtual Calculator**: Complete TCS iON examination simulator with authentic 11-column desktop and adaptive mobile layouts.
+* 📱 **Mobile Phone View Ergonomics**: Upward-shifted clean layout, circular tactile buttons, negative bottom breathing space, and touch gesture unblocking for flawless phone usability.
 * 🧩 **Modular OOP Architecture**: Built with modern Object-Oriented design patterns (Inheritance, Encapsulation, Polymorphism, and Singleton State Management).
 * 📴 **100% Offline-First PWA**: Powered by an intelligent Service Worker (`sw.js`) with pre-caching and background auto-sync, functioning seamlessly without an internet connection.
 * 🌓 **Dual Obsidian Dark & Crisp Light Themes**: Custom CSS-variable design system featuring smooth transitions and automatic system-preference detection.
@@ -81,7 +84,10 @@
 ### 2. 🔬 Scientific Calculator
 * **Trigonometry**: Sine, Cosine, Tangent, and their inverse functions ($\sin, \cos, \tan, \sin^{-1}, \cos^{-1}, \tan^{-1}$) with **DEG / RAD** mode toggle.
 * **Triple Logarithms & Powers**: Natural log ($\ln$, base $e$), Common log ($\log_{10}$, base 10), and Binary log ($\log_2$, base 2) with arbitrary base $\log(b, x)$ support, exponentiation ($x^y$), square ($x^2$), cube ($x^3$), square root ($\sqrt{x}$), cube root ($\sqrt[3]{x}$), reciprocal ($1/x$), and absolute value ($|x|$).
-* **Interactive 2nd Function Key**: 1-click switcher between standard and alternate functions ($\sin^{-1}, \cos^{-1}, \tan^{-1}, e^x, 10^x, 2^x, \sqrt[3]{x}, x^3$).
+* **Ceiling & Floor Functions**: Dedicated buttons for Ceiling value $\lceil x \rceil$ (`ceil`: smallest integer $\ge x$) and Floor value $\lfloor x \rfloor$ (`floor`: greatest integer $\le x$).
+* **Decimal Extraction & Rounding**: Extract pure fractional/decimal values (`frac`: $x - \operatorname{trunc}(x)$) and round to the nearest integer (`round`), with integer truncation (`trunc`).
+* **Modulo Arithmetic**: Full `mod` and `%` operators for integer division remainders.
+* **Interactive 2nd Function Key**: 1-click switcher between standard and alternate functions ($\sin^{-1}, \cos^{-1}, \tan^{-1}, e^x, 10^x, 2^x, \sqrt[3]{x}, x^3, \lceil x \rceil, \lfloor x \rfloor, \text{dec}, \text{trunc}$).
 * **Combinatorics**: Integer factorial computation ($n!$).
 * **Fundamental Constants**: 1-click access to $\pi$ and Euler's number $e$.
 
@@ -342,6 +348,20 @@ Calculator/
 | **Apple Safari** (iOS & macOS) | ✅ Supported | ✅ Yes (Add to Home) | ✅ Yes |
 | **Mozilla Firefox** (Desktop & Android) | ✅ Supported | ✅ Yes | ✅ Yes |
 | **Brave, Opera, Vivaldi** | ✅ Supported | ✅ Yes | ✅ Yes |
+
+---
+
+## 🚀 Version History & Milestones
+
+| Version | Milestone & Feature Highlights |
+| :---: | :--- |
+| **v7.0** | • Added the **Official GATE Virtual Calculator (TCS iON Engine)** with dual authentic desktop and adaptive mobile layouts.<br>• Added **Ceiling (`ceil`), Floor (`floor`), Decimal / Fractional Value (`frac`), Rounding (`round`), and Modulo (`mod`)** to Scientific Calculator.<br>• Complete **Mobile View Ergonomics**: Upward-shifted layout, circular buttons, negative bottom space, pull-to-refresh deadzone unblocking, and robust theme/mode drawers.<br>• Full hyperbolic trigonometric function suite (`sinh`, `cosh`, `tanh`, `asinh`, `acosh`, `atanh`). |
+| **v6.0** | Complete modular ES6+ OOP architecture refactor, unified tamper-proof `CalVerse` global facade, hardened math evaluation sandbox, and high-contrast Light Theme. |
+| **v5.0** | Full Progressive Web App (PWA) offline engine with `sw.js` precaching and multi-platform installation modals. |
+| **v4.0** | Added Financial Suite (Loan EMI, Compound Growth, Live Currency API) and 7-category Unit Converter. |
+| **v3.0** | Added 2D Canvas Graphing engine and Multi-Radix Programmer Calculator. |
+| **v2.0** | Scientific Calculator, trigonometric evaluation, logarithms, and calculation history drawer. |
+| **v1.0** | Initial release: Standard arithmetic calculator with persistent registers. |
 
 ---
 
