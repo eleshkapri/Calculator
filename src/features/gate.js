@@ -213,7 +213,8 @@ export class GateCalculator extends BaseCalculator {
                 'sinh': 'sinh', 'cosh': 'cosh', 'tanh': 'tanh',
                 'asinh': 'asinh', 'acosh': 'acosh', 'atanh': 'atanh',
                 'ln': 'ln', 'log': 'log', 'log2': 'log2',
-                'sqrt': 'sqrt', 'cbrt': 'cbrt', 'abs': 'abs'
+                'sqrt': 'sqrt', 'cbrt': 'cbrt', 'abs': 'abs',
+                'ceil': 'ceil', 'floor': 'floor', 'round': 'round', 'frac': 'frac'
             };
             const p = prefixMap[fn] || fn;
             data.expr = (data.expr ? data.expr.trim() + ' ' : '') + `${p}(`;
@@ -363,6 +364,22 @@ export class GateCalculator extends BaseCalculator {
             case 'abs':
                 res = Math.abs(num);
                 exprLabel = `|${cur}|`;
+                break;
+            case 'ceil':
+                res = Math.ceil(num);
+                exprLabel = `ceil(${cur})`;
+                break;
+            case 'floor':
+                res = Math.floor(num);
+                exprLabel = `floor(${cur})`;
+                break;
+            case 'round':
+                res = Math.round(num);
+                exprLabel = `round(${cur})`;
+                break;
+            case 'frac':
+                res = parseFloat((num - Math.trunc(num)).toFixed(10));
+                exprLabel = `frac(${cur})`;
                 break;
             default:
                 return;

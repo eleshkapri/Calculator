@@ -48,6 +48,10 @@ export class ScientificCalculator extends StandardCalculator {
         const btnLog2 = document.getElementById('btnLog2');
         const btnSqrt = document.getElementById('btnSqrt');
         const btnSqr = document.getElementById('btnSqr');
+        const btnCeil = document.getElementById('btnCeil');
+        const btnFloor = document.getElementById('btnFloor');
+        const btnFrac = document.getElementById('btnFrac');
+        const btnRound = document.getElementById('btnRound');
 
         if (this.is2ndActive) {
             if (btnSin) { btnSin.textContent = 'sin⁻¹'; btnSin.onclick = () => this.inputFunc('asin'); }
@@ -58,6 +62,10 @@ export class ScientificCalculator extends StandardCalculator {
             if (btnLog2) { btnLog2.textContent = '2ˣ'; btnLog2.onclick = () => this.inputFunc('twoPow'); }
             if (btnSqrt) { btnSqrt.textContent = '∛x'; btnSqrt.onclick = () => this.inputFunc('cbrt'); }
             if (btnSqr) { btnSqr.textContent = 'x³'; btnSqr.onclick = () => this.inputFunc('cube'); }
+            if (btnCeil) { btnCeil.textContent = '⌈x⌉'; btnCeil.title = 'Ceiling ⌈x⌉'; }
+            if (btnFloor) { btnFloor.textContent = '⌊x⌋'; btnFloor.title = 'Floor ⌊x⌋'; }
+            if (btnFrac) { btnFrac.textContent = 'dec'; btnFrac.title = 'Decimal Value (dec)'; }
+            if (btnRound) { btnRound.textContent = 'trunc'; btnRound.title = 'Truncate (Integer Part)'; btnRound.onclick = () => this.inputFunc('trunc'); }
         } else {
             if (btnSin) { btnSin.textContent = 'sin'; btnSin.onclick = () => this.inputFunc('sin'); }
             if (btnCos) { btnCos.textContent = 'cos'; btnCos.onclick = () => this.inputFunc('cos'); }
@@ -67,6 +75,10 @@ export class ScientificCalculator extends StandardCalculator {
             if (btnLog2) { btnLog2.textContent = 'log₂'; btnLog2.onclick = () => this.inputFunc('log2'); }
             if (btnSqrt) { btnSqrt.textContent = '√x'; btnSqrt.onclick = () => this.inputFunc('sqrt'); }
             if (btnSqr) { btnSqr.textContent = 'x²'; btnSqr.onclick = () => this.inputFunc('sqr'); }
+            if (btnCeil) { btnCeil.textContent = 'ceil'; btnCeil.title = 'Ceiling Value (Smallest integer ≥ x)'; }
+            if (btnFloor) { btnFloor.textContent = 'floor'; btnFloor.title = 'Floor Value (Greatest integer ≤ x)'; }
+            if (btnFrac) { btnFrac.textContent = 'frac'; btnFrac.title = 'Decimal / Fractional Part (frac(x))'; }
+            if (btnRound) { btnRound.textContent = 'round'; btnRound.title = 'Round to nearest integer'; btnRound.onclick = () => this.inputFunc('round'); }
         }
     }
 
@@ -101,7 +113,12 @@ export class ScientificCalculator extends StandardCalculator {
             'abs': 'abs',
             'exp': 'e^',
             'tenPow': '10^',
-            'twoPow': '2^'
+            'twoPow': '2^',
+            'ceil': 'ceil',
+            'floor': 'floor',
+            'round': 'round',
+            'frac': 'frac',
+            'trunc': 'trunc'
         };
 
         const sym = symbols[fn] || fn;
@@ -194,6 +211,23 @@ export class ScientificCalculator extends StandardCalculator {
         } else if (fn === 'twoPow') {
             res = Math.pow(2, num);
             exprLabel = `2^(${cur}) =`;
+        } else if (fn === 'ceil') {
+            res = Math.ceil(num);
+            exprLabel = `ceil(${cur}) =`;
+        } else if (fn === 'floor') {
+            res = Math.floor(num);
+            exprLabel = `floor(${cur}) =`;
+        } else if (fn === 'round') {
+            res = Math.round(num);
+            exprLabel = `round(${cur}) =`;
+        } else if (fn === 'frac') {
+            // Decimal / Fractional Part (preserves precision without IEEE-754 floating point tails)
+            const dec = num - Math.trunc(num);
+            res = parseFloat(dec.toFixed(10));
+            exprLabel = `frac(${cur}) =`;
+        } else if (fn === 'trunc') {
+            res = Math.trunc(num);
+            exprLabel = `trunc(${cur}) =`;
         } else {
             // Trigonometry using evaluateMath for proper DEG/RAD handling
             const evalResult = evaluateMath(`${fn}(${cur})`, state.angleMode);

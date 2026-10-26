@@ -66,7 +66,7 @@ export class MathEvaluator {
 
         // Strip known safe Math members and numeric tokens
         const stripped = sanitizedExpr
-            .replace(/Math\.(asinh|acosh|atanh|asin|acos|atan|sinh|cosh|tanh|sin|cos|tan|log10|log2|log|sqrt|cbrt|abs|exp|pow|PI|E)/g, '')
+            .replace(/Math\.(asinh|acosh|atanh|asin|acos|atan|sinh|cosh|tanh|sin|cos|tan|log10|log2|log|sqrt|cbrt|abs|exp|pow|ceil|floor|round|trunc|PI|E)/g, '')
             .replace(/Infinity|NaN/g, '')
             .replace(/[0-9.]+/g, '')
             .replace(/[\+\-\*\/\%\(\)\,\s\^]/g, '');
@@ -143,6 +143,13 @@ export class MathEvaluator {
         s = s.replace(/sqrt\(([^)]+)\)/g, 'Math.sqrt($1)');
         s = s.replace(/abs\(([^)]+)\)/g, 'Math.abs($1)');
         s = s.replace(/exp\(([^)]+)\)/g, 'Math.exp($1)');
+
+        // Ceiling, Floor, Round, Truncation, Fractional (Decimal Part)
+        s = s.replace(/(?<![a-zA-Z\.])ceil\s*\(([^)]+)\)/g, 'Math.ceil($1)');
+        s = s.replace(/(?<![a-zA-Z\.])floor\s*\(([^)]+)\)/g, 'Math.floor($1)');
+        s = s.replace(/(?<![a-zA-Z\.])round\s*\(([^)]+)\)/g, 'Math.round($1)');
+        s = s.replace(/(?<![a-zA-Z\.])trunc\s*\(([^)]+)\)/g, 'Math.trunc($1)');
+        s = s.replace(/(?<![a-zA-Z\.])frac\s*\(([^)]+)\)/g, '(($1) - Math.trunc($1))');
 
         return s;
     }
